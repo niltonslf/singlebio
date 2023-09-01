@@ -1,9 +1,11 @@
+import {Link} from '../components';
+
 type UserPageProps = {
   any?: any;
 };
 
 export default function UserPage(props: UserPageProps) {
-  console.log({ props });
+  console.log({props});
 
   return (
     <main className='flex h-screen items-center justify-center bg-gray-300 p-10'>
@@ -11,20 +13,12 @@ export default function UserPage(props: UserPageProps) {
         <h2 className='mb-10 flex items-center justify-center text-2xl'>
           @niltonslf
         </h2>
-        <ul className='flex flex-col gap-5'>
-          <li className='flex items-center justify-center rounded-md bg-white p-5 font-medium'>
-            Link 01
-          </li>
-          <li className='flex items-center justify-center rounded-md bg-white p-5 font-medium'>
-            Link 02
-          </li>
-          <li className='flex items-center justify-center rounded-md bg-white p-5 font-medium'>
-            Link 03
-          </li>
-          <li className='flex items-center justify-center rounded-md bg-white p-5 font-medium'>
-            Link 04
-          </li>
-        </ul>
+        <Link.container>
+          <Link.item path='#'>Link 01</Link.item>
+          <Link.item path='#'>Link 02</Link.item>
+          <Link.item path='#'>Link 03</Link.item>
+          <Link.item path='#'>Link 04</Link.item>
+        </Link.container>
       </div>
     </main>
   );
