@@ -1,6 +1,6 @@
 import {Link} from '@/app/components';
 import {Metadata} from 'next';
-import {Card} from './components';
+import {AddLinkForm} from './components';
 
 export const metadata: Metadata = {
   title: 'Admin',
@@ -17,7 +17,7 @@ export default function Admin() {
           </div>
 
           <section className='mt-5'>
-            <Card />
+            <AddLinkForm />
           </section>
         </section>
         <aside className='flex w-2/5  justify-center  bg-gray-300'>
