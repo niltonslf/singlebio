@@ -9,7 +9,7 @@ type LinkItemProps = {
 export const LinkItem = ({path, children}: LinkItemProps) => {
   return (
     <Link href={path} target='_blank'>
-      <li className='flex w-full items-center justify-center rounded-md bg-white p-5 font-medium'>
+      <li className='flex w-full flex-wrap items-center justify-center rounded-md bg-white p-5 font-medium'>
         {children}
       </li>
     </Link>
