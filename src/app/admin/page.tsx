@@ -27,7 +27,7 @@ export default function Admin() {
             <AddLinkForm user={user} />
           </section>
         </section>
-        <aside className='flex w-2/5  justify-center  bg-gray-300'>
+        <aside className='flex w-2/5  justify-center  overflow-y-auto bg-gray-300'>
           <LinksList user={user} />
         </aside>
       </main>

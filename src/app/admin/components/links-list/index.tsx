@@ -3,7 +3,7 @@
 import {Link} from '@/app/components';
 import {app} from '@/app/libs/firebase';
 import {User} from 'firebase/auth';
-import {collection, getDocs, getFirestore} from 'firebase/firestore';
+import {collection, getFirestore, onSnapshot, query} from 'firebase/firestore';
 import {useCallback, useEffect, useState} from 'react';
 
 type LinksListProps = {
@@ -15,17 +15,23 @@ const db = getFirestore(app);
 export const LinksList = ({user}: LinksListProps) => {
   const [links, setLinks] = useState<any[]>([]);
 
-  const fetchData = useCallback(async () => {
-    const snapshot = await getDocs(collection(db, `users/${user.uid}/links`));
-    const linksRes: any = [];
+  const fetchData = useCallback(() => {
+    if (!user.uid) return () => {};
 
-    snapshot.forEach(doc => linksRes.push(doc.data()));
+    const customQuery = query(collection(db, 'users', user.uid, 'links'));
+    const unsubscribe = onSnapshot(customQuery, querySnapshot => {
+      setLinks([]);
+      querySnapshot.forEach(doc => setLinks(prev => [doc.data(), ...prev]));
+    });
 
-    return linksRes;
+    return unsubscribe;
   }, [user.uid]);
 
   useEffect(() => {
-    if (user) fetchData().then(setLinks);
+    if (!user) return;
+
+    const unsubscribe = fetchData();
+    return () => unsubscribe();
   }, [fetchData, user]);
 
   return (
