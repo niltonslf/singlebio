@@ -24,11 +24,12 @@ type FormData = {
 };
 
 export const AddLinkForm = ({user}: AddLinkFormProps) => {
-  const {register, handleSubmit} = useForm<FormData>();
+  const {register, handleSubmit, reset} = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
     const res = await doc(db, 'users', user.uid);
     addDoc(collection(res, 'links'), data);
+    reset();
   };
 
   return (
