@@ -42,7 +42,7 @@ export default function SignIn() {
 
   return (
     <div className='h-[100vh] w-[100vw]'>
-      <main className='container m-auto flex h-full max-w-5xl items-center justify-center bg-slate-300'>
+      <main className='m-auto flex h-full w-full items-center justify-center bg-slate-300'>
         <div className='flex w-[400px] max-w-full flex-col rounded-md bg-white p-4 shadow-md'>
           <h1 className='mb-4 text-lg font-semibold'>SignIn</h1>
 

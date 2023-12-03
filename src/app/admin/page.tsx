@@ -18,16 +18,17 @@ export default function Admin() {
   }, []);
 
   return (
-    <div className='flex h-screen flex-col items-center bg-gray-300 p-10'>
+    <div className='flex h-screen flex-col items-center overflow-auto bg-gray-300 px-10'>
       <Header user={user} />
 
-      <main className='flex w-full flex-row'>
+      <main className=' grid h-screen w-full grid-cols-[3fr_2fr] grid-rows-1 overflow-hidden '>
         <section className='flex flex-1 flex-col justify-start p-10'>
           <section className='mt-5'>
             <AddLinkForm user={user} />
           </section>
         </section>
-        <aside className='flex w-2/5  justify-center  overflow-y-auto bg-gray-300'>
+
+        <aside className='grid w-full grid-rows-1 '>
           <LinksList user={user} />
         </aside>
       </main>
