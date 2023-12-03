@@ -2,11 +2,11 @@
 
 import {signInWithPopup} from 'firebase/auth';
 import {GoogleIcon} from '../components';
-import {provider, auth, app} from '../libs/firebase';
+import {provider, auth, app} from '@/libs/firebase';
 import {useState} from 'react';
 import {doc, getFirestore, setDoc} from 'firebase/firestore';
 import {useRouter} from 'next/navigation';
-import {User} from '../models';
+import {User} from '../../models';
 
 const db = getFirestore(app);
 

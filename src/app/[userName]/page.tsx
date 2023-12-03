@@ -18,6 +18,7 @@ export default function UserPage(props: UserPageProps) {
           <Link.item path='#'>Link 02</Link.item>
           <Link.item path='#'>Link 03</Link.item>
           <Link.item path='#'>Link 04</Link.item>
+          <Link.item path='#'>Link 05</Link.item>
         </Link.container>
       </div>
     </main>

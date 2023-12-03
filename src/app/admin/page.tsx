@@ -2,7 +2,7 @@
 
 import {AddLinkForm, Header, LinksList} from './components';
 import {useEffect, useState} from 'react';
-import {auth} from '../libs/firebase';
+import {auth} from '@/libs/firebase';
 import {User, onAuthStateChanged} from 'firebase/auth';
 import {useRouter} from 'next/navigation';
 
