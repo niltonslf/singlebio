@@ -2,23 +2,16 @@
 
 import {User, onAuthStateChanged} from 'firebase/auth';
 import {addDoc, collection, doc, getFirestore} from 'firebase/firestore';
-import {useRouter} from 'next/navigation';
 import {useEffect, useState} from 'react';
 
 import {app, auth} from '@/libs/firebase';
 
 import {AddLinkForm, Header, LinksList} from './components';
 
-// export const metadata: Metadata = {
-//   title: 'Admin',
-// };
-
 const db = getFirestore(app);
 
 export default function Admin() {
   const [user, setUser] = useState<User | null>(null);
-
-  const router = useRouter();
 
   const onSaveLink = async (data: any) => {
     if (!user) return;
@@ -26,13 +19,6 @@ export default function Admin() {
     const res = await doc(db, 'users', user.uid);
     addDoc(collection(res, 'links'), data);
   };
-
-  useEffect(() => {
-    onAuthStateChanged(auth, authUser => {
-      if (!user) return;
-      if (user?.email !== authUser?.email) return router.refresh();
-    });
-  }, [user]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);
