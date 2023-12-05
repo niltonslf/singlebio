@@ -31,4 +31,14 @@ describe('Link component', () => {
     expect(baseElement.childElementCount).toBe(1);
     expect(baseElement.children[0].textContent).toBe("I'm a child");
   });
+
+  it('Link.item should  have a link tag', () => {
+    const {baseElement} = setup(
+      <Link.item path='/'>
+        <span>I'm a child</span>
+      </Link.item>,
+    );
+
+    expect(baseElement?.querySelector('a')?.getAttribute('href')).toBe('/');
+  });
 });
