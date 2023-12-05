@@ -3,7 +3,6 @@ import {AddLinkForm} from '@/app/admin/components';
 import {faker} from '@faker-js/faker';
 import {screen} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
 
 const mockLogin = jest.fn((data: any) => {
   return Promise.resolve(data);
