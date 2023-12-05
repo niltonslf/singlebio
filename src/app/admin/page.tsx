@@ -1,10 +1,11 @@
 'use client';
 
 import {User, onAuthStateChanged} from 'firebase/auth';
+import {addDoc, collection, doc, getFirestore} from 'firebase/firestore';
 import {useRouter} from 'next/navigation';
 import {useEffect, useState} from 'react';
 
-import {auth} from '@/libs/firebase';
+import {app, auth} from '@/libs/firebase';
 
 import {AddLinkForm, Header, LinksList} from './components';
 
@@ -12,10 +13,19 @@ import {AddLinkForm, Header, LinksList} from './components';
 //   title: 'Admin',
 // };
 
+const db = getFirestore(app);
+
 export default function Admin() {
   const [user, setUser] = useState<User | null>(null);
 
   const router = useRouter();
+
+  const onSaveLink = async (data: any) => {
+    if (!user) return;
+
+    const res = await doc(db, 'users', user.uid);
+    addDoc(collection(res, 'links'), data);
+  };
 
   useEffect(() => {
     onAuthStateChanged(auth, authUser => {
@@ -40,7 +50,7 @@ export default function Admin() {
           <main className=' grid h-screen w-full grid-cols-[3fr_2fr] grid-rows-1 overflow-hidden'>
             <section className='flex flex-1 flex-col justify-start p-10'>
               <section className='mt-5'>
-                <AddLinkForm user={user} />
+                <AddLinkForm saveLink={onSaveLink} />
               </section>
             </section>
 

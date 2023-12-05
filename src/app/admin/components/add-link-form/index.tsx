@@ -1,21 +1,9 @@
 'use client';
 
-import {User} from 'firebase/auth';
-import {
-  getFirestore,
-  setDoc,
-  doc,
-  collection,
-  addDoc,
-} from 'firebase/firestore';
 import {useForm} from 'react-hook-form';
 
-import {app} from '@/libs/firebase';
-
-const db = getFirestore(app);
-
 type AddLinkFormProps = {
-  user: User;
+  saveLink: (args: any) => Promise<typeof args>;
 };
 
 type FormData = {
@@ -23,12 +11,11 @@ type FormData = {
   label: string;
 };
 
-export const AddLinkForm = ({user}: AddLinkFormProps) => {
+export const AddLinkForm = ({saveLink}: AddLinkFormProps) => {
   const {register, handleSubmit, reset} = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    const res = await doc(db, 'users', user.uid);
-    addDoc(collection(res, 'links'), data);
+    await saveLink(data);
     reset();
   };
 
