@@ -1,9 +1,11 @@
 'use client';
 
-import {useCallback, useEffect, useState} from 'react';
-import {Link} from '../components';
-import {app} from '@/libs/firebase';
 import {collection, getFirestore, getDocs} from 'firebase/firestore';
+import {useCallback, useEffect, useState} from 'react';
+
+import {app} from '@/libs/firebase';
+
+import {Link} from '../components';
 
 type UserPageProps = {
   params: {
@@ -13,45 +15,46 @@ type UserPageProps = {
 
 const db = getFirestore(app);
 
-export default function UserPage({params}: UserPageProps) {
+export default function UserPage({params: {userName}}: UserPageProps) {
   const [links, setLinks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
-    if (!params.userName) return setIsLoading(false);
-    setIsLoading(true);
+    if (!userName) return setIsLoading(false);
 
-    const customQuery = await getDocs(
-      collection(db, 'users', params.userName, 'links'),
-    );
+    try {
+      const {docs, size} = await getDocs(
+        collection(db, 'users', userName, 'links'),
+      );
 
-    const res = customQuery.docs;
+      if (size === 0) throw new Error('no links');
 
-    if (customQuery.size === 0) return setIsLoading(false);
-
-    setLinks([]);
-    res.forEach(doc => {
-      setLinks(prev => [...prev, doc.data()]);
-    });
-
-    setIsLoading(false);
-  }, [params.userName]);
+      setLinks([]);
+      docs.forEach(doc => setLinks(prev => [...prev, doc.data()]));
+    } catch (error) {
+      //
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userName]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   return (
     <main className='flex h-screen items-center justify-center bg-gray-300 p-10'>
       <div className='w-full max-w-2xl '>
         <h2 className='mb-10 flex items-center justify-center text-2xl'>
-          {params.userName}
+          {userName}
         </h2>
+
         {links.length === 0 && isLoading === false && (
           <div className='rounded-md bg-red-300 p-2 shadow-md'>
-            Profile found
+            Profile not found
           </div>
         )}
+
         <Link.container>
           {links.length > 0 &&
             links.map(link => {
