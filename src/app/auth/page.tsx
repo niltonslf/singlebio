@@ -1,12 +1,14 @@
 'use client';
 
 import {signInWithPopup} from 'firebase/auth';
-import {GoogleIcon} from '../components';
-import {provider, auth, app} from '@/libs/firebase';
-import {useState} from 'react';
 import {doc, getFirestore, setDoc} from 'firebase/firestore';
 import {useRouter} from 'next/navigation';
+import {useState} from 'react';
+
+import {provider, auth, app} from '@/libs/firebase';
+
 import {User} from '../../models';
+import {GoogleIcon} from '../components';
 
 const db = getFirestore(app);
 

@@ -1,31 +1,22 @@
 import '@testing-library/jest-dom';
+import * as auth from 'firebase/auth';
+import * as firestore from 'firebase/firestore';
+import mockRouter from 'next-router-mock';
+import {ReactElement} from 'react';
+
+import AuthPage from '@/app/auth/page';
+import {faker} from '@faker-js/faker';
 import {screen, render} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {ReactElement} from 'react';
-import AuthPage from '@/app/auth/page';
-
-// import {useRouter} from 'next/navigation';
-
-import mockRouter from 'next-router-mock';
-
-import * as auth from 'firebase/auth';
-// import * as nextNavigation from 'next/navigation';
-import * as firestore from 'firebase/firestore';
 
 jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
 
 jest.mock('firebase/firestore', () => {
-  return {
-    __esModule: true,
-    ...jest.requireActual('firebase/firestore'),
-  };
+  return {__esModule: true, ...jest.requireActual('firebase/firestore')};
 });
 
 jest.mock('firebase/auth', () => {
-  return {
-    __esModule: true,
-    ...jest.requireActual('firebase/auth'),
-  };
+  return {__esModule: true, ...jest.requireActual('firebase/auth')};
 });
 
 // setup function
@@ -35,14 +26,6 @@ function setup(jsx: ReactElement) {
     ...render(jsx),
   };
 }
-
-// jest.mock('next/navigation', () => ({
-//   __esModule: true,
-//   useRouter: jest.fn(),
-//   // ...jest.requireActual('next/navigation'),
-// }));
-
-// jest.spyOn(nextNavigation, 'useRouter').mockImplementation(() => jest.fn());
 
 describe('Auth Page', () => {
   it('render Auh page with the login button', () => {
@@ -74,14 +57,14 @@ describe('Auth Page', () => {
   it('Should login with success when clicked at Login with Google', async () => {
     jest.spyOn(auth, 'signInWithPopup').mockResolvedValue({
       user: {
-        uid: 'abc',
-        displayName: 'Jhon',
-        email: 'email@email.com',
-        photoURL: 'picture-url',
+        uid: faker.word.words(1),
+        displayName: faker.person.fullName,
+        email: faker.internet.email,
+        photoURL: faker.image.urlLoremFlickr,
       },
-    });
+    } as any);
 
-    jest.spyOn(firestore, 'setDoc').mockImplementation(() => jest.fn());
+    jest.spyOn(firestore, 'setDoc').mockImplementation(() => jest.fn() as any);
 
     const {user} = setup(<AuthPage />);
 

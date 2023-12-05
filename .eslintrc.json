@@ -1,3 +1,35 @@
 {
-  "extends": ["next/core-web-vitals", "prettier"]
+  "extends": ["next/core-web-vitals", "prettier"],
+  "plugins": ["react", "import", "eslint-plugin-import-helpers", "prettier"],
+  "rules": {
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "semi": "off",
+    "import/prefer-default-export": "off",
+    "space-before-function-paren": "off",
+    "@typescript-eslint/space-before-function-paren": "off",
+    "jsx-quotes": ["error", "prefer-single"],
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "indent": "off",
+    "no-tabs": "error",
+    "@typescript-eslint/no-tabs": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-uses-vars": "error",
+    "react/no-unescaped-entities": "off",
+    "react/prop-types": "off",
+    "react/display-name": "off",
+    "max-len": ["off", {"code": 100, "tabWidth": 2}],
+    "curly": "off",
+    "import-helpers/order-imports": [
+      "warn",
+      {
+        "newlinesBetween": "always",
+        "groups": ["module", "/^@/", ["parent", "sibling", "index"]],
+        "alphabetize": {"order": "asc", "ignoreCase": true}
+      }
+    ]
+  }
 }
