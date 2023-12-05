@@ -32,19 +32,32 @@ describe('Links List component', () => {
       photoURL: faker.image.urlLoremFlickr(),
     } as User;
 
-    const callbackMockResponse = {
-      data() {
-        return {
-          label: faker.word.words(2),
-          url: faker.internet.url(),
-        };
-      },
+    const linkMock = (label?: string, url?: string) => {
+      return {
+        label: label || faker.word.words(2),
+        url: url || faker.internet.url(),
+      };
     };
+
+    const linkMockCompareData = linkMock('instagram', 'http://instagram.com');
+
+    const callbackMockResponse = [
+      {
+        data() {
+          return linkMockCompareData;
+        },
+      },
+      {
+        data() {
+          return linkMock();
+        },
+      },
+    ];
 
     jest
       .spyOn(firestore, 'onSnapshot')
       .mockImplementation((query: any, callback: any) => {
-        callback([callbackMockResponse, callbackMockResponse]);
+        callback(callbackMockResponse);
         return jest.fn();
       });
 
@@ -52,5 +65,13 @@ describe('Links List component', () => {
 
     const list = screen.getByRole('list');
     expect(list.childElementCount).toBe(2);
+
+    const firstItem = list.children[1];
+
+    expect(firstItem.querySelector('span')?.textContent).toBe(
+      linkMockCompareData.url,
+    );
+
+    expect(firstItem.textContent).toContain(linkMockCompareData.label);
   });
 });
