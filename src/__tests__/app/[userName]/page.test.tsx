@@ -11,6 +11,10 @@ jest.mock('firebase/firestore', () => ({
   ...jest.requireActual('firebase/firestore'),
 }));
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('Render user links page', () => {
   it('should render page with all elements', async () => {
     const userNameMock = 'jsdevbr';
@@ -33,5 +37,24 @@ describe('Render user links page', () => {
 
     const linkList = await screen.queryByRole('list');
     expect(linkList?.children).toHaveLength(2);
+  });
+
+  it("should show alert message when there isn't links saved", async () => {
+    const userNameMock = 'jsdevbr';
+
+    jest
+      .spyOn(firestore, 'getDocs')
+      .mockResolvedValue({docs: [], size: 0} as any);
+
+    await waitFor(() => setup(<UserPage params={{userName: userNameMock}} />));
+
+    const userName = screen.getByRole('heading', {level: 2});
+    expect(userName.textContent).toBe(userNameMock);
+
+    const linkList = await screen.queryByRole('list');
+    expect(linkList?.children).toHaveLength(0);
+
+    const alertMessage = await screen.queryByText('No links in this profile');
+    expect(alertMessage).toBeInTheDocument();
   });
 });

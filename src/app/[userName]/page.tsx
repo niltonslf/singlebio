@@ -20,22 +20,17 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
-    if (!userName) return setIsLoading(false);
+    const {docs, size} = await getDocs(
+      collection(db, 'users', userName, 'links'),
+    );
 
-    try {
-      const {docs, size} = await getDocs(
-        collection(db, 'users', userName, 'links'),
-      );
+    setLinks([]);
 
-      if (size === 0) throw new Error('no links');
+    if (size === 0) return setIsLoading(false);
 
-      setLinks([]);
-      docs.forEach(doc => setLinks(prev => [...prev, doc.data()]));
-    } catch (error) {
-      //
-    } finally {
-      setIsLoading(false);
-    }
+    docs.forEach(doc => setLinks(prev => [...prev, doc.data()]));
+
+    setIsLoading(false);
   }, [userName]);
 
   useEffect(() => {
@@ -43,15 +38,15 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   }, [fetchData]);
 
   return (
-    <main className='flex h-screen items-center justify-center bg-gray-300 p-10'>
-      <div className='w-full max-w-2xl '>
+    <main className='flex h-screen items-center justify-center overflow-y-auto bg-gray-300 p-10  py-20'>
+      <div className=' h-full w-full max-w-2xl '>
         <h2 className='mb-10 flex items-center justify-center text-2xl'>
           {userName}
         </h2>
 
         {links.length === 0 && isLoading === false && (
           <div className='rounded-md bg-red-300 p-2 shadow-md'>
-            Profile not found
+            No links in this profile
           </div>
         )}
 
