@@ -30,11 +30,9 @@ export const LinksList = ({user}: LinksListProps) => {
   }, [user.uid]);
 
   useEffect(() => {
-    if (!user) return;
-
     const unsubscribe = fetchData();
     return () => unsubscribe();
-  }, [fetchData, user]);
+  }, [fetchData]);
 
   return (
     <Link.container>
