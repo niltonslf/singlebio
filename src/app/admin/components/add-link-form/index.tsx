@@ -8,7 +8,6 @@ import {
   collection,
   addDoc,
 } from 'firebase/firestore';
-import {Grip} from 'lucide-react';
 import {useForm} from 'react-hook-form';
 
 import {app} from '@/libs/firebase';
@@ -35,7 +34,6 @@ export const AddLinkForm = ({user}: AddLinkFormProps) => {
 
   return (
     <div className='flex w-full flex-row gap-5 rounded-lg bg-white p-5'>
-      <Grip />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='flex flex-1 flex-col gap-2'>
