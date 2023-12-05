@@ -1,6 +1,6 @@
-import {GoogleAuthProvider, getAuth} from 'firebase/auth';
-import {initializeApp, getApps} from 'firebase/app';
 import {getAnalytics, isSupported} from 'firebase/analytics';
+import {initializeApp, getApps} from 'firebase/app';
+import {GoogleAuthProvider, getAuth} from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_KEY,
@@ -13,6 +13,10 @@ const firebaseConfig = {
 };
 
 export const app = (() => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('initializing firebase 🟢');
+  }
+
   if (getApps().length === 0) return initializeApp(firebaseConfig);
   return getApps()[0];
 })();

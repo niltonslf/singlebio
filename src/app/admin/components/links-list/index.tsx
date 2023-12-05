@@ -22,6 +22,7 @@ export const LinksList = ({user}: LinksListProps) => {
     const customQuery = query(collection(db, 'users', user.uid, 'links'));
     const unsubscribe = onSnapshot(customQuery, querySnapshot => {
       setLinks([]);
+
       querySnapshot.forEach(doc => setLinks(prev => [doc.data(), ...prev]));
     });
 
