@@ -1,10 +1,12 @@
 'use client';
 
-import {AddLinkForm, Header, LinksList} from './components';
-import {useEffect, useState} from 'react';
-import {auth} from '@/libs/firebase';
 import {User, onAuthStateChanged} from 'firebase/auth';
 import {useRouter} from 'next/navigation';
+import {useEffect, useState} from 'react';
+
+import {auth} from '@/libs/firebase';
+
+import {AddLinkForm, Header, LinksList} from './components';
 
 // export const metadata: Metadata = {
 //   title: 'Admin',

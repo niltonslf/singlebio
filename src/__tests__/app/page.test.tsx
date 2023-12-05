@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
-import {render, screen} from '@testing-library/react';
-
 import HomePage from '@/app/page';
+import {render, screen} from '@testing-library/react';
 
 describe('Home Page', () => {
   it('render home page', () => {

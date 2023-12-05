@@ -40,8 +40,6 @@ export default function SignIn() {
         throw error;
       }
 
-      console.log('push router');
-
       router.push('/admin');
     } catch (error: any) {
       setError(true);

@@ -1,6 +1,5 @@
 'use client';
 
-import {app} from '@/app/libs/firebase';
 import {User} from 'firebase/auth';
 import {
   getFirestore,
@@ -11,6 +10,8 @@ import {
 } from 'firebase/firestore';
 import {Grip} from 'lucide-react';
 import {useForm} from 'react-hook-form';
+
+import {app} from '@/libs/firebase';
 
 const db = getFirestore(app);
 

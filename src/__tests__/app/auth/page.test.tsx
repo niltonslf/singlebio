@@ -2,12 +2,11 @@ import '@testing-library/jest-dom';
 import * as auth from 'firebase/auth';
 import * as firestore from 'firebase/firestore';
 import mockRouter from 'next-router-mock';
-import {ReactElement} from 'react';
 
+import {setup} from '@/__tests__/utils';
 import AuthPage from '@/app/auth/page';
 import {faker} from '@faker-js/faker';
 import {screen, render} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
 
@@ -18,14 +17,6 @@ jest.mock('firebase/firestore', () => {
 jest.mock('firebase/auth', () => {
   return {__esModule: true, ...jest.requireActual('firebase/auth')};
 });
-
-// setup function
-function setup(jsx: ReactElement) {
-  return {
-    user: userEvent.setup(),
-    ...render(jsx),
-  };
-}
 
 describe('Auth Page', () => {
   it('render Auh page with the login button', () => {
