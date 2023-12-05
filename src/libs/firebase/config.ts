@@ -13,8 +13,6 @@ const firebaseConfig = {
 };
 
 export const app = (() => {
-  console.log('🟢 starting firebase');
-
   if (getApps().length === 0) return initializeApp(firebaseConfig);
   return getApps()[0];
 })();

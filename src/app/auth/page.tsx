@@ -16,7 +16,7 @@ export default function SignIn() {
   const [error, setError] = useState(false);
 
   const handlePersistUser = async (user: User) => {
-    await setDoc(doc(db, 'users', user.uid), user);
+    return await setDoc(doc(db, 'users', user.uid), user);
   };
 
   const handleLoginWithGoogle = async () => {
@@ -32,7 +32,13 @@ export default function SignIn() {
         pictureUrl: user.photoURL || '',
       };
 
-      await handlePersistUser(newUser);
+      try {
+        await handlePersistUser(newUser);
+      } catch (error) {
+        throw error;
+      }
+
+      console.log('push router');
 
       router.push('/admin');
     } catch (error: any) {
