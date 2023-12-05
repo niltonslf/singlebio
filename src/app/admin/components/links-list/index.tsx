@@ -1,10 +1,11 @@
 'use client';
 
-import {Link} from '@/app/components';
-import {app} from '@/libs/firebase';
 import {User} from 'firebase/auth';
 import {collection, getFirestore, onSnapshot, query} from 'firebase/firestore';
 import {useCallback, useEffect, useState} from 'react';
+
+import {Link} from '@/app/components';
+import {app} from '@/libs/firebase';
 
 type LinksListProps = {
   user: User;
