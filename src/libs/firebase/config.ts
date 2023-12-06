@@ -1,6 +1,7 @@
-import {getAnalytics, isSupported} from 'firebase/analytics';
-import {initializeApp, getApps} from 'firebase/app';
-import {GoogleAuthProvider, getAuth} from 'firebase/auth';
+import {getAnalytics, isSupported} from 'firebase/analytics'
+import {initializeApp, getApps} from 'firebase/app'
+import {GoogleAuthProvider, getAuth} from 'firebase/auth'
+import {getFirestore} from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_KEY,
@@ -10,18 +11,19 @@ const firebaseConfig = {
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-};
+}
 
 export const app = (() => {
   if (process.env.NODE_ENV === 'development') {
-    console.log('initializing firebase 🟢');
+    console.log('initializing firebase 🟢')
   }
 
-  if (getApps().length === 0) return initializeApp(firebaseConfig);
-  return getApps()[0];
-})();
+  if (getApps().length === 0) return initializeApp(firebaseConfig)
+  return getApps()[0]
+})()
 
-isSupported().then(res => (res ? getAnalytics(app) : null));
+isSupported().then(res => (res ? getAnalytics(app) : null))
 
-export const auth = getAuth(app);
-export const provider = new GoogleAuthProvider();
+export const auth = getAuth(app)
+export const provider = new GoogleAuthProvider()
+export const db = getFirestore(app)

@@ -1,22 +1,13 @@
 'use client'
 
 import {User, onAuthStateChanged} from 'firebase/auth'
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getFirestore,
-  updateDoc,
-} from 'firebase/firestore'
+import {addDoc, collection, doc, getDoc, updateDoc} from 'firebase/firestore'
 import {useCallback, useEffect, useState} from 'react'
 
 import {Modal} from '@/app/components'
-import {app, auth} from '@/libs/firebase'
+import {auth, db} from '@/libs/firebase'
 
 import {AddLinkForm, Header, LinksList} from './components'
-
-const db = getFirestore(app)
 
 export default function Admin() {
   const [user, setUser] = useState<User | null>(null)
