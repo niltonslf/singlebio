@@ -1,4 +1,3 @@
-import {clsx} from 'clsx';
 import {User} from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
