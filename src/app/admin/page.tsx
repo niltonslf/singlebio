@@ -33,8 +33,8 @@ export default function Admin() {
         <>
           <Header user={user} />
 
-          <main className=' grid h-screen w-full grid-cols-[3fr_2fr] grid-rows-1 overflow-hidden'>
-            <section className='flex flex-1 flex-col justify-start p-10'>
+          <main className=' grid w-full grid-cols-1 grid-rows-1 md:h-screen md:grid-cols-[3fr_2fr] md:overflow-hidden'>
+            <section className='flex flex-col justify-start p-10'>
               <section className='mt-5'>
                 <AddLinkForm saveLink={onSaveLink} />
               </section>
