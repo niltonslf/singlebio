@@ -1,82 +1,86 @@
-import {User} from 'firebase/auth';
+import 'next-router-mock'
 
-import {setup} from '@/__tests__/utils';
-import {Header} from '@/app/admin/components/header';
-import {faker} from '@faker-js/faker';
-import {screen} from '@testing-library/react';
+import {User} from 'firebase/auth'
 
-import '@testing-library/jest-dom';
+import {setup} from '@/__tests__/utils'
+import {Header} from '@/app/admin/components/header'
+import {faker} from '@faker-js/faker'
+import {screen} from '@testing-library/react'
+
+import '@testing-library/jest-dom'
+
+jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
 
 describe('Header component', () => {
   it('render component with logo and user data', () => {
     const userMock = {
       displayName: faker.person.fullName(),
       photoURL: faker.image.urlLoremFlickr(),
-    } as User;
+    } as User
 
-    setup(<Header user={userMock} />);
+    setup(<Header user={userMock} />)
 
-    const header = screen.getByText('Lnktree admin');
-    expect(header).toBeInTheDocument;
+    const header = screen.getByText('Lnktree admin')
+    expect(header).toBeInTheDocument
 
-    const userName = screen.getByText(userMock.displayName || '');
-    expect(userName.textContent).toBe(userMock.displayName);
+    const userName = screen.getByText(userMock.displayName || '')
+    expect(userName.textContent).toBe(userMock.displayName)
 
-    const profilePicture = screen.getByRole('img');
-    expect(profilePicture).toBeInTheDocument;
-  });
+    const profilePicture = screen.getByRole('img')
+    expect(profilePicture).toBeInTheDocument
+  })
 
   it('render component without user image', () => {
     const userMock = {
       displayName: faker.person.fullName(),
       photoURL: null,
-    } as User;
+    } as User
 
-    setup(<Header user={userMock} />);
+    setup(<Header user={userMock} />)
 
-    const header = screen.getByText('Lnktree admin');
-    expect(header).toBeInTheDocument;
+    const header = screen.getByText('Lnktree admin')
+    expect(header).toBeInTheDocument
 
-    const userName = screen.getByText(userMock.displayName || '');
-    expect(userName.textContent).toBe(userMock.displayName);
+    const userName = screen.getByText(userMock.displayName || '')
+    expect(userName.textContent).toBe(userMock.displayName)
 
-    const profilePicture = screen.queryByRole('img');
-    expect(profilePicture).not.toBeInTheDocument;
-  });
+    const profilePicture = screen.queryByRole('img')
+    expect(profilePicture).not.toBeInTheDocument
+  })
 
   it('render component without user name', () => {
     const userMock = {
       displayName: '',
       photoURL: faker.image.urlLoremFlickr(),
-    } as User;
+    } as User
 
-    setup(<Header user={userMock} />);
+    setup(<Header user={userMock} />)
 
-    const header = screen.getByText('Lnktree admin');
-    expect(header).toBeInTheDocument;
+    const header = screen.getByText('Lnktree admin')
+    expect(header).toBeInTheDocument
 
-    const userName = document.querySelector('header > div > div > span');
-    expect(userName).toBeEmptyDOMElement();
+    const userName = document.querySelector('header > div > div > span')
+    expect(userName).toBeEmptyDOMElement()
 
-    const profilePicture = screen.getByRole('img');
-    expect(profilePicture).toBeInTheDocument();
-  });
+    const profilePicture = screen.getByRole('img')
+    expect(profilePicture).toBeInTheDocument()
+  })
 
   it('render component without user logged', () => {
     const userMock = {
       displayName: '',
       photoURL: null,
-    } as User;
+    } as User
 
-    setup(<Header user={userMock} />);
+    setup(<Header user={userMock} />)
 
-    const header = screen.getByText('Lnktree admin');
-    expect(header).toBeInTheDocument;
+    const header = screen.getByText('Lnktree admin')
+    expect(header).toBeInTheDocument
 
-    const userName = document.querySelector('header > div > div > span');
-    expect(userName).toBeEmptyDOMElement();
+    const userName = document.querySelector('header > div > div > span')
+    expect(userName).toBeEmptyDOMElement()
 
-    const profilePicture = screen.queryByRole('img');
-    expect(profilePicture).not.toBeInTheDocument();
-  });
-});
+    const profilePicture = screen.queryByRole('img')
+    expect(profilePicture).not.toBeInTheDocument()
+  })
+})
