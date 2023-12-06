@@ -55,7 +55,7 @@ describe('Header component', () => {
     const header = screen.getByText('Lnktree admin');
     expect(header).toBeInTheDocument;
 
-    const userName = document.querySelector('header > div > span');
+    const userName = document.querySelector('header > div > div > span');
     expect(userName).toBeEmptyDOMElement();
 
     const profilePicture = screen.getByRole('img');
@@ -73,7 +73,7 @@ describe('Header component', () => {
     const header = screen.getByText('Lnktree admin');
     expect(header).toBeInTheDocument;
 
-    const userName = document.querySelector('header > div > span');
+    const userName = document.querySelector('header > div > div > span');
     expect(userName).toBeEmptyDOMElement();
 
     const profilePicture = screen.queryByRole('img');

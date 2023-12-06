@@ -6,7 +6,9 @@ type LinkContainerProps = {
 
 export const LinkContainer = ({children}: LinkContainerProps) => {
   return (
-    <ul className='flex w-full flex-col gap-5 overflow-y-auto p-10'>
+    <ul
+      aria-label='link-list'
+      className='flex w-full flex-col gap-5 overflow-y-auto p-10'>
       {children}
     </ul>
   );

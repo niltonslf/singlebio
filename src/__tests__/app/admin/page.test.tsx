@@ -1,5 +1,3 @@
-import 'next-router-mock';
-
 import * as firebaseAuth from 'firebase/auth';
 
 import {setup} from '@/__tests__/utils';
@@ -7,8 +5,6 @@ import AdminPage from '@/app/admin/page';
 import {screen} from '@testing-library/react';
 
 import '@testing-library/jest-dom';
-
-jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
 
 jest.mock('firebase/auth', () => ({
   __esModule: true,
@@ -43,7 +39,7 @@ describe('Admin page', () => {
     const form = await screen.queryByRole('button');
     expect(form).toBeInTheDocument();
 
-    const linksList = await screen.queryByRole('list');
-    expect(linksList).toBeInTheDocument();
+    const linksList = await screen.queryByLabelText('link-list');
+    expect(linksList?.children).toHaveLength(0);
   });
 });
