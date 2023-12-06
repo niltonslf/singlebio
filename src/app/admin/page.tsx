@@ -1,32 +1,63 @@
-'use client';
+'use client'
 
-import {User, onAuthStateChanged} from 'firebase/auth';
-import {addDoc, collection, doc, getFirestore} from 'firebase/firestore';
-import {useEffect, useState} from 'react';
+import {User, onAuthStateChanged} from 'firebase/auth'
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getFirestore,
+  updateDoc,
+} from 'firebase/firestore'
+import {useCallback, useEffect, useState} from 'react'
 
-import {app, auth} from '@/libs/firebase';
+import {Modal} from '@/app/components'
+import {app, auth} from '@/libs/firebase'
 
-import {AddLinkForm, Header, LinksList} from './components';
+import {AddLinkForm, Header, LinksList} from './components'
 
-const db = getFirestore(app);
+const db = getFirestore(app)
 
 export default function Admin() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(true)
+
+  const onSaveUserName = async (data: string) => {
+    if (!user) return
+
+    await updateDoc(doc(db, 'users', user.uid), {
+      userName: data,
+    })
+  }
 
   const onSaveLink = async (data: any) => {
-    if (!user) return;
+    if (!user) return
 
-    const res = await doc(db, 'users', user.uid);
-    addDoc(collection(res, 'links'), data);
-  };
+    const res = await doc(db, 'users', user.uid)
+    addDoc(collection(res, 'links'), data)
+  }
+
+  const fetchUserData = useCallback(async () => {
+    if (!user) return
+    const res = await getDoc(doc(db, 'users', user.uid))
+
+    const userData = res.data()
+
+    console.log({userData})
+  }, [user])
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, setUser);
-    return () => unsubscribe();
-  }, []);
+    fetchUserData()
+  }, [fetchUserData])
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, setUser)
+    return () => unsubscribe()
+  }, [])
 
   return (
     <div className='flex h-screen flex-col items-center overflow-auto bg-gray-300 '>
+      <Modal onSave={onSaveUserName} initialOpen={isModalOpen} />
       {!user ? (
         <div>Loading...</div>
       ) : (
@@ -47,5 +78,5 @@ export default function Admin() {
         </>
       )}
     </div>
-  );
+  )
 }
