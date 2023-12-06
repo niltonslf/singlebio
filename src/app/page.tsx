@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main className='flex h-screen w-screen flex-col bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 font-normal'>
+    <main className='flex h-screen w-screen flex-col bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 px-5 font-normal'>
       <nav className='mx-auto flex w-full max-w-6xl items-center justify-between py-2'>
         <Link href='/' title='Brand' className='font-semibold'>
           /share@LnkTree
@@ -18,8 +18,8 @@ export default function Home() {
         </Link>
       </nav>
 
-      <section className='mx-auto flex h-full w-6/12 max-w-full flex-col items-center justify-center '>
-        <h1 className='text-center text-6xl font-extrabold'>
+      <section className='mx-auto flex h-full w-full max-w-full flex-col items-center justify-center md:w-7/12 lg:w-6/12 '>
+        <h1 className='text-center text-5xl font-extrabold md:text-6xl'>
           Share{' '}
           <span className='bg-gradient-to-r from-fuchsia-600 to-pink-600 bg-clip-text text-transparent'>
             links
