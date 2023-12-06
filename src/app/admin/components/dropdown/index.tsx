@@ -1,6 +1,5 @@
 'use client';
 
-import {clsx} from 'clsx';
 import {PropsWithChildren, useEffect, useRef, useState} from 'react';
 
 import {DropdownMenu} from './dropdown-menu';
