@@ -6,8 +6,16 @@ describe('Home Page', () => {
   it('render home page', () => {
     render(<HomePage />);
 
-    const text = screen.getByText('Home page');
+    const brand = screen.getByText('/share@LnkTree');
+    expect(brand).toBeInTheDocument();
 
-    expect(text.textContent).toEqual('Home page');
+    const accessButton = screen.getByText('Access');
+    expect(accessButton).toBeInTheDocument();
+
+    const text = screen.getByRole('heading');
+    expect(text).toBeInTheDocument();
+
+    const tryButton = screen.getByText('Try it now');
+    expect(tryButton).toBeInTheDocument();
   });
 });
