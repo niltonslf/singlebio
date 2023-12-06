@@ -1,5 +1,5 @@
 import {clsx} from 'clsx'
-import {Fragment, useState} from 'react'
+import {Fragment, useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
@@ -22,7 +22,7 @@ type ModalProps = {
   initialOpen?: boolean
 }
 
-export const Modal = ({onSave, initialOpen = true}: ModalProps) => {
+export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
   const {
     register,
     handleSubmit,
@@ -42,21 +42,12 @@ export const Modal = ({onSave, initialOpen = true}: ModalProps) => {
     setIsOpen(false)
   }
 
-  // function openModal() {
-  //   setIsOpen(true)
-  // }
+  useEffect(() => {
+    setIsOpen(initialOpen)
+  }, [initialOpen])
 
   return (
     <>
-      {/* <div className='fixed inset-0 flex items-center justify-center'>
-        <button
-          type='button'
-          onClick={openModal}
-          className='rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'>
-          Open dialog
-        </button>
-      </div> */}
-
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as='div' className='relative z-10' onClose={() => null}>
           <Transition.Child

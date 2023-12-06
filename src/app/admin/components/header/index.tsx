@@ -1,8 +1,10 @@
-import {User, getAuth, signOut} from 'firebase/auth'
+import {getAuth, signOut} from 'firebase/auth'
 import Image from 'next/image'
 import {useRouter} from 'next/navigation'
 
 import {Dropdown} from '..'
+
+import {User} from '@/models'
 
 type HeaderProps = {
   user: User
@@ -23,11 +25,11 @@ export const Header = ({user}: HeaderProps) => {
 
       <div className='flex flex-row items-center justify-between gap-3'>
         <Dropdown>
-          <span className=' font-semibold text-white'>{user?.displayName}</span>
-          {user?.photoURL && (
+          <span className=' font-semibold text-white'>{user?.name}</span>
+          {user?.pictureUrl && (
             <Image
               className='rounded-full border-2'
-              src={user?.photoURL}
+              src={user?.pictureUrl}
               width={40}
               height={40}
               alt='User profile image'

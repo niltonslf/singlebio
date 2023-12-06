@@ -1,19 +1,12 @@
 'use client'
 
-import {User} from 'firebase/auth'
-import {
-  collection,
-  getFirestore,
-  onSnapshot,
-  query,
-  deleteDoc,
-  doc,
-} from 'firebase/firestore'
+import {collection, onSnapshot, query, deleteDoc, doc} from 'firebase/firestore'
 import {Trash} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
 import {Link} from '@/app/components'
-import {app} from '@/libs/firebase'
+import {db} from '@/libs/firebase'
+import {User} from '@/models'
 
 type LinksListProps = {
   user: User
@@ -24,8 +17,6 @@ type Link = {
   label: string
   url: string
 }
-
-const db = getFirestore(app)
 
 export const LinksList = ({user}: LinksListProps) => {
   const [links, setLinks] = useState<Link[]>([])

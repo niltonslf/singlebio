@@ -1,50 +1,43 @@
-'use client';
+'use client'
 
-import {signInWithPopup} from 'firebase/auth';
-import {doc, getFirestore, setDoc} from 'firebase/firestore';
-import {useRouter} from 'next/navigation';
-import {useState} from 'react';
+import {signInWithPopup} from 'firebase/auth'
+import {doc, setDoc} from 'firebase/firestore'
+import {observer} from 'mobx-react-lite'
+import {useRouter} from 'next/navigation'
+import {useState} from 'react'
 
-import {provider, auth, app} from '@/libs/firebase';
+import {provider, auth, db} from '@/libs/firebase'
 
-import {User} from '../../models';
-import {GoogleIcon} from '../components';
+import {User} from '../../models'
+import {GoogleIcon} from '../components'
+import {authState} from './context/auth-state'
 
-const db = getFirestore(app);
+const SignIn = observer(() => {
+  const router = useRouter()
 
-export default function SignIn() {
-  const router = useRouter();
-
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(false)
 
   const handlePersistUser = async (user: User) => {
-    return await setDoc(doc(db, 'users', user.uid), user);
-  };
+    return await setDoc(doc(db, 'users', user.uid), user)
+  }
 
   const handleLoginWithGoogle = async () => {
     try {
-      const res = await signInWithPopup(auth, provider);
-
-      const user = res.user;
-
-      const newUser: User = {
-        uid: user.uid || '',
-        name: user.displayName || '',
-        email: user.email || '',
-        pictureUrl: user.photoURL || '',
-      };
+      const {user} = await signInWithPopup(auth, provider)
+      const newUser = authState.authUser(user)
 
       try {
-        await handlePersistUser(newUser);
+        await handlePersistUser(newUser)
       } catch (error) {
-        throw error;
+        authState.cleanUser()
+        throw error
       }
 
-      router.push('/admin');
+      router.push('/admin')
     } catch (error: any) {
-      setError(true);
+      setError(true)
     }
-  };
+  }
 
   return (
     <div className='h-[100vh] w-[100vw]'>
@@ -69,5 +62,7 @@ export default function SignIn() {
         </div>
       </main>
     </div>
-  );
-}
+  )
+})
+
+export default SignIn

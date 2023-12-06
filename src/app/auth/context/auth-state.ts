@@ -1,23 +1,36 @@
 import {User as FbUser} from 'firebase/auth'
-import {makeAutoObservable} from 'mobx'
+import {action, makeObservable, observable} from 'mobx'
 
 import {User} from '@/models'
 
 class AuthState {
-  public user: User = {} as User
-  public firebaseUser: FbUser = {} as FbUser
+  public user: User | undefined = undefined
+  public firebaseUser: FbUser | undefined = undefined
 
   constructor() {
-    makeAutoObservable(this)
+    makeObservable(this, {
+      user: observable,
+      firebaseUser: observable,
+      authUser: action,
+      updateUser: action,
+      cleanUser: action,
+    })
   }
 
-  public authUser(firebaseUser: FbUser) {
+  public authUser(firebaseUser: FbUser): User {
     this.user = this.makeUser(firebaseUser)
     this.firebaseUser = firebaseUser
+
+    return this.user
   }
 
   public updateUser(user: User) {
     this.user = user
+  }
+
+  public cleanUser() {
+    this.user = {} as User
+    this.firebaseUser = {} as FbUser
   }
 
   private makeUser(firebaseUser: FbUser): User {
@@ -29,7 +42,7 @@ class AuthState {
       name: firebaseUser.displayName || '',
       pictureUrl: firebaseUser.photoURL || '',
       uid: firebaseUser.uid,
-      userName: firebaseUser.email,
+      userName: '',
     }
   }
 }
