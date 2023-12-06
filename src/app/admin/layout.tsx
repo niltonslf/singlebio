@@ -1,25 +1,25 @@
 'use client'
 
-import {getAuth} from 'firebase/auth'
+import {observer} from 'mobx-react-lite'
 import {useRouter} from 'next/navigation'
 import {ReactNode, useEffect} from 'react'
 
-import {app} from '@/libs/firebase'
+import {authState} from '../auth/context/auth-state'
 
 type AdminLayoutProps = {
   children: ReactNode
 }
 
-const auth = getAuth(app)
-
-export default function AdminLayout({children}: AdminLayoutProps) {
+const AdminLayout = observer(({children}: AdminLayoutProps) => {
   const router = useRouter()
 
   useEffect(() => {
     setTimeout(() => {
-      if (!auth.currentUser?.uid) return router.push('/auth')
+      if (!authState.user?.uid) return router.push('/auth')
     }, 2000)
-  }, [router])
+  }, [router, authState.user])
 
   return children
-}
+})
+
+export default AdminLayout
