@@ -26,7 +26,7 @@ export default function Admin() {
   }, []);
 
   return (
-    <div className='flex h-screen flex-col items-center overflow-auto bg-gray-300 px-10'>
+    <div className='flex h-screen flex-col items-center overflow-auto bg-gray-300 '>
       {!user ? (
         <div>Loading...</div>
       ) : (
