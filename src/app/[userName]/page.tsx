@@ -9,9 +9,9 @@ import {
 } from 'firebase/firestore'
 import {useCallback, useEffect, useState} from 'react'
 
+import {Avatar, Link} from '@/app/components'
 import {app} from '@/libs/firebase'
-
-import {Link} from '../components'
+import {User} from '@/models'
 
 type UserPageProps = {
   params: {
@@ -23,6 +23,7 @@ const db = getFirestore(app)
 
 export default function UserPage({params: {userName}}: UserPageProps) {
   const [links, setLinks] = useState<any[]>([])
+  const [user, setUser] = useState<User>()
   const [isLoading, setIsLoading] = useState(true)
 
   const fetchData = useCallback(async () => {
@@ -30,6 +31,7 @@ export default function UserPage({params: {userName}}: UserPageProps) {
     const querySnapshot = await getDocs(q)
 
     querySnapshot.forEach(async doc => {
+      setUser(doc.data() as User)
       const {size, docs} = await getDocs(collection(db, doc.ref.path, 'links'))
 
       setLinks([])
@@ -49,8 +51,16 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   return (
     <main className='flex h-screen items-center justify-center overflow-y-auto bg-gray-300 p-10  py-20'>
       <div className=' h-full w-full max-w-2xl '>
-        <h2 className='mb-10 flex items-center justify-center text-2xl'>
-          {userName}
+        <div className='mb-4 flex w-full justify-center'>
+          <Avatar
+            name={user?.name || ''}
+            pictureUrl={user?.pictureUrl}
+            size={80}
+          />
+        </div>
+
+        <h2 className='mb-3 flex items-center justify-center text-2xl font-semibold'>
+          @{userName}
         </h2>
 
         {links.length === 0 && isLoading === false && (
