@@ -1,8 +1,13 @@
-import {User as FbUser, deleteUser, getAuth} from 'firebase/auth'
+import {
+  User as FbUser,
+  deleteUser,
+  getAuth,
+  reauthenticateWithPopup,
+} from 'firebase/auth'
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore'
 import {action, makeObservable, observable} from 'mobx'
 
-import {db} from '@/libs/firebase'
+import {app, db, provider} from '@/libs/firebase'
 import {User} from '@/models'
 
 class AuthState {
@@ -62,13 +67,15 @@ class AuthState {
   }
 
   public async deleteUser() {
-    const user = getAuth()
+    const auth = getAuth(app)
 
-    if (!this.user || !user.currentUser) return
+    if (!this.user || !auth.currentUser) return
 
+    await reauthenticateWithPopup(auth.currentUser, provider)
+    await deleteUser(auth.currentUser)
     await deleteDoc(doc(db, 'users', this.user.uid))
-    await deleteUser(user.currentUser)
     this.cleanUser()
+    console.log('deleted')
   }
 
   private makeUser(firebaseUser: FbUser): Omit<User, 'userName'> {

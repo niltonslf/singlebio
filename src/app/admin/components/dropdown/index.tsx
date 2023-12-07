@@ -16,8 +16,8 @@ export const Dropdown = observer(({children}: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const dropdown = useRef<HTMLDivElement>(null)
 
-  const deleteAccount = () => {
-    authState.deleteUser()
+  const deleteAccount = async () => {
+    await authState.deleteUser()
   }
 
   useEffect(() => {
