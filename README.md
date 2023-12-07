@@ -5,6 +5,7 @@ I created this app to practice a bit about tests, so don't hold yourself too muc
 
 ### [Live demo](https://lnktree-niltonslf.vercel.app/)
 
+![example screen](public/home.png)
 ![example screen](public/screen.png)
 
 
