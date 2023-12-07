@@ -1,41 +1,50 @@
-'use client';
+'use client'
 
-import {collection, getFirestore, getDocs} from 'firebase/firestore';
-import {useCallback, useEffect, useState} from 'react';
+import {
+  collection,
+  getFirestore,
+  getDocs,
+  query,
+  where,
+} from 'firebase/firestore'
+import {useCallback, useEffect, useState} from 'react'
 
-import {app} from '@/libs/firebase';
+import {app} from '@/libs/firebase'
 
-import {Link} from '../components';
+import {Link} from '../components'
 
 type UserPageProps = {
   params: {
-    userName: string;
-  };
-};
+    userName: string
+  }
+}
 
-const db = getFirestore(app);
+const db = getFirestore(app)
 
 export default function UserPage({params: {userName}}: UserPageProps) {
-  const [links, setLinks] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [links, setLinks] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchData = useCallback(async () => {
-    const {docs, size} = await getDocs(
-      collection(db, 'users', userName, 'links'),
-    );
+    const q = query(collection(db, 'users'), where('userName', '==', userName))
+    const querySnapshot = await getDocs(q)
 
-    setLinks([]);
+    querySnapshot.forEach(async doc => {
+      const {size, docs} = await getDocs(collection(db, doc.ref.path, 'links'))
 
-    if (size === 0) return setIsLoading(false);
+      setLinks([])
 
-    docs.forEach(doc => setLinks(prev => [...prev, doc.data()]));
+      if (size === 0) return setIsLoading(false)
 
-    setIsLoading(false);
-  }, [userName]);
+      docs.forEach(doc => setLinks(prev => [...prev, doc.data()]))
+    })
+
+    setIsLoading(false)
+  }, [userName])
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchData()
+  }, [fetchData])
 
   return (
     <main className='flex h-screen items-center justify-center overflow-y-auto bg-gray-300 p-10  py-20'>
@@ -57,10 +66,10 @@ export default function UserPage({params: {userName}}: UserPageProps) {
                 <Link.item key={link.url} path={link.url}>
                   {link.label}
                 </Link.item>
-              );
+              )
             })}
         </Link.container>
       </div>
     </main>
-  );
+  )
 }
