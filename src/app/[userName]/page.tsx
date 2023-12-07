@@ -49,7 +49,7 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   }, [fetchData])
 
   return (
-    <main className='flex h-screen items-center justify-center overflow-y-auto bg-gray-300 p-10  py-20'>
+    <main className='flex h-screen items-center justify-center overflow-y-auto bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100 p-10  py-20'>
       <div className=' h-full w-full max-w-2xl '>
         <div className='mb-4 flex w-full justify-center'>
           <Avatar
