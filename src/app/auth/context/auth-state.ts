@@ -1,16 +1,18 @@
 import {User as FbUser, deleteUser, getAuth} from 'firebase/auth'
-import {deleteDoc, doc} from 'firebase/firestore'
+import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore'
 import {action, makeObservable, observable} from 'mobx'
 
 import {db} from '@/libs/firebase'
 import {User} from '@/models'
 
 class AuthState {
+  public isLoading: boolean = true
   public user: User | undefined = undefined
   public firebaseUser: FbUser | undefined = undefined
 
   constructor() {
     makeObservable(this, {
+      isLoading: observable,
       user: observable,
       firebaseUser: observable,
       authUser: action,
@@ -20,11 +22,34 @@ class AuthState {
     })
   }
 
-  public authUser(firebaseUser: FbUser): User {
-    this.user = this.makeUser(firebaseUser)
+  public async authUser(firebaseUser: FbUser | null) {
+    if (!firebaseUser) {
+      this.isLoading = false
+      return
+    }
+
     this.firebaseUser = firebaseUser
 
-    return this.user
+    const {exists, user} = await this.fetchFirebaseUser(firebaseUser)
+
+    if (exists) {
+      this.user = user
+      this.isLoading = false
+      return
+    }
+
+    const newUser = this.makeUser(firebaseUser)
+    await setDoc(doc(db, 'users', newUser.uid), newUser)
+    this.user = {...newUser, userName: ''}
+    this.isLoading = false
+  }
+
+  private async fetchFirebaseUser(
+    firebaseUser: FbUser,
+  ): Promise<{user: User; exists: boolean}> {
+    const res = await getDoc(doc(db, 'users', firebaseUser.uid))
+
+    return {user: res.data() as User, exists: res.exists()}
   }
 
   public updateUser(user: User) {
@@ -46,7 +71,7 @@ class AuthState {
     this.cleanUser()
   }
 
-  private makeUser(firebaseUser: FbUser): User {
+  private makeUser(firebaseUser: FbUser): Omit<User, 'userName'> {
     if (!firebaseUser.email || !firebaseUser.uid)
       throw new Error('email and uid are required.')
 
@@ -55,7 +80,6 @@ class AuthState {
       name: firebaseUser.displayName || '',
       pictureUrl: firebaseUser.photoURL || '',
       uid: firebaseUser.uid,
-      userName: '',
     }
   }
 }

@@ -1,14 +1,12 @@
 'use client'
 
 import {signInWithPopup} from 'firebase/auth'
-import {doc, setDoc} from 'firebase/firestore'
 import {observer} from 'mobx-react-lite'
 import {useRouter} from 'next/navigation'
 import {useState} from 'react'
 
-import {provider, auth, db} from '@/libs/firebase'
+import {provider, auth} from '@/libs/firebase'
 
-import {User} from '../../models'
 import {GoogleIcon} from '../components'
 import {authState} from './context/auth-state'
 
@@ -17,24 +15,14 @@ const SignIn = observer(() => {
 
   const [error, setError] = useState(false)
 
-  const handlePersistUser = async (user: User) => {
-    return await setDoc(doc(db, 'users', user.uid), user)
-  }
-
   const handleLoginWithGoogle = async () => {
     try {
       const {user} = await signInWithPopup(auth, provider)
-      const newUser = authState.authUser(user)
-
-      try {
-        await handlePersistUser(newUser)
-      } catch (error) {
-        authState.cleanUser()
-        throw error
-      }
+      await authState.authUser(user)
 
       router.push('/admin')
     } catch (error: any) {
+      authState.cleanUser()
       setError(true)
     }
   }

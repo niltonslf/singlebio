@@ -14,10 +14,9 @@ const AdminLayout = observer(({children}: AdminLayoutProps) => {
   const router = useRouter()
 
   useEffect(() => {
-    setTimeout(() => {
-      if (!authState.user?.uid) return router.push('/auth')
-    }, 2000)
-  }, [router, authState.user])
+    if (!authState.user?.uid && !authState.isLoading)
+      return router.push('/auth')
+  }, [router, authState.user, authState.isLoading])
 
   return children
 })

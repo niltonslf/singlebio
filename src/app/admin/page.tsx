@@ -1,13 +1,12 @@
 'use client'
 
 import {onAuthStateChanged} from 'firebase/auth'
-import {addDoc, collection, doc, getDoc, updateDoc} from 'firebase/firestore'
+import {addDoc, collection, doc, updateDoc} from 'firebase/firestore'
 import {observer} from 'mobx-react-lite'
-import {useCallback, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 
 import {Modal} from '@/app/components'
 import {auth, db} from '@/libs/firebase'
-import {User} from '@/models'
 
 import {authState} from '../auth/context/auth-state'
 import {AddLinkForm, Header, LinksList} from './components'
@@ -31,23 +30,13 @@ const Admin = observer(() => {
     authState.updateUser({...authState.user, userName: data})
   }
 
-  const fetchUserData = useCallback(async (uid: string) => {
-    const res = await getDoc(doc(db, 'users', uid))
-
-    const userData = res.data() as User
-    authState.updateUser(userData)
-    setIsLoading(false)
-  }, [])
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, firebaseUser => {
-      if (firebaseUser) {
-        authState.authUser(firebaseUser)
-        fetchUserData(firebaseUser.uid)
-      }
+      authState.authUser(firebaseUser)
+      setIsLoading(false)
     })
     return () => unsubscribe()
-  }, [fetchUserData])
+  }, [])
 
   return (
     <div className='flex h-screen flex-col items-center overflow-auto bg-gray-300 '>
