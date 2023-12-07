@@ -1,8 +1,10 @@
 import {clsx} from 'clsx'
+import {collection, getDocs, query, where} from 'firebase/firestore'
 import {Fragment, useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
+import {db} from '@/libs/firebase'
 import {Dialog, Transition} from '@headlessui/react'
 import {zodResolver} from '@hookform/resolvers/zod'
 
@@ -26,21 +28,37 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: {errors},
   } = useForm<FormProps>({
     resolver: zodResolver(schema),
   })
 
-  let [isOpen, setIsOpen] = useState(initialOpen)
+  const [isOpen, setIsOpen] = useState(initialOpen)
+  const [submitDisabled, setSubmitDisabled] = useState(false)
+  const username = watch('userName')
 
   const onSubmit = async (data: FormProps) => {
     await onSave(data.userName)
     closeModal()
   }
 
+  const checkUsername = async (username: string) => {
+    if (!username) return setSubmitDisabled(false)
+
+    const q = query(collection(db, 'users'), where('userName', '==', username))
+    const snapshot = await getDocs(q)
+
+    if (snapshot.size) setSubmitDisabled(true)
+  }
+
   function closeModal() {
     setIsOpen(false)
   }
+
+  useEffect(() => {
+    checkUsername(username)
+  }, [username])
 
   useEffect(() => {
     setIsOpen(initialOpen)
@@ -89,14 +107,19 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
                       <input
                         className={clsx(
                           'border-1 w-full rounded-md border border-gray-400 p-2',
-                          errors?.userName?.message &&
+                          (errors?.userName?.message || submitDisabled) &&
                             'border-red-400 outline-red-400',
                         )}
                         {...register('userName', {required: true})}
                       />
                       {errors.userName && (
-                        <p className='mt-2 font-medium text-red-400'>
+                        <p className='mt-2 text-sm text-red-400'>
                           {errors.userName.message}
+                        </p>
+                      )}
+                      {submitDisabled && (
+                        <p className='mt-2 text-sm text-red-400'>
+                          username already taken.
                         </p>
                       )}
                     </div>
@@ -104,7 +127,10 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
                     <div className='mt-4'>
                       <button
                         type='submit'
-                        className='inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-8 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'>
+                        className='inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-8 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300
+                        disabled:text-gray-900
+                        disabled:opacity-50'
+                        disabled={submitDisabled}>
                         Save
                       </button>
                     </div>
