@@ -1,11 +1,20 @@
+import {User} from '@/models'
 import {faker} from '@faker-js/faker'
 
-export const makeUser = () => {
+type MakeUserProps = Partial<User>
+
+export const makeUser = (
+  email?: string,
+  name?: string,
+  pictureUrl?: string,
+  uid?: string,
+  userName?: string,
+) => {
   return {
-    email: faker.internet.email(),
-    name: faker.person.fullName(),
-    pictureUrl: faker.image.urlLoremFlickr(),
-    uid: faker.string.uuid(),
-    userName: faker.internet.userName(),
+    email: email ?? faker.internet.email(),
+    name: name ?? faker.person.fullName(),
+    pictureUrl: pictureUrl ?? faker.image.urlLoremFlickr(),
+    uid: uid ?? faker.string.uuid(),
+    userName: userName ?? faker.internet.userName(),
   }
 }
