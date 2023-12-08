@@ -28,17 +28,19 @@ export default function UserPage({params: {userName}}: UserPageProps) {
 
   const fetchData = useCallback(async () => {
     const q = query(collection(db, 'users'), where('userName', '==', userName))
-    const querySnapshot = await getDocs(q)
+    const {docs: users} = await getDocs(q)
 
-    querySnapshot.forEach(async doc => {
-      setUser(doc.data() as User)
-      const {size, docs} = await getDocs(collection(db, doc.ref.path, 'links'))
+    users.forEach(async curUser => {
+      setUser(curUser.data() as User)
+      const {size, docs} = await getDocs(
+        collection(db, curUser.ref.path, 'links'),
+      )
 
       setLinks([])
 
       if (size === 0) return setIsLoading(false)
 
-      docs.forEach(doc => setLinks(prev => [...prev, doc.data()]))
+      docs.forEach(curUser => setLinks(prev => [...prev, curUser.data()]))
     })
 
     setIsLoading(false)
