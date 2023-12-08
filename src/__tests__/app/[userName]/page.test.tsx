@@ -16,10 +16,10 @@ afterEach(() => {
 
 describe('Render user links page', () => {
   it('should render page with all elements', async () => {
-    const userNameMock = 'jsdevbr'
+    const user = makeUser()
     const userResponseMock = {
       ref: {path: faker.internet.url},
-      data: (): User => makeUser(),
+      data: (): User => user,
     } as any
 
     const linksResponseMock = {
@@ -37,13 +37,17 @@ describe('Render user links page', () => {
       .spyOn(firestore, 'getDocs')
       .mockResolvedValueOnce({docs: [linksResponseMock], size: 1} as any)
 
-    await waitFor(() => setup(<UserPage params={{userName: userNameMock}} />))
+    await waitFor(() => setup(<UserPage params={{userName: user.userName}} />))
 
     const userName = screen.getByRole('heading', {level: 2})
-    expect(userName.textContent).toBe(`@${userNameMock}`)
-
     const linkList = await screen.queryByRole('list')
+    const profilePicture = await screen.queryByRole('img')
+
+    expect(userName.textContent).toBe(`@${user.userName}`)
     expect(linkList?.children).toHaveLength(1)
+    expect(profilePicture?.getAttribute('src')).toContain(
+      encodeURIComponent(user.pictureUrl),
+    )
   })
 
   it("should show alert message when there isn't links saved", async () => {
