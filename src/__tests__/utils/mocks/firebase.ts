@@ -1,3 +1,5 @@
+import {User as FbUser} from 'firebase/auth'
+
 import {User} from '@/models'
 import {faker} from '@faker-js/faker'
 
@@ -15,11 +17,11 @@ type LinkItemResponseMockReturn = {
 
 export const makeFbUser = () => {
   return {
-    uid: faker.word.words(1),
+    uid: faker.string.uuid(),
     displayName: faker.person.fullName(),
     email: faker.internet.email(),
     photoURL: faker.image.urlLoremFlickr(),
-  }
+  } as FbUser
 }
 
 export const fbUserResponseMock = (

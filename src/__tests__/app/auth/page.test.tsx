@@ -5,7 +5,7 @@ import mockRouter from 'next-router-mock'
 
 import {setup} from '@/__tests__/utils'
 import {makeFbUser, makeUser} from '@/__tests__/utils/mocks'
-import {authStore} from '@/app/auth/context/auth-state'
+import {AuthStore} from '@/app/auth/context/auth-state'
 import AuthPage from '@/app/auth/page'
 import {screen, render} from '@testing-library/react'
 
@@ -66,10 +66,8 @@ describe('Auth Page', () => {
       .spyOn(auth, 'signInWithPopup')
       .mockResolvedValue({user: makeFbUser()} as any)
 
-    jest.spyOn(authStore, 'fetchFirebaseUser').mockResolvedValue({
-      user: makeUser(),
-      exists: true,
-    })
+    AuthStore.prototype['fetchFirebaseUser'] = args =>
+      Promise.resolve({exists: true, user: makeUser()})
 
     jest.spyOn(firestore, 'doc').mockImplementation(jest.fn())
 

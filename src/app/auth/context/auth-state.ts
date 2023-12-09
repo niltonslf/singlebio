@@ -4,11 +4,12 @@ import {
   getAuth,
   reauthenticateWithPopup,
 } from 'firebase/auth'
-import {deleteDoc, doc, getDoc} from 'firebase/firestore'
+import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore'
 import {action, makeObservable, observable} from 'mobx'
 
 import {app, db, provider} from '@/libs/firebase'
 import {User} from '@/models'
+import {parseToUser} from '@/utils/user'
 
 export class AuthStore {
   public isLoading: boolean = true
@@ -30,6 +31,7 @@ export class AuthStore {
   public async authUser(firebaseUser: FbUser | null) {
     if (!firebaseUser) {
       this.isLoading = false
+      this.firebaseUser = undefined
       return
     }
 
@@ -40,19 +42,19 @@ export class AuthStore {
     if (exists) {
       this.user = user
       this.isLoading = false
-      console.log('HEREEEEE')
       return
     }
 
-    // const newUser = this.makeUser(firebaseUser)
-    // await setDoc(doc(db, 'users', newUser.uid), newUser)
-    // this.user = {...newUser, userName: ''}
-    // this.isLoading = false
+    const newUser = parseToUser(firebaseUser)
+    await setDoc(doc(db, 'users', newUser.uid), newUser)
+
+    this.user = {...newUser, userName: ''}
+    this.isLoading = false
   }
 
-  public async fetchFirebaseUser(
+  private async fetchFirebaseUser(
     firebaseUser: FbUser,
-  ): Promise<{user: User; exists: boolean}> {
+  ): Promise<{user: User | undefined; exists: boolean}> {
     const res = await getDoc(doc(db, 'users', firebaseUser.uid))
 
     return {user: res.data() as User, exists: res.exists()}
@@ -76,19 +78,6 @@ export class AuthStore {
     await deleteUser(auth.currentUser)
     await deleteDoc(doc(db, 'users', this.user.uid))
     this.cleanUser()
-    console.log('deleted')
-  }
-
-  private makeUser(firebaseUser: FbUser): Omit<User, 'userName'> {
-    if (!firebaseUser.email || !firebaseUser.uid)
-      throw new Error('email and uid are required.')
-
-    return {
-      email: firebaseUser.email,
-      name: firebaseUser.displayName || '',
-      pictureUrl: firebaseUser.photoURL || '',
-      uid: firebaseUser.uid,
-    }
   }
 }
 
