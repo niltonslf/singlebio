@@ -1,7 +1,4 @@
-import {User} from '@/models'
 import {faker} from '@faker-js/faker'
-
-type MakeUserProps = Partial<User>
 
 export const makeUser = (
   email?: string,
