@@ -3,10 +3,12 @@ import * as firestore from 'firebase/firestore'
 import {setup} from '@/__tests__/utils'
 import UserPage from '@/app/[userName]/page'
 import '@testing-library/jest-dom'
-import {User} from '@/models'
-import {faker} from '@faker-js/faker'
 import {screen, waitFor} from '@testing-library/react'
-import {makeUser} from '@/__tests__/utils/mocks'
+import {
+  fbUserResponseMock,
+  linkItemResponseMock,
+  makeUser,
+} from '@/__tests__/utils/mocks'
 
 jest.mock('firebase/firestore')
 
@@ -17,17 +19,8 @@ afterEach(() => {
 describe('Render user links page', () => {
   it('should render page with all elements', async () => {
     const user = makeUser()
-    const userResponseMock = {
-      ref: {path: faker.internet.url},
-      data: (): User => user,
-    } as any
-
-    const linksResponseMock = {
-      data: () => ({
-        label: faker.word.words(2),
-        url: faker.image.urlLoremFlickr(),
-      }),
-    } as any
+    const userResponseMock = fbUserResponseMock(user)
+    const linksResponseMock = linkItemResponseMock()
 
     jest
       .spyOn(firestore, 'getDocs')
