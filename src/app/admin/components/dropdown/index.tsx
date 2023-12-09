@@ -3,7 +3,7 @@
 import {observer} from 'mobx-react-lite'
 import {PropsWithChildren, useEffect, useRef, useState} from 'react'
 
-import {authState} from '@/app/auth/context/auth-state'
+import {authStore} from '@/app/auth/context/auth-state'
 
 import {DropdownMenu} from './dropdown-menu'
 import {MenuItem} from './menu-item'
@@ -17,7 +17,7 @@ export const Dropdown = observer(({children}: DropdownProps) => {
   const dropdown = useRef<HTMLDivElement>(null)
 
   const deleteAccount = async () => {
-    await authState.deleteUser()
+    await authStore.deleteUser()
   }
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const Dropdown = observer(({children}: DropdownProps) => {
       onClick={() => setIsOpen(prev => !prev)}>
       {children}
       <DropdownMenu isOpen={isOpen}>
-        <MenuItem href={`/${authState?.user?.userName}`}>
+        <MenuItem href={`/${authStore?.user?.userName}`}>
           My links page
         </MenuItem>
         <MenuItem onClick={deleteAccount}>Delete account</MenuItem>

@@ -8,31 +8,31 @@ import {useEffect, useState} from 'react'
 import {Modal} from '@/app/components'
 import {auth, db} from '@/libs/firebase'
 
-import {authState} from '../auth/context/auth-state'
+import {authStore} from '../auth/context/auth-state'
 import {AddLinkForm, Header, LinksList} from './components'
 
 const Admin = observer(() => {
   const [isLoading, setIsLoading] = useState(true)
 
   const onSaveUserName = async (data: string) => {
-    if (!authState.user) return
+    if (!authStore.user) return
 
-    await updateDoc(doc(db, 'users', authState.user.uid), {
+    await updateDoc(doc(db, 'users', authStore.user.uid), {
       userName: data,
     })
   }
 
   const onSaveLink = async (data: any) => {
-    if (!authState.user) return
+    if (!authStore.user) return
 
-    const res = await doc(db, 'users', authState.user.uid)
+    const res = await doc(db, 'users', authStore.user.uid)
     addDoc(collection(res, 'links'), data)
-    authState.updateUser({...authState.user, userName: data})
+    authStore.updateUser({...authStore.user, userName: data})
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, firebaseUser => {
-      authState.authUser(firebaseUser)
+      authStore.authUser(firebaseUser)
       setIsLoading(false)
     })
     return () => unsubscribe()
@@ -40,16 +40,16 @@ const Admin = observer(() => {
 
   return (
     <div className='flex h-screen flex-col items-center overflow-auto bg-gray-300 '>
-      {isLoading || !authState.user ? (
+      {isLoading || !authStore.user ? (
         <div>Loading...</div>
       ) : (
         <>
           <Modal
             onSave={onSaveUserName}
-            initialOpen={!authState.user?.userName}
+            initialOpen={!authStore.user?.userName}
           />
 
-          <Header user={authState.user} />
+          <Header user={authStore.user} />
 
           <main className=' grid w-full grid-cols-1 grid-rows-1 md:h-screen md:grid-cols-[3fr_2fr] md:overflow-hidden'>
             <section className='flex flex-col justify-start p-10'>
@@ -59,7 +59,7 @@ const Admin = observer(() => {
             </section>
 
             <aside className='grid w-full grid-rows-1 '>
-              <LinksList user={authState.user} />
+              <LinksList user={authStore.user} />
             </aside>
           </main>
         </>

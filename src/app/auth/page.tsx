@@ -8,7 +8,7 @@ import {useState} from 'react'
 import {provider, auth} from '@/libs/firebase'
 
 import {GoogleIcon} from '../components'
-import {authState} from './context/auth-state'
+import {authStore} from './context/auth-state'
 
 const SignIn = observer(() => {
   const router = useRouter()
@@ -18,11 +18,12 @@ const SignIn = observer(() => {
   const handleLoginWithGoogle = async () => {
     try {
       const {user} = await signInWithPopup(auth, provider)
-      await authState.authUser(user)
+      await authStore.authUser(user)
 
       router.push('/admin')
     } catch (error: any) {
-      authState.cleanUser()
+      console.log({error})
+      authStore.cleanUser()
       setError(true)
     }
   }

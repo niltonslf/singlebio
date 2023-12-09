@@ -4,13 +4,13 @@ import {
   getAuth,
   reauthenticateWithPopup,
 } from 'firebase/auth'
-import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore'
+import {deleteDoc, doc, getDoc} from 'firebase/firestore'
 import {action, makeObservable, observable} from 'mobx'
 
 import {app, db, provider} from '@/libs/firebase'
 import {User} from '@/models'
 
-class AuthState {
+export class AuthStore {
   public isLoading: boolean = true
   public user: User | undefined = undefined
   public firebaseUser: FbUser | undefined = undefined
@@ -40,16 +40,17 @@ class AuthState {
     if (exists) {
       this.user = user
       this.isLoading = false
+      console.log('HEREEEEE')
       return
     }
 
-    const newUser = this.makeUser(firebaseUser)
-    await setDoc(doc(db, 'users', newUser.uid), newUser)
-    this.user = {...newUser, userName: ''}
-    this.isLoading = false
+    // const newUser = this.makeUser(firebaseUser)
+    // await setDoc(doc(db, 'users', newUser.uid), newUser)
+    // this.user = {...newUser, userName: ''}
+    // this.isLoading = false
   }
 
-  private async fetchFirebaseUser(
+  public async fetchFirebaseUser(
     firebaseUser: FbUser,
   ): Promise<{user: User; exists: boolean}> {
     const res = await getDoc(doc(db, 'users', firebaseUser.uid))
@@ -91,4 +92,4 @@ class AuthState {
   }
 }
 
-export const authState = new AuthState()
+export const authStore = new AuthStore()
