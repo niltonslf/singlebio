@@ -22,7 +22,7 @@ const SignIn = observer(() => {
 
       router.push('/admin')
     } catch (error: any) {
-      authStore.cleanUser()
+      authStore.clearUser()
       setError(true)
     }
   }

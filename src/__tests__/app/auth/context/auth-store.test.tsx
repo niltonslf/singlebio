@@ -1,3 +1,4 @@
+import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 
 import {makeFbUser, makeUser} from '@/__tests__/utils/mocks'
@@ -7,6 +8,7 @@ import '@testing-library/jest-dom'
 import {cleanup} from '@testing-library/react'
 
 jest.mock('firebase/firestore')
+jest.mock('firebase/auth')
 
 afterAll(() => {
   cleanup()
@@ -18,7 +20,7 @@ afterAll(() => {
 const fetchFirebaseUserBackup = AuthStore.prototype['fetchFirebaseUser']
 
 describe('AuthStore', () => {
-  describe('AuthUser', () => {
+  describe('authUser', () => {
     it('should authenticate the user - Account exists', async () => {
       const firebaseUser = makeFbUser()
       const user = makeUser()
@@ -70,7 +72,7 @@ describe('AuthStore', () => {
       expect(user?.uid).toBe(firebaseUser.uid)
     })
 
-    it('should return an non existent response', async () => {
+    it('should return an non existent user', async () => {
       const firebaseUser = makeFbUser()
 
       jest
@@ -88,6 +90,40 @@ describe('AuthStore', () => {
 
       expect(exists).toBe(false)
       expect(user).toBe(undefined)
+    })
+  })
+
+  describe('updateUser', () => {
+    it('Update user variable', () => {
+      const user = makeUser()
+
+      authStore.updateUser(user)
+
+      expect(authStore.user).toStrictEqual(user)
+    })
+  })
+
+  describe('clearUser', () => {
+    it('Clear users variables', () => {
+      authStore.clearUser()
+
+      expect(authStore.user).toBe(undefined)
+      expect(authStore.firebaseUser).toBe(undefined)
+    })
+  })
+
+  describe('deleteUser', () => {
+    it('delete user successfully', async () => {
+      authStore.user = makeUser()
+
+      jest.spyOn(firebaseAuth, 'getAuth').mockReturnValue({
+        currentUser: {} as firebaseAuth.User,
+      } as firebaseAuth.Auth)
+
+      await authStore.deleteUser()
+
+      expect(authStore.user).toBe(undefined)
+      expect(authStore.firebaseUser).toBe(undefined)
     })
   })
 })

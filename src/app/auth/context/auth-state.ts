@@ -24,7 +24,7 @@ export class AuthStore {
       authUser: action,
       updateUser: action,
       deleteUser: action,
-      cleanUser: action,
+      clearUser: action,
     })
   }
 
@@ -64,20 +64,21 @@ export class AuthStore {
     this.user = user
   }
 
-  public cleanUser() {
-    this.user = {} as User
-    this.firebaseUser = {} as FbUser
+  public clearUser() {
+    this.user = undefined
+    this.firebaseUser = undefined
   }
 
   public async deleteUser() {
     const auth = getAuth(app)
 
-    if (!this.user || !auth.currentUser) return
+    if (!this.user || !auth.currentUser)
+      throw new Error('Authenticated user not found.')
 
     await reauthenticateWithPopup(auth.currentUser, provider)
     await deleteUser(auth.currentUser)
     await deleteDoc(doc(db, 'users', this.user.uid))
-    this.cleanUser()
+    this.clearUser()
   }
 }
 
