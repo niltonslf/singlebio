@@ -47,7 +47,7 @@ describe('AuthStore', () => {
 
       await authStore.authUser(firebaseUser)
 
-      // expect({...authStore.user}).toStrictEqual(user)
+      expect({...authStore.user}).toStrictEqual(user)
       expect({...authStore.firebaseUser}).toStrictEqual(firebaseUser)
     })
   })
@@ -62,10 +62,11 @@ describe('AuthStore', () => {
         .spyOn(firestore, 'doc')
         .mockReturnValue({} as firestore.DocumentReference)
 
-      jest.spyOn(firestore, 'getDoc').mockResolvedValue({
-        data: () => parseToUser(firebaseUser),
-        exists: () => true,
-      } as any)
+      jest
+        .spyOn(firestore, 'getDoc')
+        .mockResolvedValue(
+          makeGetDocsResponse({data: parseToUser(firebaseUser), exists: true}),
+        )
 
       const {exists, user} = await authStore['fetchFirebaseUser'](firebaseUser)
 
