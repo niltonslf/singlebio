@@ -13,7 +13,7 @@ import {authStore} from './context/auth-store'
 const SignIn = observer(() => {
   const router = useRouter()
 
-  const [error, setError] = useState(true)
+  const [error, setError] = useState(false)
 
   const handleLoginWithGoogle = async () => {
     try {

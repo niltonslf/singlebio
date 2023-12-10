@@ -1,12 +1,13 @@
 import '@testing-library/jest-dom'
 import * as firebaseAuth from 'firebase/auth'
-import * as firestore from 'firebase/firestore'
 import mockRouter from 'next-router-mock'
 
 import {setup} from '@/__tests__/utils'
-import {makeFbUser, makeUser} from '@/__tests__/utils/mocks'
+import {makeFbUser} from '@/__tests__/utils/mocks'
 import {AuthStore, authStore} from '@/app/auth/context/auth-store'
 import AuthPage from '@/app/auth/page'
+import {User} from '@/models'
+import {parseToUser} from '@/utils/user'
 import {screen, render, cleanup} from '@testing-library/react'
 
 jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
@@ -64,7 +65,7 @@ describe('Auth Page', () => {
 
     const errorBox = await screen.getByTestId('error-msg')
 
-    expect(firebaseAuth.signInWithPopup).rejects.toThrow(errorMsg)
+    expect(firebaseAuth.signInWithPopup).rejects.toBe(errorMsg)
     expect(authStore.clearUser).toHaveBeenCalledTimes(1)
     expect(errorBox).toBeVisible()
     expect(errorBox).toHaveTextContent(
@@ -76,25 +77,25 @@ describe('Auth Page', () => {
   })
 
   it('Should Login with Google successfully  ', async () => {
+    const firebaseUserMock = makeFbUser()
+    const userMock = parseToUser(firebaseUserMock, '') as User
+
     jest
       .spyOn(firebaseAuth, 'signInWithPopup')
-      .mockResolvedValue({user: makeFbUser()} as any)
+      .mockResolvedValue({user: firebaseUserMock} as any)
 
     AuthStore.prototype['fetchFirebaseUser'] = args =>
-      Promise.resolve({exists: true, user: makeUser()})
-
-    jest.spyOn(firestore, 'doc').mockImplementation(jest.fn())
-
-    jest.spyOn(firestore, 'getDoc').mockResolvedValueOnce({
-      data: () => makeFbUser(),
-      exists: true,
-    } as any)
+      Promise.resolve({exists: true, user: userMock})
 
     const {user} = setup(<AuthPage />)
-
     const googleButton = validateGoogleBtn()
-
     await user.click(googleButton)
+
+    expect(authStore.authUser).toHaveBeenCalledWith(firebaseUserMock)
+    expect(authStore.authUser).toHaveBeenCalledTimes(1)
+
+    expect(authStore.user).toStrictEqual(userMock)
+    expect(authStore.isLoading).toBe(false)
 
     expect(mockRouter).toMatchObject({
       asPath: '/admin',

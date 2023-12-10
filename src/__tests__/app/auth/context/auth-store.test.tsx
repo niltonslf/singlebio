@@ -75,6 +75,7 @@ describe('AuthStore', () => {
       expect(user?.email).toBe(firebaseUser.email)
       expect(user?.pictureUrl).toBe(firebaseUser.photoURL)
       expect(user?.uid).toBe(firebaseUser.uid)
+      expect(authStore.isLoading).toBe(false)
     })
 
     it('should return an non existent user', async () => {
