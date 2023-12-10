@@ -6,7 +6,7 @@ import {
   makeGetDocsResponse,
   makeUser,
 } from '@/__tests__/utils/mocks'
-import {AuthStore, authStore} from '@/app/auth/context/auth-state'
+import {AuthStore, authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
 import '@testing-library/jest-dom'
 import {cleanup} from '@testing-library/react'

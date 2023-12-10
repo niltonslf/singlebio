@@ -5,9 +5,9 @@ import mockRouter from 'next-router-mock'
 
 import {setup} from '@/__tests__/utils'
 import {makeFbUser, makeUser} from '@/__tests__/utils/mocks'
-import {AuthStore} from '@/app/auth/context/auth-state'
+import {AuthStore} from '@/app/auth/context/auth-store'
 import AuthPage from '@/app/auth/page'
-import {screen, render} from '@testing-library/react'
+import {screen, render, cleanup} from '@testing-library/react'
 
 jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
 
@@ -25,7 +25,7 @@ jest.mock('@/app/auth/context/auth-state.ts', () => ({
 }))
 
 /**
- * Generators
+ * Generators helpers
  */
 
 export const validateGoogleBtn = () => {
@@ -35,8 +35,13 @@ export const validateGoogleBtn = () => {
   return googleButton
 }
 
+afterEach(() => {
+  jest.clearAllMocks()
+  cleanup()
+})
+
 describe('Auth Page', () => {
-  it('render Auh page with the login button', () => {
+  it('should render Auh page with the login button', () => {
     render(<AuthPage />)
 
     const formTitle = screen.getByText('SignIn')
@@ -53,11 +58,21 @@ describe('Auth Page', () => {
     const googleButton = validateGoogleBtn()
 
     await user.click(googleButton)
+    // should not call authUser
+    // should not call router.push
+
+    // should call signInWithPopup
+    // should call authStore.clearUser
+    //
 
     const errorBox = await screen.getByText(
       'There was an error to access your account. Please, try again later or use a different account.',
     )
 
+    expect(errorBox).toBeVisible()
+    expect(errorBox).toBeVisible()
+    expect(errorBox).toBeVisible()
+    expect(errorBox).toBeVisible()
     expect(errorBox).toBeVisible()
   })
 

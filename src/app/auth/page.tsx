@@ -8,7 +8,7 @@ import {useState} from 'react'
 import {provider, auth} from '@/libs/firebase'
 
 import {GoogleIcon} from '../components'
-import {authStore} from './context/auth-state'
+import {authStore} from './context/auth-store'
 
 const SignIn = observer(() => {
   const router = useRouter()

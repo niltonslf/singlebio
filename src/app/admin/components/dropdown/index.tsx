@@ -3,7 +3,7 @@
 import {observer} from 'mobx-react-lite'
 import {PropsWithChildren, useEffect, useRef, useState} from 'react'
 
-import {authStore} from '@/app/auth/context/auth-state'
+import {authStore} from '@/app/auth/context/auth-store'
 
 import {DropdownMenu} from './dropdown-menu'
 import {MenuItem} from './menu-item'
