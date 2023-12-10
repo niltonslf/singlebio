@@ -6,7 +6,7 @@ import {
   makeGetDocsResponse,
   makeUser,
 } from '@/__tests__/utils/mocks'
-import {AuthStore, authStore} from '@/app/auth/context/auth-state'
+import {AuthStore, authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
 import '@testing-library/jest-dom'
 import {cleanup} from '@testing-library/react'
@@ -50,6 +50,20 @@ describe('AuthStore', () => {
       expect({...authStore.user}).toStrictEqual(user)
       expect({...authStore.firebaseUser}).toStrictEqual(firebaseUser)
     })
+
+    it('should logout user if param is null', async () => {
+      const firebaseUser = null
+
+      jest.spyOn(authStore, 'authUser')
+
+      expect(async () => authStore.authUser(firebaseUser)).rejects.toThrow(
+        'Param firebaseUser must be provided',
+      )
+      expect(authStore.authUser).toHaveBeenCalledWith(null)
+      expect(authStore.user).toBe(undefined)
+      expect(authStore.firebaseUser).toBe(undefined)
+      expect(authStore.isLoading).toBe(false)
+    })
   })
 
   describe('fetchFirebaseUser', () => {
@@ -75,6 +89,7 @@ describe('AuthStore', () => {
       expect(user?.email).toBe(firebaseUser.email)
       expect(user?.pictureUrl).toBe(firebaseUser.photoURL)
       expect(user?.uid).toBe(firebaseUser.uid)
+      expect(authStore.isLoading).toBe(false)
     })
 
     it('should return an non existent user', async () => {

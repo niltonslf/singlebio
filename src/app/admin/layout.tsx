@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite'
 import {useRouter} from 'next/navigation'
 import {ReactNode, useEffect} from 'react'
 
-import {authStore} from '../auth/context/auth-state'
+import {authStore} from '../auth/context/auth-store'
 
 type AdminLayoutProps = {
   children: ReactNode
