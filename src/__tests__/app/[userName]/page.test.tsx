@@ -3,12 +3,9 @@ import * as firestore from 'firebase/firestore'
 import {setup} from '@/__tests__/utils'
 import UserPage from '@/app/[userName]/page'
 import '@testing-library/jest-dom'
+import {faker} from '@faker-js/faker'
 import {screen, waitFor} from '@testing-library/react'
-import {
-  fbUserResponseMock,
-  linkItemResponseMock,
-  makeUser,
-} from '@/__tests__/utils/mocks'
+import {makeGetDocsResponse, makeUser} from '@/__tests__/utils/mocks'
 
 jest.mock('firebase/firestore')
 
@@ -18,28 +15,32 @@ afterEach(() => {
 
 describe('Render user links page', () => {
   it('should render page with all elements', async () => {
-    const user = makeUser()
-    const userResponseMock = fbUserResponseMock(user)
-    const linksResponseMock = linkItemResponseMock()
+    const userMock = makeUser()
+    const linkMock = {
+      label: faker.word.words(2),
+      url: faker.image.urlLoremFlickr(),
+    }
 
     jest
       .spyOn(firestore, 'getDocs')
-      .mockResolvedValueOnce({docs: [userResponseMock]} as any)
+      .mockResolvedValueOnce(makeGetDocsResponse({docs: [userMock]}))
 
     jest
       .spyOn(firestore, 'getDocs')
-      .mockResolvedValueOnce({docs: [linksResponseMock], size: 1} as any)
+      .mockResolvedValueOnce(makeGetDocsResponse({docs: [linkMock]}))
 
-    await waitFor(() => setup(<UserPage params={{userName: user.userName}} />))
+    await waitFor(() =>
+      setup(<UserPage params={{userName: userMock.userName}} />),
+    )
 
     const userName = screen.getByRole('heading', {level: 2})
     const linkList = await screen.queryByRole('list')
     const profilePicture = await screen.queryByRole('img')
 
-    expect(userName.textContent).toBe(`@${user.userName}`)
+    expect(userName.textContent).toBe(`@${userMock.userName}`)
     expect(linkList?.children).toHaveLength(1)
     expect(profilePicture?.getAttribute('src')).toContain(
-      encodeURIComponent(user.pictureUrl),
+      encodeURIComponent(userMock.pictureUrl),
     )
   })
 

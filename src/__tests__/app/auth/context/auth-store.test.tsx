@@ -1,7 +1,11 @@
 import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 
-import {makeFbUser, makeUser} from '@/__tests__/utils/mocks'
+import {
+  makeFbUser,
+  makeGetDocsResponse,
+  makeUser,
+} from '@/__tests__/utils/mocks'
 import {AuthStore, authStore} from '@/app/auth/context/auth-state'
 import {parseToUser} from '@/utils/user'
 import '@testing-library/jest-dom'
@@ -52,6 +56,8 @@ describe('AuthStore', () => {
     it('should return an existent user', async () => {
       const firebaseUser = makeFbUser()
 
+      AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserBackup
+
       jest
         .spyOn(firestore, 'doc')
         .mockReturnValue({} as firestore.DocumentReference)
@@ -60,8 +66,6 @@ describe('AuthStore', () => {
         data: () => parseToUser(firebaseUser),
         exists: () => true,
       } as any)
-
-      AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserBackup
 
       const {exists, user} = await authStore['fetchFirebaseUser'](firebaseUser)
 
@@ -75,16 +79,15 @@ describe('AuthStore', () => {
     it('should return an non existent user', async () => {
       const firebaseUser = makeFbUser()
 
+      AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserBackup
+
       jest
         .spyOn(firestore, 'doc')
         .mockReturnValue({} as firestore.DocumentReference)
 
-      jest.spyOn(firestore, 'getDoc').mockResolvedValue({
-        data: () => undefined,
-        exists: () => false,
-      } as any)
-
-      AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserBackup
+      jest
+        .spyOn(firestore, 'getDoc')
+        .mockResolvedValue(makeGetDocsResponse({exists: false}))
 
       const {exists, user} = await authStore['fetchFirebaseUser'](firebaseUser)
 

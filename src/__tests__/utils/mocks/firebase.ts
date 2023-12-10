@@ -1,19 +1,14 @@
 import {User as FbUser} from 'firebase/auth'
 
-import {User} from '@/models'
 import {faker} from '@faker-js/faker'
 
-type FbUserResponseMockReturn<T = any> = {
-  ref: {path: string}
-  data: () => T
-}
-
-type LinkItemResponseMockReturn = {
-  data: () => {
-    label: string
-    url: string
-  }
-}
+type MakeGetDocsResponse = Partial<{
+  data: any
+  docs: any
+  path: string
+  exists: boolean
+  id: string
+}>
 
 export const makeFbUser = () => {
   return {
@@ -24,20 +19,30 @@ export const makeFbUser = () => {
   } as FbUser
 }
 
-export const fbUserResponseMock = (
-  user: User,
-): FbUserResponseMockReturn<User> => {
+export const makeGetDocsResponse = ({
+  data,
+  docs,
+  path,
+  exists,
+  id,
+}: MakeGetDocsResponse): any => {
   return {
-    ref: {path: faker.internet.url()},
-    data: (): User => user,
+    ref: {path: path || 'some value'} as any,
+    data: () => data,
+    exists: () => exists ?? true,
+    get: jest.fn(),
+    id: id || '',
+    metadata: {} as any,
+    docs: makeGetDocsResponseDocProperty(docs),
+    size: (data?.length || docs?.length) ?? 0,
   }
 }
 
-export const linkItemResponseMock = (): LinkItemResponseMockReturn => {
-  return {
-    data: () => ({
-      label: faker.word.words(2),
-      url: faker.image.urlLoremFlickr(),
-    }),
-  }
+export const makeGetDocsResponseDocProperty = (data: any[]) => {
+  if (!data) return
+
+  return data.map(item => ({
+    data: () => item,
+    ref: {path: faker.string.uuid()} as any,
+  }))
 }
