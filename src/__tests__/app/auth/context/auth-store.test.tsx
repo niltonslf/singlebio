@@ -120,10 +120,16 @@ describe('AuthStore', () => {
         currentUser: {} as firebaseAuth.User,
       } as firebaseAuth.Auth)
 
+      jest.spyOn(authStore, 'clearUser')
+
       await authStore.deleteUser()
 
-      expect(authStore.user).toBe(undefined)
+      expect(firebaseAuth.reauthenticateWithPopup).toHaveBeenCalledTimes(1)
+      expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
+      expect(firestore.deleteDoc).toHaveBeenCalledTimes(1)
+      expect(authStore.clearUser).toHaveBeenCalledTimes(1)
       expect(authStore.firebaseUser).toBe(undefined)
+      expect(authStore.user).toBe(undefined)
     })
   })
 })
