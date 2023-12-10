@@ -1,27 +1,24 @@
 import '@testing-library/jest-dom'
-import * as auth from 'firebase/auth'
+import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 import mockRouter from 'next-router-mock'
 
 import {setup} from '@/__tests__/utils'
 import {makeFbUser, makeUser} from '@/__tests__/utils/mocks'
-import {AuthStore} from '@/app/auth/context/auth-store'
+import {AuthStore, authStore} from '@/app/auth/context/auth-store'
 import AuthPage from '@/app/auth/page'
 import {screen, render, cleanup} from '@testing-library/react'
 
 jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
 
-jest.mock('firebase/firestore', () => {
-  return {__esModule: true, ...jest.requireActual('firebase/firestore')}
-})
-
-jest.mock('firebase/auth', () => {
-  return {__esModule: true, ...jest.requireActual('firebase/auth')}
-})
-
-jest.mock('@/app/auth/context/auth-state.ts', () => ({
+jest.mock('firebase/firestore', () => ({
   __esModule: true,
-  ...jest.requireActual('@/app/auth/context/auth-state.ts'),
+  ...jest.requireActual('firebase/firestore'),
+}))
+
+jest.mock('firebase/auth', () => ({
+  __esModule: true,
+  ...jest.requireActual('firebase/auth'),
 }))
 
 /**
@@ -51,34 +48,36 @@ describe('Auth Page', () => {
   })
 
   it('Should return an error when clicked to Login with Google', async () => {
-    jest.spyOn(auth, 'signInWithPopup').mockRejectedValue('error')
+    const errorMsg = 'error'
+
+    jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue(errorMsg)
+
+    jest.spyOn(authStore, 'clearUser')
+    jest.spyOn(authStore, 'authUser')
+    jest.spyOn(mockRouter, 'push')
 
     const {user} = setup(<AuthPage />)
 
     const googleButton = validateGoogleBtn()
 
     await user.click(googleButton)
-    // should not call authUser
-    // should not call router.push
 
-    // should call signInWithPopup
-    // should call authStore.clearUser
-    //
+    const errorBox = await screen.getByTestId('error-msg')
 
-    const errorBox = await screen.getByText(
-      'There was an error to access your account. Please, try again later or use a different account.',
+    expect(firebaseAuth.signInWithPopup).rejects.toThrow(errorMsg)
+    expect(authStore.clearUser).toHaveBeenCalledTimes(1)
+    expect(errorBox).toBeVisible()
+    expect(errorBox).toHaveTextContent(
+      /There was an error to access your account/i,
     )
 
-    expect(errorBox).toBeVisible()
-    expect(errorBox).toBeVisible()
-    expect(errorBox).toBeVisible()
-    expect(errorBox).toBeVisible()
-    expect(errorBox).toBeVisible()
+    expect(authStore.authUser).toHaveBeenCalledTimes(0)
+    expect(mockRouter.push).toHaveBeenCalledTimes(0)
   })
 
   it('Should Login with Google successfully  ', async () => {
     jest
-      .spyOn(auth, 'signInWithPopup')
+      .spyOn(firebaseAuth, 'signInWithPopup')
       .mockResolvedValue({user: makeFbUser()} as any)
 
     AuthStore.prototype['fetchFirebaseUser'] = args =>

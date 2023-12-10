@@ -13,7 +13,7 @@ import {authStore} from './context/auth-store'
 const SignIn = observer(() => {
   const router = useRouter()
 
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(true)
 
   const handleLoginWithGoogle = async () => {
     try {
@@ -42,10 +42,12 @@ const SignIn = observer(() => {
           </button>
 
           {error && (
-            <div className='rounded-md bg-red-200 p-2 text-sm '>
+            <p
+              data-testid='error-msg'
+              className='rounded-md bg-red-200 p-2 text-sm '>
               There was an error to access your account. Please, try again later
               or use a different account.
-            </div>
+            </p>
           )}
         </div>
       </main>
