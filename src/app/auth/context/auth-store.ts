@@ -36,8 +36,8 @@ export class AuthStore {
   public async authUser(firebaseUser: FbUser | null) {
     if (!firebaseUser) {
       this.isLoading = false
-      this.firebaseUser = undefined
-      return
+      this.clearUser()
+      throw new Error('Param firebaseUser must be provided')
     }
 
     this.firebaseUser = firebaseUser
@@ -51,6 +51,7 @@ export class AuthStore {
     }
 
     const newUser = parseToUser(firebaseUser)
+
     await setDoc(doc(db, 'users', newUser.uid), newUser)
 
     this.user = {...newUser, userName: ''}

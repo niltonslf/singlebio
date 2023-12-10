@@ -50,6 +50,20 @@ describe('AuthStore', () => {
       expect({...authStore.user}).toStrictEqual(user)
       expect({...authStore.firebaseUser}).toStrictEqual(firebaseUser)
     })
+
+    it('should logout user if param is null', async () => {
+      const firebaseUser = null
+
+      jest.spyOn(authStore, 'authUser')
+
+      expect(async () => authStore.authUser(firebaseUser)).rejects.toThrow(
+        'Param firebaseUser must be provided',
+      )
+      expect(authStore.authUser).toHaveBeenCalledWith(null)
+      expect(authStore.user).toBe(undefined)
+      expect(authStore.firebaseUser).toBe(undefined)
+      expect(authStore.isLoading).toBe(false)
+    })
   })
 
   describe('fetchFirebaseUser', () => {
