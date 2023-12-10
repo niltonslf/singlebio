@@ -2,8 +2,7 @@ import '@testing-library/jest-dom'
 import * as firebaseAuth from 'firebase/auth'
 import mockRouter from 'next-router-mock'
 
-import {setup} from '@/__tests__/utils'
-import {makeFbUser} from '@/__tests__/utils/mocks'
+import {setup, makeFbUser} from '@/__tests__/utils'
 import {AuthStore, authStore} from '@/app/auth/context/auth-store'
 import AuthPage from '@/app/auth/page'
 import {User} from '@/models'
@@ -15,6 +14,8 @@ jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
 jest.mock('firebase/firestore', () => ({
   __esModule: true,
   ...jest.requireActual('firebase/firestore'),
+  setDoc: jest.fn(),
+  doc: jest.fn(),
 }))
 
 jest.mock('firebase/auth', () => ({
@@ -78,7 +79,7 @@ describe('Auth Page', () => {
 
   it('Should Login with Google successfully  ', async () => {
     const firebaseUserMock = makeFbUser()
-    const userMock = parseToUser(firebaseUserMock, '') as User
+    const userMock = parseToUser(firebaseUserMock) as User
 
     jest
       .spyOn(firebaseAuth, 'signInWithPopup')
@@ -95,6 +96,34 @@ describe('Auth Page', () => {
     expect(authStore.authUser).toHaveBeenCalledTimes(1)
 
     expect(authStore.user).toStrictEqual(userMock)
+
+    expect(authStore.isLoading).toBe(false)
+
+    expect(mockRouter).toMatchObject({
+      asPath: '/admin',
+      pathname: '/admin',
+      query: {},
+    })
+  })
+
+  it('Should create a new user and Login with Google successfully  ', async () => {
+    const firebaseUserMock = makeFbUser()
+    const userMock = parseToUser(firebaseUserMock)
+
+    jest
+      .spyOn(firebaseAuth, 'signInWithPopup')
+      .mockResolvedValue({user: firebaseUserMock} as any)
+
+    AuthStore.prototype['fetchFirebaseUser'] = args =>
+      Promise.resolve({exists: false, user: undefined})
+
+    const {user} = setup(<AuthPage />)
+    const googleButton = validateGoogleBtn()
+    await user.click(googleButton)
+
+    expect(authStore.authUser).toHaveBeenCalledWith(firebaseUserMock)
+    expect(authStore.authUser).toHaveBeenCalledTimes(1)
+    expect(authStore.user).toStrictEqual({...userMock, userName: ''})
     expect(authStore.isLoading).toBe(false)
 
     expect(mockRouter).toMatchObject({

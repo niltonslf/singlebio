@@ -33,6 +33,7 @@ const Admin = observer(() => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, firebaseUser => {
       authStore.authUser(firebaseUser)
+      // TODO: test what happens when firebaseUser is undefined
       setIsLoading(false)
     })
     return () => unsubscribe()
