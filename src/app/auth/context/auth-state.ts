@@ -11,6 +11,11 @@ import {app, db, provider} from '@/libs/firebase'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
 
+type FetchFirebaseUserReturn = {
+  user: User | undefined
+  exists: boolean
+}
+
 export class AuthStore {
   public isLoading: boolean = true
   public user: User | undefined = undefined
@@ -54,7 +59,7 @@ export class AuthStore {
 
   private async fetchFirebaseUser(
     firebaseUser: FbUser,
-  ): Promise<{user: User | undefined; exists: boolean}> {
+  ): Promise<FetchFirebaseUserReturn> {
     const res = await getDoc(doc(db, 'users', firebaseUser.uid))
 
     return {user: res.data() as User, exists: res.exists()}
