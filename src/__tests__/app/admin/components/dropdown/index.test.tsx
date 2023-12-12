@@ -82,7 +82,7 @@ describe('Dropdown', () => {
   })
 
   it('should the first item has the correct link', async () => {
-    const user = userEvent.setup()
+    userEvent.setup()
 
     authStore.user = makeUser()
     const path = `/${authStore.user.userName}`
@@ -95,10 +95,26 @@ describe('Dropdown', () => {
     const firstItem = menuList.children[0]
     const link = firstItem.firstElementChild
 
-    if (!link) return fail()
+    if (!link) return expect(false).toBe(true)
 
     expect(link).toHaveAttribute('href', path)
   })
 
-  it.todo('should call deleteAccount function')
+  it('should call deleteAccount function', async () => {
+    const user = userEvent.setup()
+
+    jest.spyOn(authStore, 'deleteUser').mockImplementation()
+
+    makeSUT()
+
+    const {menuList} = handleMenuContainer()
+    const secondItem = menuList.children[1]
+    const deleteAccountItem = secondItem.firstElementChild
+
+    if (!deleteAccountItem) return expect(false).toBe(true)
+
+    await user.click(deleteAccountItem)
+
+    expect(authStore.deleteUser).toHaveBeenCalledTimes(1)
+  })
 })
