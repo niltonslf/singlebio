@@ -38,7 +38,7 @@ export class AuthStore {
     if (!firebaseUser) {
       this.isLoading = false
       this.clearUser()
-      throw new Error('Param firebaseUser must be provided')
+      return
     }
 
     this.firebaseUser = firebaseUser

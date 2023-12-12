@@ -34,19 +34,17 @@ const Admin = observer(() => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async firebaseUser => {
-      await authStore.authUser(firebaseUser)
-      // TODO: test what happens when firebaseUser is undefined
+      if (!firebaseUser) {
+        authStore.clearUser()
+        router.push('/auth')
+      } else {
+        await authStore.authUser(firebaseUser)
+      }
       setIsLoading(false)
     })
 
     return () => unsubscribe()
   }, [])
-
-  useEffect(() => {
-    if (!isLoading && !authStore.user) {
-      return router.push('/')
-    }
-  }, [isLoading, router, authStore.user])
 
   return (
     <div className='flex h-screen flex-col items-center overflow-auto bg-gray-300 '>
