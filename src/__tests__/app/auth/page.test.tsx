@@ -97,8 +97,6 @@ describe('Auth Page', () => {
 
     expect(authStore.user).toStrictEqual(userMock)
 
-    expect(authStore.isLoading).toBe(false)
-
     expect(mockRouter).toMatchObject({
       asPath: '/admin',
       pathname: '/admin',
@@ -124,7 +122,6 @@ describe('Auth Page', () => {
     expect(authStore.authUser).toHaveBeenCalledWith(firebaseUserMock)
     expect(authStore.authUser).toHaveBeenCalledTimes(1)
     expect(authStore.user).toStrictEqual({...userMock, userName: ''})
-    expect(authStore.isLoading).toBe(false)
 
     expect(mockRouter).toMatchObject({
       asPath: '/admin',

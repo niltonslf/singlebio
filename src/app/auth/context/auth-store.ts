@@ -18,13 +18,11 @@ type FetchFirebaseUserReturn = {
 }
 
 export class AuthStore {
-  public isLoading: boolean = true
   public user: User | undefined = undefined
   public firebaseUser: FbUser | undefined = undefined
 
   constructor() {
     makeObservable(this, {
-      isLoading: observable,
       user: observable,
       firebaseUser: observable,
       authUser: action,
@@ -36,9 +34,8 @@ export class AuthStore {
 
   public async authUser(firebaseUser: FbUser | null) {
     if (!firebaseUser) {
-      this.isLoading = false
       this.clearUser()
-      throw new Error('Param firebaseUser must be provided')
+      return
     }
 
     this.firebaseUser = firebaseUser
@@ -47,7 +44,6 @@ export class AuthStore {
 
     if (exists && user) {
       this.updateUser(user)
-      this.isLoading = false
       return
     }
 
@@ -56,7 +52,6 @@ export class AuthStore {
     await setDoc(doc(db, 'users', newUser.uid), newUser)
 
     this.user = {...newUser, userName: ''}
-    this.isLoading = false
   }
 
   private async fetchFirebaseUser(
