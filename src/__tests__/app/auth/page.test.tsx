@@ -2,12 +2,13 @@ import '@testing-library/jest-dom'
 import * as firebaseAuth from 'firebase/auth'
 import mockRouter from 'next-router-mock'
 
-import {setup, makeFbUser} from '@/__tests__/utils'
+import {makeFbUser} from '@/__tests__/utils'
 import {AuthStore, authStore} from '@/app/auth/context/auth-store'
 import AuthPage from '@/app/auth/page'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
-import {screen, render, cleanup} from '@testing-library/react'
+import {screen, render, cleanup, waitFor} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
 
@@ -23,25 +24,32 @@ jest.mock('firebase/auth', () => ({
   ...jest.requireActual('firebase/auth'),
 }))
 
-/**
- * Generators helpers
- */
+const mockSignInWithPopup = (result: any, isReject: boolean = false) => {
+  const spy = jest.spyOn(firebaseAuth, 'signInWithPopup')
 
-export const validateGoogleBtn = () => {
+  if (!isReject) return spy.mockResolvedValue(result)
+
+  return spy.mockRejectedValue(result)
+}
+
+const mockFetchFirebaseUser = (exists: boolean, user: User | undefined) => {
+  AuthStore.prototype['fetchFirebaseUser'] = args =>
+    Promise.resolve({exists, user})
+}
+
+const validateGoogleBtn = () => {
   const googleButton = screen.getByRole('button')
   expect(googleButton.textContent).toBe('Sign up with Google')
-
   return googleButton
 }
 
-afterEach(() => {
-  jest.clearAllMocks()
-  cleanup()
-})
-
 describe('Auth Page', () => {
-  it('should render Auh page with the login button', () => {
-    render(<AuthPage />)
+  afterEach(() => {
+    cleanup()
+  })
+
+  it('should render Auth page with the login button', async () => {
+    await waitFor(() => render(<AuthPage />))
 
     const formTitle = screen.getByText('SignIn')
     expect(formTitle.textContent).toBe('SignIn')
@@ -52,19 +60,22 @@ describe('Auth Page', () => {
   it('Should return an error when clicked to Login with Google', async () => {
     const errorMsg = 'error'
 
-    jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue(errorMsg)
+    mockSignInWithPopup(errorMsg, true)
+    mockFetchFirebaseUser(true, undefined)
 
-    jest.spyOn(authStore, 'clearUser')
     jest.spyOn(authStore, 'authUser')
+    jest.spyOn(authStore, 'clearUser')
     jest.spyOn(mockRouter, 'push')
 
-    const {user} = setup(<AuthPage />)
+    const user = userEvent.setup()
+
+    await waitFor(() => render(<AuthPage />))
 
     const googleButton = validateGoogleBtn()
 
     await user.click(googleButton)
 
-    const errorBox = await screen.getByTestId('error-msg')
+    const errorBox = await screen.findByTestId('error-msg')
 
     expect(firebaseAuth.signInWithPopup).rejects.toBe(errorMsg)
     expect(authStore.clearUser).toHaveBeenCalledTimes(1)
@@ -81,20 +92,19 @@ describe('Auth Page', () => {
     const firebaseUserMock = makeFbUser()
     const userMock = parseToUser(firebaseUserMock) as User
 
-    jest
-      .spyOn(firebaseAuth, 'signInWithPopup')
-      .mockResolvedValue({user: firebaseUserMock} as any)
+    mockSignInWithPopup({user: firebaseUserMock})
+    mockFetchFirebaseUser(true, userMock)
+    jest.spyOn(authStore, 'authUser')
 
-    AuthStore.prototype['fetchFirebaseUser'] = args =>
-      Promise.resolve({exists: true, user: userMock})
+    const user = userEvent.setup()
 
-    const {user} = setup(<AuthPage />)
+    await waitFor(() => render(<AuthPage />))
     const googleButton = validateGoogleBtn()
+
     await user.click(googleButton)
 
     expect(authStore.authUser).toHaveBeenCalledWith(firebaseUserMock)
     expect(authStore.authUser).toHaveBeenCalledTimes(1)
-
     expect(authStore.user).toStrictEqual(userMock)
 
     expect(mockRouter).toMatchObject({
@@ -104,19 +114,18 @@ describe('Auth Page', () => {
     })
   })
 
-  it('Should create a new user and Login with Google successfully  ', async () => {
+  it('Should create a new user and Login with Google successfully', async () => {
     const firebaseUserMock = makeFbUser()
     const userMock = parseToUser(firebaseUserMock)
 
-    jest
-      .spyOn(firebaseAuth, 'signInWithPopup')
-      .mockResolvedValue({user: firebaseUserMock} as any)
+    mockSignInWithPopup({user: firebaseUserMock})
+    mockFetchFirebaseUser(false, undefined)
+    jest.spyOn(authStore, 'authUser')
 
-    AuthStore.prototype['fetchFirebaseUser'] = args =>
-      Promise.resolve({exists: false, user: undefined})
-
-    const {user} = setup(<AuthPage />)
+    const user = userEvent.setup()
+    await waitFor(() => render(<AuthPage />))
     const googleButton = validateGoogleBtn()
+
     await user.click(googleButton)
 
     expect(authStore.authUser).toHaveBeenCalledWith(firebaseUserMock)

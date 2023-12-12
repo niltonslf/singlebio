@@ -11,6 +11,8 @@ const config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
+  clearMocks: true,
+  restoreMocks: true,
 }
 
 export default createJestConfig(config)

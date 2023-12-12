@@ -14,7 +14,7 @@ import {AddLinkForm, Header, LinksList} from './components'
 
 const Admin = observer(() => {
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const onSaveUserName = async (data: string) => {
     if (!authStore.user) return
@@ -29,7 +29,6 @@ const Admin = observer(() => {
 
     const res = await doc(db, 'users', authStore.user.uid)
     addDoc(collection(res, 'links'), data)
-    authStore.updateUser({...authStore.user, userName: data})
   }
 
   useEffect(() => {

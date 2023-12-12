@@ -105,6 +105,7 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
 
                     <div className='mt-2'>
                       <input
+                        placeholder='Type your username'
                         className={clsx(
                           'border-1 w-full rounded-md border border-gray-400 p-2',
                           (errors?.userName?.message || submitDisabled) &&
