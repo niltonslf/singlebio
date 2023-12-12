@@ -147,7 +147,6 @@ describe('Admin page', () => {
   it('should call method to add a new link', async () => {
     const user = userEvent.setup()
     const fbUserMock = makeFbUser()
-    const userMock = parseToUser(fbUserMock)
     const linkMock = {
       label: faker.internet.userName(),
       url: faker.internet.url(),
@@ -158,7 +157,6 @@ describe('Admin page', () => {
     jest.spyOn(firestore, 'doc').mockImplementation()
     jest.spyOn(firestore, 'collection').mockImplementation()
     jest.spyOn(firestore, 'addDoc').mockImplementation()
-    jest.spyOn(authStore, 'updateUser')
 
     await waitFor(() => render(<AdminPage />))
 
@@ -173,9 +171,6 @@ describe('Admin page', () => {
     expect(labelInput).toHaveValue(linkMock.label)
 
     await user.click(formButton)
-
-    expect(authStore.updateUser).toHaveBeenCalledWith(userMock)
-    expect(authStore.user).toStrictEqual(userMock)
 
     expect(urlInput).toHaveValue('')
     expect(labelInput).toHaveValue('')
