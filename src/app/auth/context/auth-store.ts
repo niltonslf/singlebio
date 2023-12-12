@@ -10,6 +10,7 @@ import {action, makeObservable, observable} from 'mobx'
 import {app, db, provider} from '@/libs/firebase'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
+import {injectStores} from '@mobx-devtools/tools'
 
 type FetchFirebaseUserReturn = {
   user: User | undefined
@@ -89,3 +90,6 @@ export class AuthStore {
 }
 
 export const authStore = new AuthStore()
+if (process.env.NODE_ENV === 'development') {
+  injectStores({authStore})
+}

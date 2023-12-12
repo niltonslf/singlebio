@@ -4,9 +4,11 @@
     "react",
     "import",
     "eslint-plugin-import-helpers",
+    "@typescript-eslint",
     "prettier",
     "unused-imports"
   ],
+  "parser": "@typescript-eslint/parser",
   "rules": {
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
@@ -27,15 +29,42 @@
     "react/no-unescaped-entities": "off",
     "react/prop-types": "off",
     "react/display-name": "off",
-    "max-len": ["off", {"code": 100, "tabWidth": 2}],
+    "no-console": "error",
+    "max-len": [
+      "off",
+      {
+        "code": 100,
+        "tabWidth": 2
+      }
+    ],
     "curly": "off",
     "unused-imports/no-unused-imports": "error",
+    "import/no-unresolved": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "classMethod",
+        "format": ["camelCase"]
+      },
+      {
+        "selector": "interface",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "variable",
+        "modifiers": ["destructured"],
+        "format": null
+      }
+    ],
     "import-helpers/order-imports": [
       "warn",
       {
         "newlinesBetween": "always",
         "groups": ["module", "/^@/", ["parent", "sibling", "index"]],
-        "alphabetize": {"order": "asc", "ignoreCase": true}
+        "alphabetize": {
+          "order": "asc",
+          "ignoreCase": true
+        }
       }
     ]
   }
