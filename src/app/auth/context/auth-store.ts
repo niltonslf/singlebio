@@ -44,8 +44,8 @@ export class AuthStore {
 
     const {exists, user} = await this.fetchFirebaseUser(firebaseUser)
 
-    if (exists) {
-      this.user = user
+    if (exists && user) {
+      this.updateUser(user)
       this.isLoading = false
       return
     }

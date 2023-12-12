@@ -3,6 +3,7 @@
 import {onAuthStateChanged} from 'firebase/auth'
 import {addDoc, collection, doc, updateDoc} from 'firebase/firestore'
 import {observer} from 'mobx-react-lite'
+import {useRouter} from 'next/navigation'
 import {useEffect, useState} from 'react'
 
 import {Modal} from '@/app/components'
@@ -12,6 +13,7 @@ import {authStore} from '../auth/context/auth-store'
 import {AddLinkForm, Header, LinksList} from './components'
 
 const Admin = observer(() => {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
 
   const onSaveUserName = async (data: string) => {
@@ -31,13 +33,20 @@ const Admin = observer(() => {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, firebaseUser => {
-      authStore.authUser(firebaseUser)
+    const unsubscribe = onAuthStateChanged(auth, async firebaseUser => {
+      await authStore.authUser(firebaseUser)
       // TODO: test what happens when firebaseUser is undefined
       setIsLoading(false)
     })
+
     return () => unsubscribe()
   }, [])
+
+  useEffect(() => {
+    if (!isLoading && !authStore.user) {
+      return router.push('/')
+    }
+  }, [isLoading, router, authStore.user])
 
   return (
     <div className='flex h-screen flex-col items-center overflow-auto bg-gray-300 '>
