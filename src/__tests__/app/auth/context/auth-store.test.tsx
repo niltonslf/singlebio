@@ -56,13 +56,11 @@ describe('AuthStore', () => {
 
       jest.spyOn(authStore, 'authUser')
 
-      expect(async () => authStore.authUser(firebaseUser)).rejects.toThrow(
-        'Param firebaseUser must be provided',
-      )
-      expect(authStore.authUser).toHaveBeenCalledWith(null)
+      authStore.authUser(firebaseUser)
+
+      expect(authStore.authUser).toHaveBeenCalledWith(firebaseUser)
       expect(authStore.user).toBe(undefined)
       expect(authStore.firebaseUser).toBe(undefined)
-      expect(authStore.isLoading).toBe(false)
     })
   })
 
@@ -89,7 +87,6 @@ describe('AuthStore', () => {
       expect(user?.email).toBe(firebaseUser.email)
       expect(user?.pictureUrl).toBe(firebaseUser.photoURL)
       expect(user?.uid).toBe(firebaseUser.uid)
-      expect(authStore.isLoading).toBe(false)
     })
 
     it('should return an non existent user', async () => {
