@@ -1,9 +1,23 @@
 import {Dropdown} from '@/app/admin/components'
 import '@testing-library/jest-dom'
-import {render, screen} from '@testing-library/react'
+import {cleanup, render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
+const handleMenuContainer = () => {
+  const menuContainer = screen.getByRole('list')
+  let hasHidden = menuContainer.parentElement?.classList.contains('hidden')
+
+  return {
+    hasHidden,
+    menuContainer,
+  }
+}
+
 describe('Dropdown', () => {
+  beforeEach(() => {
+    cleanup()
+  })
+
   it('should render component', async () => {
     render(
       <Dropdown>
@@ -42,7 +56,33 @@ describe('Dropdown', () => {
     expect(menuContainer.children).toHaveLength(2)
   })
 
-  it.todo('should close menu when clicked outside')
+  it('should close menu when clicked outside', async () => {
+    const user = userEvent.setup()
+
+    const {baseElement} = render(
+      <Dropdown>
+        <button>open dropdown</button>
+      </Dropdown>,
+    )
+
+    const triggerItem = screen.getByRole('button')
+    const {hasHidden} = handleMenuContainer()
+
+    expect(hasHidden).toBe(true)
+
+    await user.click(triggerItem)
+    const {hasHidden: hasHidden2, menuContainer} = handleMenuContainer()
+
+    expect(hasHidden2).toBe(false)
+    expect(menuContainer.children).toHaveLength(2)
+
+    await user.click(baseElement)
+    const {hasHidden: hasHidden3} = handleMenuContainer()
+
+    expect(hasHidden3).toBe(true)
+  })
+
+  it.todo('should go to link')
 
   it.todo('should call deleteAccount function')
 })
