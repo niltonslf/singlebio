@@ -1,4 +1,4 @@
-import {makeUser} from '@/__tests__/utils'
+import {fail, makeUser} from '@/__tests__/utils'
 import {Dropdown} from '@/app/admin/components'
 import {authStore} from '@/app/auth/context/auth-store'
 import '@testing-library/jest-dom'
@@ -15,10 +15,10 @@ const makeSUT = () => {
 
 const handleMenuContainer = () => {
   const menuList = screen.getByRole('list')
-  let hasHidden = menuList.parentElement?.classList.contains('hidden')
+  let menuHidden = menuList.parentElement?.classList.contains('hidden')
 
   return {
-    hasHidden,
+    menuHidden,
     menuList,
   }
 }
@@ -33,7 +33,7 @@ describe('Dropdown', () => {
     makeSUT()
 
     const triggerItem = screen.getByRole('button')
-    const menuList = screen.getByRole('list')
+    const {menuList} = handleMenuContainer()
 
     expect(triggerItem).toBeInTheDocument()
     expect(menuList).toBeInTheDocument()
@@ -46,16 +46,15 @@ describe('Dropdown', () => {
     makeSUT()
 
     const triggerItem = screen.getByRole('button')
-    const menuList = screen.getByRole('list')
-    let hasHidden = menuList.parentElement?.classList.contains('hidden')
+    const {menuHidden} = handleMenuContainer()
 
-    expect(hasHidden).toBe(true)
+    expect(menuHidden).toBe(true)
 
     await user.click(triggerItem)
 
-    hasHidden = menuList.parentElement?.classList.contains('hidden')
+    const {menuHidden: menuHidden2, menuList} = handleMenuContainer()
 
-    expect(hasHidden).toBe(false)
+    expect(menuHidden2).toBe(false)
     expect(menuList.children).toHaveLength(2)
   })
 
@@ -65,20 +64,39 @@ describe('Dropdown', () => {
     const {baseElement} = makeSUT()
 
     const triggerItem = screen.getByRole('button')
-    const {hasHidden} = handleMenuContainer()
+    const {menuHidden, menuList} = handleMenuContainer()
 
-    expect(hasHidden).toBe(true)
+    // dropdown hidden
+    expect(menuHidden).toBe(true)
 
+    // open dropdown
     await user.click(triggerItem)
-    const {hasHidden: hasHidden2, menuList} = handleMenuContainer()
+    const {menuHidden: menuHidden2} = handleMenuContainer()
 
-    expect(hasHidden2).toBe(false)
+    // check if dropdown is visible
+    expect(menuHidden2).toBe(false)
     expect(menuList.children).toHaveLength(2)
 
-    await user.click(baseElement)
-    const {hasHidden: hasHidden3} = handleMenuContainer()
+    // don't close when clicked in a element inside the dropdown
+    const {menuHidden: menuHidden3} = handleMenuContainer()
+    const menulistContainer = menuList.parentElement
 
-    expect(hasHidden3).toBe(true)
+    if (!menulistContainer) return fail()
+
+    // testing clicking on the list
+    await user.click(menuList)
+    expect(menuHidden3).toBe(false)
+
+    // testing clicking on the list container
+    await user.click(menulistContainer)
+    expect(menuHidden3).toBe(false)
+
+    // click outside
+    await user.click(baseElement)
+    const {menuHidden: menuHidden4} = handleMenuContainer()
+
+    // check if dropdown is hidden
+    expect(menuHidden4).toBe(true)
   })
 
   it('should the first item has the correct link', async () => {
@@ -95,7 +113,7 @@ describe('Dropdown', () => {
     const firstItem = menuList.children[0]
     const link = firstItem.firstElementChild
 
-    if (!link) return expect(false).toBe(true)
+    if (!link) return fail()
 
     expect(link).toHaveAttribute('href', path)
   })
@@ -111,7 +129,7 @@ describe('Dropdown', () => {
     const secondItem = menuList.children[1]
     const deleteAccountItem = secondItem.firstElementChild
 
-    if (!deleteAccountItem) return expect(false).toBe(true)
+    if (!deleteAccountItem) return fail()
 
     await user.click(deleteAccountItem)
 
