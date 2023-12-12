@@ -7,18 +7,18 @@ import {
   createReturnChildren,
   makeFbUser,
   makeGetDocsResponse,
-  makeUser,
   setup,
 } from '@/__tests__/utils'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
+import '@testing-library/jest-dom'
 import {AuthStore, authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
 import {faker} from '@faker-js/faker'
-import {cleanup, render, screen, waitFor} from '@testing-library/react'
+import {act, cleanup, render, screen, waitFor} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import '@testing-library/jest-dom'
+jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
 
 jest.mock('@headlessui/react', () => {
   return {
@@ -45,37 +45,40 @@ jest.mock('firebase/firestore', () => ({
   onSnapshot: jest.fn(args => jest.fn()),
 }))
 
-jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
-
 const fetchFirebaseUserCopy = AuthStore.prototype['fetchFirebaseUser']
+
+const handlePageAuthentication = (
+  fbUserMock: firebaseAuth.User | undefined,
+) => {
+  const data = fbUserMock ? parseToUser(fbUserMock) : undefined
+
+  jest
+    .spyOn(firebaseAuth, 'onAuthStateChanged')
+    .mockImplementation((auth: any, userCallback: any) => {
+      userCallback(fbUserMock)
+      return jest.fn()
+    })
+
+  jest.spyOn(firestore, 'doc').mockImplementation()
+
+  jest
+    .spyOn(firestore, 'getDoc')
+    .mockResolvedValue(makeGetDocsResponse({data, exists: true}))
+}
 
 describe('Admin page', () => {
   beforeEach(() => {
-    authStore.clearUser()
     jest.clearAllMocks()
+    jest.restoreAllMocks()
     cleanup()
+    act(() => authStore.clearUser())
+    AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserCopy
     return
   })
+  it('should render page with all sections', async () => {
+    const userMock = makeFbUser()
 
-  afterAll(() => {
-    AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserCopy
-  })
-
-  it('render page with all sections', async () => {
-    const userMock = makeUser()
-
-    jest
-      .spyOn(firebaseAuth, 'onAuthStateChanged')
-      .mockImplementation((auth: any, userCallback: any) => {
-        userCallback(userMock)
-        return jest.fn()
-      })
-
-    jest
-      .spyOn(firestore, 'getDoc')
-      .mockResolvedValue(makeGetDocsResponse({data: userMock, exists: true}))
-
-    jest.spyOn(authStore, 'authUser')
+    handlePageAuthentication(userMock)
 
     await waitFor(() => setup(<AdminPage />))
 
@@ -92,12 +95,7 @@ describe('Admin page', () => {
   })
 
   it('should redirect to /auth if not authenticated', async () => {
-    jest
-      .spyOn(firebaseAuth, 'onAuthStateChanged')
-      .mockImplementationOnce((auth: any, userCallback: any) => {
-        userCallback(null)
-        return jest.fn()
-      })
+    handlePageAuthentication(undefined)
 
     await waitFor(() =>
       render(
@@ -122,14 +120,8 @@ describe('Admin page', () => {
     const userMock = parseToUser(fbUserMock)
     const usernameMock = faker.internet.userName()
 
-    jest
-      .spyOn(firebaseAuth, 'onAuthStateChanged')
-      .mockImplementation((auth: any, userCallback: any) => {
-        userCallback(fbUserMock)
-        return jest.fn()
-      })
+    handlePageAuthentication(fbUserMock)
 
-    jest.spyOn(firestore, 'doc').mockImplementation()
     jest.spyOn(firestore, 'updateDoc').mockImplementation()
 
     AuthStore.prototype['fetchFirebaseUser'] = args =>
@@ -154,18 +146,19 @@ describe('Admin page', () => {
 
   it('should call method to add a new link', async () => {
     const user = userEvent.setup()
-    const userMock = makeUser()
+    const fbUserMock = makeFbUser()
+    const userMock = parseToUser(fbUserMock)
     const linkMock = {
       label: faker.internet.userName(),
       url: faker.internet.url(),
     }
 
-    // console.log('current user', {...authStore.user})
+    handlePageAuthentication(fbUserMock)
 
     jest.spyOn(firestore, 'doc').mockImplementation()
     jest.spyOn(firestore, 'collection').mockImplementation()
     jest.spyOn(firestore, 'addDoc').mockImplementation()
-    // jest.spyOn(authStore, 'updateUser')
+    jest.spyOn(authStore, 'updateUser')
 
     await waitFor(() => render(<AdminPage />))
 
@@ -181,7 +174,8 @@ describe('Admin page', () => {
 
     await user.click(formButton)
 
-    // expect(authStore.updateUser).toHaveBeenCalledWith(userMock)
+    expect(authStore.updateUser).toHaveBeenCalledWith(userMock)
+    expect(authStore.user).toStrictEqual(userMock)
 
     expect(urlInput).toHaveValue('')
     expect(labelInput).toHaveValue('')
