@@ -1,62 +1,66 @@
-import {setup} from '@/__tests__/utils';
-import {AddLinkForm} from '@/app/admin/components';
-import {faker} from '@faker-js/faker';
-import {screen} from '@testing-library/react';
-import '@testing-library/jest-dom';
+import {setup} from '@/__tests__/utils'
+import {AddLinkForm} from '@/app/admin/components'
+import {faker} from '@faker-js/faker'
+import {screen, waitFor} from '@testing-library/react'
+import '@testing-library/jest-dom'
 
-const mockLogin = jest.fn((data: any) => {
-  return Promise.resolve(data);
-});
+const onAddLinkMock = jest.fn((data: any) => {
+  return Promise.resolve(data)
+})
 
 afterEach(() => {
-  jest.clearAllMocks();
-});
+  jest.clearAllMocks()
+})
 
 describe('Add Link Form Component', () => {
-  it('render form with all fields', () => {
-    setup(<AddLinkForm saveLink={mockLogin} />);
+  it('render form with all fields', async () => {
+    await waitFor(() => setup(<AddLinkForm saveLink={onAddLinkMock} />))
 
-    const inputUrl = screen.getByPlaceholderText('Type the url');
-    expect(inputUrl).toBeInTheDocument();
+    const inputUrl = screen.getByPlaceholderText('Type the url')
+    expect(inputUrl).toBeInTheDocument()
 
-    const inputLabel = screen.getByPlaceholderText('type the label');
-    expect(inputLabel).toBeInTheDocument();
+    const inputLabel = screen.getByPlaceholderText(/type the label/i)
+    expect(inputLabel).toBeInTheDocument()
 
-    const submitButton = screen.getByRole('button');
-    expect(submitButton).toBeInTheDocument();
-  });
+    const submitButton = screen.getByRole('button')
+    expect(submitButton).toBeInTheDocument()
+  })
 
   it('validate input data on submit', async () => {
-    const {user} = setup(<AddLinkForm saveLink={mockLogin} />);
+    const {user} = await waitFor(() =>
+      setup(<AddLinkForm saveLink={onAddLinkMock} />),
+    )
     const mockData = {
       url: faker.image.urlLoremFlickr(),
       label: faker.word.words(2),
-    };
+    }
 
-    const inputUrl = screen.getByPlaceholderText('Type the url');
-    await user.type(inputUrl, mockData.url);
+    const inputUrl = screen.getByPlaceholderText(/type the url/i)
+    await user.type(inputUrl, mockData.url)
 
-    const inputLabel = screen.getByPlaceholderText('type the label');
-    await user.type(inputLabel, mockData.label);
+    const inputLabel = screen.getByPlaceholderText(/type the label/i)
+    await user.type(inputLabel, mockData.label)
 
-    const submitButton = screen.getByRole('button');
-    await user.click(submitButton);
+    const submitButton = screen.getByRole('button')
+    await user.click(submitButton)
 
-    expect(mockLogin).toHaveBeenCalledWith({
+    expect(onAddLinkMock).toHaveBeenCalledWith({
       label: mockData.label,
       url: mockData.url,
-    });
-  });
+    })
+  })
 
   it('should not submit without all fields filled', async () => {
-    const {user} = setup(<AddLinkForm saveLink={mockLogin} />);
+    const {user} = await waitFor(() =>
+      setup(<AddLinkForm saveLink={onAddLinkMock} />),
+    )
 
-    const inputLabel = screen.getByPlaceholderText('type the label');
-    await user.type(inputLabel, faker.word.words(2));
+    const inputLabel = screen.getByPlaceholderText(/type the label/i)
+    await user.type(inputLabel, faker.word.words(2))
 
-    const submitButton = screen.getByRole('button');
-    await user.click(submitButton);
+    const submitButton = screen.getByRole('button')
+    await user.click(submitButton)
 
-    expect(mockLogin).not.toHaveBeenCalled();
-  });
-});
+    expect(onAddLinkMock).not.toHaveBeenCalled()
+  })
+})
