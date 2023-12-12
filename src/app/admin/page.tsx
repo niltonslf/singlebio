@@ -29,7 +29,6 @@ const Admin = observer(() => {
 
     const res = await doc(db, 'users', authStore.user.uid)
     addDoc(collection(res, 'links'), data)
-    authStore.updateUser({...authStore.user, userName: data})
   }
 
   useEffect(() => {
@@ -52,7 +51,10 @@ const Admin = observer(() => {
         <div>Loading...</div>
       ) : (
         <>
-          <Modal onSave={onSaveUserName} initialOpen={true} />
+          <Modal
+            onSave={onSaveUserName}
+            initialOpen={!authStore.user?.userName}
+          />
 
           <Header user={authStore.user} />
 

@@ -30,7 +30,7 @@ export const AddLinkForm = ({saveLink}: AddLinkFormProps) => {
           {...register('url', {required: true})}
         />
         <input
-          placeholder='type the label'
+          placeholder='Type the label'
           className='border-1 w-full rounded-md border border-gray-400 p-2'
           {...register('label', {required: true})}
         />

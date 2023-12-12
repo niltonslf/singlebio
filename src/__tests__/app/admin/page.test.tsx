@@ -14,11 +14,11 @@ import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import {AuthStore, authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
+import {faker} from '@faker-js/faker'
 import {cleanup, render, screen, waitFor} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import '@testing-library/jest-dom'
-import {faker} from '@faker-js/faker'
 
 jest.mock('@headlessui/react', () => {
   return {
@@ -49,16 +49,18 @@ jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
 
 const fetchFirebaseUserCopy = AuthStore.prototype['fetchFirebaseUser']
 
-afterEach(() => {
-  jest.clearAllMocks()
-  cleanup()
-})
-
-afterAll(() => {
-  AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserCopy
-})
-
 describe('Admin page', () => {
+  beforeEach(() => {
+    authStore.clearUser()
+    jest.clearAllMocks()
+    cleanup()
+    return
+  })
+
+  afterAll(() => {
+    AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserCopy
+  })
+
   it('render page with all sections', async () => {
     const userMock = makeUser()
 
@@ -150,5 +152,38 @@ describe('Admin page', () => {
     })
   })
 
-  // it("should add a new link" , () => {})
+  it('should call method to add a new link', async () => {
+    const user = userEvent.setup()
+    const userMock = makeUser()
+    const linkMock = {
+      label: faker.internet.userName(),
+      url: faker.internet.url(),
+    }
+
+    // console.log('current user', {...authStore.user})
+
+    jest.spyOn(firestore, 'doc').mockImplementation()
+    jest.spyOn(firestore, 'collection').mockImplementation()
+    jest.spyOn(firestore, 'addDoc').mockImplementation()
+    // jest.spyOn(authStore, 'updateUser')
+
+    await waitFor(() => render(<AdminPage />))
+
+    const urlInput = await screen.findByPlaceholderText(/Type the url/i)
+    const labelInput = await screen.findByPlaceholderText(/Type the label/i)
+    const formButton = await screen.findByText('Add link')
+
+    await user.type(urlInput, linkMock.url)
+    await user.type(labelInput, linkMock.label)
+
+    expect(urlInput).toHaveValue(linkMock.url)
+    expect(labelInput).toHaveValue(linkMock.label)
+
+    await user.click(formButton)
+
+    // expect(authStore.updateUser).toHaveBeenCalledWith(userMock)
+
+    expect(urlInput).toHaveValue('')
+    expect(labelInput).toHaveValue('')
+  })
 })
