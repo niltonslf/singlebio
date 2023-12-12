@@ -8,6 +8,7 @@
     "prettier",
     "unused-imports"
   ],
+  "parser": "@typescript-eslint/parser",
   "rules": {
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
@@ -38,6 +39,7 @@
     ],
     "curly": "off",
     "unused-imports/no-unused-imports": "error",
+    "import/no-unresolved": "error",
     "@typescript-eslint/naming-convention": [
       "error",
       {
