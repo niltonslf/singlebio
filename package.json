@@ -12,6 +12,7 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:ci": "jest --passWithNoTests",
+    "test:coverage": "jest --coverage",
     "prepare": "husky install"
   },
   "dependencies": {
