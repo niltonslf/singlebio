@@ -1,23 +1,23 @@
-'use client';
+'use client'
 
-import {useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form'
 
 type AddLinkFormProps = {
-  saveLink: (args: any) => Promise<typeof args>;
-};
+  saveLink: (args: any) => Promise<typeof args>
+}
 
 type FormData = {
-  url: string;
-  label: string;
-};
+  url: string
+  label: string
+}
 
 export const AddLinkForm = ({saveLink}: AddLinkFormProps) => {
-  const {register, handleSubmit, reset} = useForm<FormData>();
+  const {register, handleSubmit, reset} = useForm<FormData>()
 
   const onSubmit = async (data: FormData) => {
-    await saveLink(data);
-    reset();
-  };
+    await saveLink(data)
+    reset()
+  }
 
   return (
     <div className='flex w-full flex-row gap-5 rounded-lg bg-white p-5'>
@@ -37,9 +37,9 @@ export const AddLinkForm = ({saveLink}: AddLinkFormProps) => {
         <button
           type='submit'
           className='rounded-md bg-green-600 py-2 text-white'>
-          Save
+          Add link
         </button>
       </form>
     </div>
-  );
-};
+  )
+}

@@ -14,7 +14,7 @@ import {AddLinkForm, Header, LinksList} from './components'
 
 const Admin = observer(() => {
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const onSaveUserName = async (data: string) => {
     if (!authStore.user) return
@@ -52,10 +52,7 @@ const Admin = observer(() => {
         <div>Loading...</div>
       ) : (
         <>
-          <Modal
-            onSave={onSaveUserName}
-            initialOpen={!authStore.user?.userName}
-          />
+          <Modal onSave={onSaveUserName} initialOpen={true} />
 
           <Header user={authStore.user} />
 

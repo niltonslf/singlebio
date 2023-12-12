@@ -2,7 +2,7 @@ import {User as FbUser} from 'firebase/auth'
 
 import {User} from '@/models'
 
-export const parseToUser = (firebaseUser: FbUser): Omit<User, 'userName'> => {
+export const parseToUser = (firebaseUser: FbUser): User => {
   if (!firebaseUser.email || !firebaseUser.uid)
     throw new Error('email and uid are required.')
 
@@ -11,6 +11,7 @@ export const parseToUser = (firebaseUser: FbUser): Omit<User, 'userName'> => {
     name: firebaseUser.displayName || '',
     pictureUrl: firebaseUser.photoURL || '',
     uid: firebaseUser.uid,
+    userName: '',
   }
 
   return response
