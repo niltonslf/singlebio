@@ -68,8 +68,8 @@ const handlePageAuthentication = (
 
 describe('Admin page', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-    jest.restoreAllMocks()
+    // jest.clearAllMocks()
+    // jest.restoreAllMocks()
     cleanup()
     act(() => authStore.clearUser())
     AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserCopy
