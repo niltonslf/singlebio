@@ -14,10 +14,6 @@ const firebaseConfig = {
 }
 
 export const app = (() => {
-  if (process.env.NODE_ENV === 'development') {
-    console.log('initializing firebase 🟢')
-  }
-
   if (getApps().length === 0) return initializeApp(firebaseConfig)
   return getApps()[0]
 })()
