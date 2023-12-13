@@ -4,7 +4,7 @@ import {onAuthStateChanged} from 'firebase/auth'
 import {addDoc, collection, doc, updateDoc} from 'firebase/firestore'
 import {observer} from 'mobx-react-lite'
 import {useRouter} from 'next/navigation'
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 
 import {Modal, Smartphone} from '@/app/components'
 import {auth, db} from '@/libs/firebase'
@@ -14,6 +14,8 @@ import {AddLinkForm, Header} from './components'
 
 const Admin = observer(() => {
   const router = useRouter()
+  const iframe = useRef<HTMLIFrameElement>(null)
+
   const [isLoading, setIsLoading] = useState(false)
 
   const onSaveUserName = async (data: string) => {
@@ -29,6 +31,7 @@ const Admin = observer(() => {
 
     const res = await doc(db, 'users', authStore.user.uid)
     addDoc(collection(res, 'links'), data)
+    iframe.current?.contentWindow?.location.reload()
   }
 
   useEffect(() => {
@@ -43,6 +46,7 @@ const Admin = observer(() => {
     })
 
     return () => unsubscribe()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -67,9 +71,11 @@ const Admin = observer(() => {
 
             <aside className='grid w-full grid-rows-1 '>
               <div className='flex flex-1 items-center justify-center px-6 py-7'>
-                <Smartphone iframeUrl={`${authStore.user.userName}`} />
+                <Smartphone
+                  ref={iframe}
+                  iframeUrl={`${authStore.user.userName}`}
+                />
               </div>
-              {/* <LinksList user={authStore.user} /> */}
             </aside>
           </main>
         </>

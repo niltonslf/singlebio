@@ -82,15 +82,18 @@ describe('Admin page', () => {
 
     await waitFor(() => setup(<AdminPage />))
 
+    const userPageUrl = `${authStore.user?.userName}`
+
     await waitFor(async () => {
       const header = await screen.queryByText('Lnktree admin')
       const formButton = await screen.queryByText('Add link')
-      const linksList = await screen.queryByLabelText('link-list')
+      const iframe = await document.querySelector('iframe')
 
       expect(header).toBeInTheDocument()
       expect(formButton).toBeInTheDocument()
       expect(formButton).toHaveTextContent(/Add link/i)
-      expect(linksList?.children).toHaveLength(0)
+      expect(iframe).toHaveAttribute('src', userPageUrl)
+      expect(iframe).toBeVisible()
     })
   })
 

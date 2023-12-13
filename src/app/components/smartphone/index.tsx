@@ -1,11 +1,14 @@
+import {forwardRef} from 'react'
+
 type SmartphoneProps = {
   iframeUrl: string
 }
 
-export const Smartphone = ({iframeUrl}: SmartphoneProps) => {
-  return (
-    <div
-      className='after:content-[" "] before:content-[" "]
+export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
+  ({iframeUrl}, ref) => {
+    return (
+      <div
+        className='after:content-[" "] before:content-[" "]
       ` 
       relative 
       my-6 
@@ -38,12 +41,12 @@ export const Smartphone = ({iframeUrl}: SmartphoneProps) => {
      after:rounded-full
      after:bg-white
      after:shadow-md'>
-      <iframe src={iframeUrl} className='h-full w-full object-cover' />
-    </div>
-  )
-}
-/**
- *
- * bg-gradient-to-r from-gray-700 via-gray-900 to-black
- *
- */
+        <iframe
+          ref={ref}
+          src={iframeUrl}
+          className='h-full w-full object-cover'
+        />
+      </div>
+    )
+  },
+)
