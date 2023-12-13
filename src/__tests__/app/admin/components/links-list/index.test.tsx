@@ -1,14 +1,22 @@
 import * as firestore from 'firebase/firestore'
 
-import {makeLink, makeUser, setup} from '@/__tests__/utils'
+import {fail, makeLink, makeUser, setup} from '@/__tests__/utils'
+import '@testing-library/jest-dom'
 import {LinksList} from '@/app/admin/components/links-list'
+import {User} from '@/models'
+import {faker} from '@faker-js/faker'
 import {cleanup, screen} from '@testing-library/react'
 
-import '@testing-library/jest-dom'
+jest.mock('firebase/firestore', () => ({
+  __esModule: true,
+  ...jest.requireActual('firebase/firestore'),
+}))
 
-jest.mock('firebase/firestore', () => {
-  return {__esModule: true, ...jest.requireActual('firebase/firestore')}
-})
+const makeSUT = (user?: User) => {
+  const userMock = user ?? makeUser()
+  const sut = setup(<LinksList user={userMock} />)
+  return {userMock, ...sut}
+}
 
 describe('Links List component', () => {
   beforeEach(() => {
@@ -16,19 +24,15 @@ describe('Links List component', () => {
   })
 
   it('render component empty', () => {
-    const userMock = makeUser()
-
-    setup(<LinksList user={userMock} />)
+    makeSUT()
 
     const list = screen.getByRole('list')
     expect(list.childElementCount).toBe(0)
   })
 
   it('render component with 2 items', () => {
-    const userMock = makeUser()
-
     const linksMock = [
-      makeLink('instagram', 'http://instagram.com'),
+      makeLink(faker.internet.domainName(), faker.internet.url()),
       makeLink(),
     ]
 
@@ -41,7 +45,7 @@ describe('Links List component', () => {
         return jest.fn()
       })
 
-    setup(<LinksList user={userMock} />)
+    makeSUT()
 
     const list = screen.getByRole('list')
 
@@ -50,5 +54,38 @@ describe('Links List component', () => {
     expect(list.childElementCount).toBe(2)
     expect(firstItem.querySelector('span')?.textContent).toBe(linksMock[0].url)
     expect(firstItem.textContent).toContain(linksMock[0].label)
+  })
+
+  it('should delete link from the list', async () => {
+    const linksMock = [
+      makeLink(faker.internet.domainName(), faker.internet.url()),
+      makeLink(),
+    ]
+
+    const responseMock = linksMock.map(link => ({data: () => link}))
+
+    jest
+      .spyOn(firestore, 'onSnapshot')
+      .mockImplementation((query: any, callback: any) => {
+        callback(responseMock)
+        return jest.fn()
+      })
+
+    jest.spyOn(firestore, 'doc').mockImplementation()
+    jest.spyOn(firestore, 'deleteDoc').mockImplementation()
+
+    const {user} = makeSUT()
+
+    const list = screen.getByRole('list')
+    const firstItem = list.children[1]
+    const deleteBtn = firstItem.querySelector('svg')?.parentElement
+
+    if (!deleteBtn) return fail()
+
+    await user.click(deleteBtn)
+
+    expect(deleteBtn).toBeVisible()
+    expect(firestore.doc).toHaveBeenCalledTimes(1)
+    expect(firestore.deleteDoc).toHaveBeenCalledTimes(1)
   })
 })
