@@ -1,8 +1,7 @@
 import * as firestore from 'firebase/firestore'
 
-import {makeUser, setup} from '@/__tests__/utils'
+import {makeLink, makeUser, setup} from '@/__tests__/utils'
 import {LinksList} from '@/app/admin/components/links-list'
-import {faker} from '@faker-js/faker'
 import {cleanup, screen} from '@testing-library/react'
 
 import '@testing-library/jest-dom'
@@ -27,13 +26,6 @@ describe('Links List component', () => {
 
   it('render component with 2 items', () => {
     const userMock = makeUser()
-
-    const makeLink = (label?: string, url?: string) => {
-      return {
-        label: label || faker.word.words(2),
-        url: url || faker.internet.url(),
-      }
-    }
 
     const linksMock = [
       makeLink('instagram', 'http://instagram.com'),
