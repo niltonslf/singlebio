@@ -22,8 +22,7 @@ export const Dropdown = observer(({children}: DropdownProps) => {
 
   useEffect(() => {
     function handleClickOutsideBox(event: any) {
-      if (!dropdown?.current?.contains(event.target || null))
-        return setIsOpen(false)
+      if (!dropdown?.current?.contains(event.target)) return setIsOpen(false)
     }
 
     document.addEventListener('click', handleClickOutsideBox)
