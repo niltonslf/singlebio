@@ -6,11 +6,11 @@ import {observer} from 'mobx-react-lite'
 import {useRouter} from 'next/navigation'
 import {useEffect, useState} from 'react'
 
-import {Modal} from '@/app/components'
+import {Modal, Smartphone} from '@/app/components'
 import {auth, db} from '@/libs/firebase'
 
 import {authStore} from '../auth/context/auth-store'
-import {AddLinkForm, Header, LinksList} from './components'
+import {AddLinkForm, Header} from './components'
 
 const Admin = observer(() => {
   const router = useRouter()
@@ -58,7 +58,7 @@ const Admin = observer(() => {
 
           <Header user={authStore.user} />
 
-          <main className=' grid w-full grid-cols-1 grid-rows-1 md:h-screen md:grid-cols-[3fr_2fr] md:overflow-hidden'>
+          <main className=' grid w-full grid-cols-1 grid-rows-1 md:h-screen md:grid-cols-[3fr_1.5fr] md:overflow-hidden'>
             <section className='flex flex-col justify-start p-10'>
               <section className='mt-5'>
                 <AddLinkForm saveLink={onSaveLink} />
@@ -66,7 +66,10 @@ const Admin = observer(() => {
             </section>
 
             <aside className='grid w-full grid-rows-1 '>
-              <LinksList user={authStore.user} />
+              <div className='flex flex-1 items-center justify-center px-6 py-7'>
+                <Smartphone iframeUrl={`${authStore.user.userName}`} />
+              </div>
+              {/* <LinksList user={authStore.user} /> */}
             </aside>
           </main>
         </>
