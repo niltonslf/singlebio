@@ -79,24 +79,26 @@ describe('Dropdown', () => {
 
     // don't close when clicked in a element inside the dropdown
     const {menuHidden: menuHidden3} = handleMenuContainer()
-    const menulistContainer = menuList.parentElement
-
-    if (!menulistContainer) return fail()
 
     // testing clicking on the list
     await user.click(menuList)
     expect(menuHidden3).toBe(false)
 
     // testing clicking on the list container
+    const {menuHidden: menuHidden4} = handleMenuContainer()
+    const menulistContainer = menuList.parentElement
+
+    if (!menulistContainer) return fail()
+
     await user.click(menulistContainer)
-    expect(menuHidden3).toBe(false)
+    expect(menuHidden4).toBe(false)
 
     // click outside
     await user.click(baseElement)
-    const {menuHidden: menuHidden4} = handleMenuContainer()
+    const {menuHidden: menuHidden5} = handleMenuContainer()
 
     // check if dropdown is hidden
-    expect(menuHidden4).toBe(true)
+    expect(menuHidden5).toBe(true)
   })
 
   it('should the first item has the correct link', async () => {
