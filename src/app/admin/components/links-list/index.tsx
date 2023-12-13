@@ -26,8 +26,6 @@ export const LinksList = ({user}: LinksListProps) => {
   }
 
   const fetchData = useCallback(() => {
-    if (!user.uid) return () => {}
-
     const customQuery = query(collection(db, 'users', user.uid, 'links'))
     const unsubscribe = onSnapshot(customQuery, querySnapshot => {
       setLinks([])
