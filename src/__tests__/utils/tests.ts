@@ -9,3 +9,7 @@ export function setup(jsx: ReactElement) {
     ...render(jsx),
   }
 }
+
+export const fail = () => {
+  expect(true).toBe(false)
+}
