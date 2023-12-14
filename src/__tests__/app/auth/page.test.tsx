@@ -38,8 +38,8 @@ const mockFetchFirebaseUser = (exists: boolean, user: User | undefined) => {
 }
 
 const validateGoogleBtn = () => {
-  const googleButton = screen.getByRole('button')
-  expect(googleButton.textContent).toBe('Sign up with Google')
+  const googleButton = screen.getByText('Sign up with Google')
+  expect(googleButton).toBeVisible()
   return googleButton
 }
 
@@ -51,9 +51,9 @@ describe('Auth Page', () => {
   it('should render Auth page with the login button', async () => {
     await waitFor(() => render(<AuthPage />))
 
-    const formTitle = screen.getByText('SignIn')
-    expect(formTitle.textContent).toBe('SignIn')
+    const formTitle = screen.getByText(/lnktree/i)
 
+    expect(formTitle.textContent).toBe('Lnktree')
     validateGoogleBtn()
   })
 
