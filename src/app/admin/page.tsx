@@ -12,10 +12,12 @@ import {auth, db} from '@/libs/firebase'
 import {authStore} from '../auth/context/auth-store'
 import {Header} from './components'
 import {LinksList} from './components/links-list'
+import {useAdmin} from './context/admin-context'
 
 const Admin = observer(() => {
   const router = useRouter()
   const iframe = useRef<HTMLIFrameElement>(null)
+  const {setSmartphoneRef, reloadSmartphoneList} = useAdmin()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -26,7 +28,7 @@ const Admin = observer(() => {
       userName: data,
     })
     authStore.updateUser({...authStore.user, userName: data})
-    iframe.current?.contentWindow?.location.reload()
+    reloadSmartphoneList()
   }
 
   useEffect(() => {
@@ -43,6 +45,10 @@ const Admin = observer(() => {
     return () => unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    setSmartphoneRef(iframe)
+  }, [iframe, setSmartphoneRef])
 
   return (
     <div className='flex h-screen w-screen flex-col items-center overflow-auto bg-gray-900 p-3'>

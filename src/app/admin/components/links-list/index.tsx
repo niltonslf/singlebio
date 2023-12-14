@@ -17,25 +17,30 @@ import {Link, User} from '@/models'
 
 import {AddLinkForm} from '..'
 
+import {useAdmin} from '../../context/admin-context'
+
 type LinksListProps = {
   user: User
 }
 
 export const LinksList = ({user}: LinksListProps) => {
+  const {reloadSmartphoneList} = useAdmin()
+
   const [links, setLinks] = useState<Link[]>([])
 
   const handleAddNewLink = async (data: any) => {
     const res = await doc(db, 'users', user.uid)
     addDoc(collection(res, 'links'), {})
-    // adminStore.reloadMobileList()
   }
+
   const handleSaveLink = async (data: Link) => {
     if (data.id) setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
-    // adminStore.reloadMobileList()
+    reloadSmartphoneList()
   }
 
   const deleteLink = (link: Link) => {
     if (link.id) deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
+    reloadSmartphoneList()
   }
 
   const fetchData = useCallback(() => {
