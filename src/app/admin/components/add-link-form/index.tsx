@@ -28,10 +28,14 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: {errors},
   } = useForm<Link>({
     resolver: zodResolver(schema),
+    defaultValues: link,
   })
+
+  watch('url')
 
   const onSubmit = async (data: Link) => {
     await saveLink(data)
@@ -45,7 +49,6 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
         className='flex flex-1 flex-col gap-2'>
         <input
           placeholder='Type the label'
-          value={link.label}
           {...register('label', {required: true})}
           className={clsx(
             'border-1 w-full rounded-md border border-gray-500 bg-gray-900 p-2 text-gray-200',
@@ -59,7 +62,6 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
 
         <input
           placeholder='Type the url'
-          value={link.url}
           {...register('url', {required: true})}
           className={clsx(
             'border-1 w-full rounded-md border border-gray-500 bg-gray-900 p-2 text-gray-200',

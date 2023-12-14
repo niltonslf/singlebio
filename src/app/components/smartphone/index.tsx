@@ -16,7 +16,7 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
       flex 
      aspect-[9/19] 
      max-h-[100%] 
-     max-w-[300px] 
+     max-w-[290px] 
      items-center 
      justify-center 
      overflow-hidden 
@@ -37,7 +37,8 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
      after:absolute 
      after:bottom-2 
      after:left-[calc(50%-20%)] 
-     after:h-1  after:w-[40%]
+     after:h-1  
+     after:w-[40%]
      after:rounded-full
      after:bg-white
      after:shadow-md'>

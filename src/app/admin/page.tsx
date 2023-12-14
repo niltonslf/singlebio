@@ -45,7 +45,7 @@ const Admin = observer(() => {
   }, [])
 
   return (
-    <div className='flex h-screen flex-col items-center overflow-auto bg-gray-900 '>
+    <div className='flex h-screen w-screen flex-col items-center overflow-auto bg-gray-900 '>
       {isLoading || !authStore.user ? (
         <div>Loading...</div>
       ) : (
@@ -55,23 +55,25 @@ const Admin = observer(() => {
             initialOpen={!authStore.user?.userName}
           />
 
-          <div className='mt-3 w-full  px-3'>
+          <div className=' mt-3 w-full px-3'>
             <Header user={authStore.user} />
           </div>
 
-          <main className='grid w-full grid-cols-1 grid-rows-1 gap-3 p-3 md:h-screen md:grid-cols-[3fr_1.5fr] md:overflow-hidden'>
-            <section className='flex flex-col justify-start rounded-lg bg-gray-800 p-10'>
-              <section className='mt-5'>
-                <LinksList user={authStore.user} />
-              </section>
+          <main className='grid w-full grid-cols-1 grid-rows-1 gap-3 p-3 md:grid-cols-[3fr_1.5fr]'>
+            <section className='flex h-auto  flex-col rounded-lg  bg-gray-800 p-10'>
+              {/* <section className='mt-5 bg-red-300'> */}
+              <LinksList user={authStore.user} />
+              {/* </section> */}
             </section>
 
             <aside className='grid w-full grid-rows-1 rounded-lg bg-gray-800'>
-              <div className='flex flex-1 items-center justify-center px-6 py-7'>
-                <Smartphone
-                  ref={iframe}
-                  iframeUrl={`${authStore.user.userName}`}
-                />
+              <div className=' flex flex-1 items-start justify-center px-6 pt-4'>
+                <div className='sticky top-6'>
+                  <Smartphone
+                    ref={iframe}
+                    iframeUrl={`${authStore.user.userName}`}
+                  />
+                </div>
               </div>
             </aside>
           </main>

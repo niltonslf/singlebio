@@ -11,7 +11,6 @@ import {
 import {Trash} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
-import {LinkCard} from '@/app/components'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
@@ -58,7 +57,7 @@ export const LinksList = ({user}: LinksListProps) => {
   }, [fetchData])
 
   return (
-    <LinkCard.container>
+    <section className='flex w-full flex-col gap-5 px-0 py-3'>
       <div className='flex flex-1 flex-col gap-5'>
         <button
           onClick={handleAddNewLink}
@@ -86,6 +85,6 @@ export const LinksList = ({user}: LinksListProps) => {
             </div>
           ))}
       </div>
-    </LinkCard.container>
+    </section>
   )
 }
