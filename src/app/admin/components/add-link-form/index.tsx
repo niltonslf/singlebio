@@ -1,11 +1,12 @@
 'use client'
 
 import clsx from 'clsx'
-import {useRef} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
 import {Link} from '@/models'
+import {useDebouce} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 type AddLinkFormProps = {
@@ -26,12 +27,12 @@ const schema = z.object({
 })
 
 export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
   const formRef = useRef<HTMLFormElement>(null)
 
   const {
     register,
     handleSubmit,
-    reset,
     watch,
     formState: {errors},
   } = useForm<Link>({
@@ -39,17 +40,31 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
     defaultValues: link,
   })
 
-  watch('url')
+  const url = watch('url')
+  const label = watch('label')
+
+  const handleChange = useDebouce(() => {
+    formRef.current?.requestSubmit()
+  })
+
+  useEffect(() => {
+    if (!isFirstLoad) {
+      if (url && label) {
+        handleChange()
+      }
+    } else {
+      setIsFirstLoad(false)
+    }
+  }, [url, label])
+
+  useEffect(() => {
+    setIsFirstLoad(true)
+  }, [link])
 
   return (
     <div className='flex w-full flex-row gap-5 rounded-lg '>
       <form
         ref={formRef}
-        onKeyDown={e => {
-          if (e.code == 'Enter') {
-            formRef.current?.requestSubmit()
-          }
-        }}
         onSubmit={handleSubmit(saveLink)}
         className='flex flex-1 flex-col gap-2'>
         <input type='hidden' {...register('id', {required: true})} />
