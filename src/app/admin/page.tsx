@@ -1,7 +1,7 @@
 'use client'
 
 import {onAuthStateChanged} from 'firebase/auth'
-import {addDoc, collection, doc, updateDoc} from 'firebase/firestore'
+import {doc, updateDoc} from 'firebase/firestore'
 import {observer} from 'mobx-react-lite'
 import {useRouter} from 'next/navigation'
 import {useEffect, useRef, useState} from 'react'
@@ -29,14 +29,6 @@ const Admin = observer(() => {
     iframe.current?.contentWindow?.location.reload()
   }
 
-  const onSaveLink = async (data: any) => {
-    if (!authStore.user) return
-
-    const res = await doc(db, 'users', authStore.user.uid)
-    addDoc(collection(res, 'links'), data)
-    iframe.current?.contentWindow?.location.reload()
-  }
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async firebaseUser => {
       if (!firebaseUser) {
@@ -53,7 +45,7 @@ const Admin = observer(() => {
   }, [])
 
   return (
-    <div className='flex h-screen flex-col items-center overflow-auto bg-gray-300 '>
+    <div className='flex h-screen flex-col items-center overflow-auto bg-gray-900 '>
       {isLoading || !authStore.user ? (
         <div>Loading...</div>
       ) : (
@@ -68,13 +60,13 @@ const Admin = observer(() => {
           </div>
 
           <main className='grid w-full grid-cols-1 grid-rows-1 gap-3 p-3 md:h-screen md:grid-cols-[3fr_1.5fr] md:overflow-hidden'>
-            <section className='flex flex-col justify-start rounded-lg bg-gray-200 p-10'>
+            <section className='flex flex-col justify-start rounded-lg bg-gray-800 p-10'>
               <section className='mt-5'>
-                <LinksList user={authStore.user} saveLink={onSaveLink} />
+                <LinksList user={authStore.user} />
               </section>
             </section>
 
-            <aside className='grid w-full grid-rows-1 rounded-lg bg-gray-200'>
+            <aside className='grid w-full grid-rows-1 rounded-lg bg-gray-800'>
               <div className='flex flex-1 items-center justify-center px-6 py-7'>
                 <Smartphone
                   ref={iframe}

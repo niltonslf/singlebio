@@ -23,7 +23,7 @@ const schema = z.object({
   label: z.string().min(1, {message: 'Required field'}),
 })
 
-export const AddLinkForm = ({saveLink}: AddLinkFormProps) => {
+export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
   const {
     register,
     handleSubmit,
@@ -39,18 +39,19 @@ export const AddLinkForm = ({saveLink}: AddLinkFormProps) => {
   }
 
   return (
-    <div className='flex w-full flex-row gap-5 rounded-lg bg-white p-5'>
+    <div className='flex w-full flex-row gap-5 rounded-lg '>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='flex flex-1 flex-col gap-2'>
         <input
           placeholder='Type the label'
+          value={link.label}
+          {...register('label', {required: true})}
           className={clsx(
-            'border-1 w-full rounded-md border border-gray-400 p-2',
+            'border-1 w-full rounded-md border border-gray-500 bg-gray-900 p-2 text-gray-200',
             errors.label && 'outline-red-400',
             errors.label && 'border-red-400',
           )}
-          {...register('label', {required: true})}
         />
         {errors.label && (
           <p className='mt-0 text-sm text-red-600'>{errors.label.message}</p>
@@ -58,12 +59,13 @@ export const AddLinkForm = ({saveLink}: AddLinkFormProps) => {
 
         <input
           placeholder='Type the url'
+          value={link.url}
+          {...register('url', {required: true})}
           className={clsx(
-            'border-1 w-full rounded-md border border-gray-400 p-2',
+            'border-1 w-full rounded-md border border-gray-500 bg-gray-900 p-2 text-gray-200',
             errors.url && 'outline-red-400',
             errors.url && 'border-red-400',
           )}
-          {...register('url', {required: true})}
         />
         {errors.url && (
           <p className='mt-0 text-sm text-red-600'>{errors.url.message}</p>

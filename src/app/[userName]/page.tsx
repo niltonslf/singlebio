@@ -39,8 +39,9 @@ export default function UserPage({params: {userName}}: UserPageProps) {
       setLinks([])
 
       if (size === 0) return setIsLoading(false)
+      const validLinks = docs.filter(link => !!link.data().url)
 
-      docs.forEach(curUser => setLinks(prev => [...prev, curUser.data()]))
+      validLinks.forEach(link => setLinks(prev => [...prev, link.data()]))
     })
 
     setIsLoading(false)
