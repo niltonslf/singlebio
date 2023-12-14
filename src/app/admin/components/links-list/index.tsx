@@ -71,24 +71,23 @@ export const LinksList = ({user}: LinksListProps) => {
           Add link
         </button>
 
-        {links.length > 0 &&
-          links.map(link => (
-            <div
-              className='flex w-full flex-wrap items-center justify-center gap-4 rounded-lg bg-gray-700 p-3 font-medium md:p-5'
-              key={link.id}>
-              <div className='flex flex-1 flex-col items-center gap-2'>
-                <AddLinkForm saveLink={handleSaveLink} link={link} />
-              </div>
-              <div
-                onClick={event => {
-                  event.stopPropagation()
-                  event.preventDefault()
-                  deleteLink(link)
-                }}>
-                <Trash className='text-red-400 hover:text-red-700' />
-              </div>
-            </div>
-          ))}
+        <ul className='flex flex-1 flex-col gap-5'>
+          {links.length > 0 &&
+            links.map(link => (
+              <li
+                key={link.id}
+                className='flex w-full flex-wrap items-center justify-center gap-4 rounded-lg bg-gray-700 p-3 font-medium md:p-5'>
+                <div className='flex flex-1 flex-col items-center gap-2'>
+                  <AddLinkForm saveLink={handleSaveLink} link={link} />
+                </div>
+                <div
+                  onClick={() => deleteLink(link)}
+                  className='cursor-pointer'>
+                  <Trash className='text-red-400 hover:text-red-700' />
+                </div>
+              </li>
+            ))}
+        </ul>
       </div>
     </section>
   )

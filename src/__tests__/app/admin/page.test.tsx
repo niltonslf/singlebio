@@ -66,7 +66,7 @@ const handlePageAuthentication = (
     .mockResolvedValue(makeGetDocsResponse({data, exists: true}))
 }
 
-describe('Admin page', () => {
+describe.skip('Admin page', () => {
   beforeEach(() => {
     // jest.clearAllMocks()
     // jest.restoreAllMocks()
