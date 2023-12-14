@@ -4,7 +4,7 @@ import {faker} from '@faker-js/faker'
 
 type MakeGetDocsResponse = Partial<{
   data: any
-  docs: any
+  docs: any[]
   path: string
   exists: boolean
   id: string
@@ -38,7 +38,7 @@ export const makeGetDocsResponse = ({
   }
 }
 
-export const makeGetDocsResponseDocProperty = (data: any[]) => {
+export const makeGetDocsResponseDocProperty = (data: any[] | undefined) => {
   if (!data) return
 
   return data.map(item => ({

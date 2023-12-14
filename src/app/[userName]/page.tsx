@@ -28,7 +28,7 @@ export default function UserPage({params: {userName}}: UserPageProps) {
 
   const fetchData = useCallback(async () => {
     const q = query(collection(db, 'users'), where('userName', '==', userName))
-    const {docs: users} = await getDocs(q)
+    const {docs: users, size} = await getDocs(q)
 
     new Promise(resolve => {
       users.forEach(async curUser => {
@@ -39,10 +39,14 @@ export default function UserPage({params: {userName}}: UserPageProps) {
 
         setLinks([])
 
-        if (size === 0) return setIsLoading(false)
+        if (size === 0) {
+          setIsLoading(false)
+          return resolve(true)
+        }
 
         const validLinks = docs.filter(link => !!link.data().url)
         validLinks.forEach(link => setLinks(prev => [...prev, link.data()]))
+
         resolve(true)
       })
     }).finally(() => {

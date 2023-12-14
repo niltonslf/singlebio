@@ -1,25 +1,29 @@
 import * as firestore from 'firebase/firestore'
 
 import {setup} from '@/__tests__/utils'
+import {makeGetDocsResponse, makeLink, makeUser} from '@/__tests__/utils/mocks'
 import UserPage from '@/app/[userName]/page'
 import '@testing-library/jest-dom'
-import {faker} from '@faker-js/faker'
-import {screen, waitFor} from '@testing-library/react'
-import {makeGetDocsResponse, makeUser} from '@/__tests__/utils/mocks'
+import {cleanup, screen, waitFor} from '@testing-library/react'
 
-jest.mock('firebase/firestore')
-
-afterEach(() => {
-  jest.clearAllMocks()
-})
+jest.mock('firebase/firestore', () => ({
+  __esModule: true,
+  ...jest.requireActual('firebase/firestore'),
+}))
 
 describe('Render user links page', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+    cleanup()
+  })
+
   it('should render page with all elements', async () => {
     const userMock = makeUser()
-    const linkMock = {
-      label: faker.word.words(2),
-      url: faker.image.urlLoremFlickr(),
-    }
+    const linkMock = makeLink()
+
+    jest.spyOn(firestore, 'query').mockImplementation()
+    jest.spyOn(firestore, 'collection').mockImplementation()
+    jest.spyOn(firestore, 'where').mockImplementation()
 
     jest
       .spyOn(firestore, 'getDocs')
@@ -47,9 +51,18 @@ describe('Render user links page', () => {
   it("should show alert message when there isn't links saved", async () => {
     const userNameMock = 'jsdevbr'
 
-    jest
-      .spyOn(firestore, 'getDocs')
-      .mockResolvedValue({docs: [], size: 0} as any)
+    jest.spyOn(firestore, 'query').mockImplementation()
+    jest.spyOn(firestore, 'collection').mockImplementation()
+    jest.spyOn(firestore, 'where').mockImplementation()
+
+    const usersResponse = makeGetDocsResponse({docs: [makeUser()]})
+
+    // getdocs that fetch users
+    jest.spyOn(firestore, 'getDocs').mockResolvedValueOnce(usersResponse)
+
+    const linksResponse = makeGetDocsResponse({docs: []})
+    // getdocs that fetch links from the users
+    jest.spyOn(firestore, 'getDocs').mockResolvedValueOnce(linksResponse)
 
     await waitFor(() => setup(<UserPage params={{userName: userNameMock}} />))
 
@@ -59,7 +72,9 @@ describe('Render user links page', () => {
     const linkList = await screen.queryByRole('list')
     expect(linkList?.children).toHaveLength(0)
 
-    const alertMessage = await screen.queryByText('No links in this profile')
-    expect(alertMessage).toBeInTheDocument()
+    await waitFor(() => {
+      const alertMessage = screen.getByText('No links in this profile')
+      expect(alertMessage).toBeInTheDocument()
+    })
   })
 })
