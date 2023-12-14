@@ -20,12 +20,12 @@ export const Header = ({user}: HeaderProps) => {
   }
 
   return (
-    <header className='flex min-w-full flex-row items-center justify-between bg-gray-900 px-5 py-2'>
-      <span className='text-md font-semibold text-white'>Lnktree admin</span>
+    <header className='flex min-w-full flex-row items-center justify-between rounded-lg bg-gray-200 px-5 py-2'>
+      <span className='text-md font-semibold text-gray-900'>Lnktree admin</span>
 
       <div className='flex flex-row items-center justify-between gap-3'>
         <Dropdown>
-          <span className=' font-semibold text-white'>{user?.name}</span>
+          <span className=' font-semibold text-gray-900'>{user?.name}</span>
           {user?.pictureUrl && (
             <Image
               className='rounded-full border-2'

@@ -9,7 +9,7 @@ import {
 } from 'firebase/firestore'
 import {useCallback, useEffect, useState} from 'react'
 
-import {Avatar, Link} from '@/app/components'
+import {Avatar, LinkCard} from '@/app/components'
 import {app} from '@/libs/firebase'
 import {User} from '@/models'
 
@@ -71,16 +71,16 @@ export default function UserPage({params: {userName}}: UserPageProps) {
           </div>
         )}
 
-        <Link.container>
+        <LinkCard.container>
           {links.length > 0 &&
             links.map(link => {
               return (
-                <Link.item key={link.url} path={link.url}>
+                <LinkCard.item key={link.url} path={link.url}>
                   {link.label}
-                </Link.item>
+                </LinkCard.item>
               )
             })}
-        </Link.container>
+        </LinkCard.container>
       </div>
     </main>
   )

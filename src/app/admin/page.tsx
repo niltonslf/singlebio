@@ -10,7 +10,7 @@ import {Modal, Smartphone} from '@/app/components'
 import {auth, db} from '@/libs/firebase'
 
 import {authStore} from '../auth/context/auth-store'
-import {AddLinkForm, Header} from './components'
+import {Header} from './components'
 import {LinksList} from './components/links-list'
 
 const Admin = observer(() => {
@@ -63,17 +63,18 @@ const Admin = observer(() => {
             initialOpen={!authStore.user?.userName}
           />
 
-          <Header user={authStore.user} />
+          <div className='mt-3 w-full  px-3'>
+            <Header user={authStore.user} />
+          </div>
 
-          <main className=' grid w-full grid-cols-1 grid-rows-1 md:h-screen md:grid-cols-[3fr_1.5fr] md:overflow-hidden'>
-            <section className='flex flex-col justify-start p-10'>
+          <main className='grid w-full grid-cols-1 grid-rows-1 gap-3 p-3 md:h-screen md:grid-cols-[3fr_1.5fr] md:overflow-hidden'>
+            <section className='flex flex-col justify-start rounded-lg bg-gray-200 p-10'>
               <section className='mt-5'>
-                <AddLinkForm saveLink={onSaveLink} />
-                <LinksList user={authStore.user} />
+                <LinksList user={authStore.user} saveLink={onSaveLink} />
               </section>
             </section>
 
-            <aside className='grid w-full grid-rows-1 '>
+            <aside className='grid w-full grid-rows-1 rounded-lg bg-gray-200'>
               <div className='flex flex-1 items-center justify-center px-6 py-7'>
                 <Smartphone
                   ref={iframe}

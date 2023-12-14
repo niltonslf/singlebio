@@ -4,15 +4,12 @@ import clsx from 'clsx'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
+import {Link} from '@/models'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 type AddLinkFormProps = {
   saveLink: (args: any) => Promise<typeof args>
-}
-
-type FormData = {
-  url: string
-  label: string
+  link: Link
 }
 
 const httpRegex = new RegExp(
@@ -32,11 +29,11 @@ export const AddLinkForm = ({saveLink}: AddLinkFormProps) => {
     handleSubmit,
     reset,
     formState: {errors},
-  } = useForm<FormData>({
+  } = useForm<Link>({
     resolver: zodResolver(schema),
   })
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: Link) => {
     await saveLink(data)
     reset()
   }
@@ -71,11 +68,6 @@ export const AddLinkForm = ({saveLink}: AddLinkFormProps) => {
         {errors.url && (
           <p className='mt-0 text-sm text-red-600'>{errors.url.message}</p>
         )}
-        <button
-          type='submit'
-          className='rounded-md bg-green-600 py-2 text-white'>
-          Add link
-        </button>
       </form>
     </div>
   )

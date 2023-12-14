@@ -4,25 +4,24 @@ import {collection, onSnapshot, query, deleteDoc, doc} from 'firebase/firestore'
 import {Trash} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
-import {Link} from '@/app/components'
+import {LinkCard} from '@/app/components'
 import {db} from '@/libs/firebase'
-import {User} from '@/models'
+import {Link, User} from '@/models'
+
+import {AddLinkForm} from '..'
 
 type LinksListProps = {
   user: User
+  saveLink: (args: any) => Promise<typeof args>
 }
 
-type Link = {
-  id: string
-  label: string
-  url: string
-}
-
-export const LinksList = ({user}: LinksListProps) => {
+export const LinksList = ({user, saveLink}: LinksListProps) => {
   const [links, setLinks] = useState<Link[]>([])
 
+  // ? consider move saveLink function to here
+
   const deleteLink = (link: Link) => {
-    deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
+    if (link.id) deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
   }
 
   const fetchData = useCallback(() => {
@@ -44,26 +43,33 @@ export const LinksList = ({user}: LinksListProps) => {
   }, [fetchData])
 
   return (
-    <Link.container>
-      {links.length > 0 &&
-        links.map(link => (
-          <Link.item path={link.url} key={link.url}>
-            <div className='flex flex-1 flex-col items-center'>
-              {link.label}
-              <span className='w-full text-center text-xs text-gray-700'>
-                {link.url}
-              </span>
-            </div>
+    <LinkCard.container>
+      <div className='flex flex-1 flex-col gap-5'>
+        <button
+          type='button'
+          className='rounded-md bg-green-600 py-2 text-white'>
+          Add link
+        </button>
+
+        {links.length > 0 &&
+          links.map(link => (
             <div
-              onClick={event => {
-                event.stopPropagation()
-                event.preventDefault()
-                deleteLink(link)
-              }}>
-              <Trash className='text-red-400 hover:text-red-700' />
+              className='flex w-full flex-wrap items-center justify-center rounded-lg bg-white p-3 font-medium md:p-3'
+              key={link.url}>
+              <div className='flex flex-1 flex-col items-center gap-2'>
+                <AddLinkForm saveLink={saveLink} link={link} />
+              </div>
+              <div
+                onClick={event => {
+                  event.stopPropagation()
+                  event.preventDefault()
+                  deleteLink(link)
+                }}>
+                <Trash className='text-red-400 hover:text-red-700' />
+              </div>
             </div>
-          </Link.item>
-        ))}
-    </Link.container>
+          ))}
+      </div>
+    </LinkCard.container>
   )
 }
