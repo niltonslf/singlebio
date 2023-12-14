@@ -10,7 +10,7 @@ import {useDebouce} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 type AddLinkFormProps = {
-  saveLink: (args: any) => Promise<typeof args>
+  saveLink: (link: Link) => void
   link: Link
 }
 

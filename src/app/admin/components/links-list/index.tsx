@@ -9,15 +9,32 @@ import {
   addDoc,
   setDoc,
 } from 'firebase/firestore'
-import {Trash} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
+import {Sortable} from '@/app/components/sortable'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
 import {AddLinkForm} from '..'
 
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+
 import {useAdmin} from '../../context/admin-context'
+import {LinkCardItem} from './link-card-item'
 
 type LinksListProps = {
   user: User
@@ -26,7 +43,14 @@ type LinksListProps = {
 export const LinksList = ({user}: LinksListProps) => {
   const {reloadSmartphoneList} = useAdmin()
 
-  const [links, setLinks] = useState<Link[]>([])
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  )
+
+  const [links, setLinks] = useState<Required<Link>[]>([])
 
   const handleAddNewLink = async (data: any) => {
     const res = await doc(db, 'users', user.uid)
@@ -49,12 +73,25 @@ export const LinksList = ({user}: LinksListProps) => {
       setLinks([])
 
       querySnapshot.forEach(doc =>
-        setLinks(prev => [{id: doc.id, ...doc.data()} as Link, ...prev]),
+        setLinks(prev => [{id: doc.id, ...(doc.data() as Link)}, ...prev]),
       )
     })
 
     return unsubscribe
   }, [user.uid])
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const {active, over} = event
+
+    if (active.id != over?.id) {
+      setLinks(items => {
+        const oldIndex = items.findIndex(item => item.id == active.id)
+        const newIndex = items.findIndex(item => item.id == over?.id)
+
+        return arrayMove(items, oldIndex, newIndex)
+      })
+    }
+  }
 
   useEffect(() => {
     const unsubscribe = fetchData()
@@ -72,21 +109,23 @@ export const LinksList = ({user}: LinksListProps) => {
         </button>
 
         <ul className='flex flex-1 flex-col gap-5'>
-          {links.length > 0 &&
-            links.map(link => (
-              <li
-                key={link.id}
-                className='flex w-full flex-wrap items-center justify-center gap-4 rounded-lg bg-gray-700 p-3 font-medium md:p-5'>
-                <div className='flex flex-1 flex-col items-center gap-2'>
-                  <AddLinkForm saveLink={handleSaveLink} link={link} />
-                </div>
-                <div
-                  onClick={() => deleteLink(link)}
-                  className='cursor-pointer'>
-                  <Trash className='text-red-400 hover:text-red-700' />
-                </div>
-              </li>
-            ))}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}>
+            <SortableContext
+              items={links}
+              strategy={verticalListSortingStrategy}>
+              {links.length > 0 &&
+                links.map(link => (
+                  <Sortable.Item key={link.id} id={link.id}>
+                    <LinkCardItem onDelete={deleteLink} link={link}>
+                      <AddLinkForm saveLink={handleSaveLink} link={link} />
+                    </LinkCardItem>
+                  </Sortable.Item>
+                ))}
+            </SortableContext>
+          </DndContext>
         </ul>
       </div>
     </section>
