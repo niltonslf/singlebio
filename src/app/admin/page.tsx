@@ -11,6 +11,7 @@ import {auth, db} from '@/libs/firebase'
 
 import {authStore} from '../auth/context/auth-store'
 import {AddLinkForm, Header} from './components'
+import {LinksList} from './components/links-list'
 
 const Admin = observer(() => {
   const router = useRouter()
@@ -24,6 +25,8 @@ const Admin = observer(() => {
     await updateDoc(doc(db, 'users', authStore.user.uid), {
       userName: data,
     })
+    authStore.updateUser({...authStore.user, userName: data})
+    iframe.current?.contentWindow?.location.reload()
   }
 
   const onSaveLink = async (data: any) => {
@@ -66,6 +69,7 @@ const Admin = observer(() => {
             <section className='flex flex-col justify-start p-10'>
               <section className='mt-5'>
                 <AddLinkForm saveLink={onSaveLink} />
+                <LinksList user={authStore.user} />
               </section>
             </section>
 
