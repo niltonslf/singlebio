@@ -66,7 +66,7 @@ const Admin = observer(() => {
           </div>
 
           <main className='grid min-h-[calc(100%-80px)] w-full grid-cols-1 gap-3 md:grid-cols-[3fr_1.5fr] md:grid-rows-[1fr]'>
-            <section className='flex h-auto  flex-col rounded-lg  bg-gray-800 p-10'>
+            <section className='flex h-auto  flex-col rounded-lg bg-gray-800 px-4 md:p-10'>
               <LinksList user={authStore.user} />
             </section>
 

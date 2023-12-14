@@ -25,7 +25,9 @@ export const Header = ({user}: HeaderProps) => {
 
       <div className='flex flex-row items-center justify-between gap-3'>
         <Dropdown>
-          <span className=' font-semibold text-white'>{user?.name}</span>
+          <span className='hidden font-semibold text-white md:flex'>
+            {user?.name}
+          </span>
           {user?.pictureUrl && (
             <Image
               className='rounded-full border-2'

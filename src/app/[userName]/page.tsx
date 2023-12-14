@@ -30,21 +30,24 @@ export default function UserPage({params: {userName}}: UserPageProps) {
     const q = query(collection(db, 'users'), where('userName', '==', userName))
     const {docs: users} = await getDocs(q)
 
-    users.forEach(async curUser => {
-      setUser(curUser.data() as User)
-      const {size, docs} = await getDocs(
-        collection(db, curUser.ref.path, 'links'),
-      )
+    new Promise(resolve => {
+      users.forEach(async curUser => {
+        setUser(curUser.data() as User)
+        const {size, docs} = await getDocs(
+          collection(db, curUser.ref.path, 'links'),
+        )
 
-      setLinks([])
+        setLinks([])
 
-      if (size === 0) return setIsLoading(false)
-      const validLinks = docs.filter(link => !!link.data().url)
+        if (size === 0) return setIsLoading(false)
 
-      validLinks.forEach(link => setLinks(prev => [...prev, link.data()]))
+        const validLinks = docs.filter(link => !!link.data().url)
+        validLinks.forEach(link => setLinks(prev => [...prev, link.data()]))
+        resolve(true)
+      })
+    }).finally(() => {
+      setIsLoading(false)
     })
-
-    setIsLoading(false)
   }, [userName])
 
   useEffect(() => {
@@ -65,6 +68,12 @@ export default function UserPage({params: {userName}}: UserPageProps) {
         <h2 className='mb-3 flex items-center justify-center text-2xl font-semibold'>
           @{userName}
         </h2>
+
+        {isLoading && (
+          <div className='flex items-center justify-center text-lg'>
+            Loading user links...
+          </div>
+        )}
 
         {links.length === 0 && isLoading === false && (
           <div className='rounded-md bg-red-300 p-2 shadow-md'>
