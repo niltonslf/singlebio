@@ -1,6 +1,7 @@
 'use client'
 
 import clsx from 'clsx'
+import {useRef} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
@@ -21,9 +22,12 @@ const schema = z.object({
     .string()
     .regex(httpRegex, 'Value must be a valid url. e.g. https://google.com '),
   label: z.string().min(1, {message: 'Required field'}),
+  id: z.string(),
 })
 
 export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
+  const formRef = useRef<HTMLFormElement>(null)
+
   const {
     register,
     handleSubmit,
@@ -37,16 +41,19 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
 
   watch('url')
 
-  const onSubmit = async (data: Link) => {
-    await saveLink(data)
-    reset()
-  }
-
   return (
     <div className='flex w-full flex-row gap-5 rounded-lg '>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        ref={formRef}
+        onKeyDown={e => {
+          if (e.code == 'Enter') {
+            formRef.current?.requestSubmit()
+          }
+        }}
+        onSubmit={handleSubmit(saveLink)}
         className='flex flex-1 flex-col gap-2'>
+        <input type='hidden' {...register('id', {required: true})} />
+
         <input
           placeholder='Type the label'
           {...register('label', {required: true})}

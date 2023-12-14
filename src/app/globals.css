@@ -4,3 +4,7 @@
 
 :root {
 }
+
+* {
+  box-sizing: border-box;
+}

@@ -45,7 +45,7 @@ const Admin = observer(() => {
   }, [])
 
   return (
-    <div className='flex h-screen w-screen flex-col items-center overflow-auto bg-gray-900 '>
+    <div className='flex h-screen w-screen flex-col items-center overflow-auto bg-gray-900 p-3'>
       {isLoading || !authStore.user ? (
         <div>Loading...</div>
       ) : (
@@ -55,15 +55,13 @@ const Admin = observer(() => {
             initialOpen={!authStore.user?.userName}
           />
 
-          <div className=' mt-3 w-full px-3'>
+          <div className=' mb-3 w-full '>
             <Header user={authStore.user} />
           </div>
 
-          <main className='grid w-full grid-cols-1 grid-rows-1 gap-3 p-3 md:grid-cols-[3fr_1.5fr]'>
+          <main className='grid min-h-[calc(100%-80px)] w-full grid-cols-1 gap-3 md:grid-cols-[3fr_1.5fr] md:grid-rows-[1fr]'>
             <section className='flex h-auto  flex-col rounded-lg  bg-gray-800 p-10'>
-              {/* <section className='mt-5 bg-red-300'> */}
               <LinksList user={authStore.user} />
-              {/* </section> */}
             </section>
 
             <aside className='grid w-full grid-rows-1 rounded-lg bg-gray-800'>

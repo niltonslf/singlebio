@@ -7,6 +7,7 @@ import {
   deleteDoc,
   doc,
   addDoc,
+  setDoc,
 } from 'firebase/firestore'
 import {Trash} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
@@ -28,9 +29,8 @@ export const LinksList = ({user}: LinksListProps) => {
     addDoc(collection(res, 'links'), {})
     // adminStore.reloadMobileList()
   }
-  const handleSaveLink = async (data: any) => {
-    const res = await doc(db, 'users', user.uid)
-    addDoc(collection(res, 'links'), data)
+  const handleSaveLink = async (data: Link) => {
+    if (data.id) setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
     // adminStore.reloadMobileList()
   }
 
@@ -70,7 +70,7 @@ export const LinksList = ({user}: LinksListProps) => {
           links.map(link => (
             <div
               className='flex w-full flex-wrap items-center justify-center gap-4 rounded-lg bg-gray-700 p-3 font-medium md:p-5'
-              key={link.url}>
+              key={link.id}>
               <div className='flex flex-1 flex-col items-center gap-2'>
                 <AddLinkForm saveLink={handleSaveLink} link={link} />
               </div>
