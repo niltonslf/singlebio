@@ -1,19 +1,24 @@
 'use client'
 
 import {onAuthStateChanged} from 'firebase/auth'
-import {addDoc, collection, doc, updateDoc} from 'firebase/firestore'
+import {doc, updateDoc} from 'firebase/firestore'
 import {observer} from 'mobx-react-lite'
 import {useRouter} from 'next/navigation'
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 
-import {Modal} from '@/app/components'
+import {Modal, Smartphone} from '@/app/components'
 import {auth, db} from '@/libs/firebase'
 
 import {authStore} from '../auth/context/auth-store'
-import {AddLinkForm, Header, LinksList} from './components'
+import {Header} from './components'
+import {LinksList} from './components/links-list'
+import {useAdmin} from './context/admin-context'
 
 const Admin = observer(() => {
   const router = useRouter()
+  const iframe = useRef<HTMLIFrameElement>(null)
+  const {setSmartphoneRef, reloadSmartphoneList} = useAdmin()
+
   const [isLoading, setIsLoading] = useState(false)
 
   const onSaveUserName = async (data: string) => {
@@ -22,13 +27,8 @@ const Admin = observer(() => {
     await updateDoc(doc(db, 'users', authStore.user.uid), {
       userName: data,
     })
-  }
-
-  const onSaveLink = async (data: any) => {
-    if (!authStore.user) return
-
-    const res = await doc(db, 'users', authStore.user.uid)
-    addDoc(collection(res, 'links'), data)
+    authStore.updateUser({...authStore.user, userName: data})
+    reloadSmartphoneList()
   }
 
   useEffect(() => {
@@ -43,10 +43,15 @@ const Admin = observer(() => {
     })
 
     return () => unsubscribe()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    setSmartphoneRef(iframe)
+  }, [iframe, setSmartphoneRef])
+
   return (
-    <div className='flex h-screen flex-col items-center overflow-auto bg-gray-300 '>
+    <div className='flex h-screen w-screen flex-col items-center overflow-auto bg-gray-900 p-3'>
       {isLoading || !authStore.user ? (
         <div>Loading...</div>
       ) : (
@@ -56,17 +61,24 @@ const Admin = observer(() => {
             initialOpen={!authStore.user?.userName}
           />
 
-          <Header user={authStore.user} />
+          <div className=' mb-3 w-full '>
+            <Header user={authStore.user} />
+          </div>
 
-          <main className=' grid w-full grid-cols-1 grid-rows-1 md:h-screen md:grid-cols-[3fr_2fr] md:overflow-hidden'>
-            <section className='flex flex-col justify-start p-10'>
-              <section className='mt-5'>
-                <AddLinkForm saveLink={onSaveLink} />
-              </section>
+          <main className='grid min-h-[calc(100%-80px)] w-full grid-cols-1 gap-3 md:grid-cols-[3fr_1.5fr] md:grid-rows-[1fr]'>
+            <section className='flex h-auto  flex-col rounded-lg  bg-gray-800 p-10'>
+              <LinksList user={authStore.user} />
             </section>
 
-            <aside className='grid w-full grid-rows-1 '>
-              <LinksList user={authStore.user} />
+            <aside className='grid w-full grid-rows-1 rounded-lg bg-gray-800'>
+              <div className=' flex flex-1 items-start justify-center px-6 pt-4'>
+                <div className='sticky top-6'>
+                  <Smartphone
+                    ref={iframe}
+                    iframeUrl={`${authStore.user.userName}`}
+                  />
+                </div>
+              </div>
             </aside>
           </main>
         </>

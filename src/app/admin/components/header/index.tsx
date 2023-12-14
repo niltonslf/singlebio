@@ -20,7 +20,7 @@ export const Header = ({user}: HeaderProps) => {
   }
 
   return (
-    <header className='flex min-w-full flex-row items-center justify-between bg-gray-900 px-5 py-2'>
+    <header className='flex min-w-full flex-row items-center justify-between rounded-lg bg-gray-800 px-5 py-2'>
       <span className='text-md font-semibold text-white'>Lnktree admin</span>
 
       <div className='flex flex-row items-center justify-between gap-3'>

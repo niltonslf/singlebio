@@ -32,7 +32,7 @@ export const Dropdown = observer(({children}: DropdownProps) => {
   return (
     <div
       ref={dropdown}
-      className='relative flex h-full cursor-pointer flex-row items-center gap-3'
+      className='relative z-[60] flex h-full cursor-pointer flex-row items-center gap-3'
       onClick={() => setIsOpen(prev => !prev)}>
       {children}
       <DropdownMenu isOpen={isOpen}>

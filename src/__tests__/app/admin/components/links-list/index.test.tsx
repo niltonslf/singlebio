@@ -12,6 +12,17 @@ jest.mock('firebase/firestore', () => ({
   ...jest.requireActual('firebase/firestore'),
 }))
 
+jest.mock('@/app/admin/context/admin-context', () => {
+  return {
+    useAdmin: () => {
+      return {
+        reloadSmartphoneList: jest.fn(),
+        setSmartphoneRef: jest.fn(),
+      }
+    },
+  }
+})
+
 const makeSUT = (user?: User) => {
   const userMock = user ?? makeUser()
   const sut = setup(<LinksList user={userMock} />)
@@ -48,12 +59,14 @@ describe('Links List component', () => {
     makeSUT()
 
     const list = screen.getByRole('list')
+    expect(list.childElementCount).toBe(2)
 
     const firstItem = list.children[1]
+    const label = firstItem.querySelectorAll('input')[1]
+    const url = firstItem.querySelectorAll('input')[2]
 
-    expect(list.childElementCount).toBe(2)
-    expect(firstItem.querySelector('span')?.textContent).toBe(linksMock[0].url)
-    expect(firstItem.textContent).toContain(linksMock[0].label)
+    expect(label).toHaveValue(linksMock[0].label)
+    expect(url).toHaveValue(linksMock[0].url)
   })
 
   it('should delete link from the list', async () => {
@@ -77,6 +90,7 @@ describe('Links List component', () => {
     const {user} = makeSUT()
 
     const list = screen.getByRole('list')
+
     const firstItem = list.children[1]
     const deleteBtn = firstItem.querySelector('svg')?.parentElement
 

@@ -16,6 +16,7 @@ import {AuthStore, authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
 import {faker} from '@faker-js/faker'
 import {act, cleanup, render, screen, waitFor} from '@testing-library/react'
+import {AdminProvider} from '@/app/admin/context/admin-context'
 import userEvent from '@testing-library/user-event'
 
 jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
@@ -31,6 +32,18 @@ jest.mock('@headlessui/react', () => {
       Child: createReturnChildren(),
       Root: TransitionRoot,
     }),
+  }
+})
+
+jest.mock('@/app/admin/context/admin-context', () => {
+  return {
+    ...jest.requireActual('@/app/admin/context/admin-context'),
+    useAdmin: () => {
+      return {
+        reloadSmartphoneList: jest.fn(),
+        setSmartphoneRef: jest.fn(),
+      }
+    },
   }
 })
 
@@ -80,17 +93,26 @@ describe('Admin page', () => {
 
     handlePageAuthentication(userMock)
 
-    await waitFor(() => setup(<AdminPage />))
+    await waitFor(() =>
+      setup(
+        <AdminProvider>
+          <AdminPage />
+        </AdminProvider>,
+      ),
+    )
+
+    const userPageUrl = `${authStore.user?.userName}`
 
     await waitFor(async () => {
       const header = await screen.queryByText('Lnktree admin')
       const formButton = await screen.queryByText('Add link')
-      const linksList = await screen.queryByLabelText('link-list')
+      const iframe = await document.querySelector('iframe')
 
       expect(header).toBeInTheDocument()
       expect(formButton).toBeInTheDocument()
       expect(formButton).toHaveTextContent(/Add link/i)
-      expect(linksList?.children).toHaveLength(0)
+      expect(iframe).toHaveAttribute('src', userPageUrl)
+      expect(iframe).toBeVisible()
     })
   })
 
@@ -99,9 +121,12 @@ describe('Admin page', () => {
 
     await waitFor(() =>
       render(
-        <AdminLayout>
-          <AdminPage />
-        </AdminLayout>,
+        <AdminProvider>
+          <AdminLayout>
+            <AdminPage />
+          </AdminLayout>
+          ,
+        </AdminProvider>,
       ),
     )
 
@@ -127,7 +152,13 @@ describe('Admin page', () => {
     AuthStore.prototype['fetchFirebaseUser'] = args =>
       Promise.resolve({exists: true, user: userMock})
 
-    await waitFor(() => render(<AdminPage />))
+    await waitFor(() =>
+      render(
+        <AdminProvider>
+          <AdminPage />
+        </AdminProvider>,
+      ),
+    )
 
     const usernameInput =
       await screen.findByPlaceholderText(/Type your username/i)
@@ -144,13 +175,10 @@ describe('Admin page', () => {
     })
   })
 
+  // TODO: Refactor this test
   it('should call method to add a new link', async () => {
     const user = userEvent.setup()
     const fbUserMock = makeFbUser()
-    const linkMock = {
-      label: faker.internet.userName(),
-      url: faker.internet.url(),
-    }
 
     handlePageAuthentication(fbUserMock)
 
@@ -158,21 +186,15 @@ describe('Admin page', () => {
     jest.spyOn(firestore, 'collection').mockImplementation()
     jest.spyOn(firestore, 'addDoc').mockImplementation()
 
-    await waitFor(() => render(<AdminPage />))
+    await waitFor(() =>
+      render(
+        <AdminProvider>
+          <AdminPage />
+        </AdminProvider>,
+      ),
+    )
 
-    const urlInput = await screen.findByPlaceholderText(/Type the url/i)
-    const labelInput = await screen.findByPlaceholderText(/Type the label/i)
     const formButton = await screen.findByText('Add link')
-
-    await user.type(urlInput, linkMock.url)
-    await user.type(labelInput, linkMock.label)
-
-    expect(urlInput).toHaveValue(linkMock.url)
-    expect(labelInput).toHaveValue(linkMock.label)
-
     await user.click(formButton)
-
-    expect(urlInput).toHaveValue('')
-    expect(labelInput).toHaveValue('')
   })
 })

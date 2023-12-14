@@ -9,7 +9,7 @@ import {
 } from 'firebase/firestore'
 import {useCallback, useEffect, useState} from 'react'
 
-import {Avatar, Link} from '@/app/components'
+import {Avatar, LinkCard} from '@/app/components'
 import {app} from '@/libs/firebase'
 import {User} from '@/models'
 
@@ -39,8 +39,9 @@ export default function UserPage({params: {userName}}: UserPageProps) {
       setLinks([])
 
       if (size === 0) return setIsLoading(false)
+      const validLinks = docs.filter(link => !!link.data().url)
 
-      docs.forEach(curUser => setLinks(prev => [...prev, curUser.data()]))
+      validLinks.forEach(link => setLinks(prev => [...prev, link.data()]))
     })
 
     setIsLoading(false)
@@ -51,7 +52,7 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   }, [fetchData])
 
   return (
-    <main className='flex h-screen items-center justify-center overflow-y-auto bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100 p-10  py-20'>
+    <main className='flex h-screen items-center justify-center overflow-y-auto bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100 p-5  py-20  md:p-10'>
       <div className=' h-full w-full max-w-2xl '>
         <div className='mb-4 flex w-full justify-center'>
           <Avatar
@@ -71,16 +72,16 @@ export default function UserPage({params: {userName}}: UserPageProps) {
           </div>
         )}
 
-        <Link.container>
+        <LinkCard.container>
           {links.length > 0 &&
             links.map(link => {
               return (
-                <Link.item key={link.url} path={link.url}>
+                <LinkCard.item key={link.url} path={link.url}>
                   {link.label}
-                </Link.item>
+                </LinkCard.item>
               )
             })}
-        </Link.container>
+        </LinkCard.container>
       </div>
     </main>
   )

@@ -1,44 +1,99 @@
 'use client'
 
+import clsx from 'clsx'
+import {useEffect, useRef, useState} from 'react'
 import {useForm} from 'react-hook-form'
+import * as z from 'zod'
+
+import {Link} from '@/models'
+import {useDebouce} from '@/utils'
+import {zodResolver} from '@hookform/resolvers/zod'
 
 type AddLinkFormProps = {
   saveLink: (args: any) => Promise<typeof args>
+  link: Link
 }
 
-type FormData = {
-  url: string
-  label: string
-}
+const httpRegex = new RegExp(
+  /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/,
+)
 
-export const AddLinkForm = ({saveLink}: AddLinkFormProps) => {
-  const {register, handleSubmit, reset} = useForm<FormData>()
+const schema = z.object({
+  url: z
+    .string()
+    .regex(httpRegex, 'Value must be a valid url. e.g. https://google.com '),
+  label: z.string().min(1, {message: 'Required field'}),
+  id: z.string(),
+})
 
-  const onSubmit = async (data: FormData) => {
-    await saveLink(data)
-    reset()
-  }
+export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
+  const formRef = useRef<HTMLFormElement>(null)
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: {errors},
+  } = useForm<Link>({
+    resolver: zodResolver(schema),
+    defaultValues: link,
+  })
+
+  const url = watch('url')
+  const label = watch('label')
+
+  const handleChange = useDebouce(() => {
+    formRef.current?.requestSubmit()
+  })
+
+  useEffect(() => {
+    if (!isFirstLoad) {
+      if (url && label) {
+        handleChange()
+      }
+    } else {
+      setIsFirstLoad(false)
+    }
+  }, [url, label])
+
+  useEffect(() => {
+    setIsFirstLoad(true)
+  }, [link])
 
   return (
-    <div className='flex w-full flex-row gap-5 rounded-lg bg-white p-5'>
+    <div className='flex w-full flex-row gap-5 rounded-lg '>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        ref={formRef}
+        onSubmit={handleSubmit(saveLink)}
         className='flex flex-1 flex-col gap-2'>
-        <input
-          placeholder='Type the url'
-          className='border-1 w-full rounded-md border border-gray-400 p-2'
-          {...register('url', {required: true})}
-        />
+        <input type='hidden' {...register('id', {required: true})} />
+
         <input
           placeholder='Type the label'
-          className='border-1 w-full rounded-md border border-gray-400 p-2'
           {...register('label', {required: true})}
+          className={clsx(
+            'border-1 w-full rounded-md border border-gray-500 bg-gray-900 p-2 text-gray-200',
+            errors.label && 'outline-red-400',
+            errors.label && 'border-red-400',
+          )}
         />
-        <button
-          type='submit'
-          className='rounded-md bg-green-600 py-2 text-white'>
-          Add link
-        </button>
+        {errors.label && (
+          <p className='mt-0 text-sm text-red-600'>{errors.label.message}</p>
+        )}
+
+        <input
+          placeholder='Type the url'
+          {...register('url', {required: true})}
+          className={clsx(
+            'border-1 w-full rounded-md border border-gray-500 bg-gray-900 p-2 text-gray-200',
+            errors.url && 'outline-red-400',
+            errors.url && 'border-red-400',
+          )}
+        />
+        {errors.url && (
+          <p className='mt-0 text-sm text-red-600'>{errors.url.message}</p>
+        )}
       </form>
     </div>
   )
