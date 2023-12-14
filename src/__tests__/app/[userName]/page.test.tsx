@@ -11,6 +11,20 @@ jest.mock('firebase/firestore', () => ({
   ...jest.requireActual('firebase/firestore'),
 }))
 
+const handleFetchLinks = (firstData: any[], secondData: any[]) => {
+  jest.spyOn(firestore, 'query').mockImplementation()
+  jest.spyOn(firestore, 'collection').mockImplementation()
+  jest.spyOn(firestore, 'where').mockImplementation()
+
+  jest
+    .spyOn(firestore, 'getDocs')
+    .mockResolvedValueOnce(makeGetDocsResponse({docs: firstData}))
+
+  jest
+    .spyOn(firestore, 'getDocs')
+    .mockResolvedValueOnce(makeGetDocsResponse({docs: secondData}))
+}
+
 describe('Render user links page', () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -21,17 +35,7 @@ describe('Render user links page', () => {
     const userMock = makeUser()
     const linkMock = makeLink()
 
-    jest.spyOn(firestore, 'query').mockImplementation()
-    jest.spyOn(firestore, 'collection').mockImplementation()
-    jest.spyOn(firestore, 'where').mockImplementation()
-
-    jest
-      .spyOn(firestore, 'getDocs')
-      .mockResolvedValueOnce(makeGetDocsResponse({docs: [userMock]}))
-
-    jest
-      .spyOn(firestore, 'getDocs')
-      .mockResolvedValueOnce(makeGetDocsResponse({docs: [linkMock]}))
+    handleFetchLinks([userMock], [linkMock])
 
     await waitFor(() =>
       setup(<UserPage params={{userName: userMock.userName}} />),
@@ -51,18 +55,7 @@ describe('Render user links page', () => {
   it("should show alert message when there isn't links saved", async () => {
     const userNameMock = 'jsdevbr'
 
-    jest.spyOn(firestore, 'query').mockImplementation()
-    jest.spyOn(firestore, 'collection').mockImplementation()
-    jest.spyOn(firestore, 'where').mockImplementation()
-
-    const usersResponse = makeGetDocsResponse({docs: [makeUser()]})
-
-    // getdocs that fetch users
-    jest.spyOn(firestore, 'getDocs').mockResolvedValueOnce(usersResponse)
-
-    const linksResponse = makeGetDocsResponse({docs: []})
-    // getdocs that fetch links from the users
-    jest.spyOn(firestore, 'getDocs').mockResolvedValueOnce(linksResponse)
+    handleFetchLinks([makeUser()], [])
 
     await waitFor(() => setup(<UserPage params={{userName: userNameMock}} />))
 
