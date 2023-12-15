@@ -4,4 +4,5 @@ export type User = {
   userName: string
   name: string
   email: string
+  backgroundUrl?: string
 }

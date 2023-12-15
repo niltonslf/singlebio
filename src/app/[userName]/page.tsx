@@ -1,5 +1,6 @@
 'use client'
 
+import clsx from 'clsx'
 import {
   collection,
   getFirestore,
@@ -69,7 +70,15 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   }, [fetchData])
 
   return (
-    <main className='flex h-screen items-center justify-center overflow-y-auto bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100 p-5  py-20  md:p-10'>
+    <main
+      className={clsx([
+        'flex h-screen items-center justify-center overflow-y-auto bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100 bg-cover  p-5  py-20 md:p-10 ',
+      ])}
+      style={
+        user?.backgroundUrl
+          ? {backgroundImage: `url(${user?.backgroundUrl})`}
+          : {}
+      }>
       <div className=' h-full w-full max-w-2xl '>
         <div className='mb-4 flex w-full justify-center'>
           <Avatar

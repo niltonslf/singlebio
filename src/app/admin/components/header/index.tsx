@@ -1,5 +1,5 @@
 import {getAuth, signOut} from 'firebase/auth'
-import {Palette} from 'lucide-react'
+import {Home, Palette} from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {useRouter} from 'next/navigation'
@@ -9,7 +9,7 @@ import {Dropdown} from '..'
 import {User} from '@/models'
 
 type HeaderProps = {
-  user: User
+  user: User | undefined
 }
 
 export const Header = ({user}: HeaderProps) => {
@@ -28,12 +28,19 @@ export const Header = ({user}: HeaderProps) => {
           Lnktree admin
         </span>
 
-        <nav className='text-white'>
+        <nav className='flex flex-row items-center gap-4   text-white'>
+          <Link
+            href='/admin'
+            title='go to appearance page'
+            className='flex flex-row gap-1'>
+            <Home width={15} />
+            Home
+          </Link>
           <Link
             href='/admin/appearance'
             title='go to appearance page'
             className='flex flex-row gap-1'>
-            <Palette width={20} />
+            <Palette width={15} />
             Appearance
           </Link>
         </nav>

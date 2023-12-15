@@ -28,7 +28,11 @@ export const AdminProvider = ({children}: PropsWithChildren) => {
   }
 
   return (
-    <adminContext.Provider value={{reloadSmartphoneList, setSmartphoneRef}}>
+    <adminContext.Provider
+      value={{
+        reloadSmartphoneList,
+        setSmartphoneRef,
+      }}>
       {children}
     </adminContext.Provider>
   )
