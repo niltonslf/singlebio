@@ -89,6 +89,36 @@ export const LinksList = ({user}: LinksListProps) => {
     return unsubscribe
   }, [user.uid])
 
+  const updateSort = (
+    links: Required<Link>[],
+    oldIndex: number,
+    newIndex: number,
+  ): void => {
+    // MOVING DOWN
+    if (oldIndex < newIndex) {
+      const [start, end] = [oldIndex, newIndex - 1]
+
+      handleSaveLink({...links[newIndex], order: links[end].order})
+
+      for (let index = start; index <= end; index++) {
+        const link: Link = {...links[index], order: links[index].order + 1}
+        handleSaveLink(link)
+      }
+
+      return
+    }
+
+    // MOVING UP
+    const [start, end] = [newIndex + 1, oldIndex]
+
+    handleSaveLink({...links[newIndex], order: links[start].order})
+
+    for (let index = start; index <= end; index++) {
+      const link: Link = {...links[index], order: links[index].order - 1}
+      handleSaveLink(link)
+    }
+  }
+
   const handleDragEnd = (event: DragEndEvent) => {
     const {active, over} = event
 
@@ -96,8 +126,9 @@ export const LinksList = ({user}: LinksListProps) => {
       setLinks(items => {
         const oldIndex = items.findIndex(item => item.id == active.id)
         const newIndex = items.findIndex(item => item.id == over?.id)
-
-        return arrayMove(items, oldIndex, newIndex)
+        const newArr = arrayMove(items, oldIndex, newIndex)
+        updateSort(newArr, oldIndex, newIndex)
+        return newArr
       })
     }
   }

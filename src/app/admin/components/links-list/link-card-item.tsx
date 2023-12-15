@@ -31,10 +31,7 @@ export const LinkCardItem = ({link, onDelete, children}: LinkCardItemProps) => {
           <Menu width={40} height={40} color='white' />
         </span>
       </div>
-      <div className='flex flex-1 flex-col items-center gap-2'>
-        {link.order}
-        {children}
-      </div>
+      <div className='flex flex-1 flex-col items-center gap-2'>{children}</div>
       <div onClick={() => onDelete(link)} className='cursor-pointer'>
         <Trash className='text-red-400 hover:text-red-700' />
       </div>
