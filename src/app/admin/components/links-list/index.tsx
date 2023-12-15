@@ -16,6 +16,7 @@ import {Link, User} from '@/models'
 
 import {AddLinkForm} from '..'
 
+import {useDebouce} from '@/utils'
 import {
   DndContext,
   closestCenter,
@@ -41,6 +42,7 @@ type LinksListProps = {
 
 export const LinksList = ({user}: LinksListProps) => {
   const {reloadSmartphoneList} = useAdmin()
+  const reloadSmartphoneListDebounced = useDebouce(() => reloadSmartphoneList())
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -61,9 +63,9 @@ export const LinksList = ({user}: LinksListProps) => {
     addDoc(collection(res, 'links'), emptyLink)
   }
 
-  const handleSaveLink = async (data: Link) => {
+  const handleSaveLink = async (data: Link, reload: boolean = true) => {
     if (data.id) setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
-    reloadSmartphoneList()
+    if (reload) reloadSmartphoneListDebounced()
   }
 
   const deleteLink = (link: Link) => {
@@ -98,25 +100,26 @@ export const LinksList = ({user}: LinksListProps) => {
     if (oldIndex < newIndex) {
       const [start, end] = [oldIndex, newIndex - 1]
 
-      handleSaveLink({...links[newIndex], order: links[end].order})
+      handleSaveLink({...links[newIndex], order: links[end].order}, false)
 
       for (let index = start; index <= end; index++) {
         const link: Link = {...links[index], order: links[index].order + 1}
-        handleSaveLink(link)
+        handleSaveLink(link, false)
       }
 
-      return
+      return reloadSmartphoneListDebounced()
     }
 
     // MOVING UP
     const [start, end] = [newIndex + 1, oldIndex]
 
-    handleSaveLink({...links[newIndex], order: links[start].order})
+    handleSaveLink({...links[newIndex], order: links[start].order}, false)
 
     for (let index = start; index <= end; index++) {
       const link: Link = {...links[index], order: links[index].order - 1}
-      handleSaveLink(link)
+      handleSaveLink(link, false)
     }
+    return reloadSmartphoneListDebounced()
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
