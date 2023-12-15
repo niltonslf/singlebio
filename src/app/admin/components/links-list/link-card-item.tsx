@@ -1,4 +1,4 @@
-import {Menu, Trash} from 'lucide-react'
+import {Grip, Trash} from 'lucide-react'
 import {ReactNode} from 'react'
 
 import {Link} from '@/models'
@@ -28,7 +28,7 @@ export const LinkCardItem = ({link, onDelete, children}: LinkCardItemProps) => {
       className='flex w-full flex-wrap items-center justify-center gap-4 rounded-lg bg-gray-700 p-3 font-medium md:p-5'>
       <div className='flex w-10 flex-col items-center rounded-lg  '>
         <span {...attributes} {...listeners}>
-          <Menu width={40} height={40} color='white' />
+          <Grip width={30} height={30} color='white' />
         </span>
       </div>
       <div className='flex flex-1 flex-col items-center gap-2'>{children}</div>

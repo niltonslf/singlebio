@@ -6,6 +6,8 @@ import {
   getDocs,
   query,
   where,
+  limit,
+  orderBy,
 } from 'firebase/firestore'
 import {useCallback, useEffect, useState} from 'react'
 
@@ -27,15 +29,23 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   const [isLoading, setIsLoading] = useState(true)
 
   const fetchData = useCallback(async () => {
-    const q = query(collection(db, 'users'), where('userName', '==', userName))
-    const {docs: users, size} = await getDocs(q)
+    const q = query(
+      collection(db, 'users'),
+      where('userName', '==', userName),
+      limit(1),
+    )
+    const {docs: users} = await getDocs(q)
 
     new Promise(resolve => {
       users.forEach(async curUser => {
         setUser(curUser.data() as User)
-        const {size, docs} = await getDocs(
+
+        const customQuery = query(
           collection(db, curUser.ref.path, 'links'),
+          orderBy('order', 'desc'),
         )
+
+        const {size, docs} = await getDocs(customQuery)
 
         setLinks([])
 
