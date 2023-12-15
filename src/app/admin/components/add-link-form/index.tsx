@@ -24,6 +24,7 @@ const schema = z.object({
     .regex(httpRegex, 'Value must be a valid url. e.g. https://google.com '),
   label: z.string().min(1, {message: 'Required field'}),
   id: z.string(),
+  order: z.number(),
 })
 
 export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
@@ -67,7 +68,14 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
         ref={formRef}
         onSubmit={handleSubmit(saveLink)}
         className='flex flex-1 flex-col gap-2'>
-        <input type='hidden' {...register('id', {required: true})} />
+        <input type='hidden' {...register('id', {required: false})} />
+        <input
+          type='hidden'
+          {...register('order', {
+            required: false,
+            setValueAs: value => Number(value),
+          })}
+        />
 
         <input
           placeholder='Type the label'

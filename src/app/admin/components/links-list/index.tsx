@@ -11,7 +11,6 @@ import {
 } from 'firebase/firestore'
 import {useCallback, useEffect, useState} from 'react'
 
-import {Sortable} from '@/app/components/sortable'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
@@ -52,9 +51,14 @@ export const LinksList = ({user}: LinksListProps) => {
 
   const [links, setLinks] = useState<Required<Link>[]>([])
 
+  const getLastOrder = () => {
+    return links.reduce((prev, cur) => Math.max(prev, cur.order + 1), 0)
+  }
+
   const handleAddNewLink = async (data: any) => {
     const res = await doc(db, 'users', user.uid)
-    addDoc(collection(res, 'links'), {})
+    const emptyLink: Link = {label: '', url: '', order: getLastOrder()}
+    addDoc(collection(res, 'links'), emptyLink)
   }
 
   const handleSaveLink = async (data: Link) => {
@@ -71,10 +75,15 @@ export const LinksList = ({user}: LinksListProps) => {
     const customQuery = query(collection(db, 'users', user.uid, 'links'))
     const unsubscribe = onSnapshot(customQuery, querySnapshot => {
       setLinks([])
+      let newLinks: Required<Link>[] = []
 
-      querySnapshot.forEach(doc =>
-        setLinks(prev => [{id: doc.id, ...(doc.data() as Link)}, ...prev]),
+      querySnapshot.forEach((doc: any) =>
+        newLinks.push({...doc.data(), id: doc.id}),
       )
+
+      newLinks = newLinks.sort((prev, next) => next.order - prev.order)
+
+      setLinks(newLinks)
     })
 
     return unsubscribe
@@ -116,14 +125,11 @@ export const LinksList = ({user}: LinksListProps) => {
             <SortableContext
               items={links}
               strategy={verticalListSortingStrategy}>
-              {links.length > 0 &&
-                links.map(link => (
-                  <Sortable.Item key={link.id} id={link.id}>
-                    <LinkCardItem onDelete={deleteLink} link={link}>
-                      <AddLinkForm saveLink={handleSaveLink} link={link} />
-                    </LinkCardItem>
-                  </Sortable.Item>
-                ))}
+              {links.map(link => (
+                <LinkCardItem key={link.id} onDelete={deleteLink} link={link}>
+                  <AddLinkForm saveLink={handleSaveLink} link={link} />
+                </LinkCardItem>
+              ))}
             </SortableContext>
           </DndContext>
         </ul>
