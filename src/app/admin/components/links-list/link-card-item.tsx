@@ -32,7 +32,10 @@ export const LinkCardItem = ({link, onDelete, children}: LinkCardItemProps) => {
         </span>
       </div>
       <div className='flex flex-1 flex-col items-center gap-2'>{children}</div>
-      <div onClick={() => onDelete(link)} className='cursor-pointer'>
+      <div
+        onClick={() => onDelete(link)}
+        className='cursor-pointer'
+        data-testid='delete-link-btn'>
         <Trash className='text-red-400 hover:text-red-700' />
       </div>
     </li>

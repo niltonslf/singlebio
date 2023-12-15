@@ -158,6 +158,7 @@ export const LinksList = ({user}: LinksListProps) => {
             onDragEnd={handleDragEnd}>
             <SortableContext
               items={links}
+              key='links-list'
               strategy={verticalListSortingStrategy}>
               {links.map(link => (
                 <LinkCardItem key={link.id} onDelete={deleteLink} link={link}>
