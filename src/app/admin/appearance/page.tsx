@@ -17,13 +17,24 @@ const AppearancePage = observer(({}: AppearancePageProps) => {
   const iframe = useRef<HTMLIFrameElement>(null)
   const {setSmartphoneRef} = useAdmin()
 
+  const handleOnClose = () => {
+    return true
+  }
+
+  const handleOnOpen = () => {
+    return true
+  }
+
   useEffect(() => {
     setSmartphoneRef(iframe)
   }, [iframe, setSmartphoneRef])
   return (
     <Layout>
       <Layout.Content>
-        <Collapse>
+        <Collapse
+          startOpen={false}
+          onClose={() => handleOnClose()}
+          onOpen={() => handleOnOpen()}>
           <Collapse.header>Page wallpaper</Collapse.header>
           <Collapse.body>
             <p>
@@ -47,7 +58,10 @@ const AppearancePage = observer(({}: AppearancePageProps) => {
           </Collapse.body>
         </Collapse>
 
-        <Collapse>
+        <Collapse
+          startOpen={false}
+          onClose={() => handleOnClose()}
+          onOpen={() => handleOnOpen()}>
           <Collapse.header>Customize buttons</Collapse.header>
           <Collapse.body>
             <p>
