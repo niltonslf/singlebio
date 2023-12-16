@@ -7,7 +7,7 @@ type LayoutProps<T> = {
 }
 
 export const Layout = (props: LayoutProps<LayoutRootProps>) => {
-  return <LayoutRoot {...props}>{props.children}</LayoutRoot>
+  return <LayoutRoot {...props}>{props?.children}</LayoutRoot>
 }
 
 Layout.Sidebar = Sidebar

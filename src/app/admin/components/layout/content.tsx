@@ -1,7 +1,7 @@
 import {ReactNode} from 'react'
 
 type ContentLayoutProps = {
-  children: ReactNode
+  children?: ReactNode
 }
 
 export const ContentLayout = ({children}: ContentLayoutProps) => {
