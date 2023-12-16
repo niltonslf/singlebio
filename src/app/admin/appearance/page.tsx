@@ -17,39 +17,39 @@ const AppearancePage = observer(({}: AppearancePageProps) => {
   const iframe = useRef<HTMLIFrameElement>(null)
   const {setSmartphoneRef} = useAdmin()
 
-  const handleOnClose = (index: number) => {
-    // console.log('closed', index)
-  }
-
-  const handleOnOpen = (index: number) => {
-    // console.log('opened', index)
-  }
-
   useEffect(() => {
     setSmartphoneRef(iframe)
-  }, [iframe, setSmartphoneRef])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [iframe])
+
   return (
     <Layout>
       <Layout.Content>
-        {[1, 2, 3, 4, 5].map(item => (
-          <Collapse
-            key={item}
-            isOpen={item === 1}
-            onOpen={handleOnOpen}
-            onClose={handleOnClose}>
-            <Collapse.Item>
-              <Collapse.Header>Page wallpaper</Collapse.Header>
-              <Collapse.Body>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
-                  tempora aut assumenda pariatur et natus ex suscipit sit totam
-                  veniam nobis ut harum cum iure, dignissimos accusantium
-                  ratione sapiente quidem.
-                </p>
-              </Collapse.Body>
-            </Collapse.Item>
-          </Collapse>
-        ))}
+        <Collapse isOpen={true}>
+          <Collapse.Item key={'wallpaper'} index={1}>
+            <Collapse.Header>Page wallpaper</Collapse.Header>
+            <Collapse.Body>
+              <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
+                tempora aut assumenda pariatur et natus ex suscipit sit totam
+                veniam nobis ut harum cum iure, dignissimos accusantium ratione
+                sapiente quidem.
+              </p>
+            </Collapse.Body>
+          </Collapse.Item>
+
+          <Collapse.Item key={'button-collor'} index={2}>
+            <Collapse.Header>Button Collor</Collapse.Header>
+            <Collapse.Body>
+              <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
+                tempora aut assumenda pariatur et natus ex suscipit sit totam
+                veniam nobis ut harum cum iure, dignissimos accusantium ratione
+                sapiente quidem.
+              </p>
+            </Collapse.Body>
+          </Collapse.Item>
+        </Collapse>
       </Layout.Content>
 
       <Layout.Sidebar>

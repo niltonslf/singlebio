@@ -51,3 +51,5 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
     )
   },
 )
+
+Smartphone.displayName = 'Smartphone'
