@@ -1,12 +1,13 @@
 import clsx from 'clsx'
-import {ReactNode} from 'react'
+import {PropsWithChildren} from 'react'
 
-type CollapseBodyProps = {
-  children?: ReactNode
-  isOpen?: boolean
-}
+import {useCollapse} from './context/collapse-context'
 
-export const CollapseBody = ({children, isOpen}: CollapseBodyProps) => {
+type CollapseBodyProps = PropsWithChildren
+
+export const CollapseBody = ({children}: CollapseBodyProps) => {
+  const {isOpen} = useCollapse()
+
   return (
     <div
       className={clsx(

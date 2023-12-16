@@ -1,68 +1,30 @@
-import {
-  Children,
-  ReactNode,
-  cloneElement,
-  isValidElement,
-  useEffect,
-  useState,
-} from 'react'
+import {ReactNode} from 'react'
 
 import {CollapseBody} from './collapse-body'
 import {CollapseHeader} from './collapse-header'
+import {CollapseItem} from './collapse-item'
+import {CollapseProvider} from './context/collapse-context'
 
 type CollapseProps = {
   children: ReactNode
-  startOpen?: boolean
-  onOpen?: () => void
-  onClose?: () => void
+  isOpen: boolean
+  onOpen?: (index: number) => void
+  onClose?: (index: number) => void
 }
+
 export const Collapse = ({
   children,
-  startOpen,
-  onOpen,
+  isOpen,
   onClose,
+  onOpen,
 }: CollapseProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-
-  const handleOpen = () => {
-    setIsOpen(true)
-    if (onOpen) {
-      onOpen()
-    }
-  }
-
-  const handleClose = () => {
-    setIsOpen(false)
-    if (onClose) {
-      onClose()
-    }
-  }
-
-  useEffect(() => {
-    if (startOpen !== undefined) setIsOpen(startOpen)
-  }, [startOpen])
-
   return (
-    <article className='mb-3 h-min overflow-hidden rounded-md border bg-gray-200'>
-      {Children.map(children, child => {
-        if (isValidElement(child)) {
-          if (child.type === CollapseHeader) {
-            return cloneElement(child, {
-              ...child.props,
-              isOpen: isOpen,
-              onOpen: handleOpen,
-              onClose: handleClose,
-            })
-          }
-          if (child.type === CollapseBody) {
-            return cloneElement(child, {...child.props, isOpen})
-          }
-        }
-        return 'error'
-      })}
-    </article>
+    <CollapseProvider defaultOpen={isOpen} onClose={onClose} onOpen={onOpen}>
+      {children}
+    </CollapseProvider>
   )
 }
 
-Collapse.header = CollapseHeader
-Collapse.body = CollapseBody
+Collapse.Item = CollapseItem
+Collapse.Header = CollapseHeader
+Collapse.Body = CollapseBody

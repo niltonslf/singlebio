@@ -17,12 +17,12 @@ const AppearancePage = observer(({}: AppearancePageProps) => {
   const iframe = useRef<HTMLIFrameElement>(null)
   const {setSmartphoneRef} = useAdmin()
 
-  const handleOnClose = () => {
-    return true
+  const handleOnClose = (index: number) => {
+    // console.log('closed', index)
   }
 
-  const handleOnOpen = () => {
-    return true
+  const handleOnOpen = (index: number) => {
+    // console.log('opened', index)
   }
 
   useEffect(() => {
@@ -31,59 +31,25 @@ const AppearancePage = observer(({}: AppearancePageProps) => {
   return (
     <Layout>
       <Layout.Content>
-        <Collapse
-          startOpen={false}
-          onClose={() => handleOnClose()}
-          onOpen={() => handleOnOpen()}>
-          <Collapse.header>Page wallpaper</Collapse.header>
-          <Collapse.body>
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
-              tempora aut assumenda pariatur et natus ex suscipit sit totam
-              veniam nobis ut harum cum iure, dignissimos accusantium ratione
-              sapiente quidem.
-            </p>
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
-              tempora aut assumenda pariatur et natus ex suscipit sit totam
-              veniam nobis ut harum cum iure, dignissimos accusantium ratione
-              sapiente quidem.
-            </p>
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
-              tempora aut assumenda pariatur et natus ex suscipit sit totam
-              veniam nobis ut harum cum iure, dignissimos accusantium ratione
-              sapiente quidem.
-            </p>
-          </Collapse.body>
-        </Collapse>
-
-        <Collapse
-          startOpen={false}
-          onClose={() => handleOnClose()}
-          onOpen={() => handleOnOpen()}>
-          <Collapse.header>Customize buttons</Collapse.header>
-          <Collapse.body>
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
-              tempora aut assumenda pariatur et natus ex suscipit sit totam
-              veniam nobis ut harum cum iure, dignissimos accusantium ratione
-              sapiente quidem.
-            </p>
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
-              tempora aut assumenda pariatur et natus ex suscipit sit totam
-              veniam nobis ut harum cum iure, dignissimos accusantium ratione
-              sapiente quidem.
-            </p>
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
-              tempora aut assumenda pariatur et natus ex suscipit sit totam
-              veniam nobis ut harum cum iure, dignissimos accusantium ratione
-              sapiente quidem.
-            </p>
-          </Collapse.body>
-        </Collapse>
+        {[1, 2, 3, 4, 5].map(item => (
+          <Collapse
+            key={item}
+            isOpen={item === 1}
+            onOpen={handleOnOpen}
+            onClose={handleOnClose}>
+            <Collapse.Item>
+              <Collapse.Header>Page wallpaper</Collapse.Header>
+              <Collapse.Body>
+                <p>
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
+                  tempora aut assumenda pariatur et natus ex suscipit sit totam
+                  veniam nobis ut harum cum iure, dignissimos accusantium
+                  ratione sapiente quidem.
+                </p>
+              </Collapse.Body>
+            </Collapse.Item>
+          </Collapse>
+        ))}
       </Layout.Content>
 
       <Layout.Sidebar>

@@ -1,23 +1,21 @@
 import {ChevronDownIcon, ChevronUpIcon} from 'lucide-react'
-import {ReactNode} from 'react'
+import {PropsWithChildren} from 'react'
 
-type CollapseHeaderProps = {
-  children?: ReactNode | string
-  isOpen?: boolean
-  onOpen?: () => void
-  onClose?: () => void
-}
+import {useCollapse} from './context/collapse-context'
 
-export const CollapseHeader = ({
-  children,
-  isOpen,
-  onClose,
-  onOpen,
-}: CollapseHeaderProps) => {
+type CollapseHeaderProps = PropsWithChildren
+
+export const CollapseHeader = ({children}: CollapseHeaderProps) => {
+  const {isOpen, setIsOpen, onClose, onOpen} = useCollapse()
+
+  const handleClick = () => {
+    setIsOpen(!isOpen)
+    if (isOpen && onOpen) return onOpen(1)
+    if (!isOpen && onClose) return onClose(1)
+  }
+
   return (
-    <header
-      className='flex w-full  select-none bg-orange-400'
-      onClick={() => (isOpen ? onClose?.() : onOpen?.())}>
+    <header className='flex w-full select-none' onClick={() => handleClick()}>
       <label className='color flex w-full cursor-pointer justify-between bg-white p-3'>
         <div className='w-full '>{children}</div>
         {isOpen ? (
