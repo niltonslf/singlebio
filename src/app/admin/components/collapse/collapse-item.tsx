@@ -13,6 +13,7 @@ export const CollapseItem = ({children, index}: CollapseItemProps) => {
 
   useEffect(() => {
     setItemIndex(index)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

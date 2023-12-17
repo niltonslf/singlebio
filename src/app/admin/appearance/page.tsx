@@ -25,7 +25,7 @@ const AppearancePage = observer(({}: AppearancePageProps) => {
   return (
     <Layout>
       <Layout.Content>
-        <Collapse isOpen={true}>
+        <Collapse>
           <Collapse.Item key={'wallpaper'} index={1}>
             <Collapse.Header>Page wallpaper</Collapse.Header>
             <Collapse.Body>

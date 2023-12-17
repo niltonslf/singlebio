@@ -7,19 +7,22 @@ import {CollapseProvider} from './context/collapse-context'
 
 type CollapseProps = {
   children: ReactNode
-  isOpen: boolean
+  defaultOpen?: number
   onOpen?: (index: number) => void
   onClose?: (index: number) => void
 }
 
 export const Collapse = ({
   children,
-  isOpen,
+  defaultOpen,
   onClose,
   onOpen,
 }: CollapseProps) => {
   return (
-    <CollapseProvider defaultOpen={isOpen} onClose={onClose} onOpen={onOpen}>
+    <CollapseProvider
+      defaultOpen={defaultOpen}
+      onClose={onClose}
+      onOpen={onOpen}>
       {children}
     </CollapseProvider>
   )

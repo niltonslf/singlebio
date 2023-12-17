@@ -14,8 +14,9 @@ export const CollapseHeader = ({children}: CollapseHeaderProps) => {
 
   const handleClick = () => {
     handleToggleItem(itemIndex)
-    if (!isItemOpen(itemIndex) && onOpen) return onOpen(itemIndex)
-    if (isItemOpen(itemIndex) && onClose) return onClose(itemIndex)
+
+    if (!isItemOpen(itemIndex)) return onOpen?.(itemIndex)
+    return onClose?.(itemIndex)
   }
 
   return (
