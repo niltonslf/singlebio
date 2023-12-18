@@ -72,11 +72,11 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   return (
     <main
       className={clsx([
-        'flex h-screen items-center justify-center overflow-y-auto bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100 bg-cover  p-5  py-20 md:p-10 ',
+        'flex h-screen items-center justify-center overflow-y-auto bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100 bg-cover bg-center  p-5 py-20 md:p-10 ',
       ])}
       style={
-        user?.backgroundUrl
-          ? {backgroundImage: `url(${user?.backgroundUrl})`}
+        user?.wallpaperUrl
+          ? {backgroundImage: `url(${user?.wallpaperUrl})`}
           : {}
       }>
       <div className=' h-full w-full max-w-2xl '>
