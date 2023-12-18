@@ -44,7 +44,7 @@ const validateGoogleBtn = () => {
 }
 
 describe('Auth Page', () => {
-  afterEach(() => {
+  beforeEach(() => {
     cleanup()
   })
 
@@ -65,7 +65,6 @@ describe('Auth Page', () => {
 
     jest.spyOn(authStore, 'authUser')
     jest.spyOn(authStore, 'clearUser')
-    jest.spyOn(mockRouter, 'push')
 
     const user = userEvent.setup()
 
@@ -85,7 +84,6 @@ describe('Auth Page', () => {
     )
 
     expect(authStore.authUser).toHaveBeenCalledTimes(0)
-    expect(mockRouter.push).toHaveBeenCalledTimes(0)
   })
 
   it('Should Login with Google successfully  ', async () => {

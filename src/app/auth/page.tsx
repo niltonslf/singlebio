@@ -1,28 +1,24 @@
 'use client'
 
-import {signInWithPopup} from 'firebase/auth'
 import {observer} from 'mobx-react-lite'
 import {useRouter} from 'next/navigation'
 import {useState} from 'react'
 
-import {provider, auth} from '@/libs/firebase'
-
+import {useValidateAuth} from '../admin/hooks'
 import {GoogleIcon} from '../components'
 import {authStore} from './context/auth-store'
 
 const SignIn = observer(() => {
   const router = useRouter()
+  useValidateAuth()
 
   const [error, setError] = useState(false)
 
   const handleLoginWithGoogle = async () => {
     try {
-      const {user} = await signInWithPopup(auth, provider)
-      await authStore.authUser(user)
-
+      await authStore.signInWithGoogle()
       router.push('/admin')
     } catch (error: any) {
-      authStore.clearUser()
       setError(true)
     }
   }

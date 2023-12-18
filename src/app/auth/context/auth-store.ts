@@ -3,11 +3,13 @@ import {
   deleteUser,
   getAuth,
   reauthenticateWithPopup,
+  signInWithPopup,
+  signOut,
 } from 'firebase/auth'
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore'
 import {action, makeObservable, observable} from 'mobx'
 
-import {app, db, provider} from '@/libs/firebase'
+import {app, auth, db, provider} from '@/libs/firebase'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
 // import {injectStores} from '@mobx-devtools/tools'
@@ -25,16 +27,28 @@ export class AuthStore {
     makeObservable(this, {
       user: observable,
       firebaseUser: observable,
+      signInWithGoogle: action,
       authUser: action,
       updateUser: action,
+      logout: action,
       deleteUser: action,
       clearUser: action,
     })
   }
 
+  public async signInWithGoogle() {
+    try {
+      const {user} = await signInWithPopup(auth, provider)
+      return await authStore.authUser(user)
+    } catch (error) {
+      throw error
+    }
+  }
+
   public async authUser(firebaseUser: FbUser | null) {
     if (!firebaseUser) {
       this.clearUser()
+      this.logout()
       return
     }
 
@@ -48,9 +62,7 @@ export class AuthStore {
     }
 
     const newUser = parseToUser(firebaseUser)
-
     await setDoc(doc(db, 'users', newUser.uid), newUser)
-
     this.user = {...newUser, username: ''}
   }
 
@@ -69,6 +81,10 @@ export class AuthStore {
   public clearUser() {
     this.user = undefined
     this.firebaseUser = undefined
+  }
+
+  public async logout() {
+    return await signOut(auth)
   }
 
   public async deleteUser() {
