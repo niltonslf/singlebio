@@ -44,10 +44,12 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
      after:shadow-md'>
         <iframe
           ref={ref}
-          src={iframeUrl}
+          src={`/${iframeUrl}`}
           className='h-full w-full object-cover'
         />
       </div>
     )
   },
 )
+
+Smartphone.displayName = 'Smartphone'
