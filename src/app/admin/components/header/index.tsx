@@ -1,23 +1,23 @@
-import {getAuth, signOut} from 'firebase/auth'
 import {Home, Palette} from 'lucide-react'
+import {observer} from 'mobx-react-lite'
 import Image from 'next/image'
 import Link from 'next/link'
 import {useRouter} from 'next/navigation'
 
 import {Dropdown} from '..'
 
+import {authStore} from '@/app/auth/context/auth-store'
 import {User} from '@/models'
 
 type HeaderProps = {
   user: User | undefined
 }
 
-export const Header = ({user}: HeaderProps) => {
+export const Header = observer(({user}: HeaderProps) => {
   const router = useRouter()
 
   const logout = async () => {
-    const auth = getAuth()
-    await signOut(auth)
+    await authStore.logout()
     router.push('/')
   }
 
@@ -72,4 +72,4 @@ export const Header = ({user}: HeaderProps) => {
       </div>
     </header>
   )
-}
+})

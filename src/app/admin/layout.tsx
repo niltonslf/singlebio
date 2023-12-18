@@ -1,36 +1,19 @@
 'use client'
 
-import {onAuthStateChanged} from 'firebase/auth'
 import {observer} from 'mobx-react-lite'
-import {useRouter} from 'next/navigation'
-import {ReactNode, useEffect} from 'react'
-
-import {auth} from '@/libs/firebase'
+import {ReactNode} from 'react'
 
 import {authStore} from '../auth/context/auth-store'
 import {Header} from './components'
 import {AdminProvider} from './context/admin-context'
+import {useValidateAuth} from './hooks'
 
 type AdminLayoutProps = {
   children: ReactNode
 }
 
 const AdminLayout = observer(({children}: AdminLayoutProps) => {
-  const router = useRouter()
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async firebaseUser => {
-      if (!firebaseUser) {
-        authStore.clearUser()
-        router.push('/auth')
-      } else {
-        await authStore.authUser(firebaseUser)
-      }
-    })
-
-    return () => unsubscribe()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  useValidateAuth()
 
   return (
     <AdminProvider>
