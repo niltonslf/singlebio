@@ -4,11 +4,12 @@
 import clsx from 'clsx'
 import {updateDoc, doc} from 'firebase/firestore'
 import {useRef, useState, ChangeEvent, useEffect} from 'react'
+import {ColorPicker, useColor} from 'react-color-palette'
+import 'react-color-palette/css'
 
 import {useAdmin} from '@/app/admin/context/admin-context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {db} from '@/libs/firebase'
-import {Colorful} from '@uiw/react-color'
 
 import {useImageCompressor} from '../../hooks/image-compressor'
 import {useWallpaperUploader} from '../../hooks/wallpaper-uploader'
@@ -27,10 +28,11 @@ export const Wallpaper = () => {
   const [hasUpdated, setHasUpdated] = useState(false)
 
   const [imageFile, setImageFile] = useState<File | undefined>(undefined)
-  const [color, setColor] = useState('#1c131368')
   const [wallpaperUrl, setWallpaperUrl] = useState('')
 
-  const preparedColor = hasColorChanged ? color.replace('#', '%23') : ''
+  const [color, setColor] = useColor('#1c131368')
+
+  const preparedColor = hasColorChanged ? color.hex.replace('#', '%23') : ''
   const iframeUrl = `/${authStore?.user?.userName}/preview?color=${preparedColor}&wallpaperUrl=${wallpaperUrl}`
 
   const handleImageThumbnail = (file: File) => {
@@ -59,7 +61,7 @@ export const Wallpaper = () => {
     }
 
     if (color && hasColorChanged) {
-      data.colorOverlay = color
+      data.colorOverlay = color.hex
     }
 
     await updateDoc(doc(db, 'users', authStore.user?.uid), data)
@@ -69,7 +71,6 @@ export const Wallpaper = () => {
   }
 
   const handleReset = () => {
-    setColor('')
     setWallpaperUrl('')
     setImageFile(undefined)
     setHasImage(false)
@@ -121,11 +122,11 @@ export const Wallpaper = () => {
         <h2 className='font-mg font-semibold'>2. Customize the overlay</h2>
 
         <div className='mt-3'>
-          <Colorful
-            style={{width: '100%'}}
+          <ColorPicker
+            hideInput={['rgb', 'hsv']}
             color={color}
-            onChange={color => {
-              setColor(color.hexa)
+            onChange={e => {
+              setColor(e)
               setHasColorChanged(true)
             }}
           />
