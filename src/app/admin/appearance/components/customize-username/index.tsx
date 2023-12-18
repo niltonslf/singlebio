@@ -3,7 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 import clsx from 'clsx'
 import {updateDoc, doc} from 'firebase/firestore'
-import {useState, useEffect} from 'react'
+import {observer} from 'mobx-react-lite'
+import {useState, useEffect, useMemo} from 'react'
 import {ColorPicker, useColor} from 'react-color-palette'
 import 'react-color-palette/css'
 
@@ -11,7 +12,9 @@ import {useAdmin} from '@/app/admin/context/admin-context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {db} from '@/libs/firebase'
 
-export const CustomizeUsername = () => {
+import {makePreviewUrl} from '../../utils'
+
+export const CustomizeUsername = observer(() => {
   const {updateSmartphoneSrc, reloadSmartphoneList} = useAdmin()
 
   const [error, setError] = useState(false)
@@ -21,9 +24,17 @@ export const CustomizeUsername = () => {
 
   const [color, setColor] = useColor('#1c131368')
 
-  const preparedColor = hasColorChanged ? color.hex.replace('#', '%23') : ''
+  let iframeUrl = useMemo(() => {
+    const params = makePreviewUrl({
+      buttonColor: authStore.user?.buttonColor,
+      buttonTextColor: authStore.user?.buttonTextColor,
+      colorOverlay: authStore.user?.colorOverlay,
+      usernameColor: color.hex,
+      wallpaperUrl: authStore.user?.wallpaperUrl,
+    })
 
-  const iframeUrl = `/${authStore?.user?.username}/preview?usernameColor=${preparedColor}`
+    return `/${authStore?.user?.username}/preview?&${params}`
+  }, [color.hex, authStore.user])
 
   const handleSave = async () => {
     if (!authStore.user?.uid) return setError(true)
@@ -36,6 +47,7 @@ export const CustomizeUsername = () => {
     }
 
     await updateDoc(doc(db, 'users', authStore.user?.uid), data)
+    authStore.updateUser({...authStore.user, ...data})
 
     setIsLoading(false)
     setHasUpdated(true)
@@ -97,4 +109,4 @@ export const CustomizeUsername = () => {
       </div>
     </>
   )
-}
+})

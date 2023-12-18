@@ -8,7 +8,7 @@ import {Avatar, LinkCard} from '@/app/components'
 type UserPreviewProps = {
   params: {username: string}
   searchParams: {
-    color?: string
+    colorOverlay?: string
     wallpaperUrl?: string
     buttonColor?: string
     buttonTextColor?: string
@@ -19,15 +19,19 @@ type UserPreviewProps = {
 const UserPreview = observer(
   ({params: {username}, searchParams}: UserPreviewProps) => {
     const {
-      color,
+      colorOverlay,
       wallpaperUrl,
       buttonColor,
       buttonTextColor: textColor,
       usernameColor,
     } = searchParams
 
-    const wallpaperStyle = {backgroundImage: `url(${wallpaperUrl})`}
-    const colorStyle = {background: `${color}`}
+    const wallpaperStyle = {
+      backgroundImage: `url(${decodeURIComponent(wallpaperUrl || '')})`,
+    }
+    const colorStyle = {
+      backgroundColor: `${decodeURIComponent(colorOverlay || '')}`,
+    }
 
     return (
       <main
@@ -37,7 +41,7 @@ const UserPreview = observer(
           className={clsx([
             'flex h-screen w-screen items-center justify-center overflow-y-auto p-5 py-20 md:p-10 ',
           ])}
-          style={color ? colorStyle : {}}>
+          style={colorOverlay ? colorStyle : {}}>
           <div className=' h-full w-full max-w-2xl '>
             <div className='mb-4 flex w-full justify-center'>
               <Avatar name={username} size={80} />
@@ -45,33 +49,35 @@ const UserPreview = observer(
 
             <h2
               className='mb-3 flex items-center justify-center text-2xl font-semibold'
-              style={usernameColor ? {color: usernameColor} : {}}>
+              style={
+                usernameColor ? {color: decodeURIComponent(usernameColor)} : {}
+              }>
               @{username}
             </h2>
 
             <LinkCard.container>
               <LinkCard.item
                 path='/admin'
-                bgColor={buttonColor}
-                textColor={textColor}>
+                bgColor={decodeURIComponent(buttonColor || '')}
+                textColor={decodeURIComponent(textColor || '')}>
                 Example 01
               </LinkCard.item>
               <LinkCard.item
                 path='/admin'
-                bgColor={buttonColor}
-                textColor={textColor}>
+                bgColor={decodeURIComponent(buttonColor || '')}
+                textColor={decodeURIComponent(textColor || '')}>
                 Example 02
               </LinkCard.item>
               <LinkCard.item
                 path='/admin'
-                bgColor={buttonColor}
-                textColor={textColor}>
+                bgColor={decodeURIComponent(buttonColor || '')}
+                textColor={decodeURIComponent(textColor || '')}>
                 Example 03
               </LinkCard.item>
               <LinkCard.item
                 path='/admin'
-                bgColor={buttonColor}
-                textColor={textColor}>
+                bgColor={decodeURIComponent(buttonColor || '')}
+                textColor={decodeURIComponent(textColor || '')}>
                 Example 04
               </LinkCard.item>
             </LinkCard.container>
