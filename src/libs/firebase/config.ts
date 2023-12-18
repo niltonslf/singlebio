@@ -2,6 +2,7 @@ import {getAnalytics, isSupported} from 'firebase/analytics'
 import {initializeApp, getApps} from 'firebase/app'
 import {GoogleAuthProvider, getAuth} from 'firebase/auth'
 import {getFirestore} from 'firebase/firestore'
+import {getStorage} from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_KEY,
@@ -21,5 +22,6 @@ export const app = (() => {
 isSupported().then(res => (res ? getAnalytics(app) : null))
 
 export const auth = getAuth(app)
+export const firebaseStorage = getStorage(app)
 export const provider = new GoogleAuthProvider()
 export const db = getFirestore(app)
