@@ -5,4 +5,5 @@ export type User = {
   name: string
   email: string
   wallpaperUrl?: string
+  colorOverlay?: string
 }

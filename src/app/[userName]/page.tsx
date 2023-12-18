@@ -29,6 +29,10 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   const [user, setUser] = useState<User>()
   const [isLoading, setIsLoading] = useState(true)
 
+  const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
+  const wallpaperStyle = {backgroundImage: `url(${user?.wallpaperUrl})`}
+  const colorStyle = {background: `${user?.colorOverlay}`}
+
   const fetchData = useCallback(async () => {
     const q = query(
       collection(db, 'users'),
@@ -72,48 +76,51 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   return (
     <main
       className={clsx([
-        'flex h-screen items-center justify-center overflow-y-auto bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100 bg-cover bg-center  p-5 py-20 md:p-10 ',
+        'flex h-screen w-screen bg-white bg-cover bg-center',
+        !user?.wallpaperUrl ? defaultBg : '',
       ])}
-      style={
-        user?.wallpaperUrl
-          ? {backgroundImage: `url(${user?.wallpaperUrl})`}
-          : {}
-      }>
-      <div className=' h-full w-full max-w-2xl '>
-        <div className='mb-4 flex w-full justify-center'>
-          <Avatar
-            name={user?.name || ''}
-            pictureUrl={user?.pictureUrl}
-            size={80}
-          />
+      style={user?.wallpaperUrl ? wallpaperStyle : {}}>
+      <div
+        className={clsx([
+          'flex h-screen w-screen items-center justify-center overflow-y-auto p-5 py-20 md:p-10 ',
+        ])}
+        style={user?.colorOverlay ? colorStyle : {}}>
+        <div className=' h-full w-full max-w-2xl '>
+          <div className='mb-4 flex w-full justify-center'>
+            <Avatar
+              name={user?.name || ''}
+              pictureUrl={user?.pictureUrl}
+              size={80}
+            />
+          </div>
+
+          <h2 className='mb-3 flex items-center justify-center text-2xl font-semibold'>
+            @{userName}
+          </h2>
+
+          {isLoading && (
+            <div className='flex items-center justify-center text-lg'>
+              Loading user links...
+            </div>
+          )}
+
+          {links.length === 0 && isLoading === false && (
+            <div className='rounded-md bg-red-300 p-2 shadow-md'>
+              No links in this profile
+            </div>
+          )}
+
+          <LinkCard.container>
+            {links.length > 0 &&
+              links.map(link => {
+                return (
+                  <LinkCard.item key={link.url} path={link.url}>
+                    {link.label}
+                  </LinkCard.item>
+                )
+              })}
+          </LinkCard.container>
         </div>
-
-        <h2 className='mb-3 flex items-center justify-center text-2xl font-semibold'>
-          @{userName}
-        </h2>
-
-        {isLoading && (
-          <div className='flex items-center justify-center text-lg'>
-            Loading user links...
-          </div>
-        )}
-
-        {links.length === 0 && isLoading === false && (
-          <div className='rounded-md bg-red-300 p-2 shadow-md'>
-            No links in this profile
-          </div>
-        )}
-
-        <LinkCard.container>
-          {links.length > 0 &&
-            links.map(link => {
-              return (
-                <LinkCard.item key={link.url} path={link.url}>
-                  {link.label}
-                </LinkCard.item>
-              )
-            })}
-        </LinkCard.container>
       </div>
     </main>
   )

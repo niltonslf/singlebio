@@ -80,7 +80,7 @@ export const Wallpaper = () => {
     const unsubscribe = setTimeout(() => reloadSmartphoneList(), 500)
 
     return () => clearTimeout(unsubscribe)
-  }, [color, reloadSmartphoneList, wallpaperUrl])
+  }, [iframeUrl, reloadSmartphoneList, updateSmartphoneSrc])
 
   return (
     <>
