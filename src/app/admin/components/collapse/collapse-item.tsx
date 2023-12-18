@@ -1,4 +1,6 @@
-import {ReactNode, useEffect} from 'react'
+import {HTMLAttributes, ReactNode, useEffect} from 'react'
+
+import {merge} from '@/utils'
 
 import {useCollapse} from './context/collapse-context'
 import {CollapseItemProvider} from './context/collapse-item-context'
@@ -6,9 +8,14 @@ import {CollapseItemProvider} from './context/collapse-item-context'
 type CollapseItemProps = {
   children: ReactNode
   index: number
+  className?: HTMLAttributes<HTMLElement>['className']
 }
 
-export const CollapseItem = ({children, index}: CollapseItemProps) => {
+export const CollapseItem = ({
+  children,
+  index,
+  className,
+}: CollapseItemProps) => {
   const {setItemIndex} = useCollapse()
 
   useEffect(() => {
@@ -18,7 +25,11 @@ export const CollapseItem = ({children, index}: CollapseItemProps) => {
 
   return (
     <CollapseItemProvider index={index}>
-      <article className='mb-3 h-min overflow-hidden rounded-md border bg-gray-200'>
+      <article
+        className={merge([
+          'mb-3 h-min overflow-hidden rounded-md border bg-gray-200',
+          className,
+        ])}>
         {children}
       </article>
     </CollapseItemProvider>

@@ -173,7 +173,7 @@ export const CustomizeWallpaper = observer(() => {
 
           <div className='mt-3'>
             <ColorPicker
-              hideInput={['rgb', 'hsv', 'hex']}
+              hideInput={['rgb', 'hsv']}
               color={color}
               onChange={e => {
                 setColor(e)
