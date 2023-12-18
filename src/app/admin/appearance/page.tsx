@@ -9,11 +9,7 @@ import {Smartphone} from '@/app/components'
 import {Collapse, Layout} from '../components'
 import {useAdmin} from '../context/admin-context'
 
-type AppearancePageProps = {
-  any?: any
-}
-
-const AppearancePage = observer(({}: AppearancePageProps) => {
+const AppearancePage = observer(() => {
   const iframe = useRef<HTMLIFrameElement>(null)
   const {setSmartphoneRef} = useAdmin()
 
