@@ -6,7 +6,7 @@ import {observer} from 'mobx-react-lite'
 import {Avatar, LinkCard} from '@/app/components'
 
 type UserPreviewProps = {
-  params: {userName: string}
+  params: {username: string}
   searchParams: {
     color?: string
     wallpaperUrl?: string
@@ -17,7 +17,7 @@ type UserPreviewProps = {
 }
 
 const UserPreview = observer(
-  ({params: {userName}, searchParams}: UserPreviewProps) => {
+  ({params: {username}, searchParams}: UserPreviewProps) => {
     const {
       color,
       wallpaperUrl,
@@ -39,11 +39,11 @@ const UserPreview = observer(
           style={color ? colorStyle : {}}>
           <div className=' h-full w-full max-w-2xl '>
             <div className='mb-4 flex w-full justify-center'>
-              <Avatar name={userName} size={80} />
+              <Avatar name={username} size={80} />
             </div>
 
             <h2 className='mb-3 flex items-center justify-center text-2xl font-semibold'>
-              @{userName}
+              @{username}
             </h2>
 
             <LinkCard.container>

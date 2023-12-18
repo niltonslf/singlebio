@@ -51,7 +51,7 @@ export class AuthStore {
 
     await setDoc(doc(db, 'users', newUser.uid), newUser)
 
-    this.user = {...newUser, userName: ''}
+    this.user = {...newUser, username: ''}
   }
 
   private async fetchFirebaseUser(

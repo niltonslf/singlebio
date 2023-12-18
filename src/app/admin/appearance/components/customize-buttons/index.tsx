@@ -27,7 +27,7 @@ export const CustomizeButtons = () => {
     ? colorText.hex.replace('#', '%23')
     : ''
 
-  const iframeUrl = `/${authStore?.user?.userName}/preview?buttonColor=${preparedColor}&buttonTextColor=${preparedTextColor}`
+  const iframeUrl = `/${authStore?.user?.username}/preview?buttonColor=${preparedColor}&buttonTextColor=${preparedTextColor}`
 
   const handleSave = async () => {
     if (!authStore.user?.uid) return setError(true)

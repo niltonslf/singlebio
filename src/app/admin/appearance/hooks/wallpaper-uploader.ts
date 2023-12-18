@@ -11,7 +11,7 @@ export const useWallpaperUploader = () => {
 
     const imageArray = await imageFile.arrayBuffer()
 
-    const fileRef = `wallpapers/${user.userName}/wallpaper.jpg`
+    const fileRef = `wallpapers/${user.username}/wallpaper.jpg`
     const storageRef = ref(firebaseStorage, fileRef)
 
     await uploadBytes(storageRef, imageArray)

@@ -14,7 +14,7 @@ const AppearancePage = observer(() => {
   const iframe = useRef<HTMLIFrameElement>(null)
   const {setSmartphoneRef, updateSmartphoneSrc} = useAdmin()
 
-  const iframeUrl = `${authStore.user?.userName}`
+  const iframeUrl = `${authStore.user?.username}`
 
   useEffect(() => {
     setSmartphoneRef(iframe)
@@ -43,7 +43,7 @@ const AppearancePage = observer(() => {
 
       <Layout.Sidebar>
         <div className='sticky top-6'>
-          {authStore?.user?.userName && (
+          {authStore?.user?.username && (
             <Smartphone ref={iframe} iframeUrl={iframeUrl} />
           )}
         </div>

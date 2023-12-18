@@ -18,13 +18,13 @@ import {User} from '@/models'
 
 type UserPageProps = {
   params: {
-    userName: string
+    username: string
   }
 }
 
 const db = getFirestore(app)
 
-export default function UserPage({params: {userName}}: UserPageProps) {
+export default function UserPage({params: {username}}: UserPageProps) {
   const [links, setLinks] = useState<any[]>([])
   const [user, setUser] = useState<User>()
   const [isLoading, setIsLoading] = useState(true)
@@ -36,7 +36,7 @@ export default function UserPage({params: {userName}}: UserPageProps) {
   const fetchData = useCallback(async () => {
     const q = query(
       collection(db, 'users'),
-      where('userName', '==', userName),
+      where('username', '==', username),
       limit(1),
     )
     const {docs: users} = await getDocs(q)
@@ -67,7 +67,7 @@ export default function UserPage({params: {userName}}: UserPageProps) {
     }).finally(() => {
       setIsLoading(false)
     })
-  }, [userName])
+  }, [username])
 
   useEffect(() => {
     fetchData()
@@ -95,7 +95,7 @@ export default function UserPage({params: {userName}}: UserPageProps) {
           </div>
 
           <h2 className='mb-3 flex items-center justify-center text-2xl font-semibold'>
-            @{userName}
+            @{username}
           </h2>
 
           {isLoading && (

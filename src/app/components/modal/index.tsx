@@ -9,18 +9,18 @@ import {Dialog, Transition} from '@headlessui/react'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 type FormProps = {
-  userName: string
+  username: string
 }
 
 const schema = z.object({
-  userName: z
+  username: z
     .string()
     .transform(value => value.replace(/\s+/g, ''))
     .pipe(z.string().min(4, {message: 'Required field'})),
 })
 
 type ModalProps = {
-  onSave: (userName: string) => Promise<void>
+  onSave: (username: string) => Promise<void>
   initialOpen?: boolean
 }
 
@@ -36,17 +36,17 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
 
   const [isOpen, setIsOpen] = useState(initialOpen)
   const [submitDisabled, setSubmitDisabled] = useState(false)
-  const username = watch('userName')
+  const username = watch('username')
 
   const onSubmit = async (data: FormProps) => {
-    await onSave(data.userName)
+    await onSave(data.username)
     closeModal()
   }
 
   const checkUsername = async (username: string) => {
     if (!username) return setSubmitDisabled(false)
 
-    const q = query(collection(db, 'users'), where('userName', '==', username))
+    const q = query(collection(db, 'users'), where('username', '==', username))
     const snapshot = await getDocs(q)
 
     if (snapshot.size) setSubmitDisabled(true)
@@ -108,14 +108,14 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
                         placeholder='Type your username'
                         className={clsx(
                           'border-1 w-full rounded-md border border-gray-400 p-2',
-                          (errors?.userName?.message || submitDisabled) &&
+                          (errors?.username?.message || submitDisabled) &&
                             'border-red-400 outline-red-400',
                         )}
-                        {...register('userName', {required: true})}
+                        {...register('username', {required: true})}
                       />
-                      {errors.userName && (
+                      {errors.username && (
                         <p className='mt-2 text-sm text-red-400'>
-                          {errors.userName.message}
+                          {errors.username.message}
                         </p>
                       )}
                       {submitDisabled && (
