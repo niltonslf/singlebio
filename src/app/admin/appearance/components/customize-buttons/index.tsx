@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import {updateDoc, doc} from 'firebase/firestore'
 import {observer} from 'mobx-react-lite'
 import {useState, useEffect, useMemo} from 'react'
-import {ColorPicker, useColor} from 'react-color-palette'
+import {ColorPicker, ColorService, useColor} from 'react-color-palette'
 import 'react-color-palette/css'
 
 import {useAdmin} from '@/app/admin/context/admin-context'
@@ -15,52 +15,72 @@ import {db} from '@/libs/firebase'
 import {makePreviewUrl} from '../../utils'
 
 export const CustomizeButtons = observer(() => {
+  const user = authStore.user
   const {updateSmartphoneSrc, reloadSmartphoneList} = useAdmin()
 
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [hasColorChanged, setHasColorChanged] = useState(false)
   const [hasUpdated, setHasUpdated] = useState(false)
 
-  const [color, setColor] = useColor('#1c131368')
-  const [colorText, setColorText] = useColor('#000')
+  const [color, setColor] = useColor(user?.buttonColor || '#FFFFFF')
+  const [colorText, setColorText] = useColor(user?.buttonTextColor || '#000')
 
   let iframeUrl = useMemo(() => {
     const params = makePreviewUrl({
       buttonColor: color.hex,
       buttonTextColor: colorText.hex,
-      colorOverlay: authStore.user?.colorOverlay,
-      usernameColor: authStore.user?.colorOverlay,
-      wallpaperUrl: authStore.user?.wallpaperUrl,
+      colorOverlay: user?.colorOverlay,
+      usernameColor: user?.colorOverlay,
+      wallpaperUrl: user?.wallpaperUrl,
     })
 
-    return `/${authStore?.user?.username}/preview?&${params}`
-  }, [color.hex, colorText.hex, authStore.user])
+    return `/${user?.username}/preview?&${params}`
+  }, [color.hex, colorText.hex, user])
 
   const handleSave = async () => {
-    if (!authStore.user?.uid) return setError(true)
+    if (!user?.uid) return setError(true)
     setIsLoading(true)
 
     const data = {buttonColor: '', buttonTextColor: ''}
 
-    if (color && hasColorChanged) {
+    if (color) {
       data.buttonColor = color.hex
     }
-    if (colorText && hasColorChanged) {
+    if (colorText) {
       data.buttonTextColor = colorText.hex
     }
 
-    await updateDoc(doc(db, 'users', authStore.user?.uid), data)
-
-    authStore.updateUser({...authStore.user, ...data})
+    await updateDoc(doc(db, 'users', user?.uid), data)
+    authStore.updateUser({...user, ...data})
 
     setIsLoading(false)
     setHasUpdated(true)
   }
 
   const handleReset = () => {
+    const hexButton = user?.buttonColor || '#FFFFFF'
+    const rgbButton = ColorService.hex2rgb(hexButton)
+    const hsvButton = ColorService.rgb2hsv(rgbButton)
+
+    const hexText = user?.buttonTextColor || '#000'
+    const rgbText = ColorService.hex2rgb(hexText)
+    const hsvText = ColorService.rgb2hsv(rgbText)
+
+    setColor({hex: hexButton, rgb: rgbButton, hsv: hsvButton})
+    setColorText({hex: hexText, rgb: rgbText, hsv: hsvText})
+
     setError(false)
   }
+
+  useEffect(() => {
+    let unsubscribe: string | number | NodeJS.Timeout | undefined = undefined
+
+    if (hasUpdated) {
+      unsubscribe = setTimeout(() => setHasUpdated(false), 5000)
+    }
+
+    return () => clearTimeout(unsubscribe)
+  }, [hasUpdated])
 
   useEffect(() => {
     updateSmartphoneSrc(iframeUrl)
@@ -80,7 +100,6 @@ export const CustomizeButtons = observer(() => {
             color={color}
             onChange={e => {
               setColor(e)
-              setHasColorChanged(true)
             }}
           />
         </div>
@@ -95,7 +114,6 @@ export const CustomizeButtons = observer(() => {
             color={colorText}
             onChange={e => {
               setColorText(e)
-              setHasColorChanged(true)
             }}
           />
         </div>
