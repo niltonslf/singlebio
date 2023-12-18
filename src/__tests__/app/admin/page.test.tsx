@@ -9,14 +9,14 @@ import {
   makeGetDocsResponse,
   setup,
 } from '@/__tests__/utils'
+import {AdminProvider} from '@/app/admin/context/admin-context'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import '@testing-library/jest-dom'
 import {AuthStore, authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
 import {faker} from '@faker-js/faker'
-import {act, cleanup, render, screen, waitFor} from '@testing-library/react'
-import {AdminProvider} from '@/app/admin/context/admin-context'
+import {act, cleanup, screen, waitFor} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
@@ -60,11 +60,24 @@ jest.mock('firebase/firestore', () => ({
 
 const fetchFirebaseUserCopy = AuthStore.prototype['fetchFirebaseUser']
 
+const makeSUT = async () => {
+  return await waitFor(() =>
+    setup(
+      <AdminLayout>
+        <AdminProvider>
+          <AdminPage />
+        </AdminProvider>
+      </AdminLayout>,
+    ),
+  )
+}
+
 const handlePageAuthentication = (
   fbUserMock: firebaseAuth.User | undefined,
 ) => {
-  const data = fbUserMock ? parseToUser(fbUserMock) : undefined
-
+  const data = fbUserMock
+    ? parseToUser(fbUserMock, faker.internet.userName())
+    : undefined
   jest
     .spyOn(firebaseAuth, 'onAuthStateChanged')
     .mockImplementation((auth: any, userCallback: any) => {
@@ -81,8 +94,6 @@ const handlePageAuthentication = (
 
 describe('Admin page', () => {
   beforeEach(() => {
-    // jest.clearAllMocks()
-    // jest.restoreAllMocks()
     cleanup()
     act(() => authStore.clearUser())
     AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserCopy
@@ -93,15 +104,9 @@ describe('Admin page', () => {
 
     handlePageAuthentication(userMock)
 
-    await waitFor(() =>
-      setup(
-        <AdminProvider>
-          <AdminPage />
-        </AdminProvider>,
-      ),
-    )
+    await makeSUT()
 
-    const userPageUrl = `${authStore.user?.userName}`
+    const userPageUrl = `/${authStore.user?.userName}`
 
     await waitFor(async () => {
       const header = await screen.queryByText('Lnktree admin')
@@ -119,16 +124,7 @@ describe('Admin page', () => {
   it('should redirect to /auth if not authenticated', async () => {
     handlePageAuthentication(undefined)
 
-    await waitFor(() =>
-      render(
-        <AdminProvider>
-          <AdminLayout>
-            <AdminPage />
-          </AdminLayout>
-          ,
-        </AdminProvider>,
-      ),
-    )
+    await makeSUT()
 
     await waitFor(() => {
       expect(routerMock).toMatchObject({
@@ -152,13 +148,7 @@ describe('Admin page', () => {
     AuthStore.prototype['fetchFirebaseUser'] = args =>
       Promise.resolve({exists: true, user: userMock})
 
-    await waitFor(() =>
-      render(
-        <AdminProvider>
-          <AdminPage />
-        </AdminProvider>,
-      ),
-    )
+    await makeSUT()
 
     const usernameInput =
       await screen.findByPlaceholderText(/Type your username/i)
@@ -186,13 +176,7 @@ describe('Admin page', () => {
     jest.spyOn(firestore, 'collection').mockImplementation()
     jest.spyOn(firestore, 'addDoc').mockImplementation()
 
-    await waitFor(() =>
-      render(
-        <AdminProvider>
-          <AdminPage />
-        </AdminProvider>,
-      ),
-    )
+    await makeSUT()
 
     const formButton = await screen.findByText('Add link')
     await user.click(formButton)

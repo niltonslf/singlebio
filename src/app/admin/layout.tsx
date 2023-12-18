@@ -2,7 +2,7 @@
 
 import {onAuthStateChanged} from 'firebase/auth'
 import {observer} from 'mobx-react-lite'
-import router from 'next/router'
+import {useRouter} from 'next/navigation'
 import {ReactNode, useEffect} from 'react'
 
 import {auth} from '@/libs/firebase'
@@ -16,6 +16,8 @@ type AdminLayoutProps = {
 }
 
 const AdminLayout = observer(({children}: AdminLayoutProps) => {
+  const router = useRouter()
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async firebaseUser => {
       if (!firebaseUser) {

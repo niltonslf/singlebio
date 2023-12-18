@@ -53,6 +53,7 @@ export const Header = ({user}: HeaderProps) => {
           </span>
           {user?.pictureUrl && (
             <Image
+              priority
               className='rounded-full border-2'
               src={user?.pictureUrl}
               width={40}

@@ -25,16 +25,13 @@ const AppearancePage = observer(({}: AppearancePageProps) => {
   return (
     <Layout>
       <Layout.Content>
-        <Collapse>
+        <Collapse defaultOpen={1}>
           <Collapse.Item key={'wallpaper'} index={1}>
             <Collapse.Header>Page wallpaper</Collapse.Header>
             <Collapse.Body>
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
-                tempora aut assumenda pariatur et natus ex suscipit sit totam
-                veniam nobis ut harum cum iure, dignissimos accusantium ratione
-                sapiente quidem.
-              </p>
+              <div className='flex w-full cursor-pointer flex-row items-center justify-center border-2 border-dashed border-gray-500 p-10 text-center text-xl text-gray-500'>
+                Drag your file or click here to select your wallpaper
+              </div>
             </Collapse.Body>
           </Collapse.Item>
 
