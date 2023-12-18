@@ -37,8 +37,12 @@ export class AuthStore {
   }
 
   public async signInWithGoogle() {
-    const {user} = await signInWithPopup(auth, provider)
-    return await authStore.authUser(user)
+    try {
+      const {user} = await signInWithPopup(auth, provider)
+      return await authStore.authUser(user)
+    } catch (error) {
+      throw error
+    }
   }
 
   public async authUser(firebaseUser: FbUser | null) {

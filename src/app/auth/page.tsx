@@ -19,7 +19,6 @@ const SignIn = observer(() => {
       await authStore.signInWithGoogle()
       router.push('/admin')
     } catch (error: any) {
-      authStore.clearUser()
       setError(true)
     }
   }
