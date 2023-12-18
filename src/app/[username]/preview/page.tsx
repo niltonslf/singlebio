@@ -23,6 +23,7 @@ const UserPreview = observer(
       wallpaperUrl,
       buttonColor,
       buttonTextColor: textColor,
+      usernameColor,
     } = searchParams
 
     const wallpaperStyle = {backgroundImage: `url(${wallpaperUrl})`}
@@ -42,7 +43,9 @@ const UserPreview = observer(
               <Avatar name={username} size={80} />
             </div>
 
-            <h2 className='mb-3 flex items-center justify-center text-2xl font-semibold'>
+            <h2
+              className='mb-3 flex items-center justify-center text-2xl font-semibold'
+              style={usernameColor ? {color: usernameColor} : {}}>
               @{username}
             </h2>
 

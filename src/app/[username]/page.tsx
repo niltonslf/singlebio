@@ -94,7 +94,9 @@ export default function UserPage({params: {username}}: UserPageProps) {
             />
           </div>
 
-          <h2 className='mb-3 flex items-center justify-center text-2xl font-semibold'>
+          <h2
+            className='mb-3 flex items-center justify-center text-2xl font-semibold'
+            style={user?.usernameColor ? {color: user.usernameColor} : {}}>
             @{username}
           </h2>
 
