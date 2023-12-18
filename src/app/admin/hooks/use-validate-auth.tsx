@@ -1,5 +1,5 @@
 import {onAuthStateChanged} from 'firebase/auth'
-import {useRouter} from 'next/navigation'
+import {useRouter, usePathname} from 'next/navigation'
 import {useEffect} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
@@ -7,6 +7,7 @@ import {auth} from '@/libs/firebase'
 
 export const useValidateAuth = () => {
   const router = useRouter()
+  const pathName = usePathname()
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async firebaseUser => {
@@ -15,7 +16,8 @@ export const useValidateAuth = () => {
         router.push('/auth')
       } else {
         await authStore.authUser(firebaseUser)
-        router.push('/admin')
+
+        if (!pathName.startsWith('/admin')) router.push('/admin')
       }
     })
 

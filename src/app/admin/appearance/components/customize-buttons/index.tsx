@@ -88,31 +88,33 @@ export const CustomizeButtons = observer(() => {
 
   return (
     <>
-      <div className='mt-5'>
-        <h2 className='font-mg font-semibold'>1. Button background</h2>
+      <div className='flex flex-row justify-between gap-10'>
+        <div className='mt-5 flex-1'>
+          <h2 className='font-mg font-semibold'>1. Button background</h2>
 
-        <div className='mt-3'>
-          <ColorPicker
-            hideInput={['rgb', 'hsv', 'hex']}
-            color={color}
-            onChange={e => {
-              setColor(e)
-            }}
-          />
+          <div className='mt-3'>
+            <ColorPicker
+              hideInput={['rgb', 'hsv', 'hex']}
+              color={color}
+              onChange={e => {
+                setColor(e)
+              }}
+            />
+          </div>
         </div>
-      </div>
 
-      <div className='mt-5'>
-        <h2 className='font-mg font-semibold'>2. Button text</h2>
+        <div className='mt-5 flex-1'>
+          <h2 className='font-mg font-semibold'>2. Button text</h2>
 
-        <div className='mt-3'>
-          <ColorPicker
-            hideInput={['rgb', 'hsv', 'hex']}
-            color={colorText}
-            onChange={e => {
-              setColorText(e)
-            }}
-          />
+          <div className='mt-3'>
+            <ColorPicker
+              hideInput={['rgb', 'hsv', 'hex']}
+              color={colorText}
+              onChange={e => {
+                setColorText(e)
+              }}
+            />
+          </div>
         </div>
       </div>
 
