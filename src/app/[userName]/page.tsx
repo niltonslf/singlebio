@@ -114,7 +114,11 @@ export default function UserPage({params: {userName}}: UserPageProps) {
             {links.length > 0 &&
               links.map(link => {
                 return (
-                  <LinkCard.item key={link.url} path={link.url}>
+                  <LinkCard.item
+                    key={link.url}
+                    path={link.url}
+                    bgColor={user?.buttonColor}
+                    textColor={user?.buttonTextColor}>
                     {link.label}
                   </LinkCard.item>
                 )

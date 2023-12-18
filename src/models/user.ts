@@ -6,4 +6,7 @@ export type User = {
   email: string
   wallpaperUrl?: string
   colorOverlay?: string
+  buttonColor?: string
+  buttonTextColor?: string
+  usernameColor?: string
 }

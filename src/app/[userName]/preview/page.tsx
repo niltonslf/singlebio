@@ -11,13 +11,19 @@ type UserPreviewProps = {
     color?: string
     wallpaperUrl?: string
     buttonColor?: string
-    textColor?: string
+    buttonTextColor?: string
+    usernameColor?: string
   }
 }
 
 const UserPreview = observer(
   ({params: {userName}, searchParams}: UserPreviewProps) => {
-    const {color, wallpaperUrl} = searchParams
+    const {
+      color,
+      wallpaperUrl,
+      buttonColor,
+      buttonTextColor: textColor,
+    } = searchParams
 
     const wallpaperStyle = {backgroundImage: `url(${wallpaperUrl})`}
     const colorStyle = {background: `${color}`}
@@ -41,10 +47,30 @@ const UserPreview = observer(
             </h2>
 
             <LinkCard.container>
-              <LinkCard.item path='/admin'>Example 01</LinkCard.item>
-              <LinkCard.item path='/admin'>Example 02</LinkCard.item>
-              <LinkCard.item path='/admin'>Example 03</LinkCard.item>
-              <LinkCard.item path='/admin'>Example 04</LinkCard.item>
+              <LinkCard.item
+                path='/admin'
+                bgColor={buttonColor}
+                textColor={textColor}>
+                Example 01
+              </LinkCard.item>
+              <LinkCard.item
+                path='/admin'
+                bgColor={buttonColor}
+                textColor={textColor}>
+                Example 02
+              </LinkCard.item>
+              <LinkCard.item
+                path='/admin'
+                bgColor={buttonColor}
+                textColor={textColor}>
+                Example 03
+              </LinkCard.item>
+              <LinkCard.item
+                path='/admin'
+                bgColor={buttonColor}
+                textColor={textColor}>
+                Example 04
+              </LinkCard.item>
             </LinkCard.container>
           </div>
         </div>
