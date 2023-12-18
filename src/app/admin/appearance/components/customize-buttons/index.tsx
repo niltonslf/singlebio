@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import clsx from 'clsx'
 import {updateDoc, doc} from 'firebase/firestore'
-import {useRef, useState, ChangeEvent, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {ColorPicker, useColor} from 'react-color-palette'
 import 'react-color-palette/css'
 
@@ -11,57 +11,32 @@ import {useAdmin} from '@/app/admin/context/admin-context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {db} from '@/libs/firebase'
 
-import {useImageCompressor} from '../../hooks/image-compressor'
-import {useWallpaperUploader} from '../../hooks/wallpaper-uploader'
-
-export const Wallpaper = () => {
-  const wallpaperRef = useRef<HTMLImageElement>(null)
-
+export const CustomizeButtons = () => {
   const {updateSmartphoneSrc, reloadSmartphoneList} = useAdmin()
-  const {upload} = useWallpaperUploader()
-  const {compress} = useImageCompressor()
 
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [hasImage, setHasImage] = useState(false)
   const [hasColorChanged, setHasColorChanged] = useState(false)
   const [hasUpdated, setHasUpdated] = useState(false)
 
-  const [imageFile, setImageFile] = useState<File | undefined>(undefined)
-  const [wallpaperUrl, setWallpaperUrl] = useState('')
-
   const [color, setColor] = useColor('#1c131368')
+  const [colorText, setColorText] = useColor('#000')
 
   const preparedColor = hasColorChanged ? color.hex.replace('#', '%23') : ''
-  const iframeUrl = `/${authStore?.user?.userName}/preview?color=${preparedColor}&wallpaperUrl=${wallpaperUrl}`
+  const preparedTextColor = hasColorChanged
+    ? colorText.hex.replace('#', '%23')
+    : ''
 
-  const handleImageThumbnail = (file: File) => {
-    return URL.createObjectURL(file)
-  }
-
-  const handleSelectPicture = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event?.target?.files?.[0] || undefined
-    if (!file) return 'You must select a file'
-
-    setWallpaperUrl(handleImageThumbnail(file))
-    setImageFile(file)
-    setHasImage(true)
-  }
+  const iframeUrl = `/${authStore?.user?.userName}/preview?buttonColor=${preparedColor}&buttonTextColor=${preparedTextColor}`
 
   const handleSave = async () => {
     if (!authStore.user?.uid) return setError(true)
     setIsLoading(true)
 
-    const data = {wallpaperUrl: '', colorOverlay: ''}
-
-    if (imageFile) {
-      const newImage = await compress(imageFile)
-      const url = await upload(newImage)
-      data.wallpaperUrl = url
-    }
+    const data = {buttonColor: ''}
 
     if (color && hasColorChanged) {
-      data.colorOverlay = color.hex
+      data.buttonColor = color.hex
     }
 
     await updateDoc(doc(db, 'users', authStore.user?.uid), data)
@@ -71,9 +46,6 @@ export const Wallpaper = () => {
   }
 
   const handleReset = () => {
-    setWallpaperUrl('')
-    setImageFile(undefined)
-    setHasImage(false)
     setError(false)
   }
 
@@ -86,47 +58,30 @@ export const Wallpaper = () => {
 
   return (
     <>
-      <div className='mb-5'>
-        <h1 className='font-mg font-semibold'>1. Select the wallpaper</h1>
+      <div className='mt-5'>
+        <h2 className='font-mg font-semibold'>1. Button background</h2>
 
-        <div className='mt-5'>
-          <label
-            htmlFor='wallpaper-file'
-            className='relative flex w-full cursor-pointer flex-row items-center justify-center border-2 border-dashed border-gray-500 p-10 text-center text-xl text-gray-500'>
-            {!hasImage && (
-              <span>Drag your file or click here to select your wallpaper</span>
-            )}
-
-            <img
-              ref={wallpaperRef}
-              src={wallpaperUrl}
-              width='100%'
-              height='auto'
-              alt='wallpaper'
-              className={clsx([wallpaperUrl ? 'block' : 'hidden'])}
-            />
-
-            <input
-              className='absolute left-0 top-0 h-full w-full border-2 border-red-700 opacity-0'
-              id='wallpaper-file'
-              type='file'
-              accept='image/x-png,image/jpeg'
-              multiple={false}
-              onChange={e => handleSelectPicture(e)}
-            />
-          </label>
+        <div className='mt-3'>
+          <ColorPicker
+            hideInput={['rgb', 'hsv', 'hex']}
+            color={color}
+            onChange={e => {
+              setColor(e)
+              setHasColorChanged(true)
+            }}
+          />
         </div>
       </div>
 
       <div className='mt-5'>
-        <h2 className='font-mg font-semibold'>2. Customize the overlay</h2>
+        <h2 className='font-mg font-semibold'>2. Button text</h2>
 
         <div className='mt-3'>
           <ColorPicker
-            hideInput={['rgb', 'hsv']}
-            color={color}
+            hideInput={['rgb', 'hsv', 'hex']}
+            color={colorText}
             onChange={e => {
-              setColor(e)
+              setColorText(e)
               setHasColorChanged(true)
             }}
           />

@@ -8,7 +8,7 @@ import {Smartphone} from '@/app/components'
 
 import {Collapse, Layout} from '../components'
 import {useAdmin} from '../context/admin-context'
-import {Wallpaper} from './components'
+import {CustomizeWallpaper, CustomizeButtons} from './components'
 
 const AppearancePage = observer(() => {
   const iframe = useRef<HTMLIFrameElement>(null)
@@ -24,18 +24,18 @@ const AppearancePage = observer(() => {
   return (
     <Layout>
       <Layout.Content>
-        <Collapse defaultOpen={1}>
+        <Collapse defaultOpen={2}>
           <Collapse.Item key={'wallpaper'} index={1}>
             <Collapse.Header>Page wallpaper</Collapse.Header>
             <Collapse.Body>
-              <Wallpaper />
+              <CustomizeWallpaper />
             </Collapse.Body>
           </Collapse.Item>
 
           <Collapse.Item key={'button-color'} index={2}>
             <Collapse.Header>Button Collor</Collapse.Header>
             <Collapse.Body>
-              <p>Return a preset of options</p>
+              <CustomizeButtons />
             </Collapse.Body>
           </Collapse.Item>
         </Collapse>
