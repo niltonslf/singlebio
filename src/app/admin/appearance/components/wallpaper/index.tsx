@@ -51,8 +51,7 @@ export const Wallpaper = () => {
     const data = {wallpaperUrl: '', colorOverlay: ''}
 
     if (imageFile) {
-      const fileArray = await imageFile.arrayBuffer()
-      const newImage = await compress(fileArray)
+      const newImage = await compress(imageFile)
       const url = await upload(newImage)
       data.wallpaperUrl = url
     }

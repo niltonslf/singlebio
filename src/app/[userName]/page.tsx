@@ -77,7 +77,7 @@ export default function UserPage({params: {userName}}: UserPageProps) {
     <main
       className={clsx([
         'flex h-screen w-screen bg-white bg-cover bg-center',
-        !user?.wallpaperUrl ? defaultBg : '',
+        !user?.wallpaperUrl && !user?.colorOverlay ? defaultBg : '',
       ])}
       style={user?.wallpaperUrl ? wallpaperStyle : {}}>
       <div

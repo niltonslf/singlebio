@@ -6,17 +6,16 @@ import {firebaseStorage} from '@/libs/firebase'
 export const useWallpaperUploader = () => {
   const user = authStore.user
 
-  const upload = async (
-    imageFile: Blob | Uint8Array | ArrayBuffer,
-  ): Promise<string> => {
+  const upload = async (imageFile: File): Promise<string> => {
     if (!user) throw new Error('user is not authenticated')
+
+    const imageArray = await imageFile.arrayBuffer()
 
     const fileRef = `wallpapers/${user.userName}/wallpaper.jpg`
     const storageRef = ref(firebaseStorage, fileRef)
 
-    await uploadBytes(storageRef, imageFile)
-    const downloadUrl = await getDownloadURL(storageRef)
-    return downloadUrl
+    await uploadBytes(storageRef, imageArray)
+    return await getDownloadURL(storageRef)
   }
 
   return {
