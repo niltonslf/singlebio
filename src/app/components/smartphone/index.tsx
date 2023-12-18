@@ -1,11 +1,11 @@
 import {forwardRef} from 'react'
 
 type SmartphoneProps = {
-  iframeUrl: string
+  iframeUrl?: string
 }
 
 export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
-  ({iframeUrl}, ref) => {
+  ({iframeUrl = 'demo'}, ref) => {
     return (
       <div
         className='after:content-[" "] before:content-[" "]
@@ -21,7 +21,7 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
      justify-center 
      overflow-hidden 
      rounded-[40px] 
-     bg-blue-400 
+     bg-black 
      shadow-[0px_0px_0px_11px_#1f1f1f,0px_0px_0px_13px_#191919,0px_0px_0px_20px_#111111] 
      before:absolute 
      before:left-[calc(50%-28%)] 
