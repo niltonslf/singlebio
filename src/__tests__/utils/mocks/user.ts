@@ -5,13 +5,13 @@ export const makeUser = (
   name?: string,
   pictureUrl?: string,
   uid?: string,
-  userName?: string,
+  username?: string,
 ) => {
   return {
     email: email ?? faker.internet.email(),
     name: name ?? faker.person.fullName(),
     pictureUrl: pictureUrl ?? faker.image.urlLoremFlickr(),
     uid: uid ?? faker.string.uuid(),
-    userName: userName ?? faker.internet.userName(),
+    username: username ?? faker.internet.userName(),
   }
 }

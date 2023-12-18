@@ -11,7 +11,7 @@ import {useAdmin} from '@/app/admin/context/admin-context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {db} from '@/libs/firebase'
 
-export const CustomizeButtons = () => {
+export const CustomizeUsername = () => {
   const {updateSmartphoneSrc, reloadSmartphoneList} = useAdmin()
 
   const [error, setError] = useState(false)
@@ -20,23 +20,19 @@ export const CustomizeButtons = () => {
   const [hasUpdated, setHasUpdated] = useState(false)
 
   const [color, setColor] = useColor('#1c131368')
-  const [colorText, setColorText] = useColor('#000')
 
   const preparedColor = hasColorChanged ? color.hex.replace('#', '%23') : ''
-  const preparedTextColor = hasColorChanged
-    ? colorText.hex.replace('#', '%23')
-    : ''
 
-  const iframeUrl = `/${authStore?.user?.username}/preview?buttonColor=${preparedColor}&buttonTextColor=${preparedTextColor}`
+  const iframeUrl = `/${authStore?.user?.username}/preview?usernameColor=${preparedColor}`
 
   const handleSave = async () => {
     if (!authStore.user?.uid) return setError(true)
     setIsLoading(true)
 
-    const data = {buttonColor: ''}
+    const data = {usernameColor: ''}
 
     if (color && hasColorChanged) {
-      data.buttonColor = color.hex
+      data.usernameColor = color.hex
     }
 
     await updateDoc(doc(db, 'users', authStore.user?.uid), data)
@@ -59,7 +55,7 @@ export const CustomizeButtons = () => {
   return (
     <>
       <div className='mt-5'>
-        <h2 className='font-mg font-semibold'>1. Button background</h2>
+        <h2 className='font-mg font-semibold'>1. Select the username color</h2>
 
         <div className='mt-3'>
           <ColorPicker
@@ -67,21 +63,6 @@ export const CustomizeButtons = () => {
             color={color}
             onChange={e => {
               setColor(e)
-              setHasColorChanged(true)
-            }}
-          />
-        </div>
-      </div>
-
-      <div className='mt-5'>
-        <h2 className='font-mg font-semibold'>2. Button text</h2>
-
-        <div className='mt-3'>
-          <ColorPicker
-            hideInput={['rgb', 'hsv', 'hex']}
-            color={colorText}
-            onChange={e => {
-              setColorText(e)
               setHasColorChanged(true)
             }}
           />

@@ -106,7 +106,7 @@ describe('Admin page', () => {
 
     await makeSUT()
 
-    const userPageUrl = `/${authStore.user?.userName}`
+    const userPageUrl = `/${authStore.user?.username}`
 
     await waitFor(async () => {
       const header = await screen.queryByText('Lnktree admin')
@@ -161,7 +161,7 @@ describe('Admin page', () => {
 
     expect(firestore.updateDoc).toHaveBeenCalledTimes(1)
     expect(firestore.updateDoc).toHaveBeenCalledWith(undefined, {
-      userName: usernameMock,
+      username: usernameMock,
     })
   })
 

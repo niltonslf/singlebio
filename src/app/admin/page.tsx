@@ -21,9 +21,9 @@ const Admin = observer(() => {
     if (!authStore.user) return
 
     await updateDoc(doc(db, 'users', authStore.user.uid), {
-      userName: data,
+      username: data,
     })
-    authStore.updateUser({...authStore.user, userName: data})
+    authStore.updateUser({...authStore.user, username: data})
     reloadSmartphoneList()
   }
 
@@ -46,7 +46,7 @@ const Admin = observer(() => {
               <div className='sticky top-6'>
                 <Smartphone
                   ref={iframe}
-                  iframeUrl={`${authStore.user.userName}`}
+                  iframeUrl={`${authStore.user.username}`}
                 />
               </div>
             </div>
@@ -54,7 +54,7 @@ const Admin = observer(() => {
 
           <Modal
             onSave={onSaveUserName}
-            initialOpen={!authStore.user?.userName}
+            initialOpen={!authStore.user?.username}
           />
         </main>
       )}

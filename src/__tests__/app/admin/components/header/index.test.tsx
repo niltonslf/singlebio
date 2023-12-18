@@ -41,8 +41,8 @@ describe('Header component', () => {
     const header = screen.getByText('Lnktree admin')
     expect(header).toBeInTheDocument
 
-    const userName = screen.getByText(userMock.name)
-    expect(userName.textContent).toBe(userMock.name)
+    const username = screen.getByText(userMock.name)
+    expect(username.textContent).toBe(userMock.name)
 
     const profilePicture = screen.getByRole('img')
     expect(profilePicture).toBeInTheDocument
@@ -55,8 +55,8 @@ describe('Header component', () => {
     const header = screen.getByText('Lnktree admin')
     expect(header).toBeInTheDocument
 
-    const userName = screen.getByText(userMock.name || '')
-    expect(userName.textContent).toBe(userMock.name)
+    const username = screen.getByText(userMock.name || '')
+    expect(username.textContent).toBe(userMock.name)
 
     const profilePicture = screen.queryByRole('img')
     expect(profilePicture).not.toBeInTheDocument
@@ -69,8 +69,8 @@ describe('Header component', () => {
     const header = screen.getByText('Lnktree admin')
     expect(header).toBeInTheDocument
 
-    const userName = document.querySelector('header > div > div > span')
-    expect(userName).toBeEmptyDOMElement()
+    const username = document.querySelector('header > div > div > span')
+    expect(username).toBeEmptyDOMElement()
 
     const profilePicture = screen.getByRole('img')
     expect(profilePicture).toBeInTheDocument()

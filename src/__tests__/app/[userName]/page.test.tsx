@@ -2,7 +2,7 @@ import * as firestore from 'firebase/firestore'
 
 import {setup} from '@/__tests__/utils'
 import {makeGetDocsResponse, makeLink, makeUser} from '@/__tests__/utils/mocks'
-import UserPage from '@/app/[userName]/page'
+import UserPage from '@/app/[username]/page'
 import '@testing-library/jest-dom'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
@@ -38,14 +38,14 @@ describe('Render user links page', () => {
     handleFetchLinks([userMock], [linkMock])
 
     await waitFor(() =>
-      setup(<UserPage params={{userName: userMock.userName}} />),
+      setup(<UserPage params={{username: userMock.username}} />),
     )
 
-    const userName = screen.getByRole('heading', {level: 2})
+    const username = screen.getByRole('heading', {level: 2})
     const linkList = await screen.queryByRole('list')
     const profilePicture = await screen.queryByRole('img')
 
-    expect(userName.textContent).toBe(`@${userMock.userName}`)
+    expect(username.textContent).toBe(`@${userMock.username}`)
     expect(linkList?.children).toHaveLength(1)
     expect(profilePicture?.getAttribute('src')).toContain(
       encodeURIComponent(userMock.pictureUrl),
@@ -53,14 +53,14 @@ describe('Render user links page', () => {
   })
 
   it("should show alert message when there isn't links saved", async () => {
-    const userNameMock = 'jsdevbr'
+    const usernameMock = 'jsdevbr'
 
     handleFetchLinks([makeUser()], [])
 
-    await waitFor(() => setup(<UserPage params={{userName: userNameMock}} />))
+    await waitFor(() => setup(<UserPage params={{username: usernameMock}} />))
 
-    const userName = screen.getByRole('heading', {level: 2})
-    expect(userName.textContent).toBe(`@${userNameMock}`)
+    const username = screen.getByRole('heading', {level: 2})
+    expect(username.textContent).toBe(`@${usernameMock}`)
 
     const linkList = await screen.queryByRole('list')
     expect(linkList?.children).toHaveLength(0)

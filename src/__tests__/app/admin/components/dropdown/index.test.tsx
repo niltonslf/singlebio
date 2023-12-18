@@ -105,7 +105,7 @@ describe('Dropdown', () => {
     userEvent.setup()
 
     authStore.user = makeUser()
-    const path = `/${authStore.user.userName}`
+    const path = `/${authStore.user.username}`
 
     makeSUT()
 

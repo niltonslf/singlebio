@@ -36,7 +36,7 @@ export const Dropdown = observer(({children}: DropdownProps) => {
       onClick={() => setIsOpen(prev => !prev)}>
       {children}
       <DropdownMenu isOpen={isOpen}>
-        <MenuItem href={`/${authStore?.user?.userName}`}>
+        <MenuItem href={`/${authStore?.user?.username}`}>
           My links page
         </MenuItem>
         <MenuItem onClick={deleteAccount}>Delete account</MenuItem>

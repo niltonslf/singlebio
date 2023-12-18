@@ -8,13 +8,17 @@ import {Smartphone} from '@/app/components'
 
 import {Collapse, Layout} from '../components'
 import {useAdmin} from '../context/admin-context'
-import {CustomizeWallpaper, CustomizeButtons} from './components'
+import {
+  CustomizeWallpaper,
+  CustomizeButtons,
+  CustomizeUsername,
+} from './components'
 
 const AppearancePage = observer(() => {
   const iframe = useRef<HTMLIFrameElement>(null)
   const {setSmartphoneRef, updateSmartphoneSrc} = useAdmin()
 
-  const iframeUrl = `${authStore.user?.userName}`
+  const iframeUrl = `${authStore.user?.username}`
 
   useEffect(() => {
     setSmartphoneRef(iframe)
@@ -24,7 +28,7 @@ const AppearancePage = observer(() => {
   return (
     <Layout>
       <Layout.Content>
-        <Collapse defaultOpen={2}>
+        <Collapse defaultOpen={3}>
           <Collapse.Item key={'wallpaper'} index={1}>
             <Collapse.Header>Page wallpaper</Collapse.Header>
             <Collapse.Body>
@@ -33,9 +37,16 @@ const AppearancePage = observer(() => {
           </Collapse.Item>
 
           <Collapse.Item key={'button-color'} index={2}>
-            <Collapse.Header>Button Collor</Collapse.Header>
+            <Collapse.Header>Button Color</Collapse.Header>
             <Collapse.Body>
               <CustomizeButtons />
+            </Collapse.Body>
+          </Collapse.Item>
+
+          <Collapse.Item key={'button-color'} index={3}>
+            <Collapse.Header>Username color</Collapse.Header>
+            <Collapse.Body>
+              <CustomizeUsername />
             </Collapse.Body>
           </Collapse.Item>
         </Collapse>
@@ -43,7 +54,7 @@ const AppearancePage = observer(() => {
 
       <Layout.Sidebar>
         <div className='sticky top-6'>
-          {authStore?.user?.userName && (
+          {authStore?.user?.username && (
             <Smartphone ref={iframe} iframeUrl={iframeUrl} />
           )}
         </div>

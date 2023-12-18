@@ -40,7 +40,7 @@ describe('AuthStore', () => {
 
     it('should authenticate the user - New account', async () => {
       const firebaseUser = makeFbUser()
-      const user = {...parseToUser(firebaseUser), userName: ''}
+      const user = {...parseToUser(firebaseUser), username: ''}
 
       AuthStore.prototype['fetchFirebaseUser'] = args =>
         Promise.resolve({exists: false, user: makeUser()})

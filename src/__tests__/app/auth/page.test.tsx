@@ -130,7 +130,7 @@ describe('Auth Page', () => {
 
     expect(authStore.authUser).toHaveBeenCalledWith(firebaseUserMock)
     expect(authStore.authUser).toHaveBeenCalledTimes(1)
-    expect(authStore.user).toStrictEqual({...userMock, userName: ''})
+    expect(authStore.user).toStrictEqual({...userMock, username: ''})
 
     expect(mockRouter).toMatchObject({
       asPath: '/admin',

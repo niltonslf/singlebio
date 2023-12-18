@@ -1,7 +1,7 @@
 export type User = {
   uid: string
   pictureUrl: string
-  userName: string
+  username: string
   name: string
   email: string
   wallpaperUrl?: string

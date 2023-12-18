@@ -33,7 +33,7 @@ export const CustomizeWallpaper = () => {
   const [color, setColor] = useColor('#1c131368')
 
   const preparedColor = hasColorChanged ? color.hex.replace('#', '%23') : ''
-  const iframeUrl = `/${authStore?.user?.userName}/preview?color=${preparedColor}&wallpaperUrl=${wallpaperUrl}`
+  const iframeUrl = `/${authStore?.user?.username}/preview?color=${preparedColor}&wallpaperUrl=${wallpaperUrl}`
 
   const handleImageThumbnail = (file: File) => {
     return URL.createObjectURL(file)
