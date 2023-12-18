@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import {updateDoc, doc} from 'firebase/firestore'
 import {observer} from 'mobx-react-lite'
 import {useState, useEffect, useMemo} from 'react'
-import {ColorPicker, useColor} from 'react-color-palette'
+import {ColorPicker, ColorService, useColor} from 'react-color-palette'
 import 'react-color-palette/css'
 
 import {useAdmin} from '@/app/admin/context/admin-context'
@@ -15,53 +15,66 @@ import {db} from '@/libs/firebase'
 import {makePreviewUrl} from '../../utils'
 
 export const CustomizeUsername = observer(() => {
+  const user = authStore.user
+
   const {updateSmartphoneSrc, reloadSmartphoneList} = useAdmin()
 
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [hasColorChanged, setHasColorChanged] = useState(false)
   const [hasUpdated, setHasUpdated] = useState(false)
 
-  const [color, setColor] = useColor('#1c131368')
+  const [color, setColor] = useColor(user?.usernameColor || '#000')
 
   let iframeUrl = useMemo(() => {
     const params = makePreviewUrl({
-      buttonColor: authStore.user?.buttonColor,
-      buttonTextColor: authStore.user?.buttonTextColor,
-      colorOverlay: authStore.user?.colorOverlay,
+      buttonColor: user?.buttonColor,
+      buttonTextColor: user?.buttonTextColor,
+      colorOverlay: user?.colorOverlay,
       usernameColor: color.hex,
-      wallpaperUrl: authStore.user?.wallpaperUrl,
+      wallpaperUrl: user?.wallpaperUrl,
     })
 
-    return `/${authStore?.user?.username}/preview?&${params}`
-  }, [color.hex, authStore.user])
+    return `/${user?.username}/preview?&${params}`
+  }, [color.hex, user])
 
   const handleSave = async () => {
-    if (!authStore.user?.uid) return setError(true)
+    if (!user?.uid) return setError(true)
     setIsLoading(true)
 
     const data = {usernameColor: ''}
 
-    if (color && hasColorChanged) {
+    if (color) {
       data.usernameColor = color.hex
     }
 
-    await updateDoc(doc(db, 'users', authStore.user?.uid), data)
-    authStore.updateUser({...authStore.user, ...data})
+    await updateDoc(doc(db, 'users', user?.uid), data)
+    authStore.updateUser({...user, ...data})
 
     setIsLoading(false)
     setHasUpdated(true)
   }
 
   const handleReset = () => {
+    const hex = user?.usernameColor || '#000'
+    const rgb = ColorService.hex2rgb(hex)
+    const hsv = ColorService.rgb2hsv(rgb)
+
+    setColor({hex, rgb, hsv})
     setError(false)
   }
 
   useEffect(() => {
-    updateSmartphoneSrc(iframeUrl)
-    const unsubscribe = setTimeout(() => reloadSmartphoneList(), 500)
+    let unsubscribe: string | number | NodeJS.Timeout | undefined = undefined
+
+    if (hasUpdated) {
+      unsubscribe = setTimeout(() => setHasUpdated(false), 5000)
+    }
 
     return () => clearTimeout(unsubscribe)
+  }, [hasUpdated])
+
+  useEffect(() => {
+    updateSmartphoneSrc(iframeUrl)
   }, [iframeUrl, reloadSmartphoneList, updateSmartphoneSrc])
 
   return (
@@ -75,7 +88,6 @@ export const CustomizeUsername = observer(() => {
             color={color}
             onChange={e => {
               setColor(e)
-              setHasColorChanged(true)
             }}
           />
         </div>
