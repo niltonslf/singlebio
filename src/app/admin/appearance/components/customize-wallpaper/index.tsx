@@ -114,9 +114,6 @@ export const CustomizeWallpaper = observer(() => {
 
   useEffect(() => {
     updateSmartphoneSrc(iframeUrl)
-    const unsubscribe = setTimeout(() => reloadSmartphoneList(), 500)
-
-    return () => clearTimeout(unsubscribe)
   }, [iframeUrl, reloadSmartphoneList, updateSmartphoneSrc])
 
   return (

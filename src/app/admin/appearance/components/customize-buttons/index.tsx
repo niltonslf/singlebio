@@ -84,9 +84,6 @@ export const CustomizeButtons = observer(() => {
 
   useEffect(() => {
     updateSmartphoneSrc(iframeUrl)
-    const unsubscribe = setTimeout(() => reloadSmartphoneList(), 500)
-
-    return () => clearTimeout(unsubscribe)
   }, [iframeUrl, reloadSmartphoneList, updateSmartphoneSrc])
 
   return (
