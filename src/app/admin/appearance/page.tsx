@@ -1,7 +1,7 @@
 'use client'
 
 import {observer} from 'mobx-react-lite'
-import {useEffect, useRef} from 'react'
+import {useEffect, useRef, useState} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
 import {Smartphone} from '@/app/components'
@@ -14,21 +14,46 @@ import {
   CustomizeWallpaper,
 } from './components'
 import {appearanceStore} from './context'
+import {useBackgroundUpload, useImageCompressor} from './hooks'
 
 const AppearancePage = observer(() => {
   const {user} = authStore
-  const previewUrl = appearanceStore.previewUrl
+  const {previewUrl, theme, aux} = appearanceStore
 
   const iframe = useRef<HTMLIFrameElement>(null)
   const {setSmartphoneRef, updateSmartphoneSrc} = useAdmin()
+  const {compress} = useImageCompressor()
+  const {upload} = useBackgroundUpload()
 
-  const handleSaveAppearance = () => {
-    //
+  const [updated, setUpdated] = useState(false)
+
+  const handleSaveAppearance = async () => {
+    const data = {theme}
+
+    if (aux.backgroundFile && theme.backgroundImage) {
+      const newImage = await compress(aux.backgroundFile)
+      const url = await upload(newImage)
+
+      data.theme.backgroundImage = url
+      appearanceStore.setBackgroundFile(undefined)
+    }
+
+    if (!theme.backgroundImage) {
+      data.theme.backgroundImage = ''
+    }
+
+    await authStore.updateUser(data)
+    setUpdated(true)
   }
 
   const handleResetAppearance = () => {
     appearanceStore.reset()
   }
+
+  useEffect(() => {
+    const unsubscribe = setTimeout(() => setUpdated(false), 5000)
+    return () => clearTimeout(unsubscribe)
+  }, [updated])
 
   // update iframe on every change
   useEffect(() => {
@@ -39,6 +64,10 @@ const AppearancePage = observer(() => {
     setSmartphoneRef(iframe)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [iframe])
+
+  useEffect(() => {
+    if (user?.theme) appearanceStore.setThemeConfig(user?.theme)
+  }, [user?.theme])
 
   return (
     <Layout>
@@ -66,18 +95,25 @@ const AppearancePage = observer(() => {
           </Collapse.Item>
         </Collapse>
 
-        <div className='mt-5 flex flex-row items-center gap-5 border-t border-t-gray-500 pt-5'>
-          <button
-            className='rounded bg-blue-600 px-14 py-2 font-bold text-white hover:bg-blue-800'
-            onClick={() => handleSaveAppearance()}>
-            Save
-          </button>
-          <button
-            className='rounded bg-red-600 px-14 py-2 font-bold text-white hover:bg-red-800'
-            onClick={() => handleResetAppearance()}>
-            Reset
-          </button>
-        </div>
+        {updated ? (
+          <div className='mt-5 flex flex-row items-center rounded-lg border border-green-900 bg-green-200 p-5 font-medium'>
+            Appearance published with success! You can check on your profile
+            link.
+          </div>
+        ) : (
+          <div className='mt-5 flex flex-row items-center gap-5 border-t border-t-gray-500 pt-5'>
+            <button
+              className='rounded bg-blue-600 px-14 py-2 font-bold text-white hover:bg-blue-800'
+              onClick={() => handleSaveAppearance()}>
+              Save
+            </button>
+            <button
+              className='rounded bg-red-600 px-14 py-2 font-bold text-white hover:bg-red-800'
+              onClick={() => handleResetAppearance()}>
+              Reset
+            </button>
+          </div>
+        )}
       </Layout.Content>
 
       <Layout.Sidebar>
