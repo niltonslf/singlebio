@@ -93,8 +93,8 @@ export class AuthStore {
       throw new Error('Authenticated user not found.')
 
     await reauthenticateWithPopup(auth.currentUser, provider)
-    await deleteUser(auth.currentUser)
     await deleteDoc(doc(db, 'users', this.user.uid))
+    await deleteUser(auth.currentUser)
     this.clearUser()
   }
 }

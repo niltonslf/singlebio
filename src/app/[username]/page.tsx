@@ -30,8 +30,10 @@ export default function UserPage({params: {username}}: UserPageProps) {
   const [isLoading, setIsLoading] = useState(true)
 
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
-  const wallpaperStyle = {backgroundImage: `url(${user?.wallpaperUrl})`}
-  const colorStyle = {background: `${user?.colorOverlay}`}
+  const backgroundImageStyle = {
+    backgroundImage: `url(${user?.backgroundImage})`,
+  }
+  const backgroundColorStyle = {background: `${user?.backgroundColor}`}
 
   const fetchData = useCallback(async () => {
     const q = query(
@@ -77,14 +79,14 @@ export default function UserPage({params: {username}}: UserPageProps) {
     <main
       className={clsx([
         'flex h-screen w-screen bg-white bg-cover bg-center',
-        !user?.wallpaperUrl && !user?.colorOverlay ? defaultBg : '',
+        !user?.backgroundImage && !user?.backgroundColor ? defaultBg : '',
       ])}
-      style={user?.wallpaperUrl ? wallpaperStyle : {}}>
+      style={user?.backgroundImage ? backgroundImageStyle : {}}>
       <div
         className={clsx([
           'flex h-screen w-screen items-center justify-center overflow-y-auto p-5 py-20 md:p-10 ',
         ])}
-        style={user?.colorOverlay ? colorStyle : {}}>
+        style={user?.backgroundColor ? backgroundColorStyle : {}}>
         <div className=' h-full w-full max-w-2xl '>
           <div className='mb-4 flex w-full justify-center'>
             <Avatar
@@ -119,7 +121,7 @@ export default function UserPage({params: {username}}: UserPageProps) {
                   <LinkCard.item
                     key={link.url}
                     path={link.url}
-                    bgColor={user?.buttonColor}
+                    bgColor={user?.buttonBackground}
                     textColor={user?.buttonTextColor}>
                     {link.label}
                   </LinkCard.item>

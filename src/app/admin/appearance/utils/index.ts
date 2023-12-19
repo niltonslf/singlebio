@@ -1,21 +1,28 @@
 type MakeUrlProps = {
-  wallpaperUrl?: string
-  colorOverlay?: string
-  buttonColor?: string
+  backgroundImage?: string
+  backgroundColor?: string
+  buttonBackground?: string
   buttonTextColor?: string
   usernameColor?: string
 }
 
-export const makePreviewUrl = ({...props}: MakeUrlProps) => {
+export const themeToQuery = ({...props}: MakeUrlProps) => {
   const url = new URLSearchParams()
-  url.set('wallpaperUrl', encodeURIComponent(props?.wallpaperUrl || '') ?? '')
-  url.set('colorOverlay', encodeURIComponent(props?.colorOverlay || '') ?? '')
-  url.set('buttonColor', encodeURIComponent(props?.buttonColor || '') ?? '')
-  url.set('usernameColor', encodeURIComponent(props?.usernameColor || '') ?? '')
-  url.set(
-    'buttonTextColor',
-    encodeURIComponent(props?.buttonTextColor || '') ?? '',
-  )
+
+  if (props?.backgroundImage)
+    url.set('backgroundImage', encodeURIComponent(props?.backgroundImage))
+
+  if (props?.backgroundColor)
+    url.set('backgroundColor', encodeURIComponent(props?.backgroundColor))
+
+  if (props?.buttonBackground)
+    url.set('buttonBackground', encodeURIComponent(props?.buttonBackground))
+
+  if (props?.usernameColor)
+    url.set('usernameColor', encodeURIComponent(props?.usernameColor))
+
+  if (props?.buttonTextColor)
+    url.set('buttonTextColor', encodeURIComponent(props?.buttonTextColor))
 
   return url.toString()
 }

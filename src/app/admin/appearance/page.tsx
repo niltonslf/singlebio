@@ -9,31 +9,31 @@ import {Smartphone} from '@/app/components'
 import {Collapse, Layout} from '../components'
 import {useAdmin} from '../context/admin-context'
 import {
-  CustomizeWallpaper,
   CustomizeButtons,
   CustomizeUsername,
+  CustomizeWallpaper,
 } from './components'
-import {makePreviewUrl} from './utils'
+import {appearanceStore} from './context'
 
 const AppearancePage = observer(() => {
+  const {user} = authStore
+  const previewUrl = appearanceStore.previewUrl
+
   const iframe = useRef<HTMLIFrameElement>(null)
   const {setSmartphoneRef, updateSmartphoneSrc} = useAdmin()
 
-  useEffect(() => {
-    if (authStore.user) {
-      const params = makePreviewUrl({
-        wallpaperUrl: authStore.user?.wallpaperUrl,
-        buttonColor: authStore.user?.buttonColor,
-        buttonTextColor: authStore.user?.buttonTextColor,
-        colorOverlay: authStore.user?.colorOverlay,
-        usernameColor: authStore.user?.usernameColor,
-      })
+  const handleSaveAppearance = () => {
+    //
+  }
 
-      const url = `/${authStore?.user?.username}/preview?&${params}`
-      updateSmartphoneSrc(url)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authStore.user])
+  const handleResetAppearance = () => {
+    appearanceStore.reset()
+  }
+
+  // update iframe on every change
+  useEffect(() => {
+    updateSmartphoneSrc(`/${user?.username}/${previewUrl}`)
+  }, [previewUrl, updateSmartphoneSrc, user?.username])
 
   useEffect(() => {
     setSmartphoneRef(iframe)
@@ -65,11 +65,24 @@ const AppearancePage = observer(() => {
             </Collapse.Body>
           </Collapse.Item>
         </Collapse>
+
+        <div className='mt-5 flex flex-row items-center gap-5 border-t border-t-gray-500 pt-5'>
+          <button
+            className='rounded bg-blue-600 px-14 py-2 font-bold text-white hover:bg-blue-800'
+            onClick={() => handleSaveAppearance()}>
+            Save
+          </button>
+          <button
+            className='rounded bg-red-600 px-14 py-2 font-bold text-white hover:bg-red-800'
+            onClick={() => handleResetAppearance()}>
+            Reset
+          </button>
+        </div>
       </Layout.Content>
 
       <Layout.Sidebar>
         <div className='sticky top-6'>
-          {authStore?.user?.username && <Smartphone ref={iframe} />}
+          <Smartphone ref={iframe} />
         </div>
       </Layout.Sidebar>
     </Layout>
