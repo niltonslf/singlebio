@@ -12,5 +12,5 @@ export type User = {
   username: string
   name: string
   email: string
-  theme: UserTheme
+  theme?: UserTheme
 }

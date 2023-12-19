@@ -17,7 +17,7 @@ jest.mock('firebase/auth')
 afterAll(() => {
   cleanup()
   jest.clearAllMocks()
-  authStore.user = undefined
+  authStore.setUser(undefined)
   authStore.firebaseUser = undefined
 })
 
@@ -29,7 +29,7 @@ describe('AuthStore', () => {
       const firebaseUser = makeFbUser()
       const user = makeUser()
 
-      AuthStore.prototype['fetchFirebaseUser'] = args =>
+      AuthStore.prototype['fetchFirebaseUser'] = () =>
         Promise.resolve({exists: true, user})
 
       await authStore.authUser(firebaseUser)
@@ -42,7 +42,7 @@ describe('AuthStore', () => {
       const firebaseUser = makeFbUser()
       const user = {...parseToUser(firebaseUser), username: ''}
 
-      AuthStore.prototype['fetchFirebaseUser'] = args =>
+      AuthStore.prototype['fetchFirebaseUser'] = () =>
         Promise.resolve({exists: false, user: makeUser()})
 
       await authStore.authUser(firebaseUser)
@@ -113,7 +113,7 @@ describe('AuthStore', () => {
     it('Update user variable', () => {
       const user = makeUser()
 
-      authStore.updateUser(user)
+      authStore.setUser(user)
 
       expect(authStore.user).toStrictEqual(user)
     })
@@ -130,7 +130,7 @@ describe('AuthStore', () => {
 
   describe('deleteUser', () => {
     it('delete user successfully', async () => {
-      authStore.user = makeUser()
+      authStore.userModel = makeUser()
 
       jest.spyOn(firebaseAuth, 'getAuth').mockReturnValue({
         currentUser: {} as firebaseAuth.User,

@@ -33,7 +33,7 @@ const mockSignInWithPopup = (result: any, isReject: boolean = false) => {
 }
 
 const mockFetchFirebaseUser = (exists: boolean, user: User | undefined) => {
-  AuthStore.prototype['fetchFirebaseUser'] = args =>
+  AuthStore.prototype['fetchFirebaseUser'] = () =>
     Promise.resolve({exists, user})
 }
 

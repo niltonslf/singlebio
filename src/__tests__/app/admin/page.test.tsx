@@ -55,7 +55,7 @@ jest.mock('firebase/auth', () => ({
 jest.mock('firebase/firestore', () => ({
   __esModule: true,
   ...jest.requireActual('firebase/firestore'),
-  onSnapshot: jest.fn(args => jest.fn()),
+  onSnapshot: jest.fn(() => jest.fn()),
 }))
 
 const fetchFirebaseUserCopy = AuthStore.prototype['fetchFirebaseUser']
@@ -145,7 +145,7 @@ describe('Admin page', () => {
 
     jest.spyOn(firestore, 'updateDoc').mockImplementation()
 
-    AuthStore.prototype['fetchFirebaseUser'] = args =>
+    AuthStore.prototype['fetchFirebaseUser'] = () =>
       Promise.resolve({exists: true, user: userMock})
 
     await makeSUT()

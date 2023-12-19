@@ -104,8 +104,8 @@ describe('Dropdown', () => {
   it('should the first item has the correct link', async () => {
     userEvent.setup()
 
-    authStore.user = makeUser()
-    const path = `/${authStore.user.username}`
+    authStore.userModel = makeUser()
+    const path = `/${authStore?.user?.username}`
 
     makeSUT()
 

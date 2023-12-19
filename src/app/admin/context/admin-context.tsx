@@ -17,6 +17,7 @@ type AdminContextProps = {
   updateSmartphoneSrc: (src: string) => void
 }
 
+// TODO: This context is more like "IframeContext/SmartphoneContext" than admin. Consider rename it
 const adminContext = createContext<AdminContextProps>({} as AdminContextProps)
 
 export const AdminProvider = ({children}: PropsWithChildren) => {

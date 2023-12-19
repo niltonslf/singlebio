@@ -1,29 +1,20 @@
 'use client'
 
-import {doc, updateDoc} from 'firebase/firestore'
 import {observer} from 'mobx-react-lite'
-import {useRouter} from 'next/navigation'
 import {useEffect, useRef} from 'react'
 
 import {Modal, Smartphone} from '@/app/components'
-import {db} from '@/libs/firebase'
 
 import {authStore} from '../auth/context/auth-store'
 import {LinksList} from './components/links-list'
 import {useAdmin} from './context/admin-context'
 
 const Admin = observer(() => {
-  const router = useRouter()
   const iframe = useRef<HTMLIFrameElement>(null)
   const {setSmartphoneRef, reloadSmartphoneList} = useAdmin()
 
-  const onSaveUserName = async (data: string) => {
-    if (!authStore.user) return
-
-    await updateDoc(doc(db, 'users', authStore.user.uid), {
-      username: data,
-    })
-    authStore.updateUser({...authStore.user, username: data})
+  const onSaveUserName = async (username: string) => {
+    await authStore.updateUser({username})
     reloadSmartphoneList()
   }
 

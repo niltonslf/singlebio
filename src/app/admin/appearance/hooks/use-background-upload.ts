@@ -3,7 +3,7 @@ import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {authStore} from '@/app/auth/context/auth-store'
 import {firebaseStorage} from '@/libs/firebase'
 
-export const useWallpaperUploader = () => {
+export const useBackgroundUpload = () => {
   const user = authStore.user
 
   const upload = async (imageFile: File): Promise<string> => {

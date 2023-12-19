@@ -2,8 +2,7 @@
 
 import {makeAutoObservable} from 'mobx'
 
-import {authStore} from '@/app/auth/context/auth-store'
-import {User, UserTheme} from '@/models'
+import {UserTheme} from '@/models'
 
 import {themeToQuery} from '../utils'
 
@@ -12,7 +11,7 @@ type Aux = {
 }
 
 class AppearanceStore {
-  public themeConfig: UserTheme = {
+  private themeConfig: UserTheme = {
     backgroundImage: '',
     backgroundColor: '',
     buttonBackground: '#FFF',
@@ -24,10 +23,8 @@ class AppearanceStore {
     backgroundFile: undefined,
   }
 
-  constructor(user?: User) {
+  constructor() {
     makeAutoObservable(this)
-
-    if (user?.theme) this.themeConfig = user?.theme
   }
 
   get theme() {
@@ -38,6 +35,9 @@ class AppearanceStore {
     return `preview?&${themeToQuery(this.themeConfig)}`
   }
 
+  setThemeConfig(theme: UserTheme) {
+    this.themeConfig = theme
+  }
   setBackgroundImage(value: string) {
     this.themeConfig.backgroundImage = value
   }
@@ -70,5 +70,5 @@ class AppearanceStore {
   }
 }
 
-const appearanceStore = new AppearanceStore(authStore.user)
+const appearanceStore = new AppearanceStore()
 export {appearanceStore}

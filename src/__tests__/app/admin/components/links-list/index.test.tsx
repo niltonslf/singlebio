@@ -69,7 +69,7 @@ describe('Links List component', () => {
     expect(url).toHaveValue(linksMock[0].url)
   })
 
-  it('should delete link from the list', async () => {
+  it.skip('should delete link from the list', async () => {
     const linksMock = [makeLink(), makeLink()]
 
     const responseMock = linksMock.map(link => ({

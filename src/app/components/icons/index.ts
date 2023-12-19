@@ -1,1 +1,2 @@
-export * from './google';
+export * from './google'
+export * from './check'

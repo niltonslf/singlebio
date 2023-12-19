@@ -1,2 +1,2 @@
 export * from './image-compressor'
-export * from './wallpaper-uploader'
+export * from './use-background-upload'

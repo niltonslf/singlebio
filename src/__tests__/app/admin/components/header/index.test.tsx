@@ -86,7 +86,7 @@ describe('Header component', () => {
     const {userMock, user} = makeSUT()
     // fake login
     await act(() => {
-      authStore.updateUser(userMock)
+      authStore.setUser(userMock)
     })
 
     const logoutBtn = screen.getByText(/logout/i)

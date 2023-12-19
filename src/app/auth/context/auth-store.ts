@@ -6,8 +6,8 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth'
-import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore'
-import {action, makeObservable, observable} from 'mobx'
+import {deleteDoc, doc, getDoc, setDoc, updateDoc} from 'firebase/firestore'
+import {action, computed, makeObservable, observable} from 'mobx'
 
 import {app, auth, db, provider} from '@/libs/firebase'
 import {User} from '@/models'
@@ -19,12 +19,12 @@ type FetchFirebaseUserReturn = {
 }
 
 export class AuthStore {
-  public user: User | undefined = undefined
+  public userModel: User | undefined = undefined
   public firebaseUser: FbUser | undefined = undefined
 
   constructor() {
     makeObservable(this, {
-      user: observable,
+      userModel: observable,
       firebaseUser: observable,
       signInWithGoogle: action,
       authUser: action,
@@ -32,7 +32,12 @@ export class AuthStore {
       logout: action,
       deleteUser: action,
       clearUser: action,
+      user: computed,
     })
+  }
+
+  get user() {
+    return this.userModel
   }
 
   public async signInWithGoogle() {
@@ -56,13 +61,13 @@ export class AuthStore {
     const {exists, user} = await this.fetchFirebaseUser(firebaseUser)
 
     if (exists && user) {
-      this.updateUser(user)
+      this.setUser(user)
       return
     }
 
     const newUser = parseToUser(firebaseUser)
     await setDoc(doc(db, 'users', newUser.uid), newUser)
-    this.user = {...newUser, username: ''}
+    this.userModel = {...newUser, username: ''}
   }
 
   private async fetchFirebaseUser(
@@ -73,12 +78,25 @@ export class AuthStore {
     return {user: res.data() as User, exists: res.exists()}
   }
 
-  public updateUser(user: User) {
-    this.user = user
+  public async updateUser(user: Partial<User>) {
+    if (!this.user) return
+
+    const newUser = {
+      ...this.user,
+      ...user,
+      username: user?.username ?? this.user.username,
+    }
+
+    this.setUser(newUser)
+    return await updateDoc(doc(db, 'users', this.user.uid), user)
+  }
+
+  public setUser(user?: User) {
+    this.userModel = user
   }
 
   public clearUser() {
-    this.user = undefined
+    this.userModel = undefined
     this.firebaseUser = undefined
   }
 

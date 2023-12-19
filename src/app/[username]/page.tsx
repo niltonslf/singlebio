@@ -31,9 +31,9 @@ export default function UserPage({params: {username}}: UserPageProps) {
 
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
   const backgroundImageStyle = {
-    backgroundImage: `url(${user?.backgroundImage})`,
+    backgroundImage: `url(${user?.theme?.backgroundImage})`,
   }
-  const backgroundColorStyle = {background: `${user?.backgroundColor}`}
+  const backgroundColorStyle = {background: `${user?.theme?.backgroundColor}`}
 
   const fetchData = useCallback(async () => {
     const q = query(
@@ -79,14 +79,16 @@ export default function UserPage({params: {username}}: UserPageProps) {
     <main
       className={clsx([
         'flex h-screen w-screen bg-white bg-cover bg-center',
-        !user?.backgroundImage && !user?.backgroundColor ? defaultBg : '',
+        !user?.theme?.backgroundImage && !user?.theme?.backgroundColor
+          ? defaultBg
+          : '',
       ])}
-      style={user?.backgroundImage ? backgroundImageStyle : {}}>
+      style={user?.theme?.backgroundImage ? backgroundImageStyle : {}}>
       <div
         className={clsx([
           'flex h-screen w-screen items-center justify-center overflow-y-auto p-5 py-20 md:p-10 ',
         ])}
-        style={user?.backgroundColor ? backgroundColorStyle : {}}>
+        style={user?.theme?.backgroundColor ? backgroundColorStyle : {}}>
         <div className=' h-full w-full max-w-2xl '>
           <div className='mb-4 flex w-full justify-center'>
             <Avatar
@@ -98,7 +100,11 @@ export default function UserPage({params: {username}}: UserPageProps) {
 
           <h2
             className='mb-3 flex items-center justify-center text-2xl font-semibold'
-            style={user?.usernameColor ? {color: user.usernameColor} : {}}>
+            style={
+              user?.theme?.usernameColor
+                ? {color: user.theme.usernameColor}
+                : {}
+            }>
             @{username}
           </h2>
 
@@ -121,8 +127,8 @@ export default function UserPage({params: {username}}: UserPageProps) {
                   <LinkCard.item
                     key={link.url}
                     path={link.url}
-                    bgColor={user?.buttonBackground}
-                    textColor={user?.buttonTextColor}>
+                    bgColor={user?.theme?.buttonBackground}
+                    textColor={user?.theme?.buttonTextColor}>
                     {link.label}
                   </LinkCard.item>
                 )
