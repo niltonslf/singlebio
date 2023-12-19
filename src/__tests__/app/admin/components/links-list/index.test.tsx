@@ -17,7 +17,6 @@ jest.mock('@/app/admin/context/admin-context', () => {
     useAdmin: () => {
       return {
         reloadSmartphoneList: jest.fn(),
-        setSmartphoneRef: jest.fn(),
       }
     },
   }

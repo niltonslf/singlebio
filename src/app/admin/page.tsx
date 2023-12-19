@@ -1,26 +1,20 @@
 'use client'
 
 import {observer} from 'mobx-react-lite'
-import {useEffect, useRef} from 'react'
 
 import {Modal, Smartphone} from '@/app/components'
 
 import {authStore} from '../auth/context/auth-store'
 import {LinksList} from './components/links-list'
-import {useAdmin} from './context/admin-context'
+import {useSmartphone} from './context/admin-context'
 
 const Admin = observer(() => {
-  const iframe = useRef<HTMLIFrameElement>(null)
-  const {setSmartphoneRef, reloadSmartphoneList} = useAdmin()
+  const {iframeRef, reloadSmartphoneList} = useSmartphone()
 
   const onSaveUserName = async (username: string) => {
     await authStore.updateUser({username})
     reloadSmartphoneList()
   }
-
-  useEffect(() => {
-    setSmartphoneRef(iframe)
-  }, [iframe, setSmartphoneRef])
 
   return (
     <>
@@ -36,7 +30,7 @@ const Admin = observer(() => {
             <div className=' flex flex-1 items-start justify-center px-6 pt-4'>
               <div className='sticky top-6'>
                 <Smartphone
-                  ref={iframe}
+                  ref={iframeRef}
                   iframeUrl={`${authStore.user.username}`}
                 />
               </div>

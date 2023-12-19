@@ -1,51 +1,47 @@
 import {
-  Dispatch,
   PropsWithChildren,
   RefObject,
-  SetStateAction,
   createContext,
   useCallback,
   useContext,
-  useState,
+  useRef,
 } from 'react'
 
-type AdminContextProps = {
-  setSmartphoneRef: Dispatch<
-    SetStateAction<RefObject<HTMLIFrameElement> | undefined>
-  >
+type SmartphoneContext = {
   reloadSmartphoneList: () => void
   updateSmartphoneSrc: (src: string) => void
+  iframeRef: RefObject<HTMLIFrameElement>
 }
 
-// TODO: This context is more like "IframeContext/SmartphoneContext" than admin. Consider rename it
-const adminContext = createContext<AdminContextProps>({} as AdminContextProps)
+const initialData = {} as SmartphoneContext
+const smartphoneContext = createContext<SmartphoneContext>(initialData)
 
-export const AdminProvider = ({children}: PropsWithChildren) => {
-  const [smartphoneRef, setSmartphoneRef] =
-    useState<RefObject<HTMLIFrameElement>>()
+export const SmartphoneProvider = ({children}: PropsWithChildren) => {
+  const iframeRef = useRef<HTMLIFrameElement>(null)
 
   const reloadSmartphoneList = useCallback(() => {
-    if (!smartphoneRef?.current) return
-    smartphoneRef.current?.contentWindow?.location.reload()
-  }, [smartphoneRef])
+    if (!iframeRef?.current) return
+
+    iframeRef.current?.contentWindow?.location.reload()
+  }, [iframeRef])
 
   const updateSmartphoneSrc = useCallback(
     (src: string) => {
-      smartphoneRef?.current?.setAttribute('src', src)
+      iframeRef?.current?.setAttribute('src', src)
     },
-    [smartphoneRef],
+    [iframeRef],
   )
 
   return (
-    <adminContext.Provider
+    <smartphoneContext.Provider
       value={{
         reloadSmartphoneList,
-        setSmartphoneRef,
         updateSmartphoneSrc,
+        iframeRef,
       }}>
       {children}
-    </adminContext.Provider>
+    </smartphoneContext.Provider>
   )
 }
 
-export const useAdmin = () => ({...useContext(adminContext)})
+export const useSmartphone = () => ({...useContext(smartphoneContext)})

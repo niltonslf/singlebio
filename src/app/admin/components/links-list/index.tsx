@@ -33,7 +33,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
-import {useAdmin} from '../../context/admin-context'
+import {useSmartphone} from '../../context/admin-context'
 import {LinkCardItem} from './link-card-item'
 
 type LinksListProps = {
@@ -41,7 +41,7 @@ type LinksListProps = {
 }
 
 export const LinksList = ({user}: LinksListProps) => {
-  const {reloadSmartphoneList} = useAdmin()
+  const {reloadSmartphoneList} = useSmartphone()
   const reloadSmartphoneListDebounced = useDebouce(() => reloadSmartphoneList())
 
   const sensors = useSensors(

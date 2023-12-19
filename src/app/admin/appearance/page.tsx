@@ -1,13 +1,13 @@
 'use client'
 
 import {observer} from 'mobx-react-lite'
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useState} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
 import {Smartphone} from '@/app/components'
 
 import {Collapse, Layout} from '../components'
-import {useAdmin} from '../context/admin-context'
+import {useSmartphone} from '../context/admin-context'
 import {
   CustomizeButtons,
   CustomizeUsername,
@@ -20,12 +20,15 @@ const AppearancePage = observer(() => {
   const {user} = authStore
   const {previewUrl, theme, aux} = appearanceStore
 
-  const iframe = useRef<HTMLIFrameElement>(null)
-  const {setSmartphoneRef, updateSmartphoneSrc} = useAdmin()
+  const {iframeRef, updateSmartphoneSrc} = useSmartphone()
   const {compress} = useImageCompressor()
   const {upload} = useBackgroundUpload()
 
   const [updated, setUpdated] = useState(false)
+
+  const scheduleCloseSuccessMsg = () => {
+    setTimeout(() => setUpdated(false), 5000)
+  }
 
   const handleSaveAppearance = async () => {
     const data = {theme}
@@ -38,32 +41,17 @@ const AppearancePage = observer(() => {
       appearanceStore.setBackgroundFile(undefined)
     }
 
-    if (!theme.backgroundImage) {
-      data.theme.backgroundImage = ''
-    }
-
     await authStore.updateUser(data)
     setUpdated(true)
+    scheduleCloseSuccessMsg()
   }
 
-  const handleResetAppearance = () => {
-    appearanceStore.reset()
-  }
-
-  useEffect(() => {
-    const unsubscribe = setTimeout(() => setUpdated(false), 5000)
-    return () => clearTimeout(unsubscribe)
-  }, [updated])
+  const handleResetAppearance = () => appearanceStore.reset()
 
   // update iframe on every change
   useEffect(() => {
     updateSmartphoneSrc(`/${user?.username}/${previewUrl}`)
   }, [previewUrl, updateSmartphoneSrc, user?.username])
-
-  useEffect(() => {
-    setSmartphoneRef(iframe)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [iframe])
 
   useEffect(() => {
     if (user?.theme) appearanceStore.setThemeConfig(user?.theme)
@@ -118,7 +106,7 @@ const AppearancePage = observer(() => {
 
       <Layout.Sidebar>
         <div className='sticky top-6'>
-          <Smartphone ref={iframe} />
+          <Smartphone ref={iframeRef} />
         </div>
       </Layout.Sidebar>
     </Layout>

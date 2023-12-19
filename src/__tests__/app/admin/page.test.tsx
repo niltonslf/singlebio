@@ -9,7 +9,7 @@ import {
   makeGetDocsResponse,
   setup,
 } from '@/__tests__/utils'
-import {AdminProvider} from '@/app/admin/context/admin-context'
+import {SmartphoneProvider} from '@/app/admin/context/admin-context'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import '@testing-library/jest-dom'
@@ -41,7 +41,6 @@ jest.mock('@/app/admin/context/admin-context', () => {
     useAdmin: () => {
       return {
         reloadSmartphoneList: jest.fn(),
-        setSmartphoneRef: jest.fn(),
       }
     },
   }
@@ -64,9 +63,9 @@ const makeSUT = async () => {
   return await waitFor(() =>
     setup(
       <AdminLayout>
-        <AdminProvider>
+        <SmartphoneProvider>
           <AdminPage />
-        </AdminProvider>
+        </SmartphoneProvider>
       </AdminLayout>,
     ),
   )
