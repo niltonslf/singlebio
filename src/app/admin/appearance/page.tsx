@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
-import {Smartphone} from '@/app/components'
+import {Button, Smartphone} from '@/app/components'
 
 import {Collapse, Layout} from '../components'
 import {useSmartphone} from '../context/smartphone-context'
@@ -25,6 +25,7 @@ const AppearancePage = observer(() => {
   const {upload} = useBackgroundUpload()
 
   const [updated, setUpdated] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const scheduleCloseSuccessMsg = () => {
     setTimeout(() => setUpdated(false), 5000)
@@ -32,6 +33,7 @@ const AppearancePage = observer(() => {
 
   const handleSaveAppearance = async () => {
     const data = {theme}
+    setIsLoading(true)
 
     if (aux.backgroundFile && theme.backgroundImage) {
       const newImage = await compress(aux.backgroundFile)
@@ -44,6 +46,7 @@ const AppearancePage = observer(() => {
     await authStore.updateUser(data)
     setUpdated(true)
     scheduleCloseSuccessMsg()
+    setIsLoading(false)
   }
 
   const handleResetAppearance = () => appearanceStore.reset()
@@ -90,16 +93,17 @@ const AppearancePage = observer(() => {
           </div>
         ) : (
           <div className='mt-5 flex flex-row items-center gap-5 border-t border-t-gray-500 pt-5'>
-            <button
-              className='rounded bg-blue-600 px-14 py-2 font-bold text-white hover:bg-blue-800'
-              onClick={() => handleSaveAppearance()}>
+            <Button
+              variant='primary'
+              onClick={() => handleSaveAppearance()}
+              isLoading={isLoading}>
               Save
-            </button>
-            <button
-              className='rounded bg-red-600 px-14 py-2 font-bold text-white hover:bg-red-800'
-              onClick={() => handleResetAppearance()}>
+            </Button>
+            <Button variant='error' onClick={() => handleResetAppearance()}>
               Reset
-            </button>
+            </Button>
+            <Button variant='warning'>warning</Button>
+            <Button variant='success'>success</Button>
           </div>
         )}
       </Layout.Content>
