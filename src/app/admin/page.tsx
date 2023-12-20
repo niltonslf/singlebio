@@ -6,7 +6,7 @@ import {Modal, Smartphone} from '@/app/components'
 
 import {authStore} from '../auth/context/auth-store'
 import {LinksList} from './components/links-list'
-import {useSmartphone} from './context/admin-context'
+import {useSmartphone} from './context/smartphone-context'
 
 const Admin = observer(() => {
   const {iframeRef, reloadSmartphoneList} = useSmartphone()

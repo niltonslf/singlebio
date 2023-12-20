@@ -33,7 +33,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
-import {useSmartphone} from '../../context/admin-context'
+import {useSmartphone} from '../../context/smartphone-context'
 import {LinkCardItem} from './link-card-item'
 
 type LinksListProps = {
@@ -57,7 +57,7 @@ export const LinksList = ({user}: LinksListProps) => {
     return links.reduce((prev, cur) => Math.max(prev, cur.order + 1), 0)
   }
 
-  const handleAddNewLink = async (data: any) => {
+  const handleAddNewLink = async () => {
     const res = await doc(db, 'users', user.uid)
     const emptyLink: Link = {label: '', url: '', order: getLastOrder()}
     addDoc(collection(res, 'links'), emptyLink)

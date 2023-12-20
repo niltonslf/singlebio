@@ -15,7 +15,7 @@ export const useBackgroundUpload = () => {
     const storageRef = ref(firebaseStorage, fileRef)
 
     await uploadBytes(storageRef, imageArray, {
-      contentType: `image/${imageFile.type}`,
+      contentType: imageFile.type,
     })
     return await getDownloadURL(storageRef)
   }

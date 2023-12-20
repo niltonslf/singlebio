@@ -5,7 +5,7 @@ import {ReactNode} from 'react'
 
 import {authStore} from '../auth/context/auth-store'
 import {Header} from './components'
-import {SmartphoneProvider} from './context/admin-context'
+import {SmartphoneProvider} from './context/smartphone-context'
 import {useValidateAuth} from './hooks'
 
 type AdminLayoutProps = {

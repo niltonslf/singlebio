@@ -62,32 +62,32 @@ const UserPreview = observer(
               @{username}
             </h2>
 
-            <LinkCard.container>
-              <LinkCard.item
+            <LinkCard>
+              <LinkCard.Item
                 path='/admin'
                 bgColor={decodeURIComponent(buttonBackground || '')}
                 textColor={decodeURIComponent(buttonTextColor || '')}>
                 Example 01
-              </LinkCard.item>
-              <LinkCard.item
+              </LinkCard.Item>
+              <LinkCard.Item
                 path='/admin'
                 bgColor={decodeURIComponent(buttonBackground || '')}
                 textColor={decodeURIComponent(buttonTextColor || '')}>
                 Example 02
-              </LinkCard.item>
-              <LinkCard.item
+              </LinkCard.Item>
+              <LinkCard.Item
                 path='/admin'
                 bgColor={decodeURIComponent(buttonBackground || '')}
                 textColor={decodeURIComponent(buttonTextColor || '')}>
                 Example 03
-              </LinkCard.item>
-              <LinkCard.item
+              </LinkCard.Item>
+              <LinkCard.Item
                 path='/admin'
                 bgColor={decodeURIComponent(buttonBackground || '')}
                 textColor={decodeURIComponent(buttonTextColor || '')}>
                 Example 04
-              </LinkCard.item>
-            </LinkCard.container>
+              </LinkCard.Item>
+            </LinkCard>
           </div>
         </div>
       </main>

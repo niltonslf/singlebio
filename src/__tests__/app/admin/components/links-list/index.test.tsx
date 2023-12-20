@@ -12,7 +12,7 @@ jest.mock('firebase/firestore', () => ({
   ...jest.requireActual('firebase/firestore'),
 }))
 
-jest.mock('@/app/admin/context/admin-context', () => {
+jest.mock('@/app/admin/context/smartphone-context', () => {
   return {
     useAdmin: () => {
       return {

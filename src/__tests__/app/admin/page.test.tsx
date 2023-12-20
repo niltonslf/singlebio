@@ -9,7 +9,7 @@ import {
   makeGetDocsResponse,
   setup,
 } from '@/__tests__/utils'
-import {SmartphoneProvider} from '@/app/admin/context/admin-context'
+import {SmartphoneProvider} from '@/app/admin/context/smartphone-context'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import '@testing-library/jest-dom'
@@ -35,9 +35,9 @@ jest.mock('@headlessui/react', () => {
   }
 })
 
-jest.mock('@/app/admin/context/admin-context', () => {
+jest.mock('@/app/admin/context/smartphone-context', () => {
   return {
-    ...jest.requireActual('@/app/admin/context/admin-context'),
+    ...jest.requireActual('@/app/admin/context/smartphone-context'),
     useAdmin: () => {
       return {
         reloadSmartphoneList: jest.fn(),

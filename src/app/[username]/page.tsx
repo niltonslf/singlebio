@@ -120,20 +120,20 @@ export default function UserPage({params: {username}}: UserPageProps) {
             </div>
           )}
 
-          <LinkCard.container>
+          <LinkCard>
             {links.length > 0 &&
               links.map(link => {
                 return (
-                  <LinkCard.item
+                  <LinkCard.Item
                     key={link.url}
                     path={link.url}
                     bgColor={user?.theme?.buttonBackground}
                     textColor={user?.theme?.buttonTextColor}>
                     {link.label}
-                  </LinkCard.item>
+                  </LinkCard.Item>
                 )
               })}
-          </LinkCard.container>
+          </LinkCard>
         </div>
       </div>
     </main>

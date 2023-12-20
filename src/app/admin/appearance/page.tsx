@@ -7,7 +7,7 @@ import {authStore} from '@/app/auth/context/auth-store'
 import {Smartphone} from '@/app/components'
 
 import {Collapse, Layout} from '../components'
-import {useSmartphone} from '../context/admin-context'
+import {useSmartphone} from '../context/smartphone-context'
 import {
   CustomizeButtons,
   CustomizeUsername,
