@@ -102,8 +102,6 @@ const AppearancePage = observer(() => {
             <Button variant='error' onClick={() => handleResetAppearance()}>
               Reset
             </Button>
-            <Button variant='warning'>warning</Button>
-            <Button variant='success'>success</Button>
           </div>
         )}
       </Layout.Content>
