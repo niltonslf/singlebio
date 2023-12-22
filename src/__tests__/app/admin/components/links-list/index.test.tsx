@@ -75,12 +75,15 @@ describe('Links List component', () => {
 
   it('render component with 2 items', () => {
     const {linksMock} = renderWithItems()
+
     makeSUT()
 
     const list = screen.getByRole('list')
-    expect(list.querySelectorAll('li').length).toBe(2)
+    const items = list.querySelectorAll('li')
 
-    const firstItem = list.querySelectorAll('li')[0]
+    expect(items.length).toBe(2)
+
+    const firstItem = items[0]
     const label = firstItem.querySelectorAll('input')[2]
     const url = firstItem.querySelectorAll('input')[3]
 
@@ -176,7 +179,7 @@ describe('Links List component', () => {
   })
 
   // TODO: finish test
-  it.skip('should save the new link', async () => {
+  it.skip('should drag and drop item', async () => {
     renderWithItems(3)
 
     makeSUT()

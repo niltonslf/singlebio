@@ -25,10 +25,7 @@ const makeSUT = (user?: User) => {
 
   const sut = setup(<Header />)
 
-  return {
-    userMock,
-    ...sut,
-  }
+  return {userMock, ...sut}
 }
 
 describe('Header component', () => {
