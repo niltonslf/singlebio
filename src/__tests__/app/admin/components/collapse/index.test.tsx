@@ -4,11 +4,15 @@ import {CollapseBody} from '@/app/admin/components/collapse/collapse-body'
 import '@testing-library/jest-dom'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
-const makeSUT = (numOfItems: number = 1, toggle: boolean = false) => {
+const makeSUT = (
+  numOfItems: number = 1,
+  toggle: boolean = false,
+  defaultOpen?: number,
+) => {
   const itemsArr = Array.from(Array(numOfItems).keys())
 
   return setup(
-    <Collapse data-testid='collapse' toggle={toggle}>
+    <Collapse data-testid='collapse' toggle={toggle} defaultOpen={defaultOpen}>
       {itemsArr.map(item => {
         return (
           <Collapse.Item key={item} index={item}>
@@ -28,6 +32,26 @@ const makeSUT = (numOfItems: number = 1, toggle: boolean = false) => {
   )
 }
 
+const getCollapseItems = () => {
+  let collapse = screen.getByTestId('collapse')
+  let items = collapse.querySelectorAll('article')
+
+  return {
+    items,
+  }
+}
+
+const getCollapseItem = (index: number, items: NodeListOf<HTMLElement>) => {
+  let header = items[index].querySelector('header')
+  let content = items[index].querySelector('header + div')
+
+  return [header, content]
+}
+
+const expectCollapseOpen = (content: Element, isOpen: boolean = true) => {
+  expect(content?.classList.contains('grid-rows-[1fr]')).toBe(isOpen)
+}
+
 describe('Collapse component', () => {
   beforeEach(() => {
     cleanup()
@@ -36,8 +60,7 @@ describe('Collapse component', () => {
   it('should render with 3 items', () => {
     makeSUT(3)
 
-    const collapse = screen.getByTestId('collapse')
-    const items = collapse.querySelectorAll('article')
+    const {items} = getCollapseItems()
 
     expect(items.length).toBe(3)
   })
@@ -45,14 +68,9 @@ describe('Collapse component', () => {
   it('should open and close collapse', async () => {
     const {user} = makeSUT(3)
 
-    let collapse = screen.getByTestId('collapse')
-    let items = collapse.querySelectorAll('article')
-
-    let firstItemHeader = items[0].querySelector('header')
-    let firstItemContent = items[0].querySelector('header + div')
-
-    let secondItemHeader = items[1].querySelector('header')
-    let secondItemContent = items[1].querySelector('header + div')
+    const {items} = getCollapseItems()
+    const [firstItemHeader, firstItemContent] = getCollapseItem(0, items)
+    const [secondItemHeader, secondItemContent] = getCollapseItem(1, items)
 
     if (
       !firstItemHeader ||
@@ -66,32 +84,34 @@ describe('Collapse component', () => {
     expect(secondItemHeader).toBeVisible()
 
     // item closed
-    expect(firstItemContent?.classList.contains('grid-rows-[1fr]')).toBe(false)
-    expect(secondItemContent?.classList.contains('grid-rows-[1fr]')).toBe(false)
+    expectCollapseOpen(firstItemContent, false)
+    expectCollapseOpen(secondItemContent, false)
 
     await user.click(firstItemHeader)
     await user.click(secondItemHeader)
 
     await waitFor(async () => {
       // item opened
-      expect(firstItemContent?.classList.contains('grid-rows-[1fr]')).toBe(true)
-      expect(secondItemContent?.classList.contains('grid-rows-[1fr]')).toBe(
-        true,
-      )
+      expectCollapseOpen(firstItemContent, true)
+      expectCollapseOpen(secondItemContent, true)
+    })
+
+    // close 2nd item
+    await user.click(secondItemHeader)
+
+    await waitFor(async () => {
+      // item opened
+      expectCollapseOpen(firstItemContent, true)
+      expectCollapseOpen(secondItemContent, false)
     })
   })
 
   it('should open collapse and close others (toggle)', async () => {
     const {user} = makeSUT(3, true)
 
-    let collapse = screen.getByTestId('collapse')
-    let items = collapse.querySelectorAll('article')
-
-    let firstItemHeader = items[0].querySelector('header')
-    let firstItemContent = items[0].querySelector('header + div')
-
-    let secondItemHeader = items[1].querySelector('header')
-    let secondItemContent = items[1].querySelector('header + div')
+    const {items} = getCollapseItems()
+    const [firstItemHeader, firstItemContent] = getCollapseItem(0, items)
+    const [secondItemHeader, secondItemContent] = getCollapseItem(1, items)
 
     if (
       !firstItemHeader ||
@@ -105,8 +125,8 @@ describe('Collapse component', () => {
     expect(secondItemHeader).toBeVisible()
 
     // item closed
-    expect(firstItemContent?.classList.contains('grid-rows-[1fr]')).toBe(false)
-    expect(secondItemContent?.classList.contains('grid-rows-[1fr]')).toBe(false)
+    expectCollapseOpen(firstItemContent, false)
+    expectCollapseOpen(secondItemContent, false)
 
     // open first item
     await user.click(firstItemHeader)
@@ -114,14 +134,21 @@ describe('Collapse component', () => {
     await user.click(secondItemHeader)
 
     await waitFor(async () => {
-      // item close
-      expect(firstItemContent?.classList.contains('grid-rows-[1fr]')).toBe(
-        false,
-      )
-      // item open
-      expect(secondItemContent?.classList.contains('grid-rows-[1fr]')).toBe(
-        true,
-      )
+      expectCollapseOpen(firstItemContent, false)
+      expectCollapseOpen(secondItemContent, true)
     })
+  })
+
+  it('should start with second item opened', () => {
+    makeSUT(3, false, 1)
+
+    const {items} = getCollapseItems()
+    const [, firstItemContent] = getCollapseItem(0, items)
+    const [, secondItemContent] = getCollapseItem(1, items)
+
+    if (!firstItemContent || !secondItemContent) return fail()
+
+    expectCollapseOpen(firstItemContent, false)
+    expectCollapseOpen(secondItemContent, true)
   })
 })
