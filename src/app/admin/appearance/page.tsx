@@ -57,12 +57,18 @@ const AppearancePage = observer(() => {
   }, [previewUrl, updateSmartphoneSrc, user?.username])
 
   useEffect(() => {
-    if (user?.theme) appearanceStore.setThemeConfig(user?.theme)
+    if (user?.theme) appearanceStore.setTheme(user?.theme)
   }, [user?.theme])
 
   return (
     <Layout>
       <Layout.Content>
+        {appearanceStore.hasChanges && (
+          <div className='mb-5 flex flex-row items-center rounded-lg border border-orange-900 bg-orange-200 p-5 font-medium'>
+            The changes are not applied yet. You must save to apply them.
+          </div>
+        )}
+
         <Collapse defaultOpen={1}>
           <Collapse.Item key={'wallpaper'} index={1}>
             <Collapse.Header>Page wallpaper</Collapse.Header>

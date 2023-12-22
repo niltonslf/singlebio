@@ -10,14 +10,17 @@ type Aux = {
   backgroundFile?: File
 }
 
+const initialData = {
+  backgroundImage: '',
+  backgroundColor: '',
+  buttonBackground: '#FFF',
+  buttonTextColor: '#000',
+  usernameColor: '#000',
+}
+
 class AppearanceStore {
-  private themeConfig: UserTheme = {
-    backgroundImage: '',
-    backgroundColor: '',
-    buttonBackground: '#FFF',
-    buttonTextColor: '#000',
-    usernameColor: '#000',
-  }
+  private themeConfig: UserTheme = {...initialData}
+  private themeConfigInitial: UserTheme = {...initialData}
 
   public aux: Aux = {
     backgroundFile: undefined,
@@ -34,9 +37,23 @@ class AppearanceStore {
   get previewUrl() {
     return `preview?&${themeToQuery(this.themeConfig)}`
   }
+  get hasChanges() {
+    return (
+      this.themeConfig.backgroundImage !=
+        this.themeConfigInitial.backgroundImage ||
+      this.themeConfig.backgroundColor !=
+        this.themeConfigInitial.backgroundColor ||
+      this.themeConfig.buttonBackground !=
+        this.themeConfigInitial.buttonBackground ||
+      this.themeConfig.buttonTextColor !=
+        this.themeConfigInitial.buttonTextColor ||
+      this.themeConfig.usernameColor != this.themeConfigInitial.usernameColor
+    )
+  }
 
-  setThemeConfig(theme: UserTheme) {
-    this.themeConfig = theme
+  setTheme(theme: UserTheme) {
+    this.themeConfig = {...theme}
+    this.themeConfigInitial = {...theme}
   }
   setBackgroundImage(value: string) {
     this.themeConfig.backgroundImage = value
@@ -67,6 +84,7 @@ class AppearanceStore {
     }
 
     this.aux.backgroundFile = undefined
+    this.themeConfigInitial = {...this.themeConfig}
   }
 }
 
