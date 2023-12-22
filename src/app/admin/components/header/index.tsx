@@ -55,8 +55,13 @@ export const Header = observer(({user}: HeaderProps) => {
   return (
     <header className='flex min-w-full flex-row items-center justify-between rounded-lg bg-gray-800 px-5 py-2'>
       <div className='flex flex-row'>
-        <span className='text-md mr-10 font-semibold text-white'>
-          Lnktree admin
+        <span className='mr-10'>
+          <Image
+            src='/logo-white.png'
+            width={114.72}
+            height={30}
+            alt='lnktree logo'
+          />
         </span>
 
         <nav className='flex flex-row items-center gap-4   text-white'>
