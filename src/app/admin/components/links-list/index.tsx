@@ -63,9 +63,11 @@ export const LinksList = ({user}: LinksListProps) => {
     addDoc(collection(res, 'links'), emptyLink)
   }
 
-  const handleSaveLink = async (data: Link, reload: boolean = true) => {
+  const handleSaveLink = async (data: Link, reload: boolean = false) => {
     if (data.id) setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
-    if (reload) reloadSmartphoneListDebounced()
+    if (reload) {
+      reloadSmartphoneListDebounced()
+    }
   }
 
   const deleteLink = (link: Link) => {
@@ -101,11 +103,11 @@ export const LinksList = ({user}: LinksListProps) => {
     if (oldIndex < newIndex) {
       const [start, end] = [oldIndex, newIndex - 1]
 
-      handleSaveLink({...links[newIndex], order: links[end].order}, false)
+      handleSaveLink({...links[newIndex], order: links[end].order})
 
       for (let index = start; index <= end; index++) {
         const link: Link = {...links[index], order: links[index].order + 1}
-        handleSaveLink(link, false)
+        handleSaveLink(link)
       }
 
       return reloadSmartphoneListDebounced()
@@ -114,11 +116,11 @@ export const LinksList = ({user}: LinksListProps) => {
     // MOVING UP
     const [start, end] = [newIndex + 1, oldIndex]
 
-    handleSaveLink({...links[newIndex], order: links[start].order}, false)
+    handleSaveLink({...links[newIndex], order: links[start].order})
 
     for (let index = start; index <= end; index++) {
       const link: Link = {...links[index], order: links[index].order - 1}
-      handleSaveLink(link, false)
+      handleSaveLink(link)
     }
     return reloadSmartphoneListDebounced()
   }
@@ -163,7 +165,10 @@ export const LinksList = ({user}: LinksListProps) => {
               strategy={verticalListSortingStrategy}>
               {links.map(link => (
                 <LinkCardItem key={link.id} onDelete={deleteLink} link={link}>
-                  <AddLinkForm saveLink={handleSaveLink} link={link} />
+                  <AddLinkForm
+                    saveLink={data => handleSaveLink(data, true)}
+                    link={link}
+                  />
                 </LinkCardItem>
               ))}
             </SortableContext>

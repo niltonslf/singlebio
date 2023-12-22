@@ -41,9 +41,10 @@ jest.mock('@headlessui/react', () => {
 jest.mock('@/app/admin/context/smartphone-context', () => {
   return {
     ...jest.requireActual('@/app/admin/context/smartphone-context'),
-    useAdmin: () => {
+    useSmartphone: () => {
       return {
         reloadSmartphoneList: jest.fn(),
+        iframeRef: {current: {}},
       }
     },
   }
