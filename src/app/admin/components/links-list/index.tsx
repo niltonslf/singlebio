@@ -17,7 +17,7 @@ import {Link, User} from '@/models'
 
 import {AddLinkForm} from '..'
 
-import {useDebouce} from '@/utils'
+import {useDebounce} from '@/utils'
 import {
   DndContext,
   closestCenter,
@@ -42,7 +42,9 @@ type LinksListProps = {
 
 export const LinksList = ({user}: LinksListProps) => {
   const {reloadSmartphoneList} = useSmartphone()
-  const reloadSmartphoneListDebounced = useDebouce(() => reloadSmartphoneList())
+  const reloadSmartphoneListDebounced = useDebounce(() =>
+    reloadSmartphoneList(),
+  )
 
   const sensors = useSensors(
     useSensor(PointerSensor),

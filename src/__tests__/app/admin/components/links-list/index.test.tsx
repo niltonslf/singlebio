@@ -5,9 +5,9 @@ import '@testing-library/jest-dom'
 import {LinksList} from '@/app/admin/components/links-list'
 import {SmartphoneProvider} from '@/app/admin/context/smartphone-context'
 import {authStore} from '@/app/auth/context/auth-store'
-import {User} from '@/models'
+import {Link, User} from '@/models'
 import {faker} from '@faker-js/faker'
-import {act, cleanup, fireEvent, screen} from '@testing-library/react'
+import {act, cleanup, screen} from '@testing-library/react'
 
 jest.mock('firebase/firestore', () => ({
   __esModule: true,
@@ -36,9 +36,7 @@ const makeSUT = (user?: User) => {
   return {userMock, ...sut}
 }
 
-const renderWithItems = (amount: number = 2, factory = makeLink) => {
-  const linksMock = Array.from({length: amount}).map(() => factory())
-
+const renderWithItems = (linksMock: Link[]) => {
   const responseMock = linksMock.map(link => ({
     data: () => link,
     id: faker.string.uuid(),
@@ -61,7 +59,7 @@ const renderWithItems = (amount: number = 2, factory = makeLink) => {
 }
 
 describe('Links List component', () => {
-  beforeEach(() => {
+  afterEach(() => {
     cleanup()
     jest.clearAllMocks()
   })
@@ -74,7 +72,10 @@ describe('Links List component', () => {
   })
 
   it('render component with 2 items', () => {
-    const {linksMock} = renderWithItems()
+    const {linksMock} = renderWithItems([
+      {...makeLink(), order: 0},
+      {...makeLink(), order: 1},
+    ])
 
     makeSUT()
 
@@ -87,19 +88,21 @@ describe('Links List component', () => {
     const label = firstItem.querySelectorAll('input')[2]
     const url = firstItem.querySelectorAll('input')[3]
 
-    expect(label).toHaveValue(linksMock[0].label)
-    expect(url).toHaveValue(linksMock[0].url)
+    expect(label).toHaveValue(linksMock[1].label)
+    expect(url).toHaveValue(linksMock[1].url)
   })
 
   it('should delete link from the list', async () => {
-    renderWithItems()
-    jest.spyOn(firestore, 'doc').mockImplementation()
-    jest.spyOn(firestore, 'deleteDoc').mockImplementation()
+    renderWithItems([makeLink(), makeLink()])
+
+    jest.spyOn(firestore, 'doc').mockImplementation(jest.fn())
+    jest.spyOn(firestore, 'deleteDoc').mockImplementation(jest.fn())
 
     const {user} = makeSUT()
 
     const list = screen.getByRole('list')
-    const firstItem = list.children[1]
+
+    const firstItem = list.children[0]
     const deleteBtn = firstItem.querySelector('[data-testid=delete-link-btn]')
 
     if (!deleteBtn) return fail()
@@ -112,7 +115,7 @@ describe('Links List component', () => {
   })
 
   it('should create a new link', async () => {
-    renderWithItems(1)
+    renderWithItems([makeLink()])
 
     const {user} = makeSUT()
 
@@ -136,7 +139,7 @@ describe('Links List component', () => {
 
   // ? i'm not happy with this test
   it('should save the new link', async () => {
-    renderWithItems(1, () => ({id: '', label: '', url: ''}))
+    renderWithItems([{id: '', label: '', url: '', order: 0}])
 
     const {user} = makeSUT()
 
@@ -176,30 +179,5 @@ describe('Links List component', () => {
 
       expect(firestore.setDoc).toHaveBeenCalledTimes(1)
     })
-  })
-
-  // TODO: finish test
-  it.skip('should drag and drop item', async () => {
-    renderWithItems(3)
-
-    makeSUT()
-
-    const list = screen.getByRole('list')
-    const items = list.querySelectorAll('li')
-
-    expect(items.length).toBe(3)
-
-    const firstItem = items[0]
-    const thirdItem = items[2]
-    const handler = firstItem.firstChild?.firstChild
-
-    if (!handler) return fail()
-
-    fireEvent.dragStart(firstItem)
-    fireEvent.dragEnter(thirdItem)
-    fireEvent.dragOver(thirdItem)
-    fireEvent.drop(thirdItem)
-
-    expect(false).toBe(true)
   })
 })

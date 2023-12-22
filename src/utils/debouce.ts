@@ -1,6 +1,6 @@
 import {useEffect, useRef} from 'react'
 
-export const useDebouce = (
+export const useDebounce = (
   callback: (...args: any) => any,
   delay: number = 500,
 ) => {

@@ -10,17 +10,16 @@ type Aux = {
   backgroundFile?: File
 }
 
-const initialData = {
-  backgroundImage: '',
-  backgroundColor: '',
-  buttonBackground: '#FFF',
-  buttonTextColor: '#000',
-  usernameColor: '#000',
-}
-
 class AppearanceStore {
-  private themeConfig: UserTheme = {...initialData}
-  private themeConfigInitial: UserTheme = {...initialData}
+  private initialData = {
+    backgroundImage: '',
+    backgroundColor: '',
+    buttonBackground: '#FFF',
+    buttonTextColor: '#000',
+    usernameColor: '#000',
+  }
+  private themeConfig: UserTheme = this.initialData
+  private themeConfigInitial: UserTheme = this.initialData
 
   public aux: Aux = {
     backgroundFile: undefined,
@@ -52,6 +51,8 @@ class AppearanceStore {
   }
 
   setTheme(theme: UserTheme) {
+    if (!theme) return
+
     this.themeConfig = {...theme}
     this.themeConfigInitial = {...theme}
   }
@@ -75,16 +76,10 @@ class AppearanceStore {
   }
 
   reset() {
-    this.themeConfig = {
-      backgroundImage: '',
-      backgroundColor: '',
-      buttonBackground: '#FFF',
-      buttonTextColor: '#000',
-      usernameColor: '#000',
-    }
+    this.themeConfig = {...this.initialData}
+    this.themeConfigInitial = {...this.initialData}
 
     this.aux.backgroundFile = undefined
-    this.themeConfigInitial = {...this.themeConfig}
   }
 }
 

@@ -5,20 +5,19 @@ import clsx from 'clsx'
 import {Trash} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useRef, ChangeEvent} from 'react'
-import {ColorPicker, IColor, useColor} from 'react-color-palette'
-import 'react-color-palette/css'
+import {HexAlphaColorPicker} from 'react-colorful'
 
 import {appearanceStore} from '@/app/admin/appearance/context'
-import {useDebouce} from '@/utils'
+import {useDebounce} from '@/utils'
 
 export const CustomizeWallpaper = observer(() => {
-  const theme = appearanceStore.theme
+  const theme = appearanceStore?.theme
 
   const wallpaperRef = useRef<HTMLImageElement>(null)
 
-  const [backgroundColor, setBackgroundColor] = useColor(
-    theme.backgroundColor || '#00000080',
-  )
+  const debouncedBackgroundColor = useDebounce((color: string) => {
+    appearanceStore.setBackgroundColor(color)
+  })
 
   const handleRemoveWallpaper = () => {
     appearanceStore.setBackgroundImage('')
@@ -34,15 +33,6 @@ export const CustomizeWallpaper = observer(() => {
     const url = returnImageThumbnail(file)
     appearanceStore.setBackgroundImage(url)
     appearanceStore.setBackgroundFile(file)
-  }
-
-  const updateBackgroundColorDebounced = useDebouce(hex => {
-    appearanceStore.setBackgroundColor(hex)
-  })
-
-  const handleChangeColor = (color: IColor) => {
-    setBackgroundColor(color)
-    updateBackgroundColorDebounced(color.hex)
   }
 
   return (
@@ -101,10 +91,10 @@ export const CustomizeWallpaper = observer(() => {
           <h2 className='font-mg font-semibold'>Customize the overlay</h2>
 
           <div className='mt-3'>
-            <ColorPicker
-              hideInput={['rgb', 'hsv']}
-              color={backgroundColor}
-              onChange={handleChangeColor}
+            <HexAlphaColorPicker
+              style={{width: '100%', height: '350px'}}
+              color={theme.backgroundColor}
+              onChange={color => debouncedBackgroundColor(color)}
             />
           </div>
         </div>

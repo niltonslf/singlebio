@@ -2,26 +2,24 @@
 
 /* eslint-disable @next/next/no-img-element */
 import {observer} from 'mobx-react-lite'
-import {ColorPicker, IColor, useColor} from 'react-color-palette'
-import 'react-color-palette/css'
+// import {HexAlphaColorPicker} from 'react-colorful'
+
+import {HexAlphaColorPicker} from 'react-colorful'
+
+import {useDebounce} from '@/utils'
 
 import {appearanceStore} from '../../context'
 
 export const CustomizeButtons = observer(() => {
   const {theme} = appearanceStore
 
-  const [btnBackground, setBtnBackground] = useColor(theme.buttonBackground)
-  const [btnTextColor, setBtnTextColor] = useColor(theme.buttonTextColor)
+  const debouncedBackground = useDebounce((color: string) => {
+    appearanceStore.setButtonBackground(color)
+  })
 
-  const handleChangeBackground = (color: IColor) => {
-    setBtnBackground(color)
-    appearanceStore.setButtonBackground(color.hex)
-  }
-
-  const handleChangeTextColor = (color: IColor) => {
-    setBtnTextColor(color)
-    appearanceStore.setButtonTextColor(color.hex)
-  }
+  const debouncedTextColor = useDebounce((color: string) => {
+    appearanceStore.setButtonTextColor(color)
+  })
 
   return (
     <>
@@ -30,10 +28,10 @@ export const CustomizeButtons = observer(() => {
           <h2 className='font-mg font-semibold'>Button background</h2>
 
           <div className='mt-3'>
-            <ColorPicker
-              hideInput={['rgb', 'hsv', 'hex']}
-              color={btnBackground}
-              onChange={handleChangeBackground}
+            <HexAlphaColorPicker
+              style={{width: '100%', height: '300px'}}
+              color={theme.buttonBackground}
+              onChange={color => debouncedBackground(color)}
             />
           </div>
         </div>
@@ -42,10 +40,10 @@ export const CustomizeButtons = observer(() => {
           <h2 className='font-mg font-semibold'>Button text</h2>
 
           <div className='mt-3'>
-            <ColorPicker
-              hideInput={['rgb', 'hsv', 'hex']}
-              color={btnTextColor}
-              onChange={handleChangeTextColor}
+            <HexAlphaColorPicker
+              style={{width: '100%', height: '300px'}}
+              color={theme.buttonTextColor}
+              onChange={color => debouncedTextColor(color)}
             />
           </div>
         </div>
