@@ -22,7 +22,7 @@ const schema = z.object({
   url: z
     .string()
     .regex(httpRegex, 'Value must be a valid url. e.g. https://google.com '),
-  label: z.string().min(1, {message: 'Required field'}),
+  label: z.string().min(3, {message: 'Required field'}),
   id: z.string(),
   order: z.number(),
 })
