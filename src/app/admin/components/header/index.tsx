@@ -1,10 +1,14 @@
+'use client'
+
 import {Home, Palette} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import Image from 'next/image'
 import Link from 'next/link'
-import {useRouter} from 'next/navigation'
+import {useRouter, usePathname} from 'next/navigation'
 
 import {Dropdown} from '..'
+
+import {ReactNode} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
 import {User} from '@/models'
@@ -13,8 +17,35 @@ type HeaderProps = {
   user: User | undefined
 }
 
+type Page = {
+  href: string
+  title: string
+  name: string
+  Icon: ReactNode
+}
+
 export const Header = observer(({user}: HeaderProps) => {
   const router = useRouter()
+  const pathName = usePathname()
+
+  const pages: Page[] = [
+    {
+      href: '/admin',
+      title: 'go to home page',
+      name: 'Home',
+      Icon: <Home width={15} />,
+    },
+    {
+      href: '/admin/appearance',
+      title: 'go to appearance page',
+      name: 'Appearance',
+      Icon: <Palette width={15} />,
+    },
+  ]
+
+  const isCurrentPage = (currentPage: string) => {
+    return pathName == currentPage
+  }
 
   const logout = async () => {
     await authStore.logout()
@@ -29,20 +60,22 @@ export const Header = observer(({user}: HeaderProps) => {
         </span>
 
         <nav className='flex flex-row items-center gap-4   text-white'>
-          <Link
-            href='/admin'
-            title='go to appearance page'
-            className='flex flex-row gap-1'>
-            <Home width={15} />
-            Home
-          </Link>
-          <Link
-            href='/admin/appearance'
-            title='go to appearance page'
-            className='flex flex-row gap-1'>
-            <Palette width={15} />
-            Appearance
-          </Link>
+          {pages.map(page => (
+            <Link
+              key={page.href}
+              href={page.href}
+              title={page.title}
+              className='flex flex-row gap-1'
+              style={{
+                borderBottom: `2px solid ${
+                  isCurrentPage(page.href) ? 'white' : 'transparent'
+                }`,
+                paddingBottom: '0.5rem',
+              }}>
+              {page.Icon}
+              {page.name}
+            </Link>
+          ))}
         </nav>
       </div>
 
