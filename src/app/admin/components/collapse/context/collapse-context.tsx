@@ -61,7 +61,9 @@ export const CollapseProvider = ({
     setItems(prev => ({...prev, [index]: !items[index]}))
   }
 
-  const isItemOpen = (index: number) => items[index]
+  const isItemOpen = (index: number) => {
+    return items[index] ?? false
+  }
 
   return (
     <CollapseContext.Provider
