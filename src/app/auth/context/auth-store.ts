@@ -26,12 +26,15 @@ export class AuthStore {
     makeObservable(this, {
       userModel: observable,
       firebaseUser: observable,
+      //action
       signInWithGoogle: action,
       authUser: action,
       updateUser: action,
       logout: action,
       deleteUser: action,
+      setUser: action,
       clearUser: action,
+      //computed
       user: computed,
     })
   }

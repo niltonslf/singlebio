@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore'
 import {useCallback, useEffect, useState} from 'react'
 
+import {useSmartphone} from '@/app/admin/context'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
@@ -33,7 +34,6 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
-import {useSmartphone} from '../../context/smartphone-context'
 import {LinkCardItem} from './link-card-item'
 
 type LinksListProps = {
@@ -77,6 +77,7 @@ export const LinksList = ({user}: LinksListProps) => {
     const customQuery = query(collection(db, 'users', user.uid, 'links'))
     const unsubscribe = onSnapshot(customQuery, querySnapshot => {
       setLinks([])
+
       let newLinks: Required<Link>[] = []
 
       querySnapshot.forEach((doc: any) =>

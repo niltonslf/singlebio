@@ -41,13 +41,15 @@ describe('Header component', () => {
   it('render component with logo and user data', () => {
     const {userMock} = makeSUT()
 
-    const header = screen.getByText('Lnktree admin')
+    const header = screen.getByRole('img', {name: /lnktree logo/i})
     expect(header).toBeInTheDocument
 
     const username = screen.getByText(userMock.name)
     expect(username.textContent).toBe(userMock.name)
 
-    const profilePicture = screen.getByRole('img')
+    const profilePicture = screen.getByRole('img', {
+      name: /user profile image/i,
+    })
     expect(profilePicture).toBeInTheDocument
   })
 
@@ -55,13 +57,15 @@ describe('Header component', () => {
   it('render component without user image', () => {
     const {userMock} = makeSUT()
 
-    const header = screen.getByText('Lnktree admin')
+    const header = screen.getByRole('img', {name: /lnktree logo/i})
     expect(header).toBeInTheDocument
 
     const username = screen.getByText(userMock.name || '')
     expect(username.textContent).toBe(userMock.name)
 
-    const profilePicture = screen.queryByRole('img')
+    const profilePicture = screen.getByRole('img', {
+      name: /user profile image/i,
+    })
     expect(profilePicture).not.toBeInTheDocument
   })
 
@@ -69,13 +73,15 @@ describe('Header component', () => {
   it('render component without user name', () => {
     makeSUT(makeUser(undefined, ''))
 
-    const header = screen.getByText('Lnktree admin')
+    const header = screen.getByRole('img', {name: /lnktree logo/i})
     expect(header).toBeInTheDocument
 
     const username = document.querySelector('header > div > div > span')
     expect(username).toBeEmptyDOMElement()
 
-    const profilePicture = screen.getByRole('img')
+    const profilePicture = screen.getByRole('img', {
+      name: /user profile image/i,
+    })
     expect(profilePicture).toBeInTheDocument()
   })
 

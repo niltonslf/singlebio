@@ -103,9 +103,7 @@ describe('Admin page', () => {
   })
   it('should render page with all sections', async () => {
     const userMock = makeFbUser()
-
     handlePageAuthentication(userMock)
-
     await makeSUT()
 
     const userPageUrl = `/${authStore.user?.username}`
@@ -116,7 +114,6 @@ describe('Admin page', () => {
       const iframe = await document.querySelector('iframe')
 
       expect(header).toBeInTheDocument()
-      expect(formButton).toBeInTheDocument()
       expect(formButton).toBeInTheDocument()
       expect(iframe).toHaveAttribute('src', userPageUrl)
       expect(iframe).toBeVisible()
