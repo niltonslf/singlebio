@@ -63,17 +63,16 @@ export class AuthStore {
 
     this.firebaseUser = firebaseUser
 
-    const {data, exists} = await this.fetchFirebaseUser(firebaseUser)
-    const user = data()
+    const res = await this.fetchFirebaseUser(firebaseUser)
 
-    if (exists() && user) {
-      this.setUser(user)
+    if (res.exists() && res.data()) {
+      this.setUser(res.data())
       return
     }
 
     const newUser = parseToUser(firebaseUser)
     await setDoc(doc(db, 'users', newUser.uid), newUser)
-    this.userModel = {...newUser, username: ''}
+    this.userModel = {...newUser}
   }
 
   private async fetchFirebaseUser(

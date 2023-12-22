@@ -1,7 +1,12 @@
 import * as firestore from 'firebase/firestore'
 
-import {setup} from '@/__tests__/utils'
-import {makeGetDocsResponse, makeLink, makeUser} from '@/__tests__/utils/mocks'
+import {fail, setup} from '@/__tests__/utils'
+import {
+  makeGetDocsResponse,
+  makeLink,
+  makeUser,
+  makeUserTheme,
+} from '@/__tests__/utils/mocks'
 import UserPage from '@/app/[username]/page'
 import '@testing-library/jest-dom'
 import {cleanup, screen, waitFor} from '@testing-library/react'
@@ -25,13 +30,13 @@ const handleFetchLinks = (firstData: any[], secondData: any[]) => {
     .mockResolvedValueOnce(makeGetDocsResponse({docs: secondData}))
 }
 
-describe('Render user links page', () => {
+describe('User page', () => {
   afterEach(() => {
     jest.clearAllMocks()
     cleanup()
   })
 
-  it('should render page with all elements', async () => {
+  it('should render page with links', async () => {
     const userMock = makeUser()
     const linkMock = makeLink()
 
@@ -69,5 +74,40 @@ describe('Render user links page', () => {
       const alertMessage = screen.getByText('No links in this profile')
       expect(alertMessage).toBeInTheDocument()
     })
+  })
+
+  it('should load user custom theme', async () => {
+    const userMock = makeUser(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      makeUserTheme(),
+    )
+    const linkMock = makeLink()
+
+    handleFetchLinks([userMock], [linkMock])
+
+    await waitFor(() =>
+      setup(<UserPage params={{username: userMock.username}} />),
+    )
+
+    const container = screen.getByRole('main')
+    const containerOverlay = container.querySelector('div')
+    const buttons = container.querySelectorAll('li')
+    const username = screen.getByText(`@${userMock.username}`)
+
+    if (!containerOverlay || !buttons) return fail()
+
+    const {theme} = userMock
+
+    expect(container.style.backgroundImage).toBe(
+      `url(${theme?.backgroundImage})`,
+    )
+    expect(containerOverlay.style.backgroundColor).toBe(theme?.backgroundColor)
+    expect(buttons[0].style.backgroundColor).toBe(theme?.buttonBackground)
+    expect(buttons[0].style.color).toBe(theme?.buttonTextColor)
+    expect(username.style.color).toBe(theme?.usernameColor)
   })
 })

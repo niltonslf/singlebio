@@ -62,7 +62,7 @@ const SignIn = observer(() => {
         {error && (
           <p
             data-testid='error-msg'
-            className='mt-5 rounded-md bg-red-200 p-2 text-sm '>
+            className='mt-5 rounded-md bg-red-200 p-2 text-sm text-black'>
             There was an error to access your account. Please, try again later
             or use a different account.
           </p>

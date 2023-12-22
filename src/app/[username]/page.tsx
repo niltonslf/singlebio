@@ -33,7 +33,9 @@ export default function UserPage({params: {username}}: UserPageProps) {
   const backgroundImageStyle = {
     backgroundImage: `url(${user?.theme?.backgroundImage})`,
   }
-  const backgroundColorStyle = {background: `${user?.theme?.backgroundColor}`}
+  const backgroundColorStyle = {
+    backgroundColor: `${user?.theme?.backgroundColor}`,
+  }
 
   const fetchData = useCallback(async () => {
     const q = query(
