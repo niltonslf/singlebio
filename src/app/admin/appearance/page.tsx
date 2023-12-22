@@ -69,7 +69,7 @@ const AppearancePage = observer(() => {
           </div>
         )}
 
-        <Collapse defaultOpen={1}>
+        <Collapse defaultOpen={1} toggle>
           <Collapse.Item key={'wallpaper'} index={1}>
             <Collapse.Header>Page wallpaper</Collapse.Header>
             <Collapse.Body>
