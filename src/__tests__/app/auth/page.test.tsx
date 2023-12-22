@@ -10,7 +10,10 @@ import {parseToUser} from '@/utils/user'
 import {screen, render, cleanup, waitFor} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
+jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next-router-mock'),
+  usePathname: jest.fn(() => '/'),
+}))
 
 jest.mock('firebase/firestore', () => ({
   __esModule: true,

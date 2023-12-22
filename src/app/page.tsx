@@ -1,11 +1,17 @@
-import Link from 'next/link';
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Home() {
   return (
     <main className='flex h-screen w-screen flex-col bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 px-5 font-normal'>
       <nav className='mx-auto flex w-full max-w-6xl items-center justify-between py-2'>
         <Link href='/' title='Brand' className='font-semibold'>
-          /share@LnkTree
+          <Image
+            src='/logo-black.png'
+            width={114.72}
+            height={30}
+            alt='lnktree logo'
+          />
         </Link>
 
         <Link
@@ -38,5 +44,5 @@ export default function Home() {
         </Link>
       </section>
     </main>
-  );
+  )
 }
