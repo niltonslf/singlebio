@@ -11,7 +11,10 @@ import {cleanup, screen} from '@testing-library/react'
 
 import {act} from 'react-dom/test-utils'
 
-jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
+jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next-router-mock'),
+  usePathname: jest.fn(() => '/'),
+}))
 
 jest.mock('firebase/auth', () => ({
   __esModule: true,

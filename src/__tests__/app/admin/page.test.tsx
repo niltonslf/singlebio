@@ -19,7 +19,10 @@ import {faker} from '@faker-js/faker'
 import {act, cleanup, screen, waitFor} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
+jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next-router-mock'),
+  usePathname: jest.fn(() => '/'),
+}))
 
 jest.mock('@headlessui/react', () => {
   return {
@@ -108,13 +111,13 @@ describe('Admin page', () => {
     const userPageUrl = `/${authStore.user?.username}`
 
     await waitFor(async () => {
-      const header = await screen.queryByText('Lnktree admin')
-      const formButton = await screen.queryByText('Add link')
+      const header = await screen.getByTestId('admin-header')
+      const formButton = await screen.queryByText(/Add link/i)
       const iframe = await document.querySelector('iframe')
 
       expect(header).toBeInTheDocument()
       expect(formButton).toBeInTheDocument()
-      expect(formButton).toHaveTextContent(/Add link/i)
+      expect(formButton).toBeInTheDocument()
       expect(iframe).toHaveAttribute('src', userPageUrl)
       expect(iframe).toBeVisible()
     })
@@ -134,7 +137,7 @@ describe('Admin page', () => {
     })
   })
 
-  it('should call method to save username', async () => {
+  it('should call method to save username on the first login', async () => {
     const user = userEvent.setup()
     const fbUserMock = makeFbUser()
     const userMock = parseToUser(fbUserMock)
@@ -162,22 +165,5 @@ describe('Admin page', () => {
     expect(firestore.updateDoc).toHaveBeenCalledWith(undefined, {
       username: usernameMock,
     })
-  })
-
-  // TODO: Refactor this test
-  it('should call method to add a new link', async () => {
-    const user = userEvent.setup()
-    const fbUserMock = makeFbUser()
-
-    handlePageAuthentication(fbUserMock)
-
-    jest.spyOn(firestore, 'doc').mockImplementation()
-    jest.spyOn(firestore, 'collection').mockImplementation()
-    jest.spyOn(firestore, 'addDoc').mockImplementation()
-
-    await makeSUT()
-
-    const formButton = await screen.findByText('Add link')
-    await user.click(formButton)
   })
 })

@@ -53,7 +53,9 @@ export const Header = observer(({user}: HeaderProps) => {
   }
 
   return (
-    <header className='flex min-w-full flex-row items-center justify-between rounded-lg bg-gray-800 px-5 py-2'>
+    <header
+      className='flex min-w-full flex-row items-center justify-between rounded-lg bg-gray-800 px-5 py-2'
+      data-testid='admin-header'>
       <div className='flex flex-row'>
         <span className='mr-10'>
           <Image
