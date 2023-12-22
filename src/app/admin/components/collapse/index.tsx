@@ -19,6 +19,7 @@ export const Collapse = ({
   onClose,
   onOpen,
   toggle,
+  ...props
 }: CollapseProps) => {
   return (
     <CollapseProvider
@@ -26,7 +27,9 @@ export const Collapse = ({
       toggle={toggle}
       onClose={onClose}
       onOpen={onOpen}>
-      {children}
+      <div className='w-full' {...props}>
+        {children}
+      </div>
     </CollapseProvider>
   )
 }
