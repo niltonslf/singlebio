@@ -11,7 +11,7 @@ import {act, cleanup, screen} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
-  usePathname: jest.fn(() => '/'),
+  usePathname: jest.fn(() => '/admin'),
 }))
 
 jest.mock('firebase/auth', () => ({
@@ -37,7 +37,7 @@ describe('Header component', () => {
     authStore.clearUser()
   })
 
-  it('render component with logo and user data', () => {
+  it('render Header with logo, nav, and profile button', () => {
     makeSUT()
 
     const logo = screen.getByRole('img', {name: /lnktree logo/i})

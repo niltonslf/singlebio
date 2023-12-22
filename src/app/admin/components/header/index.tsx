@@ -83,7 +83,7 @@ export const Header = observer(() => {
         <Dropdown>
           <Avatar
             name={user?.name ?? 'User'}
-            // pictureUrl={user?.pictureUrl}
+            pictureUrl={user?.pictureUrl}
             size={40}
             className='border-white'
           />
