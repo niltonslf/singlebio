@@ -6,17 +6,19 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth'
-import {deleteDoc, doc, getDoc, setDoc, updateDoc} from 'firebase/firestore'
+import {
+  DocumentSnapshot,
+  deleteDoc,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore'
 import {action, computed, makeObservable, observable} from 'mobx'
 
 import {app, auth, db, provider} from '@/libs/firebase'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
-
-type FetchFirebaseUserReturn = {
-  user: User | undefined
-  exists: boolean
-}
 
 export class AuthStore {
   public userModel: User | undefined = undefined
@@ -61,9 +63,10 @@ export class AuthStore {
 
     this.firebaseUser = firebaseUser
 
-    const {exists, user} = await this.fetchFirebaseUser(firebaseUser)
+    const {data, exists} = await this.fetchFirebaseUser(firebaseUser)
+    const user = data()
 
-    if (exists && user) {
+    if (exists() && user) {
       this.setUser(user)
       return
     }
@@ -75,10 +78,8 @@ export class AuthStore {
 
   private async fetchFirebaseUser(
     firebaseUser: FbUser,
-  ): Promise<FetchFirebaseUserReturn> {
-    const res = await getDoc(doc(db, 'users', firebaseUser.uid))
-
-    return {user: res.data() as User, exists: res.exists()}
+  ): Promise<DocumentSnapshot<any, any>> {
+    return await getDoc(doc(db, 'users', firebaseUser.uid))
   }
 
   public async updateUser(user: Partial<User>) {

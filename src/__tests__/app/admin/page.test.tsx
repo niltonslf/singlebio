@@ -14,7 +14,7 @@ import {SmartphoneProvider} from '@/app/admin/context/smartphone-context'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import '@testing-library/jest-dom'
-import {AuthStore, authStore} from '@/app/auth/context/auth-store'
+import {authStore} from '@/app/auth/context/auth-store'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
 import {faker} from '@faker-js/faker'
@@ -64,8 +64,6 @@ jest.mock('firebase/firestore', () => ({
   onSnapshot: jest.fn(() => jest.fn()),
 }))
 
-const fetchFirebaseUserCopy = AuthStore.prototype['fetchFirebaseUser']
-
 const makeSUT = async () => {
   return await waitFor(() =>
     setup(
@@ -101,7 +99,6 @@ describe('Admin page', () => {
   afterEach(() => {
     cleanup()
     act(() => authStore.clearUser())
-    AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserCopy
     return
   })
   it('should render page with all sections', async () => {
@@ -141,31 +138,28 @@ describe('Admin page', () => {
     it('should call method to save username on the first login', async () => {
       const user = userEvent.setup()
       const fbUserMock = makeFbUser()
-      const userMock = parseToUser(fbUserMock)
       const usernameMock = faker.internet.userName()
 
-      handlePageAuthentication(fbUserMock)
+      handlePageAuthentication(fbUserMock, '')
 
       jest.spyOn(firestore, 'updateDoc').mockImplementation()
 
-      // TODO: remove this spy
-      AuthStore.prototype['fetchFirebaseUser'] = () =>
-        Promise.resolve({exists: true, user: userMock})
-
       await makeSUT()
 
-      const usernameInput =
-        await screen.findByPlaceholderText(/Type your username/i)
-      const saveButton = await screen.findByText(/save/i)
+      await waitFor(async () => {
+        const usernameInput =
+          await screen.findByPlaceholderText(/Type your username/i)
+        const saveButton = await screen.findByText(/save/i)
 
-      await user.type(usernameInput, usernameMock)
-      expect(usernameInput).toHaveValue(usernameMock)
+        await user.type(usernameInput, usernameMock)
+        expect(usernameInput).toHaveValue(usernameMock)
 
-      await user.click(saveButton)
+        await user.click(saveButton)
 
-      expect(firestore.updateDoc).toHaveBeenCalledTimes(1)
-      expect(firestore.updateDoc).toHaveBeenCalledWith(undefined, {
-        username: usernameMock,
+        expect(firestore.updateDoc).toHaveBeenCalledTimes(1)
+        expect(firestore.updateDoc).toHaveBeenCalledWith(undefined, {
+          username: usernameMock,
+        })
       })
     })
   })

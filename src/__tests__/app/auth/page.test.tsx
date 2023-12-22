@@ -1,9 +1,10 @@
 import '@testing-library/jest-dom'
 import * as firebaseAuth from 'firebase/auth'
+import * as firestore from 'firebase/firestore'
 import mockRouter from 'next-router-mock'
 
-import {makeFbUser} from '@/__tests__/utils'
-import {AuthStore, authStore} from '@/app/auth/context/auth-store'
+import {makeFbUser, makeGetDocsResponse} from '@/__tests__/utils'
+import {authStore} from '@/app/auth/context/auth-store'
 import AuthPage from '@/app/auth/page'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
@@ -35,11 +36,6 @@ const mockSignInWithPopup = (result: any, isReject: boolean = false) => {
   return spy.mockRejectedValue(result)
 }
 
-const mockFetchFirebaseUser = (exists: boolean, user: User | undefined) => {
-  AuthStore.prototype['fetchFirebaseUser'] = () =>
-    Promise.resolve({exists, user})
-}
-
 const validateGoogleBtn = () => {
   const googleButton = screen.getByText('Sign up with Google')
   expect(googleButton).toBeVisible()
@@ -64,7 +60,9 @@ describe('Auth Page', () => {
     const errorMsg = 'error'
 
     mockSignInWithPopup(errorMsg, true)
-    mockFetchFirebaseUser(true, undefined)
+    jest
+      .spyOn(firestore, 'getDoc')
+      .mockResolvedValue(makeGetDocsResponse({data: undefined, exists: false}))
 
     jest.spyOn(authStore, 'authUser')
     jest.spyOn(authStore, 'clearUser')
@@ -94,8 +92,11 @@ describe('Auth Page', () => {
     const userMock = parseToUser(firebaseUserMock) as User
 
     mockSignInWithPopup({user: firebaseUserMock})
-    mockFetchFirebaseUser(true, userMock)
     jest.spyOn(authStore, 'authUser')
+
+    jest
+      .spyOn(firestore, 'getDoc')
+      .mockResolvedValue(makeGetDocsResponse({data: userMock, exists: true}))
 
     const user = userEvent.setup()
 
@@ -120,7 +121,9 @@ describe('Auth Page', () => {
     const userMock = parseToUser(firebaseUserMock)
 
     mockSignInWithPopup({user: firebaseUserMock})
-    mockFetchFirebaseUser(false, undefined)
+    jest
+      .spyOn(firestore, 'getDoc')
+      .mockResolvedValue(makeGetDocsResponse({data: undefined, exists: false}))
     jest.spyOn(authStore, 'authUser')
 
     const user = userEvent.setup()

@@ -6,7 +6,7 @@ import {
   makeGetDocsResponse,
   makeUser,
 } from '@/__tests__/utils/mocks'
-import {AuthStore, authStore} from '@/app/auth/context/auth-store'
+import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
 import '@testing-library/jest-dom'
 import {cleanup} from '@testing-library/react'
@@ -21,16 +21,15 @@ afterAll(() => {
   authStore.firebaseUser = undefined
 })
 
-const fetchFirebaseUserBackup = AuthStore.prototype['fetchFirebaseUser']
-
 describe('AuthStore', () => {
   describe('authUser', () => {
     it('should authenticate the user - Account exists', async () => {
       const firebaseUser = makeFbUser()
       const user = makeUser()
 
-      AuthStore.prototype['fetchFirebaseUser'] = () =>
-        Promise.resolve({exists: true, user})
+      jest
+        .spyOn(firestore, 'getDoc')
+        .mockResolvedValue(makeGetDocsResponse({data: user, exists: true}))
 
       await authStore.authUser(firebaseUser)
 
@@ -42,8 +41,9 @@ describe('AuthStore', () => {
       const firebaseUser = makeFbUser()
       const user = {...parseToUser(firebaseUser), username: ''}
 
-      AuthStore.prototype['fetchFirebaseUser'] = () =>
-        Promise.resolve({exists: false, user: makeUser()})
+      jest
+        .spyOn(firestore, 'getDoc')
+        .mockResolvedValue(makeGetDocsResponse({data: user, exists: true}))
 
       await authStore.authUser(firebaseUser)
 
@@ -61,51 +61,6 @@ describe('AuthStore', () => {
       expect(authStore.authUser).toHaveBeenCalledWith(firebaseUser)
       expect(authStore.user).toBe(undefined)
       expect(authStore.firebaseUser).toBe(undefined)
-    })
-  })
-
-  describe('fetchFirebaseUser', () => {
-    it('should return an existent user', async () => {
-      const firebaseUser = makeFbUser()
-
-      AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserBackup
-
-      jest
-        .spyOn(firestore, 'doc')
-        .mockReturnValue({} as firestore.DocumentReference)
-
-      jest
-        .spyOn(firestore, 'getDoc')
-        .mockResolvedValue(
-          makeGetDocsResponse({data: parseToUser(firebaseUser), exists: true}),
-        )
-
-      const {exists, user} = await authStore['fetchFirebaseUser'](firebaseUser)
-
-      expect(exists).toBe(true)
-      expect(user?.name).toBe(firebaseUser.displayName)
-      expect(user?.email).toBe(firebaseUser.email)
-      expect(user?.pictureUrl).toBe(firebaseUser.photoURL)
-      expect(user?.uid).toBe(firebaseUser.uid)
-    })
-
-    it('should return an non existent user', async () => {
-      const firebaseUser = makeFbUser()
-
-      AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserBackup
-
-      jest
-        .spyOn(firestore, 'doc')
-        .mockReturnValue({} as firestore.DocumentReference)
-
-      jest
-        .spyOn(firestore, 'getDoc')
-        .mockResolvedValue(makeGetDocsResponse({exists: false}))
-
-      const {exists, user} = await authStore['fetchFirebaseUser'](firebaseUser)
-
-      expect(exists).toBe(false)
-      expect(user).toBe(undefined)
     })
   })
 
