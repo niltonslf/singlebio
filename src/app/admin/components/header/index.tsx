@@ -4,18 +4,13 @@ import {Home, Palette} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import Image from 'next/image'
 import Link from 'next/link'
-import {useRouter, usePathname} from 'next/navigation'
+import {usePathname} from 'next/navigation'
 
 import {Dropdown} from '..'
 
 import {ReactNode} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
-import {User} from '@/models'
-
-type HeaderProps = {
-  user: User | undefined
-}
 
 type Page = {
   href: string
@@ -24,8 +19,9 @@ type Page = {
   Icon: ReactNode
 }
 
-export const Header = observer(({user}: HeaderProps) => {
-  const router = useRouter()
+export const Header = observer(() => {
+  const {user} = authStore
+
   const pathName = usePathname()
 
   const pages: Page[] = [
@@ -47,17 +43,12 @@ export const Header = observer(({user}: HeaderProps) => {
     return pathName == currentPage
   }
 
-  const logout = async () => {
-    await authStore.logout()
-    router.push('/')
-  }
-
   return (
     <header
       className='flex min-w-full flex-row items-center justify-between rounded-lg bg-gray-800 px-5 py-2'
       data-testid='admin-header'>
       <div className='flex flex-row'>
-        <span className='mr-10'>
+        <span className='mr-3 md:mr-10'>
           <Image
             src='/logo-white.png'
             width={114.72}
@@ -77,7 +68,8 @@ export const Header = observer(({user}: HeaderProps) => {
                 borderBottom: `2px solid ${
                   isCurrentPage(page.href) ? 'white' : 'transparent'
                 }`,
-                paddingBottom: '0.5rem',
+                paddingBottom: '0.2rem',
+                marginBottom: '-0.2rem',
               }}>
               {page.Icon}
               {page.name}
@@ -88,9 +80,6 @@ export const Header = observer(({user}: HeaderProps) => {
 
       <div className='flex flex-row items-center justify-between gap-3'>
         <Dropdown>
-          <span className='hidden font-semibold text-white md:flex'>
-            {user?.name}
-          </span>
           {user?.pictureUrl && (
             <Image
               priority
@@ -102,13 +91,6 @@ export const Header = observer(({user}: HeaderProps) => {
             />
           )}
         </Dropdown>
-        <div
-          onClick={logout}
-          className='group relative  inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-pink-500 to-orange-400 p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-pink-200 group-hover:from-pink-500 group-hover:to-orange-400 dark:text-white dark:focus:ring-pink-800'>
-          <span className='relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 dark:bg-gray-900'>
-            logout
-          </span>
-        </div>{' '}
       </div>
     </header>
   )
