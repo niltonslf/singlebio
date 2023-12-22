@@ -11,6 +11,7 @@ import {Dropdown} from '..'
 import {ReactNode} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
+import {Avatar} from '@/app/components'
 
 type Page = {
   href: string
@@ -80,16 +81,12 @@ export const Header = observer(() => {
 
       <div className='flex flex-row items-center justify-between gap-3'>
         <Dropdown>
-          {user?.pictureUrl && (
-            <Image
-              priority
-              className='rounded-full border-2'
-              src={user?.pictureUrl}
-              width={40}
-              height={40}
-              alt='User profile image'
-            />
-          )}
+          <Avatar
+            name={user?.name ?? 'User'}
+            // pictureUrl={user?.pictureUrl}
+            size={40}
+            className='border-white'
+          />
         </Dropdown>
       </div>
     </header>
