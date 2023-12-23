@@ -1,9 +1,6 @@
 'use client'
 
-/* eslint-disable @next/next/no-img-element */
 import {observer} from 'mobx-react-lite'
-// import {HexAlphaColorPicker} from 'react-colorful'
-
 import {HexAlphaColorPicker} from 'react-colorful'
 
 import {useDebounce} from '@/utils'
