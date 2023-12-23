@@ -14,6 +14,8 @@ describe('Customize username', () => {
   })
 
   it('should select username color', async () => {
+    jest.spyOn(appearanceStore, 'setUsernameColor')
+
     const {user} = makeSUT()
 
     const colorPicker = document.querySelector('div[aria-label=Color]')
@@ -28,6 +30,7 @@ describe('Customize username', () => {
 
     await waitFor(() => {
       expect(appearanceStore.theme.usernameColor).not.toBe('')
+      expect(appearanceStore.setUsernameColor).toHaveBeenCalledTimes(1)
     })
   })
 })

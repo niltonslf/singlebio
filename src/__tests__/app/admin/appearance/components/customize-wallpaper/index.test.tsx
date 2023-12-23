@@ -4,23 +4,6 @@ import {appearanceStore} from '@/app/admin/appearance/context'
 import '@testing-library/jest-dom'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
-jest.mock('next/navigation', () => ({
-  ...jest.requireActual('next-router-mock'),
-  usePathname: jest.fn(() => '/'),
-}))
-
-jest.mock('firebase/firestore', () => ({
-  __esModule: true,
-  ...jest.requireActual('firebase/firestore'),
-  setDoc: jest.fn(),
-  doc: jest.fn(),
-}))
-
-jest.mock('firebase/auth', () => ({
-  __esModule: true,
-  ...jest.requireActual('firebase/auth'),
-}))
-
 const makeImageFile = () => {
   const blob = b64toBlob(
     'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAALElEQVR4nGJZFhDCgAQ2MdUhc5kY8AKaSjM+lNqHzE/fcY9udhOQBgQAAP//FgsGSDtiJfMAAAAASUVORK5CYII=',
