@@ -27,14 +27,10 @@ export const makeUserTheme = (
   usernameColor?: string,
 ): UserTheme => {
   return {
-    backgroundColor:
-      backgroundColor ?? faker.color.rgb({format: 'css', includeAlpha: true}),
+    backgroundColor: backgroundColor ?? faker.color.rgb({format: 'css'}),
     backgroundImage: backgroundImage ?? faker.image.urlLoremFlickr(),
-    buttonBackground:
-      buttonBackground ?? faker.color.rgb({format: 'css', includeAlpha: true}),
-    buttonTextColor:
-      buttonTextColor ?? faker.color.rgb({format: 'css', includeAlpha: true}),
-    usernameColor:
-      usernameColor ?? faker.color.rgb({format: 'css', includeAlpha: true}),
+    buttonBackground: buttonBackground ?? faker.color.rgb({format: 'css'}),
+    buttonTextColor: buttonTextColor ?? faker.color.rgb({format: 'css'}),
+    usernameColor: usernameColor ?? faker.color.rgb({format: 'css'}),
   }
 }

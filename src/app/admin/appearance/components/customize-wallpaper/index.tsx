@@ -28,11 +28,11 @@ export const CustomizeWallpaper = observer(() => {
 
   const handleSelectPicture = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event?.target?.files?.[0]
-    if (!file) return 'You must select a file'
-
-    const url = returnImageThumbnail(file)
-    appearanceStore.setBackgroundImage(url)
-    appearanceStore.setBackgroundFile(file)
+    if (file) {
+      const url = returnImageThumbnail(file)
+      appearanceStore.setBackgroundImage(url)
+      appearanceStore.setBackgroundFile(file)
+    }
   }
 
   return (
@@ -78,6 +78,7 @@ export const CustomizeWallpaper = observer(() => {
               <input
                 className='absolute left-0 top-0 h-full w-full border-2 border-red-700 opacity-0'
                 id='wallpaper-file'
+                data-testid='wallpaper-file'
                 type='file'
                 accept='image/x-png,image/jpeg'
                 multiple={false}
