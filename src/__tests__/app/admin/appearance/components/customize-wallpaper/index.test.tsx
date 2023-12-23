@@ -89,5 +89,21 @@ describe('Customize wallpaper', () => {
     })
   })
 
-  it.todo('should select background color')
+  it('should select background color', async () => {
+    const {user} = makeSUT()
+
+    const colorPicker = document.querySelector('div[aria-label=Color]')
+
+    if (!colorPicker) return fail()
+
+    await user.pointer({
+      target: colorPicker,
+      coords: {clientX: 100, clientY: 50},
+      keys: '[MouseLeft]',
+    })
+
+    await waitFor(() => {
+      expect(appearanceStore.theme.backgroundColor).not.toBe('')
+    })
+  })
 })
