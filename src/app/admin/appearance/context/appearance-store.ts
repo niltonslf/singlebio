@@ -51,8 +51,6 @@ class AppearanceStore {
   }
 
   setTheme(theme: UserTheme) {
-    if (!theme) return
-
     this.themeConfig = {...theme}
     this.themeConfigInitial = {...theme}
   }
