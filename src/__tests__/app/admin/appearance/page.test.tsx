@@ -16,7 +16,7 @@ import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils'
 import {faker} from '@faker-js/faker'
 import '@testing-library/jest-dom'
-import {screen, waitFor} from '@testing-library/react'
+import {cleanup, screen, waitFor} from '@testing-library/react'
 
 import {makeImageFile} from './components/customize-wallpaper/index.test'
 
@@ -96,6 +96,10 @@ const setCustomTheme = () => {
 }
 
 describe('Appearance Page', () => {
+  afterEach(() => {
+    cleanup()
+  })
+
   describe('Customization section', () => {
     it('should save theme', async () => {
       setCustomTheme()
@@ -117,7 +121,22 @@ describe('Appearance Page', () => {
       expect(authStore.updateUser).toHaveBeenCalledWith({
         theme: appearanceStore.theme,
       })
-    })
+
+      const successMsg = screen.getByText(
+        'Theme published with success! You can check on your profile link.',
+      )
+
+      expect(successMsg).toBeInTheDocument()
+
+      await new Promise(r => setTimeout(r, 6000))
+
+      await act(async () => {
+        const successMsg = await screen.queryByText(
+          'Theme published with success! You can check on your profile link.',
+        )
+        expect(successMsg).not.toBeInTheDocument()
+      })
+    }, 8000)
 
     it('should reset theme', async () => {
       setCustomTheme()

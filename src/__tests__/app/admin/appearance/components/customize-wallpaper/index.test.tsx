@@ -63,13 +63,11 @@ describe('Customize wallpaper', () => {
     expect(appearanceStore.theme.backgroundImage).toBe(url)
     expect(appearanceStore.aux.backgroundFile).toBe(file)
 
-    await waitFor(async () => {
-      await user.hover(imageArea)
-      await user.click(deleteButton)
+    await user.hover(imageArea)
+    await user.click(deleteButton)
 
-      expect(appearanceStore.theme.backgroundImage).toBe('')
-      expect(appearanceStore.aux.backgroundFile).toBe(undefined)
-    })
+    expect(appearanceStore.theme.backgroundImage).toBe('')
+    expect(appearanceStore.aux.backgroundFile).toBe(undefined)
   })
 
   it('should select background color', async () => {

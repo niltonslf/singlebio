@@ -94,8 +94,7 @@ const AppearancePage = observer(() => {
 
         {updated ? (
           <div className='mt-5 flex flex-row items-center rounded-lg border border-green-900 bg-green-200 p-5 font-medium'>
-            Appearance published with success! You can check on your profile
-            link.
+            Theme published with success! You can check on your profile link.
           </div>
         ) : (
           <div className='mt-5 flex flex-row items-center gap-5 border-t border-t-gray-500 pt-5'>
