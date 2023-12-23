@@ -1,7 +1,14 @@
 import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 
-import {fail, makeFbUser, makeGetDocsResponse, setup} from '@/__tests__/utils'
+import {
+  fail,
+  makeFbUser,
+  makeGetDocsResponse,
+  makeUser,
+  makeUserTheme,
+  setup,
+} from '@/__tests__/utils'
 import {appearanceStore} from '@/app/admin/appearance/context'
 import AppearancePage from '@/app/admin/appearance/page'
 import {Layout} from '@/app/admin/components'
@@ -9,9 +16,11 @@ import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils'
 import {faker} from '@faker-js/faker'
 import '@testing-library/jest-dom'
-import {screen} from '@testing-library/react'
+import {screen, waitFor} from '@testing-library/react'
 
 import {makeImageFile} from './components/customize-wallpaper/index.test'
+
+import {act} from 'react-dom/test-utils'
 
 jest.mock('@/app/admin/appearance/hooks/use-background-upload', () => ({
   useBackgroundUpload: () => {
@@ -128,6 +137,22 @@ describe('Appearance Page', () => {
         usernameColor: '#000',
       })
       expect(appearanceStore.aux.backgroundFile).toBe(undefined)
+    })
+
+    it('should update appearanceStore when user theme updates', async () => {
+      jest.spyOn(appearanceStore, 'setTheme')
+
+      const user = makeUser()
+      const theme = makeUserTheme()
+
+      makeSUT()
+
+      await act(() => authStore.setUser({...user, theme}))
+
+      await waitFor(() => {
+        expect(appearanceStore.setTheme).toHaveBeenCalledTimes(1)
+        expect(appearanceStore.setTheme).toHaveBeenCalledWith(theme)
+      })
     })
   })
 
