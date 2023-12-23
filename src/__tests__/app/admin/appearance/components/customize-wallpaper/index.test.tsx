@@ -4,7 +4,7 @@ import {appearanceStore} from '@/app/admin/appearance/context'
 import '@testing-library/jest-dom'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
-const makeImageFile = () => {
+export const makeImageFile = () => {
   const blob = b64toBlob(
     'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAALElEQVR4nGJZFhDCgAQ2MdUhc5kY8AKaSjM+lNqHzE/fcY9udhOQBgQAAP//FgsGSDtiJfMAAAAASUVORK5CYII=',
     'image/jpeg',

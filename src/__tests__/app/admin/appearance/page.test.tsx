@@ -2,16 +2,26 @@ import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 
 import {fail, makeFbUser, makeGetDocsResponse, setup} from '@/__tests__/utils'
+import {appearanceStore} from '@/app/admin/appearance/context'
 import AppearancePage from '@/app/admin/appearance/page'
 import {Layout} from '@/app/admin/components'
+import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils'
 import {faker} from '@faker-js/faker'
-
 import '@testing-library/jest-dom'
+import {screen} from '@testing-library/react'
 
-jest.mock('next/navigation', () => ({
-  ...jest.requireActual('next-router-mock'),
-  usePathname: jest.fn(() => '/'),
+import {makeImageFile} from './components/customize-wallpaper/index.test'
+
+jest.mock('@/app/admin/appearance/hooks/use-background-upload', () => ({
+  useBackgroundUpload: () => {
+    return {upload: () => 'path-to-file'}
+  },
+}))
+jest.mock('@/app/admin/appearance/hooks/use-image-compressor', () => ({
+  useImageCompressor: () => {
+    return {compress: () => null}
+  },
 }))
 
 jest.mock('firebase/auth', () => ({
@@ -57,16 +67,51 @@ jest.mock('@/app/admin/context/smartphone-context', () => {
   }
 })
 
+const makeSUT = () => {
+  handlePageAuthentication(makeFbUser())
+
+  return setup(
+    <Layout>
+      <AppearancePage />
+    </Layout>,
+  )
+}
+
 describe('Appearance Page', () => {
+  describe('Customization section', () => {
+    it('should save theme', async () => {
+      appearanceStore.setBackgroundColor('#000')
+      appearanceStore.setBackgroundFile(makeImageFile())
+      appearanceStore.setBackgroundImage('some-url')
+      appearanceStore.setButtonBackground('#000')
+      appearanceStore.setButtonTextColor('#000')
+      appearanceStore.setUsernameColor('#000')
+
+      jest.spyOn(authStore, 'updateUser')
+      jest.spyOn(appearanceStore, 'setBackgroundFile')
+
+      const {user} = makeSUT()
+
+      const buttons = screen.getAllByRole('button')
+      const submitButton = buttons[0]
+
+      await user.click(submitButton)
+
+      expect(appearanceStore.setBackgroundFile).toHaveBeenCalledTimes(1)
+      expect(appearanceStore.setBackgroundFile).toHaveBeenCalledWith(undefined)
+
+      expect(authStore.updateUser).toHaveBeenCalledTimes(1)
+      expect(authStore.updateUser).toHaveBeenCalledWith({
+        theme: appearanceStore.theme,
+      })
+    })
+
+    it.todo('should reset theme')
+  })
+
   describe('smartphone', () => {
     it('should update smartphone source', () => {
-      handlePageAuthentication(makeFbUser())
-
-      setup(
-        <Layout>
-          <AppearancePage />
-        </Layout>,
-      )
+      makeSUT()
 
       const smartphone = document.querySelector('iframe')
 
