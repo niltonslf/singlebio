@@ -77,15 +77,19 @@ const makeSUT = () => {
   )
 }
 
+const setCustomTheme = () => {
+  appearanceStore.setBackgroundColor('#0F2')
+  appearanceStore.setBackgroundFile(makeImageFile())
+  appearanceStore.setBackgroundImage('some-url')
+  appearanceStore.setButtonBackground('#0F2')
+  appearanceStore.setButtonTextColor('#0F2')
+  appearanceStore.setUsernameColor('#0F2')
+}
+
 describe('Appearance Page', () => {
   describe('Customization section', () => {
     it('should save theme', async () => {
-      appearanceStore.setBackgroundColor('#000')
-      appearanceStore.setBackgroundFile(makeImageFile())
-      appearanceStore.setBackgroundImage('some-url')
-      appearanceStore.setButtonBackground('#000')
-      appearanceStore.setButtonTextColor('#000')
-      appearanceStore.setUsernameColor('#000')
+      setCustomTheme()
 
       jest.spyOn(authStore, 'updateUser')
       jest.spyOn(appearanceStore, 'setBackgroundFile')
@@ -106,7 +110,25 @@ describe('Appearance Page', () => {
       })
     })
 
-    it.todo('should reset theme')
+    it('should reset theme', async () => {
+      setCustomTheme()
+
+      const {user} = makeSUT()
+
+      const buttons = screen.getAllByRole('button')
+      const resetButton = buttons[1]
+
+      await user.click(resetButton)
+
+      expect(appearanceStore.theme).toStrictEqual({
+        backgroundImage: '',
+        backgroundColor: '',
+        buttonBackground: '#FFF',
+        buttonTextColor: '#000',
+        usernameColor: '#000',
+      })
+      expect(appearanceStore.aux.backgroundFile).toBe(undefined)
+    })
   })
 
   describe('smartphone', () => {
