@@ -146,20 +146,18 @@ describe('Admin page', () => {
 
       await makeSUT()
 
-      await waitFor(async () => {
-        const usernameInput =
-          await screen.findByPlaceholderText(/Type your username/i)
-        const saveButton = await screen.findByText(/save/i)
+      const usernameInput =
+        await screen.findByPlaceholderText(/Type your username/i)
+      const saveButton = await screen.findByText(/save/i)
 
-        await user.type(usernameInput, usernameMock)
-        expect(usernameInput).toHaveValue(usernameMock)
+      await user.type(usernameInput, usernameMock)
+      expect(usernameInput).toHaveValue(usernameMock)
 
-        await user.click(saveButton)
+      await user.click(saveButton)
 
-        expect(firestore.updateDoc).toHaveBeenCalledTimes(1)
-        expect(firestore.updateDoc).toHaveBeenCalledWith(undefined, {
-          username: usernameMock,
-        })
+      expect(firestore.updateDoc).toHaveBeenCalledTimes(1)
+      expect(firestore.updateDoc).toHaveBeenCalledWith(undefined, {
+        username: usernameMock,
       })
     })
   })

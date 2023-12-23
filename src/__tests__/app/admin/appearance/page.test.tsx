@@ -128,14 +128,14 @@ describe('Appearance Page', () => {
 
       expect(successMsg).toBeInTheDocument()
 
-      await new Promise(r => setTimeout(r, 6000))
-
       await act(async () => {
-        const successMsg = await screen.queryByText(
-          'Theme published with success! You can check on your profile link.',
-        )
-        expect(successMsg).not.toBeInTheDocument()
+        await new Promise(r => setTimeout(r, 6000))
       })
+
+      const successMsgAfter = screen.queryByText(
+        'Theme published with success! You can check on your profile link.',
+      )
+      expect(successMsgAfter).not.toBeInTheDocument()
     }, 8000)
 
     it('should reset theme', async () => {
