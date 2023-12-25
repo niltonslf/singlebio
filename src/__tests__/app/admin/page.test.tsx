@@ -10,7 +10,6 @@ import {
   makeGetDocsResponse,
   setup,
 } from '@/__tests__/utils'
-import {SmartphoneProvider} from '@/app/admin/context/smartphone-context'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import '@testing-library/jest-dom'
@@ -40,6 +39,17 @@ jest.mock('@headlessui/react', () => {
   }
 })
 
+jest.mock('firebase/auth', () => ({
+  __esModule: true,
+  ...jest.requireActual('firebase/auth'),
+}))
+
+jest.mock('firebase/firestore', () => ({
+  __esModule: true,
+  ...jest.requireActual('firebase/firestore'),
+  onSnapshot: jest.fn(() => jest.fn()),
+}))
+
 jest.mock('@/app/admin/context/smartphone-context', () => {
   return {
     ...jest.requireActual('@/app/admin/context/smartphone-context'),
@@ -53,24 +63,11 @@ jest.mock('@/app/admin/context/smartphone-context', () => {
   }
 })
 
-jest.mock('firebase/auth', () => ({
-  __esModule: true,
-  ...jest.requireActual('firebase/auth'),
-}))
-
-jest.mock('firebase/firestore', () => ({
-  __esModule: true,
-  ...jest.requireActual('firebase/firestore'),
-  onSnapshot: jest.fn(() => jest.fn()),
-}))
-
 const makeSUT = async () => {
   return await waitFor(() =>
     setup(
       <AdminLayout>
-        <SmartphoneProvider>
-          <AdminPage />
-        </SmartphoneProvider>
+        <AdminPage />
       </AdminLayout>,
     ),
   )

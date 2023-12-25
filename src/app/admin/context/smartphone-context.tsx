@@ -22,7 +22,7 @@ export const SmartphoneProvider = ({children}: PropsWithChildren) => {
   const reloadSmartphoneList = useCallback(() => {
     if (!iframeRef?.current) return
 
-    iframeRef.current?.contentWindow?.location?.reload()
+    iframeRef?.current?.contentWindow?.location?.reload()
   }, [iframeRef])
 
   const updateSmartphoneSrc = useCallback(

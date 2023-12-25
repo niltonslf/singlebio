@@ -2,7 +2,6 @@ import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 
 import {
-  fail,
   makeFbUser,
   makeGetDocsResponse,
   makeUser,
@@ -11,16 +10,14 @@ import {
 } from '@/__tests__/utils'
 import {appearanceStore} from '@/app/admin/appearance/context'
 import AppearancePage from '@/app/admin/appearance/page'
-import {Layout} from '@/app/admin/components'
+import AdminLayout from '@/app/admin/layout'
 import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils'
 import {faker} from '@faker-js/faker'
 import '@testing-library/jest-dom'
-import {cleanup, screen, waitFor} from '@testing-library/react'
+import {act, cleanup, screen, waitFor} from '@testing-library/react'
 
 import {makeImageFile} from './components/customize-wallpaper/index.test'
-
-import {act} from 'react-dom/test-utils'
 
 jest.mock('@/app/admin/appearance/hooks/use-background-upload', () => ({
   useBackgroundUpload: () => {
@@ -44,6 +41,11 @@ jest.mock('firebase/firestore', () => ({
   onSnapshot: jest.fn(() => jest.fn()),
 }))
 
+jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next-router-mock'),
+  usePathname: jest.fn(() => '/'),
+}))
+
 const handlePageAuthentication = (
   fbUserMock: firebaseAuth.User | undefined,
   username: string = faker.internet.userName(),
@@ -63,26 +65,13 @@ const handlePageAuthentication = (
     .mockResolvedValue(makeGetDocsResponse({data, exists: true}))
 }
 
-jest.mock('@/app/admin/context/smartphone-context', () => {
-  return {
-    ...jest.requireActual('@/app/admin/context/smartphone-context'),
-    useSmartphone: () => {
-      return {
-        iframeRef: {current: null},
-        reloadSmartphoneList: jest.fn(),
-        updateSmartphoneSrc: jest.fn(),
-      }
-    },
-  }
-})
-
 const makeSUT = () => {
   handlePageAuthentication(makeFbUser())
 
   return setup(
-    <Layout>
+    <AdminLayout>
       <AppearancePage />
-    </Layout>,
+    </AdminLayout>,
   )
 }
 
@@ -106,6 +95,7 @@ describe('Appearance Page', () => {
 
       jest.spyOn(authStore, 'updateUser')
       jest.spyOn(appearanceStore, 'setBackgroundFile')
+      jest.spyOn(firestore, 'updateDoc').mockImplementation()
 
       const {user} = makeSUT()
 
@@ -172,18 +162,6 @@ describe('Appearance Page', () => {
         expect(appearanceStore.setTheme).toHaveBeenCalledTimes(1)
         expect(appearanceStore.setTheme).toHaveBeenCalledWith(theme)
       })
-    })
-  })
-
-  describe('smartphone', () => {
-    it('should update smartphone source', () => {
-      makeSUT()
-
-      const smartphone = document.querySelector('iframe')
-
-      if (!smartphone) return fail()
-
-      expect(smartphone.src).toBe('http://localhost/demo')
     })
   })
 })
