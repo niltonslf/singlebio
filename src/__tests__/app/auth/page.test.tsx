@@ -41,7 +41,7 @@ const validateGoogleBtn = () => {
   return googleButton
 }
 
-describe.skip('Auth Page', () => {
+describe('Auth Page', () => {
   beforeEach(() => {
     cleanup()
   })
