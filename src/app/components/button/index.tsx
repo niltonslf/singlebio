@@ -5,11 +5,13 @@ import {HTMLAttributes, ReactNode} from 'react'
 
 import {merge} from '@/utils'
 
+export type ButtonVariants = 'primary' | 'error' | 'warning' | 'success'
+
 type ButtonProps = {
   children: ReactNode
   onClick?: () => void
   className?: HTMLAttributes<HTMLButtonElement>['className']
-  variant?: 'primary' | 'error' | 'warning' | 'success'
+  variant?: ButtonVariants
   isLoading?: boolean
 }
 
