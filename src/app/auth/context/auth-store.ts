@@ -101,11 +101,10 @@ class AuthStore {
     return await signOut(auth)
   }
 
-  public async deleteUser() {
+  public async deleteUser(): Promise<void> {
     const auth = getAuth(app)
 
-    if (!this.user || !auth.currentUser)
-      throw new Error('Authenticated user not found.')
+    if (!this.user?.uid || !auth.currentUser) throw 'User not found.'
 
     await reauthenticateWithPopup(auth.currentUser, provider)
     await deleteDoc(doc(db, 'users', this.user.uid))

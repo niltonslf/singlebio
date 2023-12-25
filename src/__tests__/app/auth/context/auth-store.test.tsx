@@ -136,24 +136,42 @@ describe('AuthStore', () => {
     })
   })
 
-  // describe('deleteUser', () => {
-  //   it('delete user successfully', async () => {
-  //     authStore.userModel = makeUser()
+  describe('deleteUser', () => {
+    it('should throw an error to delete user', async () => {
+      // mock the getAuth method to don't return any user
+      const authRes = {currentUser: null} as firebaseAuth.Auth
+      jest.spyOn(firebaseAuth, 'getAuth').mockReturnValue(authRes)
 
-  //     jest.spyOn(firebaseAuth, 'getAuth').mockReturnValue({
-  //       currentUser: {} as firebaseAuth.User,
-  //     } as firebaseAuth.Auth)
+      await expect(authStore.deleteUser()).rejects.toBe('User not found.')
+    })
 
-  //     jest.spyOn(authStore, 'clearUser')
+    it('should delete user successfully', async () => {
+      const fbUserMock = makeFbUser()
+      const userMock = parseToUser(fbUserMock)
 
-  //     await authStore.deleteUser()
+      // simulate an user logged in
+      authStore.userModel = userMock
+      authStore.firebaseUser = fbUserMock
 
-  //     expect(firebaseAuth.reauthenticateWithPopup).toHaveBeenCalledTimes(1)
-  //     expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
-  //     expect(firestore.deleteDoc).toHaveBeenCalledTimes(1)
-  //     expect(authStore.clearUser).toHaveBeenCalledTimes(1)
-  //     expect(authStore.firebaseUser).toBe(undefined)
-  //     expect(authStore.user).toBe(undefined)
-  //   })
-  // })
+      // mock the getAuth method to return the fake logged in user
+      const authRes = {currentUser: fbUserMock} as firebaseAuth.Auth
+      jest.spyOn(firebaseAuth, 'getAuth').mockReturnValue(authRes)
+      jest.spyOn(authStore, 'clearUser')
+
+      jest.spyOn(firebaseAuth, 'reauthenticateWithPopup').mockImplementation()
+      jest.spyOn(firebaseAuth, 'deleteUser').mockImplementation()
+      jest.spyOn(firestore, 'deleteDoc')
+
+      await authStore.deleteUser()
+
+      //? should I really test these method calls from firebase?
+      expect(firebaseAuth.reauthenticateWithPopup).toHaveBeenCalledTimes(1)
+      expect(firestore.deleteDoc).toHaveBeenCalledTimes(1)
+      expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
+
+      expect(authStore.clearUser).toHaveBeenCalledTimes(1)
+      expect(authStore.firebaseUser).toBe(undefined)
+      expect(authStore.user).toBe(undefined)
+    })
+  })
 })
