@@ -20,7 +20,7 @@ import {app, auth, db, provider} from '@/libs/firebase'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
 
-export class AuthStore {
+class AuthStore {
   public userModel: User | undefined = undefined
   public firebaseUser: FbUser | undefined = undefined
 
@@ -45,34 +45,30 @@ export class AuthStore {
     return this.userModel
   }
 
-  public async signInWithGoogle() {
+  public async signInWithGoogle(): Promise<User> {
     try {
       const {user} = await signInWithPopup(auth, provider)
-      return await authStore.authUser(user)
+      return this.authUser(user)
     } catch (error) {
-      throw error
+      throw 'could not authenticate user'
     }
   }
 
-  public async authUser(firebaseUser: FbUser | null) {
-    if (!firebaseUser) {
-      this.clearUser()
-      this.logout()
-      return
-    }
-
+  public async authUser(firebaseUser: FbUser): Promise<User> {
     this.firebaseUser = firebaseUser
 
     const res = await this.fetchFirebaseUser(firebaseUser)
 
     if (res.exists() && res.data()) {
-      this.setUser(res.data())
-      return
+      const user = res.data() as User
+      this.setUser(user)
+      return user
     }
 
     const newUser = parseToUser(firebaseUser)
     await setDoc(doc(db, 'users', newUser.uid), newUser)
     this.userModel = {...newUser}
+    return newUser
   }
 
   private async fetchFirebaseUser(

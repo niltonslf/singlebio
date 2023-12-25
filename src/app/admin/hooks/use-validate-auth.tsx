@@ -16,7 +16,6 @@ export const useValidateAuth = () => {
         router.push('/auth')
       } else {
         await authStore.authUser(firebaseUser)
-
         if (!pathName.startsWith('/admin')) router.push('/admin')
       }
     })
