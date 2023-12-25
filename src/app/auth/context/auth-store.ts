@@ -88,16 +88,16 @@ class AuthStore {
     return newUser
   }
 
-  public setUser(user?: User) {
+  public setUser(user?: User): void {
     this.userModel = user
   }
 
-  public clearUser() {
+  public clearUser(): void {
     this.userModel = undefined
     this.firebaseUser = undefined
   }
 
-  public async logout() {
+  public async logout(): Promise<void> {
     return await signOut(auth)
   }
 

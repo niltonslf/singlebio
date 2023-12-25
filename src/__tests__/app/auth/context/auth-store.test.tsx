@@ -130,6 +130,12 @@ describe('AuthStore', () => {
     })
   })
 
+  describe('logout', () => {
+    it('should call signOut method from firebase', async () => {
+      await expect(authStore.logout()).resolves.toBeUndefined()
+    })
+  })
+
   // describe('deleteUser', () => {
   //   it('delete user successfully', async () => {
   //     authStore.userModel = makeUser()
