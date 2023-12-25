@@ -1,6 +1,11 @@
 import * as firebaseAuth from 'firebase/auth'
+import * as firestore from 'firebase/firestore'
 
-import {makeFbUser, makeUser} from '@/__tests__/__helpers__'
+import {
+  makeFbUser,
+  makeGetDocsResponse,
+  makeUser,
+} from '@/__tests__/__helpers__'
 import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
 import {cleanup} from '@testing-library/react'
@@ -49,35 +54,36 @@ describe('AuthStore', () => {
     })
   })
 
-  // describe('authUser', () => {
-  //   it('should authenticate the user - Account exists', async () => {
-  //     const firebaseUser = makeFbUser()
-  //     const user = makeUser()
+  describe('authUser', () => {
+    it('should authenticate the user with an existent account', async () => {
+      const [firebaseUser, userMock] = [makeFbUser(), makeUser()]
 
-  //     jest
-  //       .spyOn(firestore, 'getDoc')
-  //       .mockResolvedValue(makeGetDocsResponse({data: user, exists: true}))
+      // simulate an user already in the database
+      const userRes = makeGetDocsResponse({data: userMock, exists: true})
+      jest.spyOn(firestore, 'getDoc').mockResolvedValue(userRes)
 
-  //     await authStore.authUser(firebaseUser)
+      const resAuth = await authStore.authUser(firebaseUser)
 
-  //     expect({...authStore.user}).toStrictEqual(user)
-  //     expect({...authStore.firebaseUser}).toStrictEqual(firebaseUser)
-  //   })
+      expect({...authStore.firebaseUser}).toEqual(firebaseUser)
+      expect({...authStore.user}).toEqual(userMock)
+      expect(resAuth).toEqual(userMock)
+    })
 
-  //   it('should authenticate the user - New account', async () => {
-  //     const firebaseUser = makeFbUser()
-  //     const user = {...parseToUser(firebaseUser), username: ''}
+    it('should authenticate the user creating a new account', async () => {
+      const firebaseUser = makeFbUser()
+      const userMock = parseToUser(firebaseUser)
 
-  //     jest
-  //       .spyOn(firestore, 'getDoc')
-  //       .mockResolvedValue(makeGetDocsResponse({data: user, exists: true}))
+      // simulate no user found
+      const userRes = makeGetDocsResponse({exists: false})
+      jest.spyOn(firestore, 'getDoc').mockResolvedValue(userRes)
 
-  //     await authStore.authUser(firebaseUser)
+      const resAuth = await authStore.authUser(firebaseUser)
 
-  //     expect({...authStore.user}).toStrictEqual(user)
-  //     expect({...authStore.firebaseUser}).toStrictEqual(firebaseUser)
-  //   })
-  // })
+      expect({...authStore.firebaseUser}).toEqual(firebaseUser)
+      expect({...authStore.user}).toEqual(userMock)
+      expect(resAuth).toEqual(userMock)
+    })
+  })
 
   // describe('updateUser', () => {
   //   it('Update user variable', () => {
