@@ -86,7 +86,25 @@ describe('Modal Component', () => {
     })
   })
 
-  it.todo('should call onSave method')
+  it('should call onSave method', async () => {
+    const userMock = makeUser()
+    if (!userMock?.username) return fail()
+
+    jest.spyOn(firestore, 'getDocs').mockResolvedValue(makeGetDocsResponse({}))
+
+    const {user} = makeSUT()
+    const {modal, saveButton, usernameInput} = getModalElements()
+
+    await user.type(usernameInput, userMock.username)
+
+    expect(usernameInput).toHaveValue(userMock.username)
+    expect(saveButton).toBeEnabled()
+
+    await user.click(saveButton)
+
+    expect(onSaveMock).toHaveBeenCalledTimes(1)
+    expect(modal).not.toBeVisible()
+  })
 
   it.todo('should prevent close modal by clicking outside')
 })

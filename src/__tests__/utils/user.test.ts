@@ -16,7 +16,6 @@ describe('parseToUser', () => {
       name: firebaseUser.displayName,
       pictureUrl: firebaseUser.photoURL,
       uid: firebaseUser.uid,
-      username: '',
     })
   })
 
@@ -43,7 +42,6 @@ describe('parseToUser', () => {
       name: '',
       pictureUrl: '',
       uid: firebaseUser.uid,
-      username: '',
     })
   })
 })
