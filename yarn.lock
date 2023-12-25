@@ -2252,15 +2252,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest-sinon@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@types/jest-sinon/-/jest-sinon-1.0.5.tgz#1d7da136200b551e688a5b7809a3cceb514f6c4e"
-  integrity sha512-tN1Fu1uInBYQewMHd2mRkdP2aJeHO0AQ4dxkzIDNhetYL8MPZhtE2vB/z5039/Pn/38HQTQ1dYtmlKChQ8Np4Q==
-  dependencies:
-    "@types/jest" "*"
-    "@types/sinon" "*"
-
-"@types/jest@*", "@types/jest@^29.5.11":
+"@types/jest@^29.5.11":
   version "29.5.11"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.5.11.tgz#0c13aa0da7d0929f078ab080ae5d4ced80fa2f2c"
   integrity sha512-S2mHmYIVe13vrm6q4kN6fLYYAka15ALQki/vgDC3mIukEOx8WJlv0kQPM+d4w8Gp6u0uSdKND04IlTXBv0rwnQ==
@@ -2360,18 +2352,6 @@
   version "7.5.6"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.6.tgz#c65b2bfce1bec346582c07724e3f8c1017a20339"
   integrity sha512-dn1l8LaMea/IjDoHNd9J52uBbInB796CDffS6VdIxvqYCPSG0V0DzHp76GpaWnlhg88uYyPbXCDIowa86ybd5A==
-
-"@types/sinon@*":
-  version "17.0.2"
-  resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-17.0.2.tgz#9a769f67e62b45b7233f1fe01cb1f231d2393e1c"
-  integrity sha512-Zt6heIGsdqERkxctIpvN5Pv3edgBrhoeb3yHyxffd4InN0AX2SVNKSrhdDZKGQICVOxWP/q4DyhpfPNMSrpIiA==
-  dependencies:
-    "@types/sinonjs__fake-timers" "*"
-
-"@types/sinonjs__fake-timers@*":
-  version "8.1.5"
-  resolved "https://registry.yarnpkg.com/@types/sinonjs__fake-timers/-/sinonjs__fake-timers-8.1.5.tgz#5fd3592ff10c1e9695d377020c033116cc2889f2"
-  integrity sha512-mQkU2jY8jJEF7YHjHvsQO8+3ughTL1mcnn96igfhONmR+fUPSKIkefQYpSe8bsly2Ep7oQbn/6VG5/9/0qcArQ==
 
 "@types/stack-utils@^2.0.0":
   version "2.0.3"
@@ -5293,7 +5273,7 @@ jest-location-mock@^2.0.0:
     "@jedmao/location" "^3.0.0"
     jest-diff "^29.6.4"
 
-jest-matcher-utils@>=24.0.0, jest-matcher-utils@^29.7.0:
+jest-matcher-utils@^29.7.0:
   version "29.7.0"
   resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-29.7.0.tgz#ae8fec79ff249fd592ce80e3ee474e83a6c44f12"
   integrity sha512-sBkD+Xi9DtcChsI3L3u0+N0opgPYnCRPtGcQYrgXmR+hmt/fYfWAL0xRXYU8eWOdfuLgBe0YCW3AFtnRLagq/g==
@@ -5414,13 +5394,6 @@ jest-runtime@^29.7.0:
     jest-util "^29.7.0"
     slash "^3.0.0"
     strip-bom "^4.0.0"
-
-jest-sinon@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/jest-sinon/-/jest-sinon-1.1.0.tgz#c34e1060e50f935afd46aed6fb524b4427965204"
-  integrity sha512-l0BvXxHffvPNjQsf+LbkMK2kGcKYuOmZUP1KNDXX/ueUfRuBXRJLohQILcRvhEyH+ANiL941pHHEmAqe12MCSg==
-  dependencies:
-    jest-matcher-utils ">=24.0.0"
 
 jest-snapshot@^29.7.0:
   version "29.7.0"

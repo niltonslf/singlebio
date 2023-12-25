@@ -1,5 +1,5 @@
 import {getAnalytics, isSupported} from 'firebase/analytics'
-import {initializeApp, getApps} from 'firebase/app'
+import {initializeApp} from 'firebase/app'
 import {GoogleAuthProvider, getAuth} from 'firebase/auth'
 import {getFirestore} from 'firebase/firestore'
 import {getStorage} from 'firebase/storage'
@@ -14,12 +14,11 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 }
 
-export const app = (() => {
-  if (getApps().length === 0) return initializeApp(firebaseConfig)
-  return getApps()[0]
-})()
+export const app = initializeApp(firebaseConfig)
 
-isSupported().then(res => (res ? getAnalytics(app) : null))
+export const analytics = isSupported().then(yes =>
+  yes ? getAnalytics(app) : null,
+)
 
 export const auth = getAuth(app)
 export const firebaseStorage = getStorage(app)

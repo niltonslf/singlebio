@@ -15,7 +15,7 @@ const config = {
   },
   clearMocks: true,
   restoreMocks: true,
-  setupFilesAfterEnv: ['<rootDir>/jest-setup.js', 'jest-sinon'],
+  setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
   workerThreads: true,
   maxWorkers: 4,
 }
