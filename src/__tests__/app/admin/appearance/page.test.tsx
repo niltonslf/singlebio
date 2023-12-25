@@ -7,7 +7,7 @@ import {
   makeUser,
   makeUserTheme,
   setup,
-} from '@/__tests__/utils'
+} from '@/__tests__/__helpers__'
 import {appearanceStore} from '@/app/admin/appearance/context'
 import AppearancePage from '@/app/admin/appearance/page'
 import AdminLayout from '@/app/admin/layout'

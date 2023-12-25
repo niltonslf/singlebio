@@ -1,12 +1,13 @@
 import * as firestore from 'firebase/firestore'
 
-import {fail, setup} from '@/__tests__/utils'
 import {
   makeGetDocsResponse,
   makeLink,
   makeUser,
   makeUserTheme,
-} from '@/__tests__/utils/mocks'
+  fail,
+  setup,
+} from '@/__tests__/__helpers__'
 import UserPage from '@/app/[username]/page'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 

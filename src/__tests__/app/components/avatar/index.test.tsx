@@ -1,4 +1,4 @@
-import {setup} from '@/__tests__/utils'
+import {setup} from '@/__tests__/__helpers__'
 import {Avatar} from '@/app/components'
 import {faker} from '@faker-js/faker'
 import {screen} from '@testing-library/react'

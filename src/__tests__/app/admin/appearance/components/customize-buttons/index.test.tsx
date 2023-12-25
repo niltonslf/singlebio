@@ -1,4 +1,4 @@
-import {fail, setup} from '@/__tests__/utils'
+import {fail, setup} from '@/__tests__/__helpers__'
 import {CustomizeButtons} from '@/app/admin/appearance/components'
 import {appearanceStore} from '@/app/admin/appearance/context'
 import {cleanup, waitFor} from '@testing-library/react'

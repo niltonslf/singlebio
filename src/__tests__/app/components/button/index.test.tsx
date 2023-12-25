@@ -1,6 +1,6 @@
 import routerMock from 'next-router-mock'
 
-import {setup} from '@/__tests__/utils'
+import {setup} from '@/__tests__/__helpers__'
 import {Button, ButtonVariants} from '@/app/components'
 import {screen} from '@testing-library/react'
 

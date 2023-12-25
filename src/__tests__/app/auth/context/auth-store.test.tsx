@@ -5,7 +5,7 @@ import {
   makeFbUser,
   makeGetDocsResponse,
   makeUser,
-} from '@/__tests__/utils/mocks'
+} from '@/__tests__/__helpers__'
 import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
 import {cleanup} from '@testing-library/react'

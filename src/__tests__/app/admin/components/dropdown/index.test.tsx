@@ -1,4 +1,4 @@
-import {fail, makeUser} from '@/__tests__/utils'
+import {fail, makeUser} from '@/__tests__/__helpers__'
 import {Dropdown} from '@/app/admin/components'
 import {authStore} from '@/app/auth/context/auth-store'
 import {cleanup, render, screen} from '@testing-library/react'

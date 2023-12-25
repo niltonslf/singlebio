@@ -1,4 +1,4 @@
-import {b64toBlob, fail, setup} from '@/__tests__/utils'
+import {b64toBlob, fail, setup} from '@/__tests__/__helpers__'
 import {CustomizeWallpaper} from '@/app/admin/appearance/components'
 import {appearanceStore} from '@/app/admin/appearance/context'
 import {cleanup, screen, waitFor} from '@testing-library/react'

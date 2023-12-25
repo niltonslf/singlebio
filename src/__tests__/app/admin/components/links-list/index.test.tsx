@@ -1,6 +1,6 @@
 import * as firestore from 'firebase/firestore'
 
-import {fail, makeLink, makeUser, setup} from '@/__tests__/utils'
+import {fail, makeLink, makeUser, setup} from '@/__tests__/__helpers__'
 import {LinksList} from '@/app/admin/components/links-list'
 import {SmartphoneProvider} from '@/app/admin/context/smartphone-context'
 import {authStore} from '@/app/auth/context/auth-store'

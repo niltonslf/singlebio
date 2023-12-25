@@ -9,7 +9,7 @@ import {
   makeFbUser,
   makeGetDocsResponse,
   setup,
-} from '@/__tests__/utils'
+} from '@/__tests__/__helpers__'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import {authStore} from '@/app/auth/context/auth-store'

@@ -2,7 +2,7 @@ import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 import mockRouter from 'next-router-mock'
 
-import {makeFbUser, makeGetDocsResponse} from '@/__tests__/utils'
+import {makeFbUser, makeGetDocsResponse} from '@/__tests__/__helpers__'
 import {authStore} from '@/app/auth/context/auth-store'
 import AuthPage from '@/app/auth/page'
 import {User} from '@/models'

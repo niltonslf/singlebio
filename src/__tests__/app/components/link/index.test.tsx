@@ -1,4 +1,4 @@
-import {setup} from '@/__tests__/utils'
+import {setup} from '@/__tests__/__helpers__'
 import {LinkCard} from '@/app/components'
 
 describe('Link component', () => {
