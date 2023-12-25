@@ -8,7 +8,6 @@ import {
   makeUserTheme,
 } from '@/__tests__/utils/mocks'
 import UserPage from '@/app/[username]/page'
-import '@testing-library/jest-dom'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('firebase/firestore', () => ({

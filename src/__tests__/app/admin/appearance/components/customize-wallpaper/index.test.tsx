@@ -1,7 +1,6 @@
 import {b64toBlob, fail, setup} from '@/__tests__/utils'
 import {CustomizeWallpaper} from '@/app/admin/appearance/components'
 import {appearanceStore} from '@/app/admin/appearance/context'
-import '@testing-library/jest-dom'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
 export const makeImageFile = () => {

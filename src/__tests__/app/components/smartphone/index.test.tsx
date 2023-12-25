@@ -1,7 +1,6 @@
 import {setup} from '@/__tests__/utils'
 import {Smartphone} from '@/app/components'
 import {faker} from '@faker-js/faker'
-import '@testing-library/jest-dom'
 
 describe('Smartphone', () => {
   it('should render smartphone iframe', async () => {

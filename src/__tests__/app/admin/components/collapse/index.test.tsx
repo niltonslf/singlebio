@@ -1,7 +1,6 @@
 import {fail, setup} from '@/__tests__/utils'
 import {Collapse} from '@/app/admin/components'
 import {CollapseBody} from '@/app/admin/components/collapse/collapse-body'
-import '@testing-library/jest-dom'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
 const makeSUT = (

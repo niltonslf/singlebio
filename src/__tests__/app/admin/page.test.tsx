@@ -12,7 +12,6 @@ import {
 } from '@/__tests__/utils'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
-import '@testing-library/jest-dom'
 import {authStore} from '@/app/auth/context/auth-store'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'

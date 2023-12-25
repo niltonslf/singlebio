@@ -1,7 +1,6 @@
 import {fail, makeUser} from '@/__tests__/utils'
 import {Dropdown} from '@/app/admin/components'
 import {authStore} from '@/app/auth/context/auth-store'
-import '@testing-library/jest-dom'
 import {cleanup, render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 

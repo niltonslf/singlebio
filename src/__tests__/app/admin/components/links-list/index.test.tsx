@@ -1,7 +1,6 @@
 import * as firestore from 'firebase/firestore'
 
 import {fail, makeLink, makeUser, setup} from '@/__tests__/utils'
-import '@testing-library/jest-dom'
 import {LinksList} from '@/app/admin/components/links-list'
 import {SmartphoneProvider} from '@/app/admin/context/smartphone-context'
 import {authStore} from '@/app/auth/context/auth-store'

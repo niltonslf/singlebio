@@ -8,7 +8,6 @@ import {
 } from '@/__tests__/utils/mocks'
 import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
-import '@testing-library/jest-dom'
 import {cleanup} from '@testing-library/react'
 
 jest.mock('firebase/firestore')

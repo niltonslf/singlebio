@@ -14,7 +14,6 @@ import AdminLayout from '@/app/admin/layout'
 import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils'
 import {faker} from '@faker-js/faker'
-import '@testing-library/jest-dom'
 import {act, cleanup, screen, waitFor} from '@testing-library/react'
 
 import {makeImageFile} from './components/customize-wallpaper/index.test'

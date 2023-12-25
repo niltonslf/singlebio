@@ -7,13 +7,13 @@ const createJestConfig = nextJest({
 /** @type {import('jest').Config} */
 const config = {
   testEnvironment: 'jest-environment-jsdom',
-  modulePathIgnorePatterns: ['(/utils/.*)$'],
+  modulePathIgnorePatterns: ['<rootDir>/src/__tests__/utils/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   clearMocks: true,
   restoreMocks: true,
-  setupFilesAfterEnv: ['./jest-setup.js', 'jest-sinon'],
+  setupFilesAfterEnv: ['<rootDir>/jest-setup.js', 'jest-sinon'],
   workerThreads: true,
   maxWorkers: 4,
 }

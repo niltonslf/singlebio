@@ -2,7 +2,6 @@ import * as firebaseAuth from 'firebase/auth'
 import routerMock from 'next-router-mock'
 
 import {fail, setup} from '@/__tests__/utils'
-import '@testing-library/jest-dom'
 import {makeUser} from '@/__tests__/utils/mocks'
 import {Header} from '@/app/admin/components/header'
 import {authStore} from '@/app/auth/context/auth-store'

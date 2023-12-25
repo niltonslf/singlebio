@@ -1,8 +1,6 @@
 import {setup} from '@/__tests__/utils'
 import {LinkCard} from '@/app/components'
 
-import '@testing-library/jest-dom'
-
 describe('Link component', () => {
   it('should render LinkCard with a children', () => {
     const {baseElement} = setup(

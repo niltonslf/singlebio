@@ -1,7 +1,6 @@
 import {fail, setup} from '@/__tests__/utils'
 import {CustomizeButtons} from '@/app/admin/appearance/components'
 import {appearanceStore} from '@/app/admin/appearance/context'
-import '@testing-library/jest-dom'
 import {cleanup, waitFor} from '@testing-library/react'
 
 const makeSUT = () => {

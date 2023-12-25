@@ -1,9 +1,8 @@
 import {makeLink, setup} from '@/__tests__/utils'
 import {AddLinkForm} from '@/app/admin/components'
 import {Link} from '@/models'
-import {cleanup, screen, waitFor} from '@testing-library/react'
-import '@testing-library/jest-dom'
 import {faker} from '@faker-js/faker'
+import {cleanup, screen, waitFor} from '@testing-library/react'
 
 const makeSUT = (link?: Link) => {
   const linkMock = link ?? makeLink()

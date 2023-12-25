@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom'
 import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 import mockRouter from 'next-router-mock'
