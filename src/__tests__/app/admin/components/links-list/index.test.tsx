@@ -17,11 +17,6 @@ jest.mock('firebase/firestore', () => ({
 jest.mock('@/app/admin/context/smartphone-context', () => {
   return {
     ...jest.requireActual('@/app/admin/context/smartphone-context'),
-    useSmartphone: () => {
-      return {
-        reloadSmartphoneList: jest.fn(),
-      }
-    },
   }
 })
 

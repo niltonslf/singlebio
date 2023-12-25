@@ -20,7 +20,7 @@ export const SmartphoneProvider = ({children}: PropsWithChildren) => {
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
   const reloadSmartphoneList = useCallback(() => {
-    const path = iframeRef?.current?.contentWindow?.location.pathname || ''
+    const path = iframeRef?.current?.contentWindow?.location.pathname
     const uniquePath = `${path}?id=${Date.now()}`
 
     iframeRef?.current?.setAttribute('src', uniquePath)
