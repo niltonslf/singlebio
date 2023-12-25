@@ -160,13 +160,21 @@ describe('AuthStore', () => {
 
       jest.spyOn(firebaseAuth, 'reauthenticateWithPopup').mockImplementation()
       jest.spyOn(firebaseAuth, 'deleteUser').mockImplementation()
-      jest.spyOn(firestore, 'deleteDoc')
+      jest.spyOn(firestore, 'deleteDoc').mockImplementation()
+
+      const linksRes = makeGetDocsResponse({docs: [1, 2]})
+      jest.spyOn(firestore, 'doc').mockImplementation()
+      jest.spyOn(firestore, 'getDocs').mockResolvedValue(linksRes)
 
       await authStore.deleteUser()
 
       //? should I really test these method calls from firebase?
       expect(firebaseAuth.reauthenticateWithPopup).toHaveBeenCalledTimes(1)
-      expect(firestore.deleteDoc).toHaveBeenCalledTimes(1)
+
+      expect(firestore.getDocs).toHaveBeenCalledTimes(1)
+      expect(firestore.doc).toHaveBeenCalled()
+
+      expect(firestore.deleteDoc).toHaveBeenCalled()
       expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
 
       expect(authStore.clearUser).toHaveBeenCalledTimes(1)

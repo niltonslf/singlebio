@@ -8,9 +8,12 @@ import {
 } from 'firebase/auth'
 import {
   DocumentSnapshot,
+  collection,
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
+  query,
   setDoc,
   updateDoc,
 } from 'firebase/firestore'
@@ -107,6 +110,17 @@ class AuthStore {
     if (!this.user?.uid || !auth.currentUser) throw 'User not found.'
 
     await reauthenticateWithPopup(auth.currentUser, provider)
+    // delete links
+    const queryLinks = query(collection(db, 'users', this.user.uid, 'links'))
+    const {size, docs} = await getDocs(queryLinks)
+
+    if (size) {
+      for await (const linkDoc of docs) {
+        await deleteDoc(doc(db, linkDoc.ref.path))
+      }
+    }
+
+    // await deleteDoc(doc(db, 'users', this.user.uid, 'links'))
     await deleteDoc(doc(db, 'users', this.user.uid))
     await deleteUser(auth.currentUser)
     this.clearUser()
