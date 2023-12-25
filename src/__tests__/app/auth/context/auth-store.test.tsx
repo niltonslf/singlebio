@@ -111,6 +111,16 @@ describe('AuthStore', () => {
     })
   })
 
+  describe('setUser', () => {
+    it('should replace user data', () => {
+      const userMock = makeUser()
+
+      authStore.setUser(userMock)
+
+      expect(authStore.userModel).toEqual(userMock)
+    })
+  })
+
   // describe('clearUser', () => {
   //   it('Clear users variables', () => {
   //     authStore.clearUser()
