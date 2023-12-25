@@ -1,6 +1,8 @@
+'use client'
+
 import {clsx} from 'clsx'
 import {collection, getDocs, query, where} from 'firebase/firestore'
-import {Fragment, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
@@ -21,10 +23,10 @@ const schema = z.object({
 
 type ModalProps = {
   onSave: (username: string) => Promise<void>
-  initialOpen?: boolean
+  initialOpen: boolean
 }
 
-export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
+export const Modal = ({onSave, initialOpen}: ModalProps) => {
   const {
     register,
     handleSubmit,
@@ -80,6 +82,7 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
 
             <div className='mt-2'>
               <input
+                data-testid='modal-username-input'
                 placeholder='Type your username'
                 className={clsx(
                   'border-1 w-full rounded-md border border-gray-400 p-2',
@@ -107,6 +110,7 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
 
             <div className='mt-4'>
               <button
+                data-testid='modal-submit-button'
                 type='submit'
                 className='inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-8 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300
                         disabled:text-gray-900

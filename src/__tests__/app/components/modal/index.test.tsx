@@ -72,6 +72,7 @@ describe('Modal Component', () => {
     const userMock = makeUser()
     if (!userMock?.username) return fail()
 
+    // simulate username available
     jest.spyOn(firestore, 'getDocs').mockResolvedValue(makeGetDocsResponse({}))
 
     const {user} = makeSUT()

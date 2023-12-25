@@ -3,7 +3,7 @@ import {Smartphone} from '@/app/components'
 import {faker} from '@faker-js/faker'
 
 describe('Smartphone', () => {
-  it('should render smartphone iframe', async () => {
+  it('should render smartphone iframe and load url', async () => {
     const url = faker.internet.url()
 
     setup(<Smartphone iframeUrl={url} />)

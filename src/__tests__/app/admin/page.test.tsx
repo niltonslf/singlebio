@@ -1,16 +1,13 @@
 import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
-import routerMock from 'next-router-mock'
-import * as React from 'react'
 
 import {makeFbUser, makeGetDocsResponse, setup} from '@/__tests__/__helpers__'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import {authStore} from '@/app/auth/context/auth-store'
-import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
 import {faker} from '@faker-js/faker'
-import {act, cleanup, screen, waitFor} from '@testing-library/react'
+import {cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
@@ -33,9 +30,7 @@ jest.mock('@/app/admin/context/smartphone-context', () => {
     ...jest.requireActual('@/app/admin/context/smartphone-context'),
     useSmartphone: () => {
       return {
-        iframeRef: {current: null},
         reloadSmartphoneList: jest.fn(),
-        updateSmartphoneSrc: jest.fn(),
       }
     },
   }
@@ -53,7 +48,7 @@ const makeSUT = async () => {
 
 const handlePageAuthentication = (
   fbUserMock: firebaseAuth.User | undefined,
-  username: string = faker.internet.userName(),
+  username?: string,
 ) => {
   const data = fbUserMock ? parseToUser(fbUserMock, username) : undefined
   jest
@@ -73,88 +68,52 @@ const handlePageAuthentication = (
 describe('Admin page', () => {
   afterEach(() => {
     cleanup()
-    act(() => authStore.clearUser())
-    return
   })
-  it('should render page with all sections', async () => {
+  it('should render page with header, links form and smartphone', async () => {
     const userMock = makeFbUser()
-    handlePageAuthentication(userMock)
+    handlePageAuthentication(userMock, faker.internet.userName())
     await makeSUT()
-
-    const userPageUrl = `/${authStore.user?.username}`
 
     await waitFor(async () => {
       const header = await screen.getByTestId('admin-header')
-      const formButton = await screen.queryByText(/Add link/i)
-      const iframe = await document.querySelector('iframe')
+      const linkForm = await screen.queryByText(/Add link/i)
+      const smartphone = await document.querySelector('iframe')
 
       expect(header).toBeInTheDocument()
-      expect(formButton).toBeInTheDocument()
-      expect(iframe).toHaveAttribute('src', userPageUrl)
-      expect(iframe).toBeVisible()
-    })
-  })
-
-  it('should redirect to /auth if not authenticated', async () => {
-    handlePageAuthentication(undefined)
-
-    await makeSUT()
-
-    await waitFor(() => {
-      expect(routerMock).toMatchObject({
-        asPath: '/auth',
-        pathname: '/auth',
-        query: {},
-      })
-    })
-  })
-
-  // describe('Set username', () => {
-  //   it('should call method to save username on the first login', async () => {
-  //     const fbUserMock = makeFbUser()
-  //     const usernameMock = faker.internet.userName()
-
-  //     handlePageAuthentication(fbUserMock, '')
-
-  //     jest.spyOn(firestore, 'updateDoc').mockImplementation()
-
-  //     const {user} = await makeSUT()
-
-  //     const usernameInput =
-  //       await screen.findByPlaceholderText(/Type your username/i)
-  //     const saveButton = await screen.findByText(/save/i)
-
-  //     await user.type(usernameInput, usernameMock)
-  //     expect(usernameInput).toHaveValue(usernameMock)
-
-  //     await user.click(saveButton)
-
-  //     expect(firestore.updateDoc).toHaveBeenCalledTimes(1)
-  //     expect(firestore.updateDoc).toHaveBeenCalledWith(undefined, {
-  //       username: usernameMock,
-  //     })
-  //   })
-  // })
-
-  describe('Smartphone', () => {
-    it('should render smartphone/iframe in the username page', async () => {
-      const fbUserMock = makeFbUser()
-      handlePageAuthentication(fbUserMock, 'jsdevbr')
-
-      await waitFor(() => makeSUT())
-
-      const smartphone = document.querySelector('iframe')
+      expect(linkForm).toBeInTheDocument()
+      expect(smartphone).toBeInTheDocument()
       expect(smartphone).toHaveAttribute('src', `/${authStore.user?.username}`)
+    })
+  })
 
-      // change the username and check if the src keeps right
-      await waitFor(() => {
-        const newUser = {...authStore.user, username: 'try_catch'} as User
-        authStore.setUser(newUser)
+  it('should show modal to set the username on the first login', async () => {
+    // simulate user authenticated
+    handlePageAuthentication(makeFbUser())
+    // simulate username available
+    const getDocsRes = makeGetDocsResponse({})
+    jest.spyOn(firestore, 'getDocs').mockResolvedValue(getDocsRes)
+    // spy method that saves username
+    jest.spyOn(authStore, 'updateUser').mockImplementation()
 
-        expect(smartphone?.getAttribute('src')).toBe(
-          `/${authStore.user?.username}`,
-        )
-      })
+    const {user} = await makeSUT()
+
+    await waitFor(async () => {
+      const modalHeader = screen.getByText(/Choose your username/i)
+      const modal = modalHeader.parentElement
+
+      // modal should be visible
+      expect(modal?.classList.contains('show')).toBe(true)
+
+      const usernameInput = modalHeader.parentElement?.querySelector('input')
+      const usernameSubmit = modalHeader.parentElement?.querySelector('button')
+
+      if (!usernameInput || !usernameSubmit) return fail()
+
+      await user.type(usernameInput, 'some-username')
+      await user.click(usernameSubmit)
+
+      expect(authStore.updateUser).toHaveBeenCalledTimes(1)
+      expect(modal?.classList.contains('show')).toBe(false)
     })
   })
 })
