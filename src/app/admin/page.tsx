@@ -31,7 +31,7 @@ const Admin = observer(() => {
               <div className='sticky top-6'>
                 <Smartphone
                   ref={iframeRef}
-                  iframeUrl={`${authStore.user.username}`}
+                  iframeUrl={authStore.user?.username}
                 />
               </div>
             </div>

@@ -28,15 +28,14 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: {errors},
   } = useForm<FormProps>({
     resolver: zodResolver(schema),
   })
 
   const [isOpen, setIsOpen] = useState(initialOpen)
-  const [submitDisabled, setSubmitDisabled] = useState(false)
-  const username = watch('username')
+  const [submitDisabled, setSubmitDisabled] = useState(true)
+  const [usernameAlreadyTaken, setUsernameAlreadyTaken] = useState(false)
 
   const onSubmit = async (data: FormProps) => {
     await onSave(data.username)
@@ -44,21 +43,22 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
   }
 
   const checkUsername = async (username: string) => {
-    if (!username) return setSubmitDisabled(false)
+    setUsernameAlreadyTaken(false)
 
     const q = query(collection(db, 'users'), where('username', '==', username))
     const snapshot = await getDocs(q)
 
-    if (snapshot.size) setSubmitDisabled(true)
+    if (snapshot.size) {
+      setUsernameAlreadyTaken(true)
+      return setSubmitDisabled(true)
+    }
+
+    setSubmitDisabled(false)
   }
 
   function closeModal() {
     setIsOpen(false)
   }
-
-  useEffect(() => {
-    checkUsername(username)
-  }, [username])
 
   useEffect(() => {
     setIsOpen(initialOpen)
@@ -108,17 +108,22 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
                         placeholder='Type your username'
                         className={clsx(
                           'border-1 w-full rounded-md border border-gray-400 p-2',
-                          (errors?.username?.message || submitDisabled) &&
+                          (errors?.username?.message || usernameAlreadyTaken) &&
                             'border-red-400 outline-red-400',
                         )}
-                        {...register('username', {required: true})}
+                        {...register('username', {
+                          required: true,
+                          onChange: event => {
+                            checkUsername(event.target.value)
+                          },
+                        })}
                       />
                       {errors.username && (
                         <p className='mt-2 text-sm text-red-400'>
                           {errors.username.message}
                         </p>
                       )}
-                      {submitDisabled && (
+                      {usernameAlreadyTaken && (
                         <p className='mt-2 text-sm text-red-400'>
                           username already taken.
                         </p>
