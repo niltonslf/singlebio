@@ -121,14 +121,14 @@ describe('AuthStore', () => {
     })
   })
 
-  // describe('clearUser', () => {
-  //   it('Clear users variables', () => {
-  //     authStore.clearUser()
+  describe('clearUser', () => {
+    it('should clear userModel and firebaseUser properties', () => {
+      authStore.clearUser()
 
-  //     expect(authStore.user).toBe(undefined)
-  //     expect(authStore.firebaseUser).toBe(undefined)
-  //   })
-  // })
+      expect(authStore.user).toBe(undefined)
+      expect(authStore.firebaseUser).toBe(undefined)
+    })
+  })
 
   // describe('deleteUser', () => {
   //   it('delete user successfully', async () => {
