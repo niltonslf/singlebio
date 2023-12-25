@@ -3,13 +3,7 @@ import * as firestore from 'firebase/firestore'
 import routerMock from 'next-router-mock'
 import * as React from 'react'
 
-import {
-  TransitionRoot,
-  createReturnChildren,
-  makeFbUser,
-  makeGetDocsResponse,
-  setup,
-} from '@/__tests__/__helpers__'
+import {makeFbUser, makeGetDocsResponse, setup} from '@/__tests__/__helpers__'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import {authStore} from '@/app/auth/context/auth-store'
@@ -22,20 +16,6 @@ jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
   usePathname: jest.fn(() => '/'),
 }))
-
-jest.mock('@headlessui/react', () => {
-  return {
-    ...jest.requireActual('@headlessui/react'),
-    Dialog: Object.assign(createReturnChildren(), {
-      Title: createReturnChildren(),
-      Panel: createReturnChildren(),
-    }),
-    Transition: Object.assign(TransitionRoot, {
-      Child: createReturnChildren(),
-      Root: TransitionRoot,
-    }),
-  }
-})
 
 jest.mock('firebase/auth', () => ({
   __esModule: true,
