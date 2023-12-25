@@ -11,8 +11,9 @@ export const parseToUser = (firebaseUser: FbUser, username?: string): User => {
     name: firebaseUser.displayName || '',
     pictureUrl: firebaseUser.photoURL || '',
     uid: firebaseUser.uid,
-    username: username ?? '',
-  }
+  } as User
+
+  if (username) response.username = username
 
   return response
 }

@@ -9,7 +9,7 @@ export type UserTheme = {
 export type User = {
   uid: string
   pictureUrl: string
-  username: string
+  username?: string
   name: string
   email: string
   theme?: UserTheme
