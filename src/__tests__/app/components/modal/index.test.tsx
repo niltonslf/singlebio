@@ -1,12 +1,49 @@
-import {setup} from '@/__tests__/__helpers__'
+import * as firestore from 'firebase/firestore'
+
+import {
+  TransitionRoot,
+  createReturnChildren,
+  fail,
+  makeGetDocsResponse,
+  makeUser,
+  setup,
+} from '@/__tests__/__helpers__'
 import {Modal} from '@/app/components'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
-const makeSUT = ({onSave = () => Promise.resolve(), initialOpen = false}) => {
+jest.mock('@headlessui/react', () => {
+  return {
+    ...jest.requireActual('@headlessui/react'),
+    Dialog: Object.assign(createReturnChildren(), {
+      Title: createReturnChildren(),
+      Panel: createReturnChildren(),
+    }),
+    Transition: Object.assign(TransitionRoot, {
+      Child: createReturnChildren(),
+      Root: TransitionRoot,
+    }),
+  }
+})
+
+jest.mock('firebase/firestore')
+
+const onSaveMock = jest.fn(() => Promise.resolve())
+
+const makeSUT = ({onSave = onSaveMock, initialOpen = true} = {}) => {
   return setup(<Modal onSave={onSave} initialOpen={initialOpen} />)
 }
 
-const onSaveMock = jest.fn()
+const getModalElements = () => {
+  const modal = document.querySelector('body > div > div > div')
+  const usernameInput = screen.getByRole('textbox')
+  const saveButton = screen.getByRole('button')
+
+  return {
+    modal,
+    usernameInput,
+    saveButton,
+  }
+}
 
 describe('Modal Component', () => {
   afterEach(() => {
@@ -14,12 +51,10 @@ describe('Modal Component', () => {
   })
 
   it('should display modal empty', async () => {
-    makeSUT({onSave: onSaveMock, initialOpen: true})
+    makeSUT()
 
     await waitFor(() => {
-      const modal = document.querySelector('#headlessui-portal-root')
-      const usernameInput = screen.getByRole('textbox')
-      const saveButton = screen.getByRole('button')
+      const {modal, saveButton, usernameInput} = getModalElements()
 
       expect(modal).toBeVisible()
       expect(usernameInput).toHaveValue('')
@@ -27,9 +62,29 @@ describe('Modal Component', () => {
     })
   })
 
-  it.todo('should init modal open')
+  it('should disable save button and show error when username exists', async () => {
+    const userMock = makeUser()
 
-  it.todo('should disable save button when username exists')
+    jest
+      .spyOn(firestore, 'getDocs')
+      .mockResolvedValue(makeGetDocsResponse({data: [userMock]}))
+
+    const {user} = makeSUT()
+
+    await waitFor(async () => {
+      if (!userMock?.username) return fail()
+
+      const {saveButton, usernameInput} = getModalElements()
+
+      await user.type(usernameInput, userMock?.username)
+
+      const errorMsg = screen.getByText(/username already taken./i)
+
+      expect(usernameInput).toHaveValue(userMock.username)
+      expect(errorMsg).toBeVisible()
+      expect(saveButton).toBeDisabled()
+    })
+  })
 
   it.todo('should call onSave method')
 
