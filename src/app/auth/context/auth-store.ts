@@ -69,6 +69,7 @@ class AuthStore {
     }
 
     const newUser = parseToUser(firebaseUser)
+
     await setDoc(doc(db, 'users', newUser.uid), newUser)
     this.userModel = {...newUser}
     return newUser
@@ -120,7 +121,6 @@ class AuthStore {
       }
     }
 
-    // await deleteDoc(doc(db, 'users', this.user.uid, 'links'))
     await deleteDoc(doc(db, 'users', this.user.uid))
     await deleteUser(auth.currentUser)
     this.clearUser()
