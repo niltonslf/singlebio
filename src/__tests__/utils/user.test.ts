@@ -3,7 +3,7 @@ import {User} from 'firebase/auth'
 import {parseToUser} from '@/utils'
 import {faker} from '@faker-js/faker'
 
-import {makeFbUser} from '../__helpers__'
+import {makeFbUser, makeUserTheme} from '../__helpers__'
 
 describe('parseToUser', () => {
   it('returns a user object', () => {
@@ -16,6 +16,20 @@ describe('parseToUser', () => {
       name: firebaseUser.displayName,
       pictureUrl: firebaseUser.photoURL,
       uid: firebaseUser.uid,
+    })
+  })
+  it('returns a user object with theme', () => {
+    const firebaseUser = makeFbUser()
+    const theme = makeUserTheme()
+
+    const user = parseToUser(firebaseUser, undefined, theme)
+
+    expect(user).toEqual({
+      email: firebaseUser.email,
+      name: firebaseUser.displayName,
+      pictureUrl: firebaseUser.photoURL,
+      uid: firebaseUser.uid,
+      theme,
     })
   })
 
