@@ -14,6 +14,8 @@ const config = {
   clearMocks: true,
   restoreMocks: true,
   setupFilesAfterEnv: ['./jest-setup.js', 'jest-sinon'],
+  workerThreads: true,
+  maxWorkers: 4,
 }
 
 export default createJestConfig(config)
