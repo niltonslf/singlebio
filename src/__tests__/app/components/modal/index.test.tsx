@@ -1,8 +1,6 @@
 import * as firestore from 'firebase/firestore'
 
 import {
-  TransitionRoot,
-  createReturnChildren,
   fail,
   makeGetDocsResponse,
   makeUser,
@@ -10,20 +8,6 @@ import {
 } from '@/__tests__/__helpers__'
 import {Modal} from '@/app/components'
 import {cleanup, screen, waitFor} from '@testing-library/react'
-
-jest.mock('@headlessui/react', () => {
-  return {
-    ...jest.requireActual('@headlessui/react'),
-    Dialog: Object.assign(createReturnChildren(), {
-      Title: createReturnChildren(),
-      Panel: createReturnChildren(),
-    }),
-    Transition: Object.assign(TransitionRoot, {
-      Child: createReturnChildren(),
-      Root: TransitionRoot,
-    }),
-  }
-})
 
 jest.mock('firebase/firestore')
 
@@ -34,7 +18,7 @@ const makeSUT = ({onSave = onSaveMock, initialOpen = true} = {}) => {
 }
 
 const getModalElements = () => {
-  const modal = document.querySelector('body > div > div > div')
+  const modal = document.querySelector('body > div > div')
   const usernameInput = screen.getByRole('textbox')
   const saveButton = screen.getByRole('button')
 
@@ -56,7 +40,7 @@ describe('Modal Component', () => {
     await waitFor(() => {
       const {modal, saveButton, usernameInput} = getModalElements()
 
-      expect(modal).toBeVisible()
+      expect(modal?.classList.contains('show')).toBe(true)
       expect(usernameInput).toHaveValue('')
       expect(saveButton).toBeDisabled()
     })
@@ -71,19 +55,17 @@ describe('Modal Component', () => {
 
     const {user} = makeSUT()
 
-    await waitFor(async () => {
-      if (!userMock?.username) return fail()
+    if (!userMock?.username) return fail()
 
-      const {saveButton, usernameInput} = getModalElements()
+    const {saveButton, usernameInput} = getModalElements()
 
-      await user.type(usernameInput, userMock?.username)
+    await user.type(usernameInput, userMock?.username)
 
-      const errorMsg = screen.getByText(/username already taken./i)
+    const errorMsg = screen.getByText(/username already taken./i)
 
-      expect(usernameInput).toHaveValue(userMock.username)
-      expect(errorMsg).toBeVisible()
-      expect(saveButton).toBeDisabled()
-    })
+    expect(usernameInput).toHaveValue(userMock.username)
+    expect(errorMsg).toBeVisible()
+    expect(saveButton).toBeDisabled()
   })
 
   it('should call onSave method', async () => {
@@ -93,7 +75,7 @@ describe('Modal Component', () => {
     jest.spyOn(firestore, 'getDocs').mockResolvedValue(makeGetDocsResponse({}))
 
     const {user} = makeSUT()
-    const {modal, saveButton, usernameInput} = getModalElements()
+    const {saveButton, usernameInput, modal} = getModalElements()
 
     await user.type(usernameInput, userMock.username)
 
@@ -103,8 +85,6 @@ describe('Modal Component', () => {
     await user.click(saveButton)
 
     expect(onSaveMock).toHaveBeenCalledTimes(1)
-    expect(modal).not.toBeVisible()
+    expect(modal?.classList.contains('show')).toBe(false)
   })
-
-  it.todo('should prevent close modal by clicking outside')
 })
