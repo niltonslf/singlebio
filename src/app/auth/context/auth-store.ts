@@ -77,17 +77,15 @@ class AuthStore {
     return await getDoc(doc(db, 'users', firebaseUser.uid))
   }
 
-  public async updateUser(user: Partial<User>) {
-    if (!this.user) return
+  public async updateUser(user: Partial<User>): Promise<User> {
+    if (!this?.user?.uid) throw 'user not found'
 
-    const newUser = {
-      ...this.user,
-      ...user,
-      username: user?.username ?? this.user.username,
-    }
+    const newUser = {...this.userModel, ...user} as User
 
     this.setUser(newUser)
-    return await updateDoc(doc(db, 'users', this.user.uid), user)
+
+    await updateDoc(doc(db, 'users', this.user.uid), user)
+    return newUser
   }
 
   public setUser(user?: User) {

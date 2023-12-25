@@ -5,6 +5,7 @@ import {
   makeFbUser,
   makeGetDocsResponse,
   makeUser,
+  makeUserTheme,
 } from '@/__tests__/__helpers__'
 import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
@@ -85,15 +86,30 @@ describe('AuthStore', () => {
     })
   })
 
-  // describe('updateUser', () => {
-  //   it('Update user variable', () => {
-  //     const user = makeUser()
+  describe('updateUser', () => {
+    it('should throw an error if user does not exists', async () => {
+      const userMock = makeUser()
 
-  //     authStore.setUser(user)
+      await expect(authStore.updateUser(userMock)).rejects.toBe(
+        'user not found',
+      )
+    })
 
-  //     expect(authStore.user).toStrictEqual(user)
-  //   })
-  // })
+    it('should update user data in the store and in the database', async () => {
+      const initialUserData = makeUser()
+      // simulate an user already logged in
+      authStore.setUser(initialUserData)
+
+      const userNewData = {theme: makeUserTheme()}
+
+      const updateRes = await authStore.updateUser(userNewData)
+
+      const mergedUserData = {...initialUserData, ...userNewData}
+
+      expect(authStore.userModel).toEqual(mergedUserData)
+      expect(updateRes).toEqual(mergedUserData)
+    })
+  })
 
   // describe('clearUser', () => {
   //   it('Clear users variables', () => {
