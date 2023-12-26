@@ -221,6 +221,8 @@ describe('Links List component', () => {
       },
       '[/MouseLeft]',
     ])
+    // wait reload the smartphone
+    await new Promise(resolve => setTimeout(resolve, 600))
 
     // drag down
     await user.pointer([

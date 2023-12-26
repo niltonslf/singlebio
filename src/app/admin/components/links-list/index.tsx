@@ -42,9 +42,9 @@ type LinksListProps = {
 
 export const LinksList = ({user}: LinksListProps) => {
   const {reloadSmartphoneList} = useSmartphone()
-  const reloadSmartphoneListDebounced = useDebounce(() =>
-    reloadSmartphoneList(),
-  )
+  const reloadSmartphoneListDebounced = useDebounce(() => {
+    reloadSmartphoneList()
+  })
 
   const sensors = useSensors(
     useSensor(PointerSensor),
