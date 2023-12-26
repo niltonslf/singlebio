@@ -1,16 +1,19 @@
-import '@testing-library/jest-dom'
 import * as firebaseAuth from 'firebase/auth'
+import * as firestore from 'firebase/firestore'
 import mockRouter from 'next-router-mock'
 
-import {makeFbUser} from '@/__tests__/utils'
-import {AuthStore, authStore} from '@/app/auth/context/auth-store'
+import {makeFbUser, makeGetDocsResponse} from '@/__tests__/__helpers__'
+import {authStore} from '@/app/auth/context/auth-store'
 import AuthPage from '@/app/auth/page'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
 import {screen, render, cleanup, waitFor} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
+jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next-router-mock'),
+  usePathname: jest.fn(() => '/'),
+}))
 
 jest.mock('firebase/firestore', () => ({
   __esModule: true,
@@ -30,11 +33,6 @@ const mockSignInWithPopup = (result: any, isReject: boolean = false) => {
   if (!isReject) return spy.mockResolvedValue(result)
 
   return spy.mockRejectedValue(result)
-}
-
-const mockFetchFirebaseUser = (exists: boolean, user: User | undefined) => {
-  AuthStore.prototype['fetchFirebaseUser'] = args =>
-    Promise.resolve({exists, user})
 }
 
 const validateGoogleBtn = () => {
@@ -61,7 +59,9 @@ describe('Auth Page', () => {
     const errorMsg = 'error'
 
     mockSignInWithPopup(errorMsg, true)
-    mockFetchFirebaseUser(true, undefined)
+    jest
+      .spyOn(firestore, 'getDoc')
+      .mockResolvedValue(makeGetDocsResponse({data: undefined, exists: false}))
 
     jest.spyOn(authStore, 'authUser')
     jest.spyOn(authStore, 'clearUser')
@@ -91,8 +91,11 @@ describe('Auth Page', () => {
     const userMock = parseToUser(firebaseUserMock) as User
 
     mockSignInWithPopup({user: firebaseUserMock})
-    mockFetchFirebaseUser(true, userMock)
     jest.spyOn(authStore, 'authUser')
+
+    jest
+      .spyOn(firestore, 'getDoc')
+      .mockResolvedValue(makeGetDocsResponse({data: userMock, exists: true}))
 
     const user = userEvent.setup()
 
@@ -117,7 +120,9 @@ describe('Auth Page', () => {
     const userMock = parseToUser(firebaseUserMock)
 
     mockSignInWithPopup({user: firebaseUserMock})
-    mockFetchFirebaseUser(false, undefined)
+    jest
+      .spyOn(firestore, 'getDoc')
+      .mockResolvedValue(makeGetDocsResponse({data: undefined, exists: false}))
     jest.spyOn(authStore, 'authUser')
 
     const user = userEvent.setup()
@@ -128,7 +133,7 @@ describe('Auth Page', () => {
 
     expect(authStore.authUser).toHaveBeenCalledWith(firebaseUserMock)
     expect(authStore.authUser).toHaveBeenCalledTimes(1)
-    expect(authStore.user).toStrictEqual({...userMock, username: ''})
+    expect(authStore.user).toStrictEqual({...userMock})
 
     expect(mockRouter).toMatchObject({
       asPath: '/admin',

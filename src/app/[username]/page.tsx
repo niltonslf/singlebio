@@ -30,8 +30,12 @@ export default function UserPage({params: {username}}: UserPageProps) {
   const [isLoading, setIsLoading] = useState(true)
 
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
-  const wallpaperStyle = {backgroundImage: `url(${user?.wallpaperUrl})`}
-  const colorStyle = {background: `${user?.colorOverlay}`}
+  const backgroundImageStyle = {
+    backgroundImage: `url(${user?.theme?.backgroundImage})`,
+  }
+  const backgroundColorStyle = {
+    backgroundColor: `${user?.theme?.backgroundColor}`,
+  }
 
   const fetchData = useCallback(async () => {
     const q = query(
@@ -77,14 +81,16 @@ export default function UserPage({params: {username}}: UserPageProps) {
     <main
       className={clsx([
         'flex h-screen w-screen bg-white bg-cover bg-center',
-        !user?.wallpaperUrl && !user?.colorOverlay ? defaultBg : '',
+        !user?.theme?.backgroundImage && !user?.theme?.backgroundColor
+          ? defaultBg
+          : '',
       ])}
-      style={user?.wallpaperUrl ? wallpaperStyle : {}}>
+      style={user?.theme?.backgroundImage ? backgroundImageStyle : {}}>
       <div
         className={clsx([
           'flex h-screen w-screen items-center justify-center overflow-y-auto p-5 py-20 md:p-10 ',
         ])}
-        style={user?.colorOverlay ? colorStyle : {}}>
+        style={user?.theme?.backgroundColor ? backgroundColorStyle : {}}>
         <div className=' h-full w-full max-w-2xl '>
           <div className='mb-4 flex w-full justify-center'>
             <Avatar
@@ -96,7 +102,11 @@ export default function UserPage({params: {username}}: UserPageProps) {
 
           <h2
             className='mb-3 flex items-center justify-center text-2xl font-semibold'
-            style={user?.usernameColor ? {color: user.usernameColor} : {}}>
+            style={
+              user?.theme?.usernameColor
+                ? {color: user.theme.usernameColor}
+                : {}
+            }>
             @{username}
           </h2>
 
@@ -112,20 +122,20 @@ export default function UserPage({params: {username}}: UserPageProps) {
             </div>
           )}
 
-          <LinkCard.container>
+          <LinkCard>
             {links.length > 0 &&
               links.map(link => {
                 return (
-                  <LinkCard.item
+                  <LinkCard.Item
                     key={link.url}
                     path={link.url}
-                    bgColor={user?.buttonColor}
-                    textColor={user?.buttonTextColor}>
+                    bgColor={user?.theme?.buttonBackground}
+                    textColor={user?.theme?.buttonTextColor}>
                     {link.label}
-                  </LinkCard.item>
+                  </LinkCard.Item>
                 )
               })}
-          </LinkCard.container>
+          </LinkCard>
         </div>
       </div>
     </main>

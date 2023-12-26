@@ -1,13 +1,18 @@
+import {ReactNode} from 'react'
+
 import {ContentLayout} from './content'
-import {LayoutRoot, LayoutRootProps} from './root'
 import {Sidebar} from './sidebar'
 
-type LayoutProps<T> = {
-  [K in keyof T]: T[K]
+type LayoutProps = {
+  children: ReactNode
 }
 
-export const Layout = (props: LayoutProps<LayoutRootProps>) => {
-  return <LayoutRoot {...props}>{props?.children}</LayoutRoot>
+export const Layout = ({children}: LayoutProps) => {
+  return (
+    <main className='grid min-h-[calc(100%-80px)] w-full grid-cols-1 gap-3 md:grid-cols-[3fr_1.5fr] md:grid-rows-[1fr]'>
+      {children}
+    </main>
+  )
 }
 
 Layout.Sidebar = Sidebar

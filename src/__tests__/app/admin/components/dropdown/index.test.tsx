@@ -1,9 +1,13 @@
-import {fail, makeUser} from '@/__tests__/utils'
+import {fail, makeUser} from '@/__tests__/__helpers__'
 import {Dropdown} from '@/app/admin/components'
 import {authStore} from '@/app/auth/context/auth-store'
-import '@testing-library/jest-dom'
 import {cleanup, render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+
+jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next-router-mock'),
+  usePathname: jest.fn(() => '/'),
+}))
 
 const makeSUT = () => {
   return render(
@@ -17,10 +21,7 @@ const handleMenuContainer = () => {
   const menuList = screen.getByRole('list')
   let menuHidden = menuList.parentElement?.classList.contains('hidden')
 
-  return {
-    menuHidden,
-    menuList,
-  }
+  return {menuHidden, menuList}
 }
 
 describe('Dropdown', () => {
@@ -34,10 +35,11 @@ describe('Dropdown', () => {
 
     const triggerItem = screen.getByRole('button')
     const {menuList} = handleMenuContainer()
+    const items = menuList.querySelectorAll('li')
 
     expect(triggerItem).toBeInTheDocument()
     expect(menuList).toBeInTheDocument()
-    expect(menuList.children).toHaveLength(2)
+    expect(items).toHaveLength(4)
   })
 
   it('should open dropdown', async () => {
@@ -52,10 +54,9 @@ describe('Dropdown', () => {
 
     await user.click(triggerItem)
 
-    const {menuHidden: menuHidden2, menuList} = handleMenuContainer()
+    const {menuHidden: menuHidden2} = handleMenuContainer()
 
     expect(menuHidden2).toBe(false)
-    expect(menuList.children).toHaveLength(2)
   })
 
   it('should close menu when clicked outside', async () => {
@@ -71,11 +72,11 @@ describe('Dropdown', () => {
 
     // open dropdown
     await user.click(triggerItem)
+
     const {menuHidden: menuHidden2} = handleMenuContainer()
 
     // check if dropdown is visible
     expect(menuHidden2).toBe(false)
-    expect(menuList.children).toHaveLength(2)
 
     // don't close when clicked in a element inside the dropdown
     const {menuHidden: menuHidden3} = handleMenuContainer()
@@ -104,15 +105,16 @@ describe('Dropdown', () => {
   it('should the first item has the correct link', async () => {
     userEvent.setup()
 
-    authStore.user = makeUser()
-    const path = `/${authStore.user.username}`
+    authStore.userModel = makeUser()
+    const path = `/${authStore?.user?.username}`
 
     makeSUT()
 
     const {menuList} = handleMenuContainer()
+    const items = menuList.querySelectorAll('li')
 
     // select first li
-    const firstItem = menuList.children[0]
+    const firstItem = items[1]
     const link = firstItem.firstElementChild
 
     if (!link) return fail()
@@ -128,7 +130,9 @@ describe('Dropdown', () => {
     makeSUT()
 
     const {menuList} = handleMenuContainer()
-    const secondItem = menuList.children[1]
+    const items = menuList.querySelectorAll('li')
+
+    const secondItem = items[2]
     const deleteAccountItem = secondItem.firstElementChild
 
     if (!deleteAccountItem) return fail()

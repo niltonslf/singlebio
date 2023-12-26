@@ -8,9 +8,9 @@ import {Avatar, LinkCard} from '@/app/components'
 type UserPreviewProps = {
   params: {username: string}
   searchParams: {
-    colorOverlay?: string
-    wallpaperUrl?: string
-    buttonColor?: string
+    backgroundColor?: string
+    backgroundImage?: string
+    buttonBackground?: string
     buttonTextColor?: string
     usernameColor?: string
   }
@@ -19,29 +19,36 @@ type UserPreviewProps = {
 const UserPreview = observer(
   ({params: {username}, searchParams}: UserPreviewProps) => {
     const {
-      colorOverlay,
-      wallpaperUrl,
-      buttonColor,
-      buttonTextColor: textColor,
+      backgroundColor,
+      backgroundImage,
+      buttonBackground,
+      buttonTextColor,
       usernameColor,
     } = searchParams
 
-    const wallpaperStyle = {
-      backgroundImage: `url(${decodeURIComponent(wallpaperUrl || '')})`,
+    const defaultBg =
+      'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
+
+    const backgroundImageStyle = {
+      backgroundImage: `url(${decodeURIComponent(backgroundImage || '')})`,
     }
-    const colorStyle = {
-      backgroundColor: `${decodeURIComponent(colorOverlay || '')}`,
+
+    const backgroundColorStyle = {
+      backgroundColor: `${decodeURIComponent(backgroundColor || '')}`,
     }
 
     return (
       <main
-        className={clsx(['flex h-screen w-screen bg-white bg-cover bg-center'])}
-        style={wallpaperUrl ? wallpaperStyle : {}}>
+        className={clsx([
+          'flex h-screen w-screen bg-white bg-cover bg-center',
+          !backgroundImage && !backgroundColor ? defaultBg : '',
+        ])}
+        style={backgroundImage ? backgroundImageStyle : {}}>
         <div
           className={clsx([
             'flex h-screen w-screen items-center justify-center overflow-y-auto p-5 py-20 md:p-10 ',
           ])}
-          style={colorOverlay ? colorStyle : {}}>
+          style={backgroundColor ? backgroundColorStyle : {}}>
           <div className=' h-full w-full max-w-2xl '>
             <div className='mb-4 flex w-full justify-center'>
               <Avatar name={username} size={80} />
@@ -55,32 +62,32 @@ const UserPreview = observer(
               @{username}
             </h2>
 
-            <LinkCard.container>
-              <LinkCard.item
+            <LinkCard>
+              <LinkCard.Item
                 path='/admin'
-                bgColor={decodeURIComponent(buttonColor || '')}
-                textColor={decodeURIComponent(textColor || '')}>
+                bgColor={decodeURIComponent(buttonBackground || '')}
+                textColor={decodeURIComponent(buttonTextColor || '')}>
                 Example 01
-              </LinkCard.item>
-              <LinkCard.item
+              </LinkCard.Item>
+              <LinkCard.Item
                 path='/admin'
-                bgColor={decodeURIComponent(buttonColor || '')}
-                textColor={decodeURIComponent(textColor || '')}>
+                bgColor={decodeURIComponent(buttonBackground || '')}
+                textColor={decodeURIComponent(buttonTextColor || '')}>
                 Example 02
-              </LinkCard.item>
-              <LinkCard.item
+              </LinkCard.Item>
+              <LinkCard.Item
                 path='/admin'
-                bgColor={decodeURIComponent(buttonColor || '')}
-                textColor={decodeURIComponent(textColor || '')}>
+                bgColor={decodeURIComponent(buttonBackground || '')}
+                textColor={decodeURIComponent(buttonTextColor || '')}>
                 Example 03
-              </LinkCard.item>
-              <LinkCard.item
+              </LinkCard.Item>
+              <LinkCard.Item
                 path='/admin'
-                bgColor={decodeURIComponent(buttonColor || '')}
-                textColor={decodeURIComponent(textColor || '')}>
+                bgColor={decodeURIComponent(buttonBackground || '')}
+                textColor={decodeURIComponent(buttonTextColor || '')}>
                 Example 04
-              </LinkCard.item>
-            </LinkCard.container>
+              </LinkCard.Item>
+            </LinkCard>
           </div>
         </div>
       </main>

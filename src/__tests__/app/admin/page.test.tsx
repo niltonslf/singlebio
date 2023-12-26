@@ -1,51 +1,18 @@
 import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
-import routerMock from 'next-router-mock'
 
-import {
-  TransitionRoot,
-  createReturnChildren,
-  makeFbUser,
-  makeGetDocsResponse,
-  setup,
-} from '@/__tests__/utils'
-import {AdminProvider} from '@/app/admin/context/admin-context'
+import {makeFbUser, makeGetDocsResponse, setup} from '@/__tests__/__helpers__'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
-import '@testing-library/jest-dom'
-import {AuthStore, authStore} from '@/app/auth/context/auth-store'
+import {authStore} from '@/app/auth/context/auth-store'
 import {parseToUser} from '@/utils/user'
 import {faker} from '@faker-js/faker'
-import {act, cleanup, screen, waitFor} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import {cleanup, screen, waitFor} from '@testing-library/react'
 
-jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
-
-jest.mock('@headlessui/react', () => {
-  return {
-    ...jest.requireActual('@headlessui/react'),
-    Dialog: Object.assign(createReturnChildren(), {
-      Title: createReturnChildren(),
-      Panel: createReturnChildren(),
-    }),
-    Transition: Object.assign(TransitionRoot, {
-      Child: createReturnChildren(),
-      Root: TransitionRoot,
-    }),
-  }
-})
-
-jest.mock('@/app/admin/context/admin-context', () => {
-  return {
-    ...jest.requireActual('@/app/admin/context/admin-context'),
-    useAdmin: () => {
-      return {
-        reloadSmartphoneList: jest.fn(),
-        setSmartphoneRef: jest.fn(),
-      }
-    },
-  }
-})
+jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next-router-mock'),
+  usePathname: jest.fn(() => '/'),
+}))
 
 jest.mock('firebase/auth', () => ({
   __esModule: true,
@@ -55,18 +22,25 @@ jest.mock('firebase/auth', () => ({
 jest.mock('firebase/firestore', () => ({
   __esModule: true,
   ...jest.requireActual('firebase/firestore'),
-  onSnapshot: jest.fn(args => jest.fn()),
+  onSnapshot: jest.fn(() => jest.fn()),
 }))
 
-const fetchFirebaseUserCopy = AuthStore.prototype['fetchFirebaseUser']
+jest.mock('@/app/admin/context/smartphone-context', () => {
+  return {
+    ...jest.requireActual('@/app/admin/context/smartphone-context'),
+    // useSmartphone: () => {
+    //   return {
+    //     reloadSmartphoneList: jest.fn(),
+    //   }
+    // },
+  }
+})
 
 const makeSUT = async () => {
   return await waitFor(() =>
     setup(
       <AdminLayout>
-        <AdminProvider>
-          <AdminPage />
-        </AdminProvider>
+        <AdminPage />
       </AdminLayout>,
     ),
   )
@@ -74,10 +48,9 @@ const makeSUT = async () => {
 
 const handlePageAuthentication = (
   fbUserMock: firebaseAuth.User | undefined,
+  username?: string,
 ) => {
-  const data = fbUserMock
-    ? parseToUser(fbUserMock, faker.internet.userName())
-    : undefined
+  const data = fbUserMock ? parseToUser(fbUserMock, username) : undefined
   jest
     .spyOn(firebaseAuth, 'onAuthStateChanged')
     .mockImplementation((auth: any, userCallback: any) => {
@@ -93,92 +66,54 @@ const handlePageAuthentication = (
 }
 
 describe('Admin page', () => {
-  beforeEach(() => {
+  afterEach(() => {
     cleanup()
-    act(() => authStore.clearUser())
-    AuthStore.prototype['fetchFirebaseUser'] = fetchFirebaseUserCopy
-    return
   })
-  it('should render page with all sections', async () => {
+  it('should render page with header, links form and smartphone', async () => {
     const userMock = makeFbUser()
-
-    handlePageAuthentication(userMock)
-
+    handlePageAuthentication(userMock, faker.internet.userName())
     await makeSUT()
-
-    const userPageUrl = `/${authStore.user?.username}`
 
     await waitFor(async () => {
-      const header = await screen.queryByText('Lnktree admin')
-      const formButton = await screen.queryByText('Add link')
-      const iframe = await document.querySelector('iframe')
+      const header = await screen.getByTestId('admin-header')
+      const linkForm = await screen.queryByText(/Add link/i)
+      const smartphone = await document.querySelector('iframe')
 
       expect(header).toBeInTheDocument()
-      expect(formButton).toBeInTheDocument()
-      expect(formButton).toHaveTextContent(/Add link/i)
-      expect(iframe).toHaveAttribute('src', userPageUrl)
-      expect(iframe).toBeVisible()
+      expect(linkForm).toBeInTheDocument()
+      expect(smartphone).toBeInTheDocument()
+      expect(smartphone).toHaveAttribute('src', `/${authStore.user?.username}`)
     })
   })
 
-  it('should redirect to /auth if not authenticated', async () => {
-    handlePageAuthentication(undefined)
+  it('should show modal to set the username on the first login', async () => {
+    // simulate user authenticated
+    handlePageAuthentication(makeFbUser())
+    // simulate username available
+    const getDocsRes = makeGetDocsResponse({})
+    jest.spyOn(firestore, 'getDocs').mockResolvedValue(getDocsRes)
+    // spy method that saves username
+    jest.spyOn(authStore, 'updateUser').mockImplementation()
 
-    await makeSUT()
+    const {user} = await makeSUT()
 
-    await waitFor(() => {
-      expect(routerMock).toMatchObject({
-        asPath: '/auth',
-        pathname: '/auth',
-        query: {},
-      })
+    await waitFor(async () => {
+      const modalHeader = screen.getByText(/Choose your username/i)
+      const modal = modalHeader.parentElement
+
+      // modal should be visible
+      expect(modal?.classList.contains('show')).toBe(true)
+
+      const usernameInput = modalHeader.parentElement?.querySelector('input')
+      const usernameSubmit = modalHeader.parentElement?.querySelector('button')
+
+      if (!usernameInput || !usernameSubmit) return fail()
+
+      await user.type(usernameInput, 'some-username')
+      await user.click(usernameSubmit)
+
+      expect(authStore.updateUser).toHaveBeenCalledTimes(1)
+      expect(modal?.classList.contains('show')).toBe(false)
     })
-  })
-
-  it('should call method to save username', async () => {
-    const user = userEvent.setup()
-    const fbUserMock = makeFbUser()
-    const userMock = parseToUser(fbUserMock)
-    const usernameMock = faker.internet.userName()
-
-    handlePageAuthentication(fbUserMock)
-
-    jest.spyOn(firestore, 'updateDoc').mockImplementation()
-
-    AuthStore.prototype['fetchFirebaseUser'] = args =>
-      Promise.resolve({exists: true, user: userMock})
-
-    await makeSUT()
-
-    const usernameInput =
-      await screen.findByPlaceholderText(/Type your username/i)
-    const saveButton = await screen.findByText(/save/i)
-
-    await user.type(usernameInput, usernameMock)
-    expect(usernameInput).toHaveValue(usernameMock)
-
-    await user.click(saveButton)
-
-    expect(firestore.updateDoc).toHaveBeenCalledTimes(1)
-    expect(firestore.updateDoc).toHaveBeenCalledWith(undefined, {
-      username: usernameMock,
-    })
-  })
-
-  // TODO: Refactor this test
-  it('should call method to add a new link', async () => {
-    const user = userEvent.setup()
-    const fbUserMock = makeFbUser()
-
-    handlePageAuthentication(fbUserMock)
-
-    jest.spyOn(firestore, 'doc').mockImplementation()
-    jest.spyOn(firestore, 'collection').mockImplementation()
-    jest.spyOn(firestore, 'addDoc').mockImplementation()
-
-    await makeSUT()
-
-    const formButton = await screen.findByText('Add link')
-    await user.click(formButton)
   })
 })

@@ -1,17 +1,17 @@
 import * as firebaseAuth from 'firebase/auth'
 import routerMock from 'next-router-mock'
 
-import {setup} from '@/__tests__/utils'
-import '@testing-library/jest-dom'
-import {makeUser} from '@/__tests__/utils/mocks'
+import {fail, setup} from '@/__tests__/__helpers__'
+import {makeUser} from '@/__tests__/__helpers__'
 import {Header} from '@/app/admin/components/header'
 import {authStore} from '@/app/auth/context/auth-store'
 import {User} from '@/models'
-import {cleanup, screen} from '@testing-library/react'
+import {act, cleanup, screen} from '@testing-library/react'
 
-import {act} from 'react-dom/test-utils'
-
-jest.mock('next/navigation', () => jest.requireActual('next-router-mock'))
+jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next-router-mock'),
+  usePathname: jest.fn(() => '/admin'),
+}))
 
 jest.mock('firebase/auth', () => ({
   __esModule: true,
@@ -20,13 +20,11 @@ jest.mock('firebase/auth', () => ({
 
 const makeSUT = (user?: User) => {
   const userMock = user ?? makeUser()
+  authStore.setUser(userMock)
 
-  const sut = setup(<Header user={userMock} />)
+  const sut = setup(<Header />)
 
-  return {
-    userMock,
-    ...sut,
-  }
+  return {userMock, ...sut}
 }
 
 describe('Header component', () => {
@@ -35,45 +33,29 @@ describe('Header component', () => {
     authStore.clearUser()
   })
 
-  it('render component with logo and user data', () => {
-    const {userMock} = makeSUT()
+  it('render Header with logo, nav, and profile button', () => {
+    makeSUT()
 
-    const header = screen.getByText('Lnktree admin')
-    expect(header).toBeInTheDocument
+    const logo = screen.getByRole('img', {name: /lnktree logo/i})
+    const nav = screen.getByRole('navigation')
+    const profileBtn = document.querySelector('header div:nth-child(2)')
 
-    const username = screen.getByText(userMock.name)
-    expect(username.textContent).toBe(userMock.name)
+    if (!profileBtn) return fail()
 
-    const profilePicture = screen.getByRole('img')
-    expect(profilePicture).toBeInTheDocument
+    expect(logo).toBeVisible()
+    expect(nav.children.length).not.toBe(0)
+    expect(profileBtn).toBeVisible()
   })
 
-  // ? Check if this tests is really necessary
   it('render component without user image', () => {
     const {userMock} = makeSUT()
 
-    const header = screen.getByText('Lnktree admin')
-    expect(header).toBeInTheDocument
+    const profileBtn = document.querySelector('header div:nth-child(2)')
+    const avatar = profileBtn?.querySelector('span')
 
-    const username = screen.getByText(userMock.name || '')
-    expect(username.textContent).toBe(userMock.name)
+    if (!profileBtn) return fail()
 
-    const profilePicture = screen.queryByRole('img')
-    expect(profilePicture).not.toBeInTheDocument
-  })
-
-  // ? Check if this tests is really necessary
-  it('render component without user name', () => {
-    makeSUT(makeUser(undefined, ''))
-
-    const header = screen.getByText('Lnktree admin')
-    expect(header).toBeInTheDocument
-
-    const username = document.querySelector('header > div > div > span')
-    expect(username).toBeEmptyDOMElement()
-
-    const profilePicture = screen.getByRole('img')
-    expect(profilePicture).toBeInTheDocument()
+    expect(avatar?.textContent).toBe(userMock.name[0])
   })
 
   it('should logout user', async () => {
@@ -86,7 +68,7 @@ describe('Header component', () => {
     const {userMock, user} = makeSUT()
     // fake login
     await act(() => {
-      authStore.updateUser(userMock)
+      authStore.setUser(userMock)
     })
 
     const logoutBtn = screen.getByText(/logout/i)

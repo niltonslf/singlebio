@@ -1,11 +1,13 @@
+'use client'
+
 import {clsx} from 'clsx'
 import {collection, getDocs, query, where} from 'firebase/firestore'
-import {Fragment, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
 import {db} from '@/libs/firebase'
-import {Dialog, Transition} from '@headlessui/react'
+import {merge} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 type FormProps = {
@@ -21,44 +23,40 @@ const schema = z.object({
 
 type ModalProps = {
   onSave: (username: string) => Promise<void>
-  initialOpen?: boolean
+  initialOpen: boolean
 }
 
-export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
+export const Modal = ({onSave, initialOpen}: ModalProps) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: {errors},
   } = useForm<FormProps>({
     resolver: zodResolver(schema),
   })
 
   const [isOpen, setIsOpen] = useState(initialOpen)
-  const [submitDisabled, setSubmitDisabled] = useState(false)
-  const username = watch('username')
+  const [submitDisabled, setSubmitDisabled] = useState(true)
+  const [usernameAlreadyTaken, setUsernameAlreadyTaken] = useState(false)
 
   const onSubmit = async (data: FormProps) => {
     await onSave(data.username)
-    closeModal()
+    setIsOpen(false)
   }
 
   const checkUsername = async (username: string) => {
-    if (!username) return setSubmitDisabled(false)
+    setUsernameAlreadyTaken(false)
 
     const q = query(collection(db, 'users'), where('username', '==', username))
     const snapshot = await getDocs(q)
 
-    if (snapshot.size) setSubmitDisabled(true)
-  }
+    if (snapshot.size) {
+      setUsernameAlreadyTaken(true)
+      return setSubmitDisabled(true)
+    }
 
-  function closeModal() {
-    setIsOpen(false)
+    setSubmitDisabled(false)
   }
-
-  useEffect(() => {
-    checkUsername(username)
-  }, [username])
 
   useEffect(() => {
     setIsOpen(initialOpen)
@@ -66,82 +64,64 @@ export const Modal = ({onSave, initialOpen = false}: ModalProps) => {
 
   return (
     <>
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as='div' className='relative z-10' onClose={() => null}>
-          <Transition.Child
-            as={Fragment}
-            enter='ease-out duration-300'
-            enterFrom='opacity-0'
-            enterTo='opacity-100'
-            leave='ease-in duration-200'
-            leaveFrom='opacity-100'
-            leaveTo='opacity-0'>
-            <div className='fixed inset-0 bg-black/25' />
-          </Transition.Child>
+      {isOpen && <label className='modal-overlay'></label>}
+      <div
+        className={merge([
+          'w-max-[100%] modal flex w-96 flex-col gap-2',
+          isOpen ? 'show' : '',
+        ])}>
+        <h2 className='text-xl'>Choose your username</h2>
+        <div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className='mt-2'>
+              <p className='text-sm text-gray-500'>
+                The <b>username</b> will be used to create your url. Obs: white
+                spaces will be removed.
+              </p>
+            </div>
 
-          <div className='fixed inset-0 overflow-y-auto'>
-            <div className='flex min-h-full items-center justify-center p-4 text-center'>
-              <Transition.Child
-                as={Fragment}
-                enter='ease-out duration-300'
-                enterFrom='opacity-0 scale-95'
-                enterTo='opacity-100 scale-100'
-                leave='ease-in duration-200'
-                leaveFrom='opacity-100 scale-100'
-                leaveTo='opacity-0 scale-95'>
-                <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
-                  <Dialog.Title
-                    as='h3'
-                    className='text-lg font-medium leading-6 text-gray-900'>
-                    Choose your username
-                  </Dialog.Title>
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className='mt-2'>
-                      <p className='text-sm text-gray-500'>
-                        The <b>username</b> will be used to create your url.
-                        Obs: white spaces will be removed.
-                      </p>
-                    </div>
+            <div className='mt-2'>
+              <input
+                data-testid='modal-username-input'
+                placeholder='Type your username'
+                className={clsx(
+                  'border-1 w-full rounded-md border border-gray-400 p-2',
+                  (errors?.username?.message || usernameAlreadyTaken) &&
+                    'border-red-400 outline-red-400',
+                )}
+                {...register('username', {
+                  required: true,
+                  onChange: event => {
+                    checkUsername(event.target.value)
+                  },
+                })}
+              />
+              {errors.username && (
+                <p className='mt-2 text-sm text-red-400'>
+                  {errors.username.message}
+                </p>
+              )}
+              {usernameAlreadyTaken && (
+                <p className='mt-2 text-sm text-red-400'>
+                  username already taken.
+                </p>
+              )}
+            </div>
 
-                    <div className='mt-2'>
-                      <input
-                        placeholder='Type your username'
-                        className={clsx(
-                          'border-1 w-full rounded-md border border-gray-400 p-2',
-                          (errors?.username?.message || submitDisabled) &&
-                            'border-red-400 outline-red-400',
-                        )}
-                        {...register('username', {required: true})}
-                      />
-                      {errors.username && (
-                        <p className='mt-2 text-sm text-red-400'>
-                          {errors.username.message}
-                        </p>
-                      )}
-                      {submitDisabled && (
-                        <p className='mt-2 text-sm text-red-400'>
-                          username already taken.
-                        </p>
-                      )}
-                    </div>
-
-                    <div className='mt-4'>
-                      <button
-                        type='submit'
-                        className='inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-8 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300
+            <div className='mt-4'>
+              <button
+                data-testid='modal-submit-button'
+                type='submit'
+                className='inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-8 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300
                         disabled:text-gray-900
                         disabled:opacity-50'
-                        disabled={submitDisabled}>
-                        Save
-                      </button>
-                    </div>
-                  </form>
-                </Dialog.Panel>
-              </Transition.Child>
+                disabled={submitDisabled}>
+                Save
+              </button>
             </div>
-          </div>
-        </Dialog>
-      </Transition>
+          </form>
+        </div>
+      </div>
     </>
   )
 }

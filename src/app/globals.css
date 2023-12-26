@@ -2,15 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-}
-
 * {
   box-sizing: border-box;
 }
-
-@layer components {
+@layer utilities {
   .reset {
     all: unset;
   }
+}
+
+/* Button */
+.btn {
+  @apply rounded border bg-gray-400 px-14 py-2 font-bold text-white shadow-md;
+}
+
+.btn-primary {
+  @apply border-blue-900 bg-blue-600;
+}
+
+.btn-primary:hover {
+  @apply hover:bg-blue-800;
+}
+
+.btn-error {
+  @apply border-red-900 bg-red-600;
+}
+
+.btn-error:hover {
+  @apply hover:bg-red-800;
+}
+
+.btn-warning {
+  @apply border-orange-900 bg-orange-600;
+}
+
+.btn-warning:hover {
+  @apply hover:bg-orange-800;
+}
+
+.btn-success {
+  @apply border-green-900 bg-green-600;
+}
+
+.btn-success:hover {
+  @apply hover:bg-green-800;
 }

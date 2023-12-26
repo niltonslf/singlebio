@@ -13,6 +13,7 @@ type CollapseContextProps = {
 type CollapseProviderProps = Spread<
   PropsWithChildren & {
     defaultOpen?: number
+    toggle?: boolean
     onOpen?: (index: number) => void
     onClose?: (index: number) => void
   }
@@ -29,6 +30,7 @@ export const CollapseProvider = ({
   defaultOpen = undefined,
   onClose,
   onOpen,
+  toggle,
 }: CollapseProviderProps) => {
   const [items, setItems] = useState<Items>(
     defaultOpen ? {[defaultOpen]: true} : {},
@@ -42,11 +44,26 @@ export const CollapseProvider = ({
   }
 
   const handleToggleItem = (index: number) => {
-    const currentStatus = items[index]
-    setItems(prev => ({...prev, [index]: !currentStatus}))
+    if (toggle) {
+      const allClosed: Items = {}
+
+      for (const key in items) {
+        if (index === Number(key)) {
+          allClosed[index] = !items[index]
+        } else {
+          allClosed[key] = false
+        }
+      }
+
+      setItems(allClosed)
+    }
+
+    setItems(prev => ({...prev, [index]: !items[index]}))
   }
 
-  const isItemOpen = (index: number) => items[index]
+  const isItemOpen = (index: number) => {
+    return items[index] ?? false
+  }
 
   return (
     <CollapseContext.Provider

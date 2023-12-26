@@ -10,12 +10,17 @@ type MakeGetDocsResponse = Partial<{
   id: string
 }>
 
-export const makeFbUser = () => {
+export const makeFbUser = ({
+  uid,
+  displayName,
+  email,
+  photoURL,
+}: Partial<FbUser> = {}) => {
   return {
-    uid: faker.string.uuid(),
-    displayName: faker.person.fullName(),
-    email: faker.internet.email(),
-    photoURL: faker.image.urlLoremFlickr(),
+    uid: uid ?? faker.string.uuid(),
+    displayName: displayName ?? faker.person.fullName(),
+    email: email ?? faker.internet.email(),
+    photoURL: photoURL ?? faker.image.urlLoremFlickr(),
   } as FbUser
 }
 

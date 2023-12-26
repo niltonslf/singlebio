@@ -13,7 +13,7 @@ export const MenuItem = ({children, href, onClick}: MenuItemProps) => {
   if (href)
     return (
       <li>
-        <a href={href} target={onClick ? '_self' : '_blank'} className={styles}>
+        <a href={href} target={'_blank'} className={styles}>
           {children}
         </a>
       </li>

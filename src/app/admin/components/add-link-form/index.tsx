@@ -6,7 +6,7 @@ import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
 import {Link} from '@/models'
-import {useDebouce} from '@/utils'
+import {useDebounce} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 type AddLinkFormProps = {
@@ -22,7 +22,7 @@ const schema = z.object({
   url: z
     .string()
     .regex(httpRegex, 'Value must be a valid url. e.g. https://google.com '),
-  label: z.string().min(1, {message: 'Required field'}),
+  label: z.string().min(3, {message: 'Required field'}),
   id: z.string(),
   order: z.number(),
 })
@@ -44,7 +44,7 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
   const url = watch('url')
   const label = watch('label')
 
-  const handleChange = useDebouce(() => {
+  const handleChange = useDebounce(() => {
     formRef.current?.requestSubmit()
   })
 

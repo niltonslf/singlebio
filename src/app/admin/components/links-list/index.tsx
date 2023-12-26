@@ -11,12 +11,13 @@ import {
 } from 'firebase/firestore'
 import {useCallback, useEffect, useState} from 'react'
 
+import {useSmartphone} from '@/app/admin/context'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
 import {AddLinkForm} from '..'
 
-import {useDebouce} from '@/utils'
+import {useDebounce} from '@/utils'
 import {
   DndContext,
   closestCenter,
@@ -33,7 +34,6 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
-import {useAdmin} from '../../context/admin-context'
 import {LinkCardItem} from './link-card-item'
 
 type LinksListProps = {
@@ -41,8 +41,10 @@ type LinksListProps = {
 }
 
 export const LinksList = ({user}: LinksListProps) => {
-  const {reloadSmartphoneList} = useAdmin()
-  const reloadSmartphoneListDebounced = useDebouce(() => reloadSmartphoneList())
+  const {reloadSmartphoneList} = useSmartphone()
+  const reloadSmartphoneListDebounced = useDebounce(() => {
+    reloadSmartphoneList()
+  })
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -57,15 +59,19 @@ export const LinksList = ({user}: LinksListProps) => {
     return links.reduce((prev, cur) => Math.max(prev, cur.order + 1), 0)
   }
 
-  const handleAddNewLink = async (data: any) => {
+  const handleAddNewLink = async () => {
     const res = await doc(db, 'users', user.uid)
     const emptyLink: Link = {label: '', url: '', order: getLastOrder()}
     addDoc(collection(res, 'links'), emptyLink)
   }
 
-  const handleSaveLink = async (data: Link, reload: boolean = true) => {
+  const handleSaveLink = async (data: Link) => {
     if (data.id) setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
-    if (reload) reloadSmartphoneListDebounced()
+  }
+
+  const handleSubmitForm = async (data: Link) => {
+    await handleSaveLink(data)
+    reloadSmartphoneListDebounced()
   }
 
   const deleteLink = (link: Link) => {
@@ -77,6 +83,7 @@ export const LinksList = ({user}: LinksListProps) => {
     const customQuery = query(collection(db, 'users', user.uid, 'links'))
     const unsubscribe = onSnapshot(customQuery, querySnapshot => {
       setLinks([])
+
       let newLinks: Required<Link>[] = []
 
       querySnapshot.forEach((doc: any) =>
@@ -100,11 +107,11 @@ export const LinksList = ({user}: LinksListProps) => {
     if (oldIndex < newIndex) {
       const [start, end] = [oldIndex, newIndex - 1]
 
-      handleSaveLink({...links[newIndex], order: links[end].order}, false)
+      handleSaveLink({...links[newIndex], order: links[end].order})
 
       for (let index = start; index <= end; index++) {
         const link: Link = {...links[index], order: links[index].order + 1}
-        handleSaveLink(link, false)
+        handleSaveLink(link)
       }
 
       return reloadSmartphoneListDebounced()
@@ -113,11 +120,11 @@ export const LinksList = ({user}: LinksListProps) => {
     // MOVING UP
     const [start, end] = [newIndex + 1, oldIndex]
 
-    handleSaveLink({...links[newIndex], order: links[start].order}, false)
+    handleSaveLink({...links[newIndex], order: links[start].order})
 
     for (let index = start; index <= end; index++) {
       const link: Link = {...links[index], order: links[index].order - 1}
-      handleSaveLink(link, false)
+      handleSaveLink(link)
     }
     return reloadSmartphoneListDebounced()
   }
@@ -130,6 +137,7 @@ export const LinksList = ({user}: LinksListProps) => {
         const oldIndex = items.findIndex(item => item.id == active.id)
         const newIndex = items.findIndex(item => item.id == over?.id)
         const newArr = arrayMove(items, oldIndex, newIndex)
+
         updateSort(newArr, oldIndex, newIndex)
         return newArr
       })
@@ -162,7 +170,7 @@ export const LinksList = ({user}: LinksListProps) => {
               strategy={verticalListSortingStrategy}>
               {links.map(link => (
                 <LinkCardItem key={link.id} onDelete={deleteLink} link={link}>
-                  <AddLinkForm saveLink={handleSaveLink} link={link} />
+                  <AddLinkForm saveLink={handleSubmitForm} link={link} />
                 </LinkCardItem>
               ))}
             </SortableContext>
