@@ -1,12 +1,11 @@
 'use client'
 
 import {observer} from 'mobx-react-lite'
-import Image from 'next/image'
 import {ReactNode} from 'react'
 
 import {merge} from '@/utils'
 
-import {Header, NavLinks} from './components'
+import {Header, Sidebar} from './components'
 import {SmartphoneProvider} from './context/smartphone-context'
 import {useValidateAuth} from './hooks'
 
@@ -28,29 +27,7 @@ const AdminLayout = observer(({children}: AdminLayoutProps) => {
         ])}>
         <section className='grid h-screen w-screen grid-cols-[250px_1fr] bg-background-100 bg-opacity-95'>
           <nav className='flex flex-col gap-5 border-r border-background-600 p-5 '>
-            <span className='mb-8 flex w-full justify-center'>
-              <Image
-                src='/logo-white.png'
-                width={114.72}
-                height={30}
-                alt='lnktree logo'
-              />
-            </span>
-
-            <NavLinks />
-
-            <div className='mt-auto flex w-full flex-row items-center justify-between'>
-              <p className=' text-left text-xs text-slate-300'>v1.0.1 (beta)</p>
-              <div className=' flex flex-row items-center justify-start gap-2'>
-                <p className=' text-right text-sm text-slate-300'>Dark mode</p>
-                <input
-                  defaultChecked={true}
-                  className='success sm switch'
-                  data-content='☀️'
-                  type='checkbox'
-                />
-              </div>
-            </div>
+            <Sidebar />
           </nav>
 
           <div className='grid h-screen grid-rows-[56px_1fr] px-10'>
