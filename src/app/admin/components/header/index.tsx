@@ -1,9 +1,11 @@
 'use client'
 
+import {ExternalLink} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 
 import {Dropdown} from '..'
 
+import Link from 'next/link'
 import {ReactNode} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
@@ -16,6 +18,7 @@ type HeaderProps = {
 
 export const Header = observer(({navbarHandler}: HeaderProps) => {
   const {user} = authStore
+  const hostname = window.location.hostname
 
   return (
     <header
@@ -27,12 +30,20 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
       <div className='flex flex-row items-center gap-3'>
         {navbarHandler && <div className='md:hidden'>{navbarHandler}</div>}
 
-        <span className='text-slate-300'>
-          Hello, {authStore?.user?.name || 'there'}!
-        </span>
+        <span className='text-slate-300'>Hello, {user?.name || 'there'}!</span>
       </div>
 
-      <div className='flex flex-row items-center gap-3'>
+      <div className='flex flex-row items-center gap-5'>
+        {user?.username && (
+          <Link
+            className='flex flex-row items-center gap-1 text-primary-1000'
+            target='_blank'
+            href={`/${user.username}`}>
+            {hostname}/{user?.username}
+            <ExternalLink size={15} />
+          </Link>
+        )}
+
         <Dropdown>
           <Avatar
             name={user?.name ?? 'User'}

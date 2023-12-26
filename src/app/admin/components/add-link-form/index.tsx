@@ -92,7 +92,7 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
         placeholder='Type the url'
         {...register('url', {required: true})}
         className={clsx(
-          'rounded-lg bg-transparent px-2 py-1 text-sm font-normal text-slate-300 hover:bg-background-500 focus:bg-background-500 focus:outline-none',
+          'mt-1 rounded-lg bg-transparent px-2 py-1 text-sm font-normal text-slate-300 hover:bg-background-500 focus:bg-background-500 focus:outline-none',
           errors.url && 'border border-primary-600',
         )}
       />
