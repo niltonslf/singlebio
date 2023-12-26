@@ -24,7 +24,7 @@ export const LinkCardItem = ({link, onDelete, children}: LinkCardItemProps) => {
     <li
       ref={setNodeRef}
       style={style}
-      className='flex w-full flex-wrap items-center justify-center gap-3 rounded-xl bg-background-300 px-3 py-2  font-medium shadow-md md:p-5'>
+      className='flex w-full flex-wrap items-center justify-center gap-3 rounded-xl bg-background-300 px-3 py-2  font-medium shadow-md md:px-5 md:py-3'>
       <button
         className=' mr-3 flex touch-none flex-col items-center'
         {...attributes}

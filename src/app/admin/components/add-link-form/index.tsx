@@ -63,46 +63,42 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
   }, [link])
 
   return (
-    <div className='flex w-full flex-row gap-5  '>
-      <form
-        ref={formRef}
-        onSubmit={handleSubmit(saveLink)}
-        className='flex flex-1 flex-col gap-1'>
-        <input type='hidden' {...register('id', {required: false})} />
-        <input
-          type='hidden'
-          {...register('order', {
-            required: false,
-            setValueAs: value => Number(value),
-          })}
-        />
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit(saveLink)}
+      className='flex w-full flex-1 flex-col'>
+      <input type='hidden' {...register('id', {required: false})} />
+      <input
+        type='hidden'
+        {...register('order', {
+          required: false,
+          setValueAs: value => Number(value),
+        })}
+      />
 
-        <input
-          placeholder='Type the label'
-          {...register('label', {required: true})}
-          className={clsx(
-            'bg-transparent font-normal text-bw-900',
-            errors.label && 'outline-red-400',
-            errors.label && 'border-red-400',
-          )}
-        />
-        {errors.label && (
-          <p className='mt-0 text-sm text-red-600'>{errors.label.message}</p>
+      <input
+        placeholder='Type the label'
+        {...register('label', {required: true})}
+        className={clsx(
+          'rounded-lg bg-transparent px-2 py-1 font-normal text-slate-50 hover:bg-background-500 focus:bg-background-500 focus:outline-none',
+          errors.label && 'border border-primary-600',
         )}
+      />
+      {errors.label && (
+        <p className='my-2 text-sm text-primary-1000'>{errors.label.message}</p>
+      )}
 
-        <input
-          placeholder='Type the url'
-          {...register('url', {required: true})}
-          className={clsx(
-            'bg-transparent text-sm font-normal text-bw-900',
-            errors.url && 'outline-red-400',
-            errors.url && 'border-red-400',
-          )}
-        />
-        {errors.url && (
-          <p className='mt-0 text-sm text-red-600'>{errors.url.message}</p>
+      <input
+        placeholder='Type the url'
+        {...register('url', {required: true})}
+        className={clsx(
+          'rounded-lg bg-transparent px-2 py-1 text-sm font-normal text-slate-300 hover:bg-background-500 focus:bg-background-500 focus:outline-none',
+          errors.url && 'border border-primary-600',
         )}
-      </form>
-    </div>
+      />
+      {errors.url && (
+        <p className='my-2 text-sm text-primary-1000'>{errors.url.message}</p>
+      )}
+    </form>
   )
 }
