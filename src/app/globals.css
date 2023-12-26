@@ -13,7 +13,7 @@
 
 /* Button */
 .btn {
-  @apply rounded border bg-gray-400 px-14 py-2 font-bold text-white shadow-md;
+  @apply rounded-md border bg-gray-400 px-14 py-2 font-semibold text-white shadow-md;
 }
 
 .btn-primary {

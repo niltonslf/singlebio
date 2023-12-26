@@ -9,9 +9,11 @@ import {
   addDoc,
   setDoc,
 } from 'firebase/firestore'
+import {Link2} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
 import {useSmartphone} from '@/app/admin/context'
+import {Button} from '@/app/components'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
@@ -152,14 +154,14 @@ export const LinksList = ({user}: LinksListProps) => {
   return (
     <section className='flex w-full flex-col gap-5 px-0 py-3'>
       <div className='flex flex-1 flex-col gap-5'>
-        <button
+        <Button
           onClick={handleAddNewLink}
-          type='button'
-          className='rounded-md bg-blue-600 py-2 text-white'>
+          className='w-full !border-[#91023b] !bg-[#b50048] !py-3'>
           Add link
-        </button>
+          <Link2 />
+        </Button>
 
-        <ul className='flex flex-1 flex-col gap-5'>
+        <ul className='flex flex-1 flex-col gap-3'>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}

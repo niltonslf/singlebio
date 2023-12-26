@@ -7,8 +7,6 @@ import {PropsWithChildren} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
 
-import {NavLinks} from '..'
-
 type DropdownProps = {
   any?: any
 } & PropsWithChildren
@@ -41,8 +39,6 @@ export const Dropdown = observer(({children}: DropdownProps) => {
         </div>
 
         <div className='is-divider' role='separator'></div>
-
-        <NavLinks location='dropdown' />
 
         <a className='item text-sm' href={`/${authStore?.user?.username}`}>
           <Link2 size={15} />

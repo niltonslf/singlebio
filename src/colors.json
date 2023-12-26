@@ -1,0 +1,16 @@
+{
+  "primary": "#b50048",
+  "secondary": "#ffc002",
+
+  "support2": "#00d97d",
+  "support3": "#e50815",
+  "support4": "#8d006f",
+
+  "black1": "#0d0d0e",
+  "black2": "#121217",
+
+  "text": {
+    "read": " #FFFFFF",
+    "actions": " #FFFFFF"
+  }
+}

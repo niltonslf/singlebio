@@ -32,14 +32,16 @@ const Admin = observer(() => {
   return (
     <>
       {!user ? (
-        <div className='text-white'>Loading...</div>
+        <div className='flex items-center justify-center text-lg text-white'>
+          Loading...
+        </div>
       ) : (
-        <main className='grid min-h-[calc(100%-80px)] w-full grid-cols-1 gap-3 md:grid-cols-[3fr_1.5fr] md:grid-rows-[1fr]'>
-          <section className='flex h-auto  flex-col rounded-lg bg-gray-800 px-4 md:p-10'>
+        <div className='grid h-auto w-full grid-cols-[3fr_2fr] grid-rows-[1fr]'>
+          <section className='flex h-full w-full flex-col py-4'>
             <LinksList user={user} />
           </section>
 
-          <aside className='grid w-full grid-rows-1 rounded-lg bg-gray-800'>
+          <aside className='grid w-full grid-rows-1'>
             <div className=' flex flex-1 items-start justify-center px-6 pt-4'>
               <div className='sticky top-6'>
                 <Smartphone ref={iframeRef} iframeUrl={user?.username} />
@@ -48,7 +50,7 @@ const Admin = observer(() => {
           </aside>
 
           <Modal onSave={onSubmitUsername} initialOpen={showUsernameModal} />
-        </main>
+        </div>
       )}
     </>
   )
