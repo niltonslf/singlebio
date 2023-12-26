@@ -29,7 +29,11 @@ type NavSection = {
 
 type NavbarLinks = Record<string, NavSection>
 
-const items: NavbarLinks = {
+type NavLinksProps = {
+  onClick?: () => void
+}
+
+const navbarItems: NavbarLinks = {
   app: {
     label: 'App',
     links: [
@@ -89,28 +93,29 @@ const items: NavbarLinks = {
   },
 }
 
-export const NavLinks = () => {
+export const NavLinks = ({onClick}: NavLinksProps) => {
   const pathName = usePathname()
 
   const isCurrentPage = (currentPage: string) => pathName == currentPage
 
   return (
     <>
-      {Object.keys(items).map(section => {
+      {Object.keys(navbarItems).map(section => {
         return (
-          <div key={section} className='mb-5'>
+          <div key={section} className='mb-5 w-full'>
             <p className='text-md mb-3 font-semibold text-slate-400'>
-              {items[section].label}
+              {navbarItems[section].label}
             </p>
             <div className='flex flex-col gap-2'>
-              {items[section].links.map(page => (
+              {navbarItems[section].links.map(page => (
                 <Link
                   key={page.href}
                   href={page.href}
+                  onClick={onClick}
                   title={page.title}
                   className={merge([
                     'text-md flex flex-row items-center gap-3 rounded-xl px-3 py-2 font-normal text-slate-300 hover:text-bw-1000',
-                    isCurrentPage(page.href) && 'bg-primary-500  text-bw-1000',
+                    isCurrentPage(page.href) && 'bg-primary-500 text-bw-1000',
                     !isCurrentPage(page.href) && 'hover:bg-background-300',
                   ])}>
                   {page.Icon}
