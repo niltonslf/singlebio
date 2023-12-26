@@ -81,7 +81,7 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
           placeholder='Type the label'
           {...register('label', {required: true})}
           className={clsx(
-            'border-1 w-full rounded-md border border-gray-500 bg-gray-900 p-2 text-gray-200',
+            'solid md input border !border-[#393948] !bg-[#0d0d0e] text-white placeholder:text-[#a1a1a1]',
             errors.label && 'outline-red-400',
             errors.label && 'border-red-400',
           )}
@@ -94,7 +94,7 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
           placeholder='Type the url'
           {...register('url', {required: true})}
           className={clsx(
-            'border-1 w-full rounded-md border border-gray-500 bg-gray-900 p-2 text-gray-200',
+            'solid md input border !border-[#393948] !bg-[#0d0d0e] text-white placeholder:text-[#a1a1a1]',
             errors.url && 'outline-red-400',
             errors.url && 'border-red-400',
           )}

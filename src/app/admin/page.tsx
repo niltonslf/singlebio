@@ -32,8 +32,10 @@ const Admin = observer(() => {
   return (
     <>
       {!user ? (
-        <div className='flex items-center justify-center text-lg text-white'>
-          Loading...
+        <div className='flex h-full w-full items-center justify-center text-lg text-white'>
+          <div className='bw loader'>
+            <div className='bar-bounce' />
+          </div>
         </div>
       ) : (
         <div className='grid h-auto w-full grid-cols-[3fr_2fr] grid-rows-[1fr]'>
@@ -43,7 +45,7 @@ const Admin = observer(() => {
 
           <aside className='grid w-full grid-rows-1'>
             <div className=' flex flex-1 items-start justify-center px-6 pt-4'>
-              <div className='sticky top-6'>
+              <div className='sticky top-6 rounded-[60px] px-5 shadow-[0px_0px_30px_0px_rgba(154,154,154,0.1)]'>
                 <Smartphone ref={iframeRef} iframeUrl={user?.username} />
               </div>
             </div>

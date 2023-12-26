@@ -11,7 +11,7 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
         className='after:content-[" "] before:content-[" "]
       ` 
       relative 
-      my-6 
+      my-5 
       box-border  
       flex 
      aspect-[9/19] 
