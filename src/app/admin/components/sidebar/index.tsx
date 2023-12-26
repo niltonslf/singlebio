@@ -2,17 +2,22 @@ import Image from 'next/image'
 
 import {NavLinks} from '..'
 
+import Link from 'next/link'
+
 export const Sidebar = () => {
   return (
     <>
-      <span className='mb-8 flex w-full justify-center'>
+      <Link
+        href='/admin'
+        title='Home page'
+        className='mb-8 flex w-full cursor-pointer justify-center'>
         <Image
           src='/logo-white.png'
           width={114.72}
           height={30}
           alt='lnktree logo'
         />
-      </span>
+      </Link>
 
       <NavLinks />
 
