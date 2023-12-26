@@ -25,7 +25,7 @@ const SignIn = observer(() => {
 
   return (
     <main className='m-auto flex h-[100vh] w-[100vw] items-center justify-center bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-yellow-500 via-purple-500 to-blue-500 px-10'>
-      <section className='flex w-[400px] max-w-full flex-col rounded-lg bg-gray-900 px-4 py-10 text-white shadow-2xl'>
+      <section className='flex w-[400px] max-w-full flex-col rounded-lg bg-gray-900 px-4 py-10 text-bw-1000 shadow-2xl'>
         <header className='mb-4 flex w-full justify-center'>
           <h1 className='text-[2rem] font-semibold'>Lnktree</h1>
         </header>
@@ -33,7 +33,7 @@ const SignIn = observer(() => {
         <button
           onClick={handleLoginWithGoogle}
           type='button'
-          className='dark:focus:ring-[#4285F4]/55 mb-2  mr-2 inline-flex w-full items-center justify-center rounded-lg bg-[#4285F4] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#4285F4]/90 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50'>
+          className='dark:focus:ring-[#4285F4]/55 mb-2  mr-2 inline-flex w-full items-center justify-center rounded-lg bg-[#4285F4] px-5 py-2.5 text-sm font-medium text-bw-1000 hover:bg-[#4285F4]/90 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50'>
           <GoogleIcon />
           Sign up with Google
         </button>
@@ -46,7 +46,7 @@ const SignIn = observer(() => {
 
         <button
           type='button'
-          className='flex w-full max-w-md cursor-not-allowed items-center justify-center rounded-lg bg-gray-600 px-4 py-2 text-center text-base font-semibold text-white opacity-60 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'>
+          className='flex w-full max-w-md cursor-not-allowed items-center justify-center rounded-lg bg-gray-600 px-4 py-2 text-center text-base font-semibold text-bw-1000 opacity-60 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             width='20'

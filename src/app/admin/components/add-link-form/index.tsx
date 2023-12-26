@@ -63,11 +63,11 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
   }, [link])
 
   return (
-    <div className='flex w-full flex-row gap-5 rounded-lg '>
+    <div className='flex w-full flex-row gap-5  '>
       <form
         ref={formRef}
         onSubmit={handleSubmit(saveLink)}
-        className='flex flex-1 flex-col gap-2'>
+        className='flex flex-1 flex-col gap-1'>
         <input type='hidden' {...register('id', {required: false})} />
         <input
           type='hidden'
@@ -81,7 +81,7 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
           placeholder='Type the label'
           {...register('label', {required: true})}
           className={clsx(
-            'solid md input border !border-[#393948] !bg-[#0d0d0e] text-white placeholder:text-[#a1a1a1]',
+            'bg-transparent font-normal text-bw-900',
             errors.label && 'outline-red-400',
             errors.label && 'border-red-400',
           )}
@@ -94,7 +94,7 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
           placeholder='Type the url'
           {...register('url', {required: true})}
           className={clsx(
-            'solid md input border !border-[#393948] !bg-[#0d0d0e] text-white placeholder:text-[#a1a1a1]',
+            'bg-transparent text-sm font-normal text-bw-900',
             errors.url && 'outline-red-400',
             errors.url && 'border-red-400',
           )}

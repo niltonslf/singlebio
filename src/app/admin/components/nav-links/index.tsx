@@ -79,7 +79,7 @@ export const NavLinks = () => {
   return (
     <>
       <div>
-        <p className='text-md mb-3 font-semibold text-[#a1a1a1]'>App</p>
+        <p className='text-md mb-3 font-semibold text-slate-300'>App</p>
         <div className='flex flex-col gap-4'>
           {pages.map(page => (
             <Link
@@ -87,8 +87,9 @@ export const NavLinks = () => {
               href={page.href}
               title={page.title}
               className={merge([
-                'text-md flex flex-row items-center gap-3 rounded-md px-3 py-2 font-normal text-[#a1a1a1] hover:text-white',
-                isCurrentPage(page.href) && 'bg-[#b50048]  text-white',
+                'text-md flex flex-row items-center gap-3 rounded-xl px-3 py-2 font-normal text-slate-300 hover:text-bw-1000',
+                isCurrentPage(page.href) && 'bg-primary-500  text-bw-1000',
+                !isCurrentPage(page.href) && 'hover:bg-background-300',
               ])}>
               {page.Icon}
               <p>{page.name}</p>
@@ -98,7 +99,7 @@ export const NavLinks = () => {
       </div>
 
       <div className='mt-5'>
-        <p className='text-md mb-3 font-semibold text-[#a1a1a1]'>Personal</p>
+        <p className='text-md mb-3 font-semibold text-slate-300'>Personal</p>
         <div className='flex flex-col gap-4'>
           {accountPages.map(page => (
             <Link
@@ -106,8 +107,8 @@ export const NavLinks = () => {
               href={page.href}
               title={page.title}
               className={merge([
-                'text-md flex flex-row items-center gap-3 rounded-md px-3 py-2 font-normal text-[#a1a1a1] hover:text-white',
-                isCurrentPage(page.href) && 'bg-[#b50048]  text-white',
+                'text-md flex flex-row items-center gap-3 rounded-xl px-3 py-2 font-normal text-slate-300 hover:text-bw-1000',
+                isCurrentPage(page.href) && 'bg-primary-200  text-bw-1000',
               ])}>
               {page.Icon}
               <p>{page.name}</p>
@@ -117,7 +118,7 @@ export const NavLinks = () => {
       </div>
 
       <div className='mt-5'>
-        <p className='text-md mb-3 font-semibold text-[#a1a1a1]'>Support</p>
+        <p className='text-md mb-3 font-semibold text-slate-300'>Support</p>
         <div className='flex flex-col gap-4'>
           {supportPages.map(page => (
             <Link
@@ -125,8 +126,8 @@ export const NavLinks = () => {
               href={page.href}
               title={page.title}
               className={merge([
-                'text-md flex flex-row items-center gap-3 rounded-md px-3 py-2 font-normal text-[#a1a1a1] hover:text-white',
-                isCurrentPage(page.href) && 'bg-[#b50048]  text-white',
+                'text-md flex flex-row items-center gap-3 rounded-xl px-3 py-2 font-normal text-slate-300 hover:text-bw-1000',
+                isCurrentPage(page.href) && 'bg-primary-200  text-bw-1000',
               ])}>
               {page.Icon}
               <p>{page.name}</p>

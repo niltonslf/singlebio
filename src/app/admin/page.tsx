@@ -32,14 +32,14 @@ const Admin = observer(() => {
   return (
     <>
       {!user ? (
-        <div className='flex h-full w-full items-center justify-center text-lg text-white'>
+        <div className='flex h-full w-full items-center justify-center text-lg text-bw-1000'>
           <div className='bw loader'>
             <div className='bar-bounce' />
           </div>
         </div>
       ) : (
-        <div className='grid h-auto w-full grid-cols-[3fr_2fr] grid-rows-[1fr]'>
-          <section className='flex h-full w-full flex-col py-4'>
+        <div className='grid h-auto w-full grid-cols-1 grid-rows-[1fr] md:grid-cols-[3fr_2fr]'>
+          <section className='flex h-full w-full flex-col pb-12 pt-4'>
             <LinksList user={user} />
           </section>
 

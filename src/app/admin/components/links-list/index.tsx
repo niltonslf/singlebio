@@ -13,7 +13,6 @@ import {Link2} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
 import {useSmartphone} from '@/app/admin/context'
-import {Button} from '@/app/components'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
@@ -154,12 +153,12 @@ export const LinksList = ({user}: LinksListProps) => {
   return (
     <section className='flex w-full flex-col gap-5 px-0 py-3'>
       <div className='flex flex-1 flex-col gap-5'>
-        <Button
+        <button
           onClick={handleAddNewLink}
-          className='w-full !border-[#91023b] !bg-[#b50048] !py-3'>
+          className='danger btn md solid w-full'>
           Add link
           <Link2 />
-        </Button>
+        </button>
 
         <ul className='flex flex-1 flex-col gap-3'>
           <DndContext
