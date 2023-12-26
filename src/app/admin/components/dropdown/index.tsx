@@ -1,13 +1,13 @@
 'use client'
 
+import {Link2, Trash} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useRouter} from 'next/navigation'
-import {PropsWithChildren, useEffect, useRef, useState} from 'react'
+import {PropsWithChildren} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
 
-import {DropdownMenu} from './dropdown-menu'
-import {MenuItem} from './menu-item'
+import {NavLinks} from '..'
 
 type DropdownProps = {
   any?: any
@@ -16,10 +16,7 @@ type DropdownProps = {
 export const Dropdown = observer(({children}: DropdownProps) => {
   const {user} = authStore
 
-  const dropdown = useRef<HTMLDivElement>(null)
   const router = useRouter()
-
-  const [isOpen, setIsOpen] = useState(false)
 
   const logout = async () => {
     await authStore.logout()
@@ -30,40 +27,36 @@ export const Dropdown = observer(({children}: DropdownProps) => {
     await authStore.deleteUser()
   }
 
-  useEffect(() => {
-    function handleClickOutsideBox(event: any) {
-      if (!dropdown?.current?.contains(event.target)) return setIsOpen(false)
-    }
-
-    document.addEventListener('click', handleClickOutsideBox)
-    return () => removeEventListener('click', handleClickOutsideBox)
-  }, [])
-
   return (
-    <div
-      ref={dropdown}
-      className='relative z-[60] flex h-full cursor-pointer flex-row items-center gap-3'
-      onClick={() => setIsOpen(prev => !prev)}>
-      {children}
-      <DropdownMenu isOpen={isOpen}>
-        <MenuItem>
-          <span>Welcome,</span>
-          <span className='hidden font-semibold text-white md:flex'>
-            {user?.name}
-          </span>
-        </MenuItem>
+    <div className='bw dropdown'>
+      <label className='cursor-pointer' tabIndex={0}>
+        {children}
+      </label>
+      <div className=' solid menu bottom-left !w-48'>
+        <div className='px-3 pt-2 text-sm'>
+          <div className='flex flex-wrap'>
+            <span className='w-full'>Welcome,</span>
+            <span className='font-semibold '>{user?.name}</span>
+          </div>
+        </div>
 
-        <div className='my-1 h-[1px] w-full bg-gray-800' />
+        <div className='is-divider' role='separator'></div>
 
-        <MenuItem href={`/${authStore?.user?.username}`}>
-          My links page
-        </MenuItem>
+        <NavLinks location='dropdown' />
 
-        <MenuItem onClick={deleteAccount}>Delete account</MenuItem>
+        <a className='item text-sm' href={`/${authStore?.user?.username}`}>
+          <Link2 size={15} />
+          <p>My page</p>
+        </a>
 
-        <div className='my-2 h-[1px] w-full bg-gray-800' />
+        <span className='item text-sm' onClick={deleteAccount}>
+          <Trash size={15} />
+          <p>Delete account</p>
+        </span>
 
-        <MenuItem>
+        <div className='is-divider' role='separator'></div>
+
+        <span className='px-3 py-2'>
           <div
             onClick={logout}
             className='group relative inline-flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-pink-500 to-orange-400 p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-pink-200 group-hover:from-pink-500 group-hover:to-orange-400 dark:text-white dark:focus:ring-pink-800'>
@@ -71,8 +64,8 @@ export const Dropdown = observer(({children}: DropdownProps) => {
               logout
             </span>
           </div>
-        </MenuItem>
-      </DropdownMenu>
+        </span>
+      </div>
     </div>
   )
 })
