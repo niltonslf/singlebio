@@ -65,11 +65,13 @@ export const LinksList = ({user}: LinksListProps) => {
     addDoc(collection(res, 'links'), emptyLink)
   }
 
-  const handleSaveLink = async (data: Link, reload: boolean = false) => {
+  const handleSaveLink = async (data: Link) => {
     if (data.id) setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
-    if (reload) {
-      reloadSmartphoneListDebounced()
-    }
+  }
+
+  const handleSubmitForm = async (data: Link) => {
+    await handleSaveLink(data)
+    reloadSmartphoneListDebounced()
   }
 
   const deleteLink = (link: Link) => {
@@ -168,10 +170,7 @@ export const LinksList = ({user}: LinksListProps) => {
               strategy={verticalListSortingStrategy}>
               {links.map(link => (
                 <LinkCardItem key={link.id} onDelete={deleteLink} link={link}>
-                  <AddLinkForm
-                    saveLink={data => handleSaveLink(data, true)}
-                    link={link}
-                  />
+                  <AddLinkForm saveLink={handleSubmitForm} link={link} />
                 </LinkCardItem>
               ))}
             </SortableContext>
