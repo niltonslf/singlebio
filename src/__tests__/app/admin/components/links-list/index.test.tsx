@@ -174,4 +174,65 @@ describe('Links List component', () => {
       expect(firestore.setDoc).toHaveBeenCalledTimes(1)
     })
   })
+
+  it('should change the order using drag and drop', async () => {
+    renderWithItems([
+      {...makeLink(), order: 0},
+      {...makeLink(), order: 1},
+      {...makeLink(), order: 2},
+      {...makeLink(), order: 3},
+    ])
+
+    const {user} = makeSUT()
+
+    jest.spyOn(firestore, 'doc').mockImplementationOnce(jest.fn())
+    jest.spyOn(firestore, 'collection').mockImplementationOnce(jest.fn())
+    jest.spyOn(firestore, 'addDoc').mockImplementationOnce(jest.fn())
+
+    jest.spyOn(firestore, 'setDoc').mockImplementation(jest.fn())
+
+    const list = screen.getByRole('list')
+    const items = list.querySelectorAll('li')
+
+    const first = items[0]
+    const firstHandler = first.querySelector('button')
+
+    const second = items[1]
+    const secondHandler = second.querySelector('button')
+
+    const third = items[2]
+    const thirdHandler = third.querySelector('button')
+
+    const last = items[3]
+    const lastHandler = last.querySelector('button')
+
+    if (!firstHandler || !lastHandler || !secondHandler || !thirdHandler)
+      return fail()
+
+    // Drag up
+    await user.pointer([
+      {
+        keys: '[MouseLeft>]',
+        target: lastHandler,
+      },
+      {
+        pointerName: 'mouse',
+        target: firstHandler,
+      },
+      '[/MouseLeft]',
+    ])
+
+    // drag down
+    await user.pointer([
+      {
+        keys: '[MouseLeft>]',
+        target: lastHandler,
+      },
+      {
+        pointerName: 'mouse',
+        target: secondHandler,
+      },
+      '[/MouseLeft]',
+    ])
+  })
 })

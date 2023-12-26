@@ -135,6 +135,7 @@ export const LinksList = ({user}: LinksListProps) => {
         const oldIndex = items.findIndex(item => item.id == active.id)
         const newIndex = items.findIndex(item => item.id == over?.id)
         const newArr = arrayMove(items, oldIndex, newIndex)
+
         updateSort(newArr, oldIndex, newIndex)
         return newArr
       })
