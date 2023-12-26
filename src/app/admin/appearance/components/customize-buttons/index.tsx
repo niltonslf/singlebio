@@ -20,9 +20,11 @@ export const CustomizeButtons = observer(() => {
 
   return (
     <>
-      <div className='flex flex-row justify-between gap-10'>
-        <div className='mt-5 flex-1'>
-          <h2 className='font-mg font-semibold'>Button background</h2>
+      <div className='flex flex-row flex-wrap justify-between gap-10'>
+        <div className='mt-3 w-full md:w-auto md:flex-1'>
+          <h2 className='text-sm font-normal text-slate-300'>
+            Button background
+          </h2>
 
           <div className='mt-3'>
             <HexAlphaColorPicker
@@ -33,8 +35,8 @@ export const CustomizeButtons = observer(() => {
           </div>
         </div>
 
-        <div className='mt-5 flex-1'>
-          <h2 className='font-mg font-semibold'>Button text</h2>
+        <div className='mt-3 w-full md:w-auto md:flex-1'>
+          <h2 className='text-sm font-normal text-slate-300'>Button text</h2>
 
           <div className='mt-3'>
             <HexAlphaColorPicker

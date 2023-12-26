@@ -27,7 +27,7 @@ export const CollapseItem = ({
     <CollapseItemProvider index={index}>
       <article
         className={merge([
-          'mb-3 h-min overflow-hidden rounded-md border bg-gray-200',
+          'compact mb-3 h-min overflow-hidden rounded-xl bg-background-500 shadow-lg ',
           className,
         ])}>
         {children}
