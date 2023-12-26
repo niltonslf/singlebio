@@ -1,11 +1,13 @@
 import {forwardRef} from 'react'
 
+import {merge} from '@/utils'
+
 type SmartphoneProps = {
   iframeUrl?: string
 }
 
 export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
-  ({iframeUrl = 'demo'}, ref) => {
+  ({iframeUrl}, ref) => {
     return (
       <div
         className='after:content-[" "] before:content-[" "]
@@ -42,11 +44,24 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
      after:rounded-full
      after:bg-white
      after:shadow-md'>
-        <iframe
-          ref={ref}
-          src={`/${iframeUrl}`}
-          className='h-full w-full object-cover'
-        />
+        {iframeUrl ? (
+          <iframe
+            ref={ref}
+            src={`/${iframeUrl}`}
+            className='h-full w-full object-cover'
+          />
+        ) : (
+          <div
+            className={merge([
+              'flex h-full w-full bg-bw-800',
+              'flex-1 items-center justify-center  ',
+              'w-[290px] max-w-full ',
+            ])}>
+            <div className='bw danger lg loader'>
+              <div className='bar-bounce' />
+            </div>
+          </div>
+        )}
       </div>
     )
   },
