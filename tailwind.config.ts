@@ -9,6 +9,16 @@ const config: Config = {
   theme: {
     extend: {},
   },
-  plugins: [require('@sira-ui/tailwind')],
+  plugins: [
+    require('@sira-ui/tailwind')({
+      themes: [
+        {
+          name: 'huecomundo',
+          colorScheme: 'dark',
+          prefersColorScheme: true,
+        },
+      ],
+    }),
+  ],
 }
 export default config
