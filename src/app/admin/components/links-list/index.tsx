@@ -9,7 +9,7 @@ import {
   addDoc,
   setDoc,
 } from 'firebase/firestore'
-import {Link2} from 'lucide-react'
+import {Plus} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
 import {useSmartphone} from '@/app/admin/context'
@@ -155,9 +155,9 @@ export const LinksList = ({user}: LinksListProps) => {
       <div className='flex flex-1 flex-col gap-5'>
         <button
           onClick={handleAddNewLink}
-          className='danger btn md solid w-full'>
+          className='danger btn solid md w-full'>
           Add link
-          <Link2 />
+          <Plus size={18} />
         </button>
 
         <ul className='flex flex-1 flex-col gap-3'>
