@@ -70,9 +70,9 @@ const navbarItems: NavbarLinks = {
     label: 'Personal',
     links: [
       {
-        href: '/admin/my-account',
+        href: '/admin/profile',
         title: 'go to register page',
-        name: 'My account',
+        name: 'Profile',
         Icon: <User2 width={18} />,
       },
     ],

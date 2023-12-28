@@ -32,11 +32,13 @@ const AdminLayout = observer(({children}: AdminLayoutProps) => {
       <main
         className={merge([
           'flex h-screen  w-screen flex-col items-center',
-          ' bg-gradient-to-tr  from-background-900 from-20%',
-          ' via-primary-900 via-45%  to-background-1000 to-70% ',
-          ' bg-background-900',
+          'bg-background-100',
         ])}>
-        <section className='relative grid h-screen w-screen grid-cols-[1fr] grid-rows-[1fr]  overflow-hidden bg-background-100  md:grid-cols-[250px_1fr]'>
+        <section
+          className={merge([
+            'relative grid h-screen w-screen grid-cols-[1fr] grid-rows-[1fr]',
+            'overflow-hidden md:grid-cols-[250px_1fr]',
+          ])}>
           <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
           <div className='grid h-screen grid-rows-[56px_1fr]'>

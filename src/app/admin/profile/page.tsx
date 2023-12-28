@@ -4,13 +4,13 @@ import {observer} from 'mobx-react-lite'
 import Image from 'next/image'
 
 import {authStore} from '@/app/auth/context/auth-store'
-import {Button, Smartphone} from '@/app/components'
+import {Smartphone} from '@/app/components'
 import {parseUserPageUrl} from '@/utils'
 
 import {AdminBaseLayout} from '../components'
 import {useSmartphone} from '../context'
 
-export const MyAccountPage = observer(() => {
+export const ProfilePage = observer(() => {
   const user = authStore.user
 
   const {iframeRef} = useSmartphone()
@@ -59,7 +59,7 @@ export const MyAccountPage = observer(() => {
           </form>
         </div>
         {/*  */}
-        <div className='mt-10 flex w-full flex-col gap-2 overflow-hidden rounded-lg bg-background-300 p-6 shadow-lg'>
+        <div className='mt-5 flex w-full flex-col gap-2 overflow-hidden rounded-lg bg-background-300 p-6 shadow-lg'>
           <div className='mb-5 flex items-baseline'>
             <h3 className='text-xl font-semibold'>Social links</h3>
           </div>
@@ -87,20 +87,6 @@ export const MyAccountPage = observer(() => {
             </div>
           </form>
         </div>
-        {/*  */}
-        <div className='mt-10 flex w-full flex-col gap-2 overflow-hidden rounded-lg bg-background-300 p-6 shadow-lg'>
-          <div className='mb-5 flex items-baseline'>
-            <h3 className='text-xl font-semibold'>Delete Account</h3>
-          </div>
-          <div>
-            <div className='warn prompt mb-5 border-warn-600'>
-              <p className='content'>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              </p>
-            </div>
-            <Button variant='error'>Delete account</Button>
-          </div>
-        </div>
       </AdminBaseLayout.Content>
       <AdminBaseLayout.RightPanel>
         <div
@@ -116,4 +102,4 @@ export const MyAccountPage = observer(() => {
   )
 })
 
-export default MyAccountPage
+export default ProfilePage
