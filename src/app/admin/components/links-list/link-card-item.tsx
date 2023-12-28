@@ -24,9 +24,9 @@ export const LinkCardItem = ({link, onDelete, children}: LinkCardItemProps) => {
     <li
       ref={setNodeRef}
       style={style}
-      className='flex w-full flex-wrap items-center justify-center gap-3 rounded-xl bg-background-300 px-3 py-2  font-medium shadow-md md:px-5 md:py-3'>
+      className='flex w-full flex-nowrap items-center justify-center gap-2 rounded-xl bg-background-300 px-3 py-2  font-medium shadow-md md:px-5 md:py-3'>
       <button
-        className=' mr-3 flex touch-none flex-col items-center'
+        className='flex touch-none flex-col items-center'
         {...attributes}
         {...listeners}>
         <span>
@@ -34,7 +34,7 @@ export const LinkCardItem = ({link, onDelete, children}: LinkCardItemProps) => {
         </span>
       </button>
 
-      <div className='flex flex-1 flex-col items-center gap-2'>{children}</div>
+      {children}
 
       <div
         onClick={() => onDelete(link)}

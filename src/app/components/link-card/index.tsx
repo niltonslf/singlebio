@@ -8,9 +8,7 @@ type LinkContainerProps = {
 
 export const LinkCard = ({children}: LinkContainerProps) => {
   return (
-    <ul
-      aria-label='link-list'
-      className='flex w-full flex-col gap-5 overflow-y-auto px-0 py-3 '>
+    <ul aria-label='link-list' className='flex w-full flex-col gap-5 p-0 '>
       {children}
     </ul>
   )

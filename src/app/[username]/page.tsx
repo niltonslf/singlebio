@@ -10,6 +10,8 @@ import {
   limit,
   orderBy,
 } from 'firebase/firestore'
+import Image from 'next/image'
+import Link from 'next/link'
 import {useCallback, useEffect, useState} from 'react'
 
 import {Avatar, LinkCard} from '@/app/components'
@@ -80,39 +82,45 @@ export default function UserPage({params: {username}}: UserPageProps) {
   return (
     <main
       className={clsx([
-        'flex h-screen w-screen bg-white bg-cover bg-center',
+        'flex h-[100dvh] w-screen flex-wrap overflow-y-auto bg-cover bg-center',
         !user?.theme?.backgroundImage && !user?.theme?.backgroundColor
           ? defaultBg
           : '',
       ])}
       style={user?.theme?.backgroundImage ? backgroundImageStyle : {}}>
-      <div
+      <section
         className={clsx([
-          'flex h-screen w-screen items-center justify-center overflow-y-auto p-5 py-20 md:p-10 ',
+          'pb-50 flex w-full flex-col items-center p-5 pt-20 md:p-10',
         ])}
         style={user?.theme?.backgroundColor ? backgroundColorStyle : {}}>
-        <div className=' h-full w-full max-w-2xl '>
-          <div className='mb-4 flex w-full justify-center'>
-            <Avatar
-              name={user?.name || ''}
-              pictureUrl={user?.pictureUrl}
-              size={80}
-            />
-          </div>
+        <div className='flex min-h-full w-full max-w-2xl flex-col'>
+          <header className='w-full'>
+            <div className='mb-4 flex w-full justify-center'>
+              <Avatar
+                name={user?.name || ''}
+                pictureUrl={user?.pictureUrl}
+                size={80}
+              />
+            </div>
 
-          <h2
-            className='mb-3 flex items-center justify-center text-2xl font-semibold'
-            style={
-              user?.theme?.usernameColor
-                ? {color: user.theme.usernameColor}
-                : {}
-            }>
-            @{username}
-          </h2>
+            <h2
+              className='mb-3 flex items-center justify-center text-2xl font-semibold text-bw-300'
+              style={
+                user?.theme?.usernameColor
+                  ? {color: user.theme.usernameColor}
+                  : {}
+              }>
+              @{username}
+            </h2>
+          </header>
 
           {isLoading && (
-            <div className='flex items-center justify-center text-lg'>
-              Loading user links...
+            <div
+              data-theme='light'
+              className='flex w-full flex-1 items-center justify-center pt-20 text-lg'>
+              <div className=' bw md loader'>
+                <div className='bar-bounce' />
+              </div>
             </div>
           )}
 
@@ -136,8 +144,25 @@ export default function UserPage({params: {username}}: UserPageProps) {
                 )
               })}
           </LinkCard>
+
+          <footer className='mt-auto flex w-full justify-center pt-5'>
+            <Link
+              href='/'
+              title='Home page'
+              className='flex flex-col items-center justify-end px-10 opacity-80'>
+              <p className='mb-1 text-xs font-semibold text-bw-300 opacity-80'>
+                Created using:{' '}
+              </p>
+              <Image
+                src='/logo-black.png'
+                width={90}
+                height={23}
+                alt='lnktree logo'
+              />
+            </Link>
+          </footer>
         </div>
-      </div>
+      </section>
     </main>
   )
 }

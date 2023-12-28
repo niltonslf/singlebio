@@ -30,18 +30,30 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
       <div className='flex flex-row items-center gap-3'>
         {navbarHandler && <div className='md:hidden'>{navbarHandler}</div>}
 
-        <span className='text-slate-300'>Hello, {user?.name || 'there'}!</span>
+        <span className='hidden text-slate-300 md:block'>
+          Hello, {user?.name || 'there'}!
+        </span>
       </div>
 
       <div className='flex flex-row items-center gap-5'>
         {user?.username && (
-          <Link
-            className='flex flex-row items-center gap-1 text-primary-1000'
-            target='_blank'
-            href={`/${user.username}`}>
-            {appUrl}/{user?.username}
-            <ExternalLink size={15} />
-          </Link>
+          <>
+            <Link
+              className='hidden flex-row items-center gap-1 text-primary-1000 md:flex '
+              target='_blank'
+              href={`/${user.username}`}>
+              {appUrl}/{user?.username}
+              <ExternalLink size={15} />
+            </Link>
+
+            <Link
+              className='flex flex-row items-center gap-1 text-primary-1000 md:hidden'
+              target='_blank'
+              href={`/${user.username}`}>
+              My page
+              <ExternalLink size={15} />
+            </Link>
+          </>
         )}
 
         <Dropdown>

@@ -9,6 +9,7 @@ import {
   setup,
 } from '@/__tests__/__helpers__'
 import UserPage from '@/app/[username]/page'
+import {User} from '@/models'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('firebase/firestore', () => ({
@@ -37,7 +38,7 @@ describe('User page', () => {
   })
 
   it('should render page with links', async () => {
-    const userMock = makeUser()
+    const userMock = makeUser() as Required<User>
     const linkMock = makeLink()
 
     handleFetchLinks([userMock], [linkMock])
@@ -48,7 +49,7 @@ describe('User page', () => {
 
     const username = screen.getByRole('heading', {level: 2})
     const linkList = await screen.queryByRole('list')
-    const profilePicture = await screen.queryByRole('img')
+    const profilePicture = await screen.queryAllByRole('img')[0]
 
     expect(username.textContent).toBe(`@${userMock.username}`)
     expect(linkList?.children).toHaveLength(1)
@@ -84,7 +85,8 @@ describe('User page', () => {
       undefined,
       undefined,
       makeUserTheme(),
-    )
+    ) as Required<User>
+
     const linkMock = makeLink()
 
     handleFetchLinks([userMock], [linkMock])
@@ -94,7 +96,7 @@ describe('User page', () => {
     )
 
     const container = screen.getByRole('main')
-    const containerOverlay = container.querySelector('div')
+    const containerOverlay = container.querySelector('section')
     const buttons = container.querySelectorAll('li')
     const username = screen.getByText(`@${userMock.username}`)
 
