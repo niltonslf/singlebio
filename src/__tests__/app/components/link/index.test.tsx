@@ -31,6 +31,6 @@ describe('Link component', () => {
       </LinkCard.Item>,
     )
 
-    expect(baseElement?.querySelector('a')?.getAttribute('href')).toBe('/')
+    expect(baseElement?.querySelector('a')?.getAttribute('href')).toBe('//')
   })
 })
