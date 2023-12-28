@@ -2,7 +2,6 @@
 
 import {LogOut, Trash} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
-import {useRouter} from 'next/navigation'
 import {PropsWithChildren} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
@@ -12,11 +11,8 @@ type DropdownProps = {
 } & PropsWithChildren
 
 export const Dropdown = observer(({children}: DropdownProps) => {
-  const router = useRouter()
-
   const logout = async () => {
-    await authStore.logout()
-    router.push('/')
+    return authStore.logout()
   }
 
   const deleteAccount = async () => {

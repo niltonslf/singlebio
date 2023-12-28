@@ -6,12 +6,12 @@ import {useRouter} from 'next/navigation'
 import {useState} from 'react'
 
 import {useValidateAuth} from '../admin/hooks'
-import {GithubIcon, GoogleIcon} from '../components'
+import {Button, GithubIcon, GoogleIcon} from '../components'
 import {authStore} from './context/auth-store'
 
 const SignIn = observer(() => {
   const router = useRouter()
-  useValidateAuth()
+  const {isFetchingUser} = useValidateAuth()
 
   const [error, setError] = useState(false)
 
@@ -31,13 +31,13 @@ const SignIn = observer(() => {
           <Image src='/logo-white.png' width={200} height={52} alt='logo' />
         </header>
 
-        <button
+        <Button
+          isLoading={isFetchingUser}
           onClick={handleLoginWithGoogle}
-          type='button'
-          className='dark:focus:ring-[#4285F4]/55 mb-2  mr-2 inline-flex w-full items-center justify-center rounded-lg bg-[#4285F4] px-5 py-2.5 text-sm font-medium text-bw-1000 hover:bg-[#4285F4]/90 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50'>
+          className='dark:focus:ring-[#4285F4]/55 !hover:bg-[#4285F4]/90  mb-2 mr-2 inline-flex w-full items-center justify-center rounded-lg !bg-[#4285F4] px-5 py-2.5 text-sm font-medium text-bw-1000 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50'>
           <GoogleIcon />
           Sign up with Google
-        </button>
+        </Button>
 
         <div className='after:bg-red after:content-[" "] relative my-5 flex items-center justify-center after:absolute after:left-[0] after:top-[50%] after:w-full after:border-b after:border-gray-400'>
           <span className='relative z-20 bg-background-100 px-4 text-slate-300'>
