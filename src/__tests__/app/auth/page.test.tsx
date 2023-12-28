@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event'
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
-  usePathname: jest.fn(() => '/'),
+  usePathname: jest.fn(() => '/auth'),
 }))
 
 jest.mock('firebase/firestore', () => ({

@@ -32,11 +32,14 @@ export default function UserPage({params: {username}}: UserPageProps) {
   const [isLoading, setIsLoading] = useState(true)
 
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
-  const backgroundImageStyle = {
-    backgroundImage: `url(${user?.theme?.backgroundImage})`,
-  }
+
   const backgroundColorStyle = {
     backgroundColor: `${user?.theme?.backgroundColor}`,
+  }
+
+  const backgroundImageStyle = {
+    backgroundImage: `url(${user?.theme?.backgroundImage})`,
+    ...backgroundColorStyle,
   }
 
   const fetchData = useCallback(async () => {

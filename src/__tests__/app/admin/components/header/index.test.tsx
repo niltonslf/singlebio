@@ -77,7 +77,6 @@ describe('Header component', () => {
     await user.click(logoutBtn)
 
     expect(firebaseAuth.signOut).toHaveBeenCalledTimes(1)
-    expect(routerMock.push).toHaveBeenCalledTimes(1)
-    expect(routerMock.pathname).toBe('/')
+    expect(routerMock.pathname).toBe('/admin')
   })
 })

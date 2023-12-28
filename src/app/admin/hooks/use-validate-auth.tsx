@@ -6,24 +6,24 @@ import {authStore} from '@/app/auth/context/auth-store'
 import {auth} from '@/libs/firebase'
 
 export const useValidateAuth = () => {
-  const router = useRouter()
+  const {push} = useRouter()
   const pathName = usePathname()
 
   const [isFetchingUser, setIsFetchingUser] = useState(false)
 
   const listenAuthState = useCallback(() => {
     return onAuthStateChanged(auth, async firebaseUser => {
+      setIsFetchingUser(true)
       if (!firebaseUser) {
         authStore.clearUser()
-        router.push('/auth')
+        push('/auth')
       } else {
-        setIsFetchingUser(true)
         await authStore.authUser(firebaseUser)
-        if (!pathName.startsWith('/admin')) router.push('/admin')
-        return setIsFetchingUser(false)
+        if (!pathName.startsWith('/admin')) push('/admin')
       }
+      setIsFetchingUser(false)
     })
-  }, [pathName, router])
+  }, [pathName, push])
 
   useEffect(() => {
     const unsubscribe = listenAuthState()

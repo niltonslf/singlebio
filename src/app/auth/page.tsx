@@ -10,7 +10,7 @@ import {Button, GithubIcon, GoogleIcon} from '../components'
 import {authStore} from './context/auth-store'
 
 const SignIn = observer(() => {
-  const router = useRouter()
+  const {push} = useRouter()
   const {isFetchingUser} = useValidateAuth()
 
   const [error, setError] = useState(false)
@@ -18,7 +18,7 @@ const SignIn = observer(() => {
   const handleLoginWithGoogle = async () => {
     try {
       await authStore.signInWithGoogle()
-      router.push('/admin')
+      push('/admin')
     } catch (error: any) {
       setError(true)
     }

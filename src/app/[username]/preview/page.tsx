@@ -29,12 +29,13 @@ const UserPreview = observer(
     const defaultBg =
       'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
 
-    const backgroundImageStyle = {
-      backgroundImage: `url(${decodeURIComponent(backgroundImage || '')})`,
-    }
-
     const backgroundColorStyle = {
       backgroundColor: `${decodeURIComponent(backgroundColor || '')}`,
+    }
+
+    const backgroundImageStyle = {
+      backgroundImage: `url(${decodeURIComponent(backgroundImage || '')})`,
+      ...backgroundColorStyle,
     }
 
     return (
