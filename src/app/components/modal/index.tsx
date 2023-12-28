@@ -38,6 +38,9 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
     control,
     formState: {errors},
   } = useForm<FormProps>({
+    defaultValues: {
+      username: '',
+    },
     resolver: zodResolver(schema),
   })
 
