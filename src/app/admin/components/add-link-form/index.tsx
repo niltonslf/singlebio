@@ -15,21 +15,24 @@ type AddLinkFormProps = {
 }
 
 const httpRegex = new RegExp(
-  /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/,
+  /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/,
 )
 
 const schema = z.object({
   url: z
     .string()
-    .regex(httpRegex, 'Value must be a valid url. e.g. https://google.com '),
+    .regex(httpRegex, 'Value must be a valid url. e.g. https://google.com ')
+    .refine(s => !s.includes(' '), 'White spaces are not allowed')
+    .refine(s => !/[A-Z]/.test(s), 'Uppercase characters are not allowed'),
   label: z.string().min(3, {message: 'Required field'}),
   id: z.string(),
   order: z.number(),
 })
 
 export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
-  const [isFirstLoad, setIsFirstLoad] = useState(true)
   const formRef = useRef<HTMLFormElement>(null)
+
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
 
   const {
     register,
@@ -96,6 +99,7 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
           errors.url && 'border border-primary-600',
         )}
       />
+
       {errors.url && (
         <p className='my-2 text-sm text-primary-1000'>{errors.url.message}</p>
       )}

@@ -2,6 +2,8 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import {ReactNode} from 'react'
 
+import {parseExternalUrl} from '@/utils'
+
 type LinkItemProps = {
   path: string
   children: ReactNode
@@ -29,7 +31,7 @@ export const LinkItem = ({
   }
 
   return (
-    <Link href={path} target='_blank'>
+    <Link href={parseExternalUrl(path)} target='_blank'>
       <li
         className={clsx([
           'flex w-full flex-wrap items-center justify-center rounded-lg bg-white p-3 font-medium shadow-md transition-all hover:scale-95 md:p-5 ',
