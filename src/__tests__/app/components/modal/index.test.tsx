@@ -10,6 +10,7 @@ import {Modal} from '@/app/components'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('firebase/firestore')
+jest.mock('@react-input/mask')
 
 const onSaveMock = jest.fn(() => Promise.resolve())
 
@@ -47,7 +48,14 @@ describe('Modal Component', () => {
   })
 
   it('should disable save button and show error when username exists', async () => {
-    const userMock = makeUser()
+    const username = 'some_username-11'
+    const userMock = makeUser(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      username,
+    )
 
     jest
       .spyOn(firestore, 'getDocs')
@@ -69,7 +77,15 @@ describe('Modal Component', () => {
   })
 
   it('should call onSave method', async () => {
-    const userMock = makeUser()
+    const username = 'some_username-11'
+    const userMock = makeUser(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      username,
+    )
+
     if (!userMock?.username) return fail()
 
     // simulate username available
@@ -78,7 +94,7 @@ describe('Modal Component', () => {
     const {user} = makeSUT()
     const {saveButton, usernameInput, modal} = getModalElements()
 
-    await user.type(usernameInput, userMock.username)
+    await user.type(usernameInput, userMock.username.toLowerCase())
 
     expect(usernameInput).toHaveValue(userMock.username)
     expect(saveButton).toBeEnabled()

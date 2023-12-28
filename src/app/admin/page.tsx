@@ -22,12 +22,12 @@ const Admin = observer(() => {
   }
 
   useEffect(() => {
-    if (!user?.username) {
+    if (user != undefined && !user?.username) {
       setShowUsernameModal(true)
     } else {
       setShowUsernameModal(false)
     }
-  }, [user?.username])
+  }, [user, user?.username])
 
   return (
     <>

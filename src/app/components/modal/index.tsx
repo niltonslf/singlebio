@@ -3,12 +3,13 @@
 import {clsx} from 'clsx'
 import {collection, getDocs, query, where} from 'firebase/firestore'
 import {useEffect, useState} from 'react'
-import {useForm} from 'react-hook-form'
+import {Controller, useForm} from 'react-hook-form'
 import * as z from 'zod'
 
 import {db} from '@/libs/firebase'
 import {merge} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
+import {useMask} from '@react-input/mask'
 
 type FormProps = {
   username: string
@@ -17,7 +18,7 @@ type FormProps = {
 const schema = z.object({
   username: z
     .string()
-    .transform(value => value.replace(/\s+/g, ''))
+    .transform(value => value.replace(/[\s@]+/g, ''))
     .pipe(z.string().min(4, {message: 'Required field'})),
 })
 
@@ -27,11 +28,19 @@ type ModalProps = {
 }
 
 export const Modal = ({onSave, initialOpen}: ModalProps) => {
+  const inputRef = useMask({
+    mask: '@==============================',
+    replacement: {'=': /[a-z0-9\-\_]/},
+  })
+
   const {
-    register,
     handleSubmit,
+    control,
     formState: {errors},
   } = useForm<FormProps>({
+    defaultValues: {
+      username: '',
+    },
     resolver: zodResolver(schema),
   })
 
@@ -45,6 +54,7 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
   }
 
   const checkUsername = async (username: string) => {
+    username = username.replace('@', '')
     setUsernameAlreadyTaken(false)
 
     const q = query(collection(db, 'users'), where('username', '==', username))
@@ -67,7 +77,7 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
       {isOpen && <label className='modal-overlay'></label>}
       <div
         className={merge([
-          'w-max-[100%] modal flex w-96 flex-col gap-2 bg-background-300',
+          'w-max-[100%] modal flex w-96 flex-col gap-2 bg-background-100 ',
           isOpen ? 'show' : '',
         ])}>
         <h2 className='text-xl'>Choose your username</h2>
@@ -75,26 +85,33 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='mt-2'>
               <p className='text-sm text-slate-300'>
-                The <b>username</b> will be used to create your url. Obs: white
-                spaces will be removed.
+                The <b className='text-primary-900'>username</b> will be used to
+                create your unique page url.
               </p>
             </div>
 
-            <div className='mt-2'>
-              <input
-                data-testid='modal-username-input'
-                placeholder='Type your username'
-                className={clsx(
-                  'md input border-slate-500 placeholder:text-slate-500',
-                  (errors?.username?.message || usernameAlreadyTaken) &&
-                    'border-red-400 outline-red-400',
+            <div className='mt-3'>
+              <Controller
+                control={control}
+                name='username'
+                render={({field: {onChange, onBlur, value}}) => (
+                  <input
+                    ref={inputRef}
+                    data-testid='modal-username-input'
+                    placeholder='Type your username'
+                    className={clsx(
+                      'md input border-slate-400 bg-background-300 placeholder:text-slate-400',
+                      (errors?.username?.message || usernameAlreadyTaken) &&
+                        '!border-red-400 outline-none',
+                    )}
+                    onChange={event => {
+                      checkUsername(event.target.value)
+                      onChange(event)
+                    }}
+                    onBlur={onBlur}
+                    value={value}
+                  />
                 )}
-                {...register('username', {
-                  required: true,
-                  onChange: event => {
-                    checkUsername(event.target.value)
-                  },
-                })}
               />
               {errors.username && (
                 <p className='mt-2 text-sm text-red-400'>
