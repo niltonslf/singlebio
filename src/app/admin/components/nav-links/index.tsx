@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
-import {ReactNode} from 'react'
+import {MouseEvent, ReactNode} from 'react'
 
 import {merge} from '@/utils'
 
@@ -20,6 +20,7 @@ type NavLink = {
   title: string
   name: string
   Icon: ReactNode
+  disabled?: boolean
 }
 
 type NavSection = {
@@ -54,12 +55,14 @@ const navbarItems: NavbarLinks = {
         title: 'go to analytics page',
         name: 'Analytics',
         Icon: <BarChartHorizontalBig width={18} />,
+        disabled: true,
       },
       {
         href: '/admin/settings',
         title: 'go to settings page',
         name: 'Settings',
         Icon: <Settings2 width={18} />,
+        disabled: true,
       },
     ],
   },
@@ -82,12 +85,14 @@ const navbarItems: NavbarLinks = {
         title: 'go to plan page',
         name: 'My subscription',
         Icon: <LayoutDashboard width={18} />,
+        disabled: true,
       },
       {
         href: '/admin/privacy',
         title: 'go to plan page',
         name: 'Privacy policies',
         Icon: <Lock width={18} />,
+        disabled: true,
       },
     ],
   },
@@ -97,6 +102,19 @@ export const NavLinks = ({onClick}: NavLinksProps) => {
   const pathName = usePathname()
 
   const isCurrentPage = (currentPage: string) => pathName == currentPage
+
+  const handleOnClick = (
+    event: MouseEvent<HTMLAnchorElement>,
+    page: NavLink,
+  ) => {
+    if (page.disabled) {
+      event.preventDefault()
+      event.stopPropagation()
+      return
+    }
+
+    onClick?.()
+  }
 
   return (
     <div className='w-full'>
@@ -111,12 +129,14 @@ export const NavLinks = ({onClick}: NavLinksProps) => {
                 <Link
                   key={page.href}
                   href={page.href}
-                  onClick={onClick}
+                  onClick={event => handleOnClick(event, page)}
                   title={page.title}
                   className={merge([
                     'text-md flex flex-row items-center gap-3 rounded-xl px-3 py-2 font-normal text-slate-300 hover:text-bw-1000',
                     isCurrentPage(page.href) && 'bg-primary-500 text-bw-1000',
                     !isCurrentPage(page.href) && 'hover:bg-background-300',
+                    page.disabled &&
+                      'cursor-not-allowed opacity-50 hover:bg-transparent hover:text-slate-300',
                   ])}>
                   {page.Icon}
                   <p>{page.name}</p>
