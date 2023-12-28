@@ -100,7 +100,7 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
                     data-testid='modal-username-input'
                     placeholder='Type your username'
                     className={clsx(
-                      'md input border-slate-400 bg-background-300 placeholder:text-slate-400',
+                      'bw solid input !border-background-600',
                       (errors?.username?.message || usernameAlreadyTaken) &&
                         '!border-red-400 outline-none',
                     )}

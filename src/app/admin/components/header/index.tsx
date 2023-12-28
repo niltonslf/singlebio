@@ -23,7 +23,7 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
     <header
       className={merge([
         'flex min-w-full flex-row items-center justify-between py-2',
-        'border-b border-b-background-600 px-5 md:border-0 md:px-0',
+        'border-b border-b-background-600 px-5 md:border-0 md:px-10',
       ])}
       data-testid='admin-header'>
       <div className='flex flex-row items-center gap-3'>

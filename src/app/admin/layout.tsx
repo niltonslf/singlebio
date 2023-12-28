@@ -36,13 +36,13 @@ const AdminLayout = observer(({children}: AdminLayoutProps) => {
           ' via-primary-900 via-45%  to-background-1000 to-70% ',
           ' bg-background-900',
         ])}>
-        <section className='relative grid h-screen w-screen grid-cols-[1fr] grid-rows-[1fr]  overflow-hidden bg-background-100 bg-opacity-95 md:grid-cols-[250px_1fr]'>
+        <section className='relative grid h-screen w-screen grid-cols-[1fr] grid-rows-[1fr]  overflow-hidden bg-background-100  md:grid-cols-[250px_1fr]'>
           <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
-          <div className='grid h-screen grid-rows-[56px_1fr] px-0 md:px-10'>
+          <div className='grid h-screen grid-rows-[56px_1fr]'>
             <Header navbarHandler={navbarHandler} />
 
-            <section className='h-[calc(100vh-56px)] min-w-full overflow-y-auto px-5 pb-14 md:-mr-10 md:px-0 md:pb-0'>
+            <section className='h-[calc(100vh-56px)] min-w-full overflow-y-auto px-5 pb-14 md:px-10 md:pb-0'>
               {children}
             </section>
           </div>

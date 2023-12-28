@@ -35,6 +35,7 @@ const config: Config = {
             ],
             background: '#1A1A1F',
             danger: '#ff086c',
+            // warn: '#d48806',
           },
         },
       ],
