@@ -67,7 +67,8 @@ export const LinksList = ({user}: LinksListProps) => {
   }
 
   const handleSaveLink = async (data: Link) => {
-    if (data.id) setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
+    if (data.id)
+      return setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
   }
 
   const handleSubmitForm = async (data: Link) => {
