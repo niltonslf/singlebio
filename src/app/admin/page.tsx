@@ -7,7 +7,7 @@ import {Modal, Smartphone} from '@/app/components'
 import {parseUserPageUrl} from '@/utils'
 
 import {authStore} from '../auth/context/auth-store'
-import {AdminLayout, PageLoader} from './components'
+import {AdminBaseLayout, PageLoader} from './components'
 import {CardList} from './components/card-list'
 import {useSmartphone} from './context/smartphone-context'
 
@@ -34,12 +34,12 @@ const Admin = observer(() => {
   if (!user) return <PageLoader />
 
   return (
-    <AdminLayout>
-      <AdminLayout.Content>
+    <AdminBaseLayout>
+      <AdminBaseLayout.Content>
         <CardList user={user} />
-      </AdminLayout.Content>
+      </AdminBaseLayout.Content>
 
-      <AdminLayout.RightPanel>
+      <AdminBaseLayout.RightPanel>
         <div
           className='sticky top-6 rounded-[60px] 
                         px-5 shadow-[0px_0px_30px_0px_rgba(154,154,154,0.1)]'>
@@ -48,10 +48,10 @@ const Admin = observer(() => {
             iframeUrl={parseUserPageUrl(user?.username || '')}
           />
         </div>
-      </AdminLayout.RightPanel>
+      </AdminBaseLayout.RightPanel>
 
       <Modal onSave={onSubmitUsername} initialOpen={showUsernameModal} />
-    </AdminLayout>
+    </AdminBaseLayout>
   )
 })
 

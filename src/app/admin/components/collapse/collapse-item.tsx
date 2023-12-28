@@ -1,3 +1,5 @@
+'use client'
+
 import {HTMLAttributes, ReactNode, useEffect} from 'react'
 
 import {merge} from '@/utils'

@@ -16,7 +16,7 @@ import {useSmartphone} from '@/app/admin/context'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
-import {AddLinkForm} from '..'
+import {AddLinkForm, PageLoader} from '..'
 
 import {useDebounce} from '@/utils'
 import {
@@ -55,6 +55,7 @@ export const CardList = ({user}: CardListProps) => {
   )
 
   const [links, setLinks] = useState<Required<Link>[]>([])
+  const [isFetchingData, setIsFetchingData] = useState(false)
 
   const getLastOrder = () => {
     return links.reduce((prev, cur) => Math.max(prev, cur.order + 1), 0)
@@ -82,6 +83,8 @@ export const CardList = ({user}: CardListProps) => {
   }
 
   const fetchData = useCallback(() => {
+    setIsFetchingData(true)
+
     const customQuery = query(collection(db, 'users', user.uid, 'links'))
     const unsubscribe = onSnapshot(customQuery, querySnapshot => {
       setLinks([])
@@ -95,6 +98,7 @@ export const CardList = ({user}: CardListProps) => {
       newLinks = newLinks.sort((prev, next) => next.order - prev.order)
 
       setLinks(newLinks)
+      setIsFetchingData(false)
     })
 
     return unsubscribe
@@ -161,23 +165,35 @@ export const CardList = ({user}: CardListProps) => {
           <Plus size={18} />
         </button>
 
-        <ul className='flex flex-1 flex-col gap-3'>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}>
-            <SortableContext
-              items={links}
-              key='links-list'
-              strategy={verticalListSortingStrategy}>
-              {links.map(link => (
-                <CardLink key={link.id} onDelete={deleteLink} link={link}>
-                  <AddLinkForm saveLink={handleSubmitForm} link={link} />
-                </CardLink>
-              ))}
-            </SortableContext>
-          </DndContext>
-        </ul>
+        {isFetchingData ? (
+          <div className='pt-5'>
+            <PageLoader />
+          </div>
+        ) : (
+          <ul className='flex flex-1 flex-col gap-3'>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}>
+              <SortableContext
+                items={links}
+                key='links-list'
+                strategy={verticalListSortingStrategy}>
+                {links.map(link => (
+                  <CardLink key={link.id} onDelete={deleteLink} link={link}>
+                    <AddLinkForm saveLink={handleSubmitForm} link={link} />
+                  </CardLink>
+                ))}
+              </SortableContext>
+            </DndContext>
+          </ul>
+        )}
+
+        {!isFetchingData && !links.length && (
+          <div className='info prompt mb-5 border-info-600'>
+            <p className='content'>It's time to create your first link!</p>
+          </div>
+        )}
       </div>
     </section>
   )

@@ -1,3 +1,5 @@
+'use client'
+
 import {ChevronDownIcon, ChevronUpIcon} from 'lucide-react'
 import {HTMLAttributes, ReactNode} from 'react'
 

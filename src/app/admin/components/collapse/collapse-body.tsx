@@ -1,3 +1,5 @@
+'use client'
+
 import {PropsWithChildren, memo} from 'react'
 
 import {merge} from '@/utils'
