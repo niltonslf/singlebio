@@ -39,7 +39,7 @@ describe('Add Link Form Component', () => {
     expect(inputUrl).toHaveValue('')
 
     await user.type(inputLabel, 'ab')
-    await user.type(inputUrl, 'someurl.com')
+    await user.type(inputUrl, 'wrong-url')
 
     await waitFor(() => {
       const errorMessages = document.querySelectorAll('form p')
