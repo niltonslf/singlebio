@@ -5,13 +5,13 @@ import {Link} from '@/models'
 import {useSortable} from '@dnd-kit/sortable'
 import {CSS} from '@dnd-kit/utilities'
 
-type LinkCardItemProps = {
+type CardLinkProps = {
   link: Required<Link>
   onDelete: (link: Link) => void
   children: ReactNode
 }
 
-export const LinkCardItem = ({link, onDelete, children}: LinkCardItemProps) => {
+export const CardLink = ({link, onDelete, children}: CardLinkProps) => {
   const {attributes, listeners, setNodeRef, transform, transition} =
     useSortable({id: link.id})
 

@@ -35,13 +35,13 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
-import {LinkCardItem} from './link-card-item'
+import {CardLink} from './card-link'
 
-type LinksListProps = {
+type CardListProps = {
   user: User
 }
 
-export const LinksList = ({user}: LinksListProps) => {
+export const CardList = ({user}: CardListProps) => {
   const {reloadSmartphoneList} = useSmartphone()
   const reloadSmartphoneListDebounced = useDebounce(() => {
     reloadSmartphoneList()
@@ -171,9 +171,9 @@ export const LinksList = ({user}: LinksListProps) => {
               key='links-list'
               strategy={verticalListSortingStrategy}>
               {links.map(link => (
-                <LinkCardItem key={link.id} onDelete={deleteLink} link={link}>
+                <CardLink key={link.id} onDelete={deleteLink} link={link}>
                   <AddLinkForm saveLink={handleSubmitForm} link={link} />
-                </LinkCardItem>
+                </CardLink>
               ))}
             </SortableContext>
           </DndContext>

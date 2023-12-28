@@ -6,7 +6,7 @@ import {useEffect, useState} from 'react'
 import {authStore} from '@/app/auth/context/auth-store'
 import {Button, Smartphone} from '@/app/components'
 
-import {Collapse, Layout} from '../components'
+import {Collapse, AdminLayout} from '../components'
 import {useSmartphone} from '../context/smartphone-context'
 import {
   CustomizeButtons,
@@ -56,8 +56,8 @@ const AppearancePage = observer(() => {
   }, [user?.theme])
 
   return (
-    <Layout>
-      <Layout.Content>
+    <AdminLayout>
+      <AdminLayout.Content>
         {appearanceStore.hasChanges && (
           <div className='warn prompt mb-5 border-warn-600'>
             <p className='content'>
@@ -110,14 +110,14 @@ const AppearancePage = observer(() => {
             </Button>
           </div>
         )}
-      </Layout.Content>
+      </AdminLayout.Content>
 
-      <Layout.Sidebar>
-        <div className='sticky top-6'>
+      <AdminLayout.RightPanel>
+        <div className='sticky top-6 rounded-[60px] px-5 shadow-[0px_0px_30px_0px_rgba(154,154,154,0.1)]'>
           <Smartphone ref={iframeRef} iframeUrl={previewUrl} />
         </div>
-      </Layout.Sidebar>
-    </Layout>
+      </AdminLayout.RightPanel>
+    </AdminLayout>
   )
 })
 
