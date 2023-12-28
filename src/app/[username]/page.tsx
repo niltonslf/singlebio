@@ -80,7 +80,7 @@ export default function UserPage({params: {username}}: UserPageProps) {
   return (
     <main
       className={clsx([
-        'flex h-screen w-screen bg-white bg-cover bg-center',
+        'flex h-screen w-screen bg-cover bg-center',
         !user?.theme?.backgroundImage && !user?.theme?.backgroundColor
           ? defaultBg
           : '',
@@ -101,7 +101,7 @@ export default function UserPage({params: {username}}: UserPageProps) {
           </div>
 
           <h2
-            className='mb-3 flex items-center justify-center text-2xl font-semibold'
+            className='mb-3 flex items-center justify-center text-2xl font-semibold text-bw-300'
             style={
               user?.theme?.usernameColor
                 ? {color: user.theme.usernameColor}
@@ -111,8 +111,10 @@ export default function UserPage({params: {username}}: UserPageProps) {
           </h2>
 
           {isLoading && (
-            <div className='flex items-center justify-center text-lg'>
-              Loading user links...
+            <div className='flex w-full flex-1 items-center justify-center pt-20 text-lg'>
+              <div className='primary md loader'>
+                <div className='bar-bounce' />
+              </div>
             </div>
           )}
 
