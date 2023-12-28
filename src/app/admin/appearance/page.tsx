@@ -59,8 +59,10 @@ const AppearancePage = observer(() => {
     <Layout>
       <Layout.Content>
         {appearanceStore.hasChanges && (
-          <div className='mb-5 flex flex-row items-center rounded-lg border border-orange-900 bg-orange-200 p-5 font-medium'>
-            The changes are not applied yet. You must save to apply them.
+          <div className='warn prompt mb-5 border-warn-600'>
+            <p className='content'>
+              The changes are not applied yet. You must save to apply them.
+            </p>
           </div>
         )}
 
@@ -88,7 +90,7 @@ const AppearancePage = observer(() => {
         </Collapse>
 
         {updated ? (
-          <div className='mt-5 flex flex-row items-center rounded-lg border border-green-900 bg-green-200 p-5 font-medium'>
+          <div className='success prompt mt-5 border-success-600'>
             Theme published with success! You can check on your profile link.
           </div>
         ) : (
