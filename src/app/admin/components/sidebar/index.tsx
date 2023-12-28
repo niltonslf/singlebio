@@ -25,7 +25,7 @@ export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
       ])}>
       <button
         className='bw btn outline xs compact absolute left-5 top-5 md:hidden'
-        onClick={() => onClose()}>
+        onClick={onClose}>
         <X size={17} />
       </button>
 

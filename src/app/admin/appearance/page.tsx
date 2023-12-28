@@ -20,7 +20,7 @@ const AppearancePage = observer(() => {
   const {user} = authStore
   const {previewUrl, theme, aux} = appearanceStore
 
-  const {iframeRef, updateSmartphoneSrc} = useSmartphone()
+  const {iframeRef} = useSmartphone()
   const {compress} = useImageCompressor()
   const {upload} = useBackgroundUpload()
 
@@ -50,11 +50,6 @@ const AppearancePage = observer(() => {
   }
 
   const handleResetAppearance = () => appearanceStore.reset()
-
-  // update iframe on every change
-  useEffect(() => {
-    updateSmartphoneSrc(`/${user?.username}/${previewUrl}`)
-  }, [previewUrl, updateSmartphoneSrc, user?.username])
 
   useEffect(() => {
     if (user?.theme) appearanceStore.setTheme(user?.theme)
@@ -117,7 +112,7 @@ const AppearancePage = observer(() => {
 
       <Layout.Sidebar>
         <div className='sticky top-6'>
-          <Smartphone ref={iframeRef} />
+          <Smartphone ref={iframeRef} iframeUrl={previewUrl} />
         </div>
       </Layout.Sidebar>
     </Layout>

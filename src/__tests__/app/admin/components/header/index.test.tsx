@@ -22,7 +22,7 @@ const makeSUT = (user?: User) => {
   const userMock = user ?? makeUser()
   authStore.setUser(userMock)
 
-  const sut = setup(<Header />)
+  const sut = setup(<Header navbarHandler={<></>} />)
 
   return {userMock, ...sut}
 }
@@ -33,18 +33,18 @@ describe('Header component', () => {
     authStore.clearUser()
   })
 
-  it('render Header with logo, nav, and profile button', () => {
-    makeSUT()
+  it('render Header with profile button, page link, and welcome message', () => {
+    const {userMock} = makeSUT()
 
-    const logo = screen.getByRole('img', {name: /lnktree logo/i})
-    const nav = screen.getByRole('navigation')
+    const welcomeMsg = screen.getByText(/hello,/i)
+    const pageLink = document.querySelector('header > div > a')
     const profileBtn = document.querySelector('header div:nth-child(2)')
 
     if (!profileBtn) return fail()
 
-    expect(logo).toBeVisible()
-    expect(nav.children.length).not.toBe(0)
+    expect(pageLink).toHaveAttribute('href', `/${userMock.username}`)
     expect(profileBtn).toBeVisible()
+    expect(welcomeMsg).toBeVisible()
   })
 
   it('render component without user image', () => {

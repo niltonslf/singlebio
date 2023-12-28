@@ -1,10 +1,7 @@
-import * as firebaseAuth from 'firebase/auth'
-import * as firestore from 'firebase/firestore'
 import routerMock from 'next-router-mock'
 
-import {makeGetDocsResponse, setup} from '@/__tests__/__helpers__'
+import {fail, handlePageAuthentication, setup} from '@/__tests__/__helpers__'
 import AdminLayout from '@/app/admin/layout'
-import {parseToUser} from '@/utils/user'
 import {cleanup, waitFor} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
@@ -33,25 +30,6 @@ const makeSUT = async () => {
   )
 }
 
-const handlePageAuthentication = (
-  fbUserMock: firebaseAuth.User | undefined,
-  username?: string,
-) => {
-  const data = fbUserMock ? parseToUser(fbUserMock, username) : undefined
-  jest
-    .spyOn(firebaseAuth, 'onAuthStateChanged')
-    .mockImplementation((auth: any, userCallback: any) => {
-      userCallback(fbUserMock)
-      return jest.fn()
-    })
-
-  jest.spyOn(firestore, 'doc').mockImplementation()
-
-  jest
-    .spyOn(firestore, 'getDoc')
-    .mockResolvedValue(makeGetDocsResponse({data, exists: true}))
-}
-
 describe('Admin Layout', () => {
   afterEach(() => {
     cleanup()
@@ -69,5 +47,26 @@ describe('Admin Layout', () => {
         query: {},
       })
     })
+  })
+
+  it('should call open/close sidebar', async () => {
+    handlePageAuthentication(undefined)
+
+    const {user} = await makeSUT()
+
+    const sidebar = document.querySelector('nav')
+    const mobileCloseBtn = sidebar?.querySelector('button')
+
+    const header = document.querySelector('header')
+    const headerOpenNav = header?.querySelector('button')
+
+    if (!mobileCloseBtn || !sidebar || !headerOpenNav) return fail()
+
+    await user.click(mobileCloseBtn)
+
+    expect(sidebar.classList.contains('left-0')).toBe(false)
+
+    await user.click(headerOpenNav)
+    expect(sidebar.classList.contains('left-0')).toBe(true)
   })
 })

@@ -47,11 +47,12 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
         {iframeUrl ? (
           <iframe
             ref={ref}
-            src={`/${iframeUrl}`}
+            src={iframeUrl}
             className='h-full w-full object-cover'
           />
         ) : (
           <div
+            data-testid='smartphone-loader'
             className={merge([
               'flex h-full w-full bg-bw-800',
               'flex-1 items-center justify-center  ',

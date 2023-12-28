@@ -49,9 +49,9 @@ describe('Auth Page', () => {
   it('should render Auth page with the login button', async () => {
     await waitFor(() => render(<AuthPage />))
 
-    const formTitle = screen.getByText(/lnktree/i)
+    const formLogo = screen.getByRole('img')
 
-    expect(formTitle.textContent).toBe('Lnktree')
+    expect(formLogo).toHaveAttribute('alt', 'logo')
     validateGoogleBtn()
   })
 

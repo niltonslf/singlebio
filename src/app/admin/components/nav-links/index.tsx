@@ -99,7 +99,7 @@ export const NavLinks = ({onClick}: NavLinksProps) => {
   const isCurrentPage = (currentPage: string) => pathName == currentPage
 
   return (
-    <>
+    <div className='w-full'>
       {Object.keys(navbarItems).map(section => {
         return (
           <div key={section} className='mb-5 w-full'>
@@ -126,6 +126,6 @@ export const NavLinks = ({onClick}: NavLinksProps) => {
           </div>
         )
       })}
-    </>
+    </div>
   )
 }

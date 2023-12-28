@@ -46,7 +46,7 @@ const Admin = observer(() => {
           <aside className='grid w-full grid-rows-1'>
             <div className=' flex flex-1 items-start justify-center px-6 pb-10 pt-4 md:pb-0'>
               <div className='sticky top-6 rounded-[60px] px-5 shadow-[0px_0px_30px_0px_rgba(154,154,154,0.1)]'>
-                <Smartphone ref={iframeRef} iframeUrl={user?.username} />
+                <Smartphone ref={iframeRef} iframeUrl={`/${user?.username}`} />
               </div>
             </div>
           </aside>

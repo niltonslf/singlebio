@@ -1,6 +1,7 @@
 import {setup} from '@/__tests__/__helpers__'
 import {Smartphone} from '@/app/components'
 import {faker} from '@faker-js/faker'
+import {screen} from '@testing-library/react'
 
 describe('Smartphone', () => {
   it('should render smartphone iframe and load url', async () => {
@@ -10,14 +11,14 @@ describe('Smartphone', () => {
 
     const iframe = document.querySelector('iframe')
 
-    expect(iframe).toHaveAttribute('src', `/${url}`)
+    expect(iframe).toHaveAttribute('src', url)
   })
 
-  it('should render smartphone iframe with default url', async () => {
+  it('should render smartphone with loader', async () => {
     setup(<Smartphone />)
 
-    const iframe = document.querySelector('iframe')
+    const loader = screen.getByTestId('smartphone-loader')
 
-    expect(iframe).toHaveAttribute('src', `/demo`)
+    expect(loader).toBeVisible()
   })
 })

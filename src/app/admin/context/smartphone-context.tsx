@@ -9,7 +9,6 @@ import {
 
 type SmartphoneContext = {
   reloadSmartphoneList: () => void
-  updateSmartphoneSrc: (src: string) => void
   iframeRef: RefObject<HTMLIFrameElement>
 }
 
@@ -26,18 +25,10 @@ export const SmartphoneProvider = ({children}: PropsWithChildren) => {
     iframeRef?.current?.setAttribute('src', uniquePath)
   }, [iframeRef])
 
-  const updateSmartphoneSrc = useCallback(
-    (src: string) => {
-      iframeRef?.current?.setAttribute('src', src)
-    },
-    [iframeRef],
-  )
-
   return (
     <smartphoneContext.Provider
       value={{
         reloadSmartphoneList,
-        updateSmartphoneSrc,
         iframeRef,
       }}>
       {children}

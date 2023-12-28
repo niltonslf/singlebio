@@ -1,9 +1,8 @@
-import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 
 import {
+  handlePageAuthentication,
   makeFbUser,
-  makeGetDocsResponse,
   makeUser,
   makeUserTheme,
   setup,
@@ -12,8 +11,6 @@ import {appearanceStore} from '@/app/admin/appearance/context'
 import AppearancePage from '@/app/admin/appearance/page'
 import AdminLayout from '@/app/admin/layout'
 import {authStore} from '@/app/auth/context/auth-store'
-import {parseToUser} from '@/utils'
-import {faker} from '@faker-js/faker'
 import {act, cleanup, screen, waitFor} from '@testing-library/react'
 
 import {makeImageFile} from './components/customize-wallpaper/index.test'
@@ -44,25 +41,6 @@ jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
   usePathname: jest.fn(() => '/'),
 }))
-
-const handlePageAuthentication = (
-  fbUserMock: firebaseAuth.User | undefined,
-  username: string = faker.internet.userName(),
-) => {
-  const data = fbUserMock ? parseToUser(fbUserMock, username) : undefined
-  jest
-    .spyOn(firebaseAuth, 'onAuthStateChanged')
-    .mockImplementation((auth: any, userCallback: any) => {
-      userCallback(fbUserMock)
-      return jest.fn()
-    })
-
-  jest.spyOn(firestore, 'doc').mockImplementation()
-
-  jest
-    .spyOn(firestore, 'getDoc')
-    .mockResolvedValue(makeGetDocsResponse({data, exists: true}))
-}
 
 const makeSUT = () => {
   handlePageAuthentication(makeFbUser())
@@ -96,10 +74,9 @@ describe('Appearance Page', () => {
       jest.spyOn(appearanceStore, 'setBackgroundFile')
       jest.spyOn(firestore, 'updateDoc').mockImplementation()
 
-      const {user} = makeSUT()
+      const {user} = await waitFor(() => makeSUT())
 
-      const buttons = screen.getAllByRole('button')
-      const submitButton = buttons[0]
+      const submitButton = screen.getByRole('button', {name: /save/i})
 
       await user.click(submitButton)
 
@@ -130,12 +107,11 @@ describe('Appearance Page', () => {
     it('should reset theme', async () => {
       setCustomTheme()
 
-      const {user} = makeSUT()
+      const {user} = await waitFor(() => makeSUT())
 
-      const buttons = screen.getAllByRole('button')
-      const resetButton = buttons[1]
+      const resetBtn = screen.getByText(/reset/i)
 
-      await user.click(resetButton)
+      await user.click(resetBtn)
 
       expect(appearanceStore.theme).toStrictEqual({
         backgroundImage: '',
@@ -153,7 +129,7 @@ describe('Appearance Page', () => {
       const user = makeUser()
       const theme = makeUserTheme()
 
-      makeSUT()
+      await waitFor(() => makeSUT())
 
       await act(() => authStore.setUser({...user, theme}))
 

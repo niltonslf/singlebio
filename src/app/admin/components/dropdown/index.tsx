@@ -24,7 +24,7 @@ export const Dropdown = observer(({children}: DropdownProps) => {
   }
 
   return (
-    <div className='background dropdown'>
+    <div className='background dropdown' data-testid='header-dropdown'>
       <label className='cursor-pointer' tabIndex={0}>
         {children}
       </label>

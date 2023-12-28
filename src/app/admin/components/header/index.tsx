@@ -18,7 +18,7 @@ type HeaderProps = {
 
 export const Header = observer(({navbarHandler}: HeaderProps) => {
   const {user} = authStore
-  const hostname = window.location.hostname
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL
 
   return (
     <header
@@ -39,7 +39,7 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
             className='flex flex-row items-center gap-1 text-primary-1000'
             target='_blank'
             href={`/${user.username}`}>
-            {hostname}/{user?.username}
+            {appUrl}/{user?.username}
             <ExternalLink size={15} />
           </Link>
         )}
@@ -49,7 +49,7 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
             name={user?.name ?? 'User'}
             pictureUrl={user?.pictureUrl}
             size={40}
-            className='border-2 border-secondary-600'
+            className='border-2 border-primary-700'
           />
         </Dropdown>
       </div>
