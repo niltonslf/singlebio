@@ -67,14 +67,14 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
       {isOpen && <label className='modal-overlay'></label>}
       <div
         className={merge([
-          'w-max-[100%] modal flex w-96 flex-col gap-2',
+          'w-max-[100%] modal flex w-96 flex-col gap-2 bg-background-300',
           isOpen ? 'show' : '',
         ])}>
         <h2 className='text-xl'>Choose your username</h2>
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='mt-2'>
-              <p className='text-sm text-gray-500'>
+              <p className='text-sm text-slate-300'>
                 The <b>username</b> will be used to create your url. Obs: white
                 spaces will be removed.
               </p>
@@ -85,7 +85,7 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
                 data-testid='modal-username-input'
                 placeholder='Type your username'
                 className={clsx(
-                  'border-1 w-full rounded-md border border-gray-400 p-2',
+                  'md input border-slate-500 placeholder:text-slate-500',
                   (errors?.username?.message || usernameAlreadyTaken) &&
                     'border-red-400 outline-red-400',
                 )}
@@ -112,9 +112,7 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
               <button
                 data-testid='modal-submit-button'
                 type='submit'
-                className='inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-8 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300
-                        disabled:text-gray-900
-                        disabled:opacity-50'
+                className='info btn solid'
                 disabled={submitDisabled}>
                 Save
               </button>

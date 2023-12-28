@@ -5,9 +5,5 @@ type ContentLayoutProps = {
 }
 
 export const ContentLayout = ({children}: ContentLayoutProps) => {
-  return (
-    <section className='flex h-auto  flex-col rounded-lg bg-gray-800 p-4 md:p-10'>
-      {children}
-    </section>
-  )
+  return <section className='flex flex-col pt-8'>{children}</section>
 }

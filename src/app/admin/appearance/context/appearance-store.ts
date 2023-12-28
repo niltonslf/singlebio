@@ -34,7 +34,7 @@ class AppearanceStore {
   }
 
   get previewUrl() {
-    return `preview?&${themeToQuery(this.themeConfig)}`
+    return `/username/preview/?&${themeToQuery(this.themeConfig)}`
   }
   get hasChanges() {
     return (

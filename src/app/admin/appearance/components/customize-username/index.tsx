@@ -17,8 +17,10 @@ export const CustomizeUsername = observer(() => {
 
   return (
     <>
-      <div className='mt-5'>
-        <h2 className='font-mg font-semibold'>1. Select the username color</h2>
+      <div className='mt-3'>
+        <h2 className='text-sm font-normal text-slate-300'>
+          Select the username color
+        </h2>
 
         <div className='mt-3'>
           <HexAlphaColorPicker

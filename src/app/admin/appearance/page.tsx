@@ -20,7 +20,7 @@ const AppearancePage = observer(() => {
   const {user} = authStore
   const {previewUrl, theme, aux} = appearanceStore
 
-  const {iframeRef, updateSmartphoneSrc} = useSmartphone()
+  const {iframeRef} = useSmartphone()
   const {compress} = useImageCompressor()
   const {upload} = useBackgroundUpload()
 
@@ -51,11 +51,6 @@ const AppearancePage = observer(() => {
 
   const handleResetAppearance = () => appearanceStore.reset()
 
-  // update iframe on every change
-  useEffect(() => {
-    updateSmartphoneSrc(`/${user?.username}/${previewUrl}`)
-  }, [previewUrl, updateSmartphoneSrc, user?.username])
-
   useEffect(() => {
     if (user?.theme) appearanceStore.setTheme(user?.theme)
   }, [user?.theme])
@@ -69,7 +64,7 @@ const AppearancePage = observer(() => {
           </div>
         )}
 
-        <Collapse defaultOpen={1} toggle>
+        <Collapse toggle>
           <Collapse.Item key={'wallpaper'} index={1}>
             <Collapse.Header>Page wallpaper</Collapse.Header>
             <Collapse.Body>
@@ -97,14 +92,18 @@ const AppearancePage = observer(() => {
             Theme published with success! You can check on your profile link.
           </div>
         ) : (
-          <div className='mt-5 flex flex-row items-center gap-5 border-t border-t-gray-500 pt-5'>
+          <div className='mt-5 flex flex-row items-center justify-center gap-5 border-t border-t-background-600 pt-5 md:justify-start'>
             <Button
+              className='w-full md:w-auto'
               variant='primary'
               onClick={() => handleSaveAppearance()}
               isLoading={isLoading}>
               Save
             </Button>
-            <Button variant='error' onClick={() => handleResetAppearance()}>
+            <Button
+              className='w-full md:w-auto'
+              variant='error'
+              onClick={() => handleResetAppearance()}>
               Reset
             </Button>
           </div>
@@ -113,7 +112,7 @@ const AppearancePage = observer(() => {
 
       <Layout.Sidebar>
         <div className='sticky top-6'>
-          <Smartphone ref={iframeRef} />
+          <Smartphone ref={iframeRef} iframeUrl={previewUrl} />
         </div>
       </Layout.Sidebar>
     </Layout>

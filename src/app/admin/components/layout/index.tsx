@@ -9,9 +9,9 @@ type LayoutProps = {
 
 export const Layout = ({children}: LayoutProps) => {
   return (
-    <main className='grid min-h-[calc(100%-80px)] w-full grid-cols-1 gap-3 md:grid-cols-[3fr_1.5fr] md:grid-rows-[1fr]'>
+    <section className='grid min-h-[calc(100vh-56px)] w-full grid-cols-1 gap-3 md:grid-cols-[3fr_1.5fr] md:grid-rows-[1fr]'>
       {children}
-    </main>
+    </section>
   )
 }
 

@@ -26,14 +26,14 @@ export const CollapseHeader = ({children, className}: CollapseHeaderProps) => {
     <header className='flex w-full select-none' onClick={() => handleClick()}>
       <label
         className={merge([
-          'color flex w-full cursor-pointer justify-between bg-white p-3',
+          'color flex w-full cursor-pointer justify-between bg-background-300 p-3',
           className,
         ])}>
-        <div className='w-full '>{children}</div>
+        <div className='w-full text-slate-300'>{children}</div>
         {isItemOpen(itemIndex) ? (
-          <ChevronUpIcon className='icon-up' />
+          <ChevronUpIcon className='icon-up text-slate-300' />
         ) : (
-          <ChevronDownIcon className='icon-down' />
+          <ChevronDownIcon className='icon-down text-slate-300' />
         )}
       </label>
     </header>

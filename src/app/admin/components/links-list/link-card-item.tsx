@@ -24,21 +24,27 @@ export const LinkCardItem = ({link, onDelete, children}: LinkCardItemProps) => {
     <li
       ref={setNodeRef}
       style={style}
-      className='flex w-full touch-manipulation flex-wrap items-center justify-center gap-4 rounded-lg bg-gray-700 p-3 font-medium md:p-5'>
+      className='flex w-full flex-wrap items-center justify-center gap-3 rounded-xl bg-background-300 px-3 py-2  font-medium shadow-md md:px-5 md:py-3'>
       <button
-        className='flex w-10 flex-col items-center rounded-lg'
+        className=' mr-3 flex touch-none flex-col items-center'
         {...attributes}
         {...listeners}>
         <span>
-          <Grip width={30} height={30} color='white' />
+          <Grip width={20} height={20} className='text-slate-300' />
         </span>
       </button>
+
       <div className='flex flex-1 flex-col items-center gap-2'>{children}</div>
+
       <div
         onClick={() => onDelete(link)}
         className='cursor-pointer'
         data-testid='delete-link-btn'>
-        <Trash className='text-red-400 hover:text-red-700' />
+        <Trash
+          width={20}
+          height={20}
+          className='text-slate-300 hover:text-bw-800'
+        />
       </div>
     </li>
   )

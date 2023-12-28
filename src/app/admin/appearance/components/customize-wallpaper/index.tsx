@@ -37,9 +37,11 @@ export const CustomizeWallpaper = observer(() => {
 
   return (
     <>
-      <section className='flex flex-row items-start gap-10'>
-        <div className='mb-5 flex-1'>
-          <h1 className='font-mg font-semibold'>Select the wallpaper</h1>
+      <section className='flex flex-row flex-wrap items-start gap-10'>
+        <div className='w-full md:w-auto md:flex-1'>
+          <h1 className='text-sm font-normal text-slate-300'>
+            Select the wallpaper
+          </h1>
 
           <div className='mt-3'>
             <label
@@ -88,12 +90,14 @@ export const CustomizeWallpaper = observer(() => {
           </div>
         </div>
 
-        <div className=' flex-1'>
-          <h2 className='font-mg font-semibold'>Customize the overlay</h2>
+        <div className='w-full md:w-auto md:flex-1'>
+          <h2 className='text-sm font-normal text-slate-300'>
+            Customize the overlay
+          </h2>
 
           <div className='mt-3'>
             <HexAlphaColorPicker
-              style={{width: '100%', height: '350px'}}
+              style={{width: '100%', height: '300px'}}
               color={theme.backgroundColor}
               onChange={color => debouncedBackgroundColor(color)}
             />

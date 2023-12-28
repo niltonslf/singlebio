@@ -1,11 +1,14 @@
-import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 
-import {makeFbUser, makeGetDocsResponse, setup} from '@/__tests__/__helpers__'
+import {
+  handlePageAuthentication,
+  makeFbUser,
+  makeGetDocsResponse,
+  setup,
+} from '@/__tests__/__helpers__'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import {authStore} from '@/app/auth/context/auth-store'
-import {parseToUser} from '@/utils/user'
 import {faker} from '@faker-js/faker'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
@@ -28,11 +31,6 @@ jest.mock('firebase/firestore', () => ({
 jest.mock('@/app/admin/context/smartphone-context', () => {
   return {
     ...jest.requireActual('@/app/admin/context/smartphone-context'),
-    // useSmartphone: () => {
-    //   return {
-    //     reloadSmartphoneList: jest.fn(),
-    //   }
-    // },
   }
 })
 
@@ -44,25 +42,6 @@ const makeSUT = async () => {
       </AdminLayout>,
     ),
   )
-}
-
-const handlePageAuthentication = (
-  fbUserMock: firebaseAuth.User | undefined,
-  username?: string,
-) => {
-  const data = fbUserMock ? parseToUser(fbUserMock, username) : undefined
-  jest
-    .spyOn(firebaseAuth, 'onAuthStateChanged')
-    .mockImplementation((auth: any, userCallback: any) => {
-      userCallback(fbUserMock)
-      return jest.fn()
-    })
-
-  jest.spyOn(firestore, 'doc').mockImplementation()
-
-  jest
-    .spyOn(firestore, 'getDoc')
-    .mockResolvedValue(makeGetDocsResponse({data, exists: true}))
 }
 
 describe('Admin page', () => {

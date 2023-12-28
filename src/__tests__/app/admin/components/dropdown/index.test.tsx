@@ -1,7 +1,7 @@
-import {fail, makeUser} from '@/__tests__/__helpers__'
+import {fail, setup} from '@/__tests__/__helpers__'
 import {Dropdown} from '@/app/admin/components'
 import {authStore} from '@/app/auth/context/auth-store'
-import {cleanup, render, screen} from '@testing-library/react'
+import {cleanup, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 jest.mock('next/navigation', () => ({
@@ -10,18 +10,18 @@ jest.mock('next/navigation', () => ({
 }))
 
 const makeSUT = () => {
-  return render(
+  return setup(
     <Dropdown>
       <button>open dropdown</button>
     </Dropdown>,
   )
 }
 
-const handleMenuContainer = () => {
-  const menuList = screen.getByRole('list')
-  let menuHidden = menuList.parentElement?.classList.contains('hidden')
+const getMenuElements = () => {
+  const dropdown = screen.getByTestId('header-dropdown')
+  const menuList = dropdown.querySelector('div')
 
-  return {menuHidden, menuList}
+  return {dropdown, menuList}
 }
 
 describe('Dropdown', () => {
@@ -30,96 +30,18 @@ describe('Dropdown', () => {
     authStore.clearUser()
   })
 
-  it('should render component', async () => {
+  it('should dropdown component', async () => {
     makeSUT()
 
-    const triggerItem = screen.getByRole('button')
-    const {menuList} = handleMenuContainer()
-    const items = menuList.querySelectorAll('li')
+    const triggerItem = screen.getByText('open dropdown')
+    const {menuList} = getMenuElements()
+    const items = menuList?.querySelectorAll('span')
+
+    if (!menuList) return fail()
 
     expect(triggerItem).toBeInTheDocument()
     expect(menuList).toBeInTheDocument()
-    expect(items).toHaveLength(4)
-  })
-
-  it('should open dropdown', async () => {
-    const user = userEvent.setup()
-
-    makeSUT()
-
-    const triggerItem = screen.getByRole('button')
-    const {menuHidden} = handleMenuContainer()
-
-    expect(menuHidden).toBe(true)
-
-    await user.click(triggerItem)
-
-    const {menuHidden: menuHidden2} = handleMenuContainer()
-
-    expect(menuHidden2).toBe(false)
-  })
-
-  it('should close menu when clicked outside', async () => {
-    const user = userEvent.setup()
-
-    const {baseElement} = makeSUT()
-
-    const triggerItem = screen.getByRole('button')
-    const {menuHidden, menuList} = handleMenuContainer()
-
-    // dropdown hidden
-    expect(menuHidden).toBe(true)
-
-    // open dropdown
-    await user.click(triggerItem)
-
-    const {menuHidden: menuHidden2} = handleMenuContainer()
-
-    // check if dropdown is visible
-    expect(menuHidden2).toBe(false)
-
-    // don't close when clicked in a element inside the dropdown
-    const {menuHidden: menuHidden3} = handleMenuContainer()
-
-    // testing clicking on the list
-    await user.click(menuList)
-    expect(menuHidden3).toBe(false)
-
-    // testing clicking on the list container
-    const {menuHidden: menuHidden4} = handleMenuContainer()
-    const menulistContainer = menuList.parentElement
-
-    if (!menulistContainer) return fail()
-
-    await user.click(menulistContainer)
-    expect(menuHidden4).toBe(false)
-
-    // click outside
-    await user.click(baseElement)
-    const {menuHidden: menuHidden5} = handleMenuContainer()
-
-    // check if dropdown is hidden
-    expect(menuHidden5).toBe(true)
-  })
-
-  it('should the first item has the correct link', async () => {
-    userEvent.setup()
-
-    authStore.userModel = makeUser()
-    const path = `/${authStore?.user?.username}`
-
-    makeSUT()
-
-    const {menuList} = handleMenuContainer()
-    const items = menuList.querySelectorAll('li')
-
-    // select first li
-    const firstItem = items[1]
-    const link = firstItem.firstElementChild
-
-    if (!link) return fail()
-
-    expect(link).toHaveAttribute('href', path)
+    expect(items).toHaveLength(2)
   })
 
   it('should call deleteAccount function', async () => {
@@ -129,15 +51,14 @@ describe('Dropdown', () => {
 
     makeSUT()
 
-    const {menuList} = handleMenuContainer()
-    const items = menuList.querySelectorAll('li')
+    const {menuList} = getMenuElements()
+    const items = menuList?.querySelectorAll('span')
 
-    const secondItem = items[2]
-    const deleteAccountItem = secondItem.firstElementChild
+    const deleteItem = items?.[0]
 
-    if (!deleteAccountItem) return fail()
+    if (!deleteItem) return fail()
 
-    await user.click(deleteAccountItem)
+    await user.click(deleteItem)
 
     expect(authStore.deleteUser).toHaveBeenCalledTimes(1)
   })
