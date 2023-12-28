@@ -9,6 +9,7 @@ import {
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import {authStore} from '@/app/auth/context/auth-store'
+import {parseUserPageUrl} from '@/utils'
 import {faker} from '@faker-js/faker'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
@@ -61,7 +62,10 @@ describe('Admin page', () => {
       expect(header).toBeInTheDocument()
       expect(linkForm).toBeInTheDocument()
       expect(smartphone).toBeInTheDocument()
-      expect(smartphone).toHaveAttribute('src', `/${authStore.user?.username}`)
+      expect(smartphone).toHaveAttribute(
+        'src',
+        parseUserPageUrl(authStore.user?.username || ''),
+      )
     })
   })
 
