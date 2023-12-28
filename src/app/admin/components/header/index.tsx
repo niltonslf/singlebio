@@ -10,7 +10,7 @@ import {ReactNode} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
 import {Avatar} from '@/app/components'
-import {merge} from '@/utils'
+import {merge, parseUserPageUrl} from '@/utils'
 
 type HeaderProps = {
   navbarHandler: ReactNode
@@ -18,7 +18,6 @@ type HeaderProps = {
 
 export const Header = observer(({navbarHandler}: HeaderProps) => {
   const {user} = authStore
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL
 
   return (
     <header
@@ -42,7 +41,7 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
               className='hidden flex-row items-center gap-1 text-primary-1000 md:flex '
               target='_blank'
               href={`/${user.username}`}>
-              {appUrl}/{user?.username}
+              {parseUserPageUrl(user?.username)}
               <ExternalLink size={15} />
             </Link>
 
