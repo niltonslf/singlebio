@@ -158,12 +158,20 @@ export const CardList = ({user}: CardListProps) => {
   return (
     <section className='flex w-full flex-col gap-5 px-0 py-3'>
       <div className='flex flex-1 flex-col gap-5'>
-        <button
-          onClick={handleAddNewLink}
-          className='danger btn solid md w-full'>
-          Add link
-          <Plus size={18} />
-        </button>
+        <div className='mb-10 flex w-full flex-1 flex-row flex-wrap gap-10'>
+          <button
+            onClick={handleAddNewLink}
+            className='primary btn solid lg flex-1 !text-sm uppercase'>
+            <Plus size={18} />
+            Add link
+          </button>
+          <button
+            onClick={handleAddNewLink}
+            className='bw btn solid  lg w-52 !text-sm uppercase'>
+            <Plus size={18} />
+            Add Social links
+          </button>
+        </div>
 
         {isFetchingData ? (
           <div className='pt-5'>

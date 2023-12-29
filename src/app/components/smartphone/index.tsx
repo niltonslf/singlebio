@@ -10,7 +10,12 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
   ({iframeUrl}, ref) => {
     return (
       <div
-        className='after:content-[" "] before:content-[" "]
+        className={merge([
+          'rounded-[60px] px-5 ',
+          'shadow-[0px_0px_30px_0px_rgba(154,154,154,0.1)]',
+        ])}>
+        <div
+          className='after:content-[" "] before:content-[" "]
       ` 
       relative 
       my-5 
@@ -44,25 +49,26 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
      after:rounded-full
      after:bg-white
      after:shadow-md'>
-        {iframeUrl ? (
-          <iframe
-            ref={ref}
-            src={iframeUrl}
-            className='h-full w-full object-cover'
-          />
-        ) : (
-          <div
-            data-testid='smartphone-loader'
-            className={merge([
-              'flex h-full w-full bg-bw-800',
-              'flex-1 items-center justify-center  ',
-              'w-[290px] max-w-full ',
-            ])}>
-            <div className='bw danger lg loader'>
-              <div className='bar-bounce' />
+          {iframeUrl ? (
+            <iframe
+              ref={ref}
+              src={iframeUrl}
+              className='h-full w-full object-cover'
+            />
+          ) : (
+            <div
+              data-testid='smartphone-loader'
+              className={merge([
+                'flex h-full w-full bg-bw-800',
+                'flex-1 items-center justify-center  ',
+                'w-[290px] max-w-full ',
+              ])}>
+              <div className='bw danger lg loader'>
+                <div className='bar-bounce' />
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     )
   },

@@ -41,10 +41,10 @@ const AdminLayout = observer(({children}: AdminLayoutProps) => {
           ])}>
           <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
-          <div className='grid h-screen grid-rows-[56px_1fr]'>
+          <div className='grid h-screen grid-rows-[60px_1fr]'>
             <Header navbarHandler={navbarHandler} />
 
-            <section className='h-[calc(100vh-56px)] min-w-full gap-5 overflow-y-auto px-5 pb-16 pt-10 md:p-10'>
+            <section className='h-[calc(100vh-60px)] min-w-full gap-5 overflow-y-auto px-5 pb-16 pt-10 md:px-10 md:py-0'>
               {children}
             </section>
           </div>

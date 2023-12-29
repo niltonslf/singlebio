@@ -9,7 +9,7 @@ type LayoutProps = {
 
 export const AdminBaseLayout = ({children}: LayoutProps) => {
   return (
-    <div className='grid h-auto w-full grid-cols-1 grid-rows-[1fr] md:grid-cols-[3fr_2fr]'>
+    <div className='grid h-auto w-full grid-cols-1 grid-rows-[1fr] gap-10 md:grid-cols-[3fr_2fr]'>
       {children}
     </div>
   )

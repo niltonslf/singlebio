@@ -38,7 +38,9 @@ const Admin = observer(() => {
   return (
     <>
       <AdminBaseLayout>
-        <AdminBaseLayout.Content>
+        <AdminBaseLayout.Content className='pb-10'>
+          <h1 className='mb-10 text-2xl font-semibold'>Your links</h1>
+
           <CardList user={user} />
         </AdminBaseLayout.Content>
 
