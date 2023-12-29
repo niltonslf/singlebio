@@ -23,7 +23,7 @@ export const Settings = observer(() => {
           </div>
           <div className='w-full'>
             <div className='background border-background-600'>
-              <select className='background select'>
+              <select className='bw solid select'>
                 <option>English</option>
                 <option>Option 2</option>
                 <option>Option 3</option>
@@ -39,7 +39,7 @@ export const Settings = observer(() => {
           </div>
           <div className='w-full'>
             <div className='background border-background-600'>
-              <select className='background select'>
+              <select className='bw solid select'>
                 <option>Dark theme</option>
                 <option>Option 2</option>
               </select>

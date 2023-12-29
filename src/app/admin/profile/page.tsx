@@ -1,5 +1,6 @@
 'use client'
 
+import {Instagram, Mail, Plus, Trash} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import Image from 'next/image'
 
@@ -42,15 +43,15 @@ export const ProfilePage = observer(() => {
                 placeholder='Bio'
                 name='bio'
                 className='bw solid input !border-background-600'
-                maxLength={150}
+                maxLength={100}
                 wrap='soft'
-                rows={4}
+                rows={2}
               />
             </div>
             <div className='flex h-full items-center'>
               <Image
                 className='rounded-full'
-                src={user?.pictureUrl}
+                src={user?.pictureUrl || ''}
                 alt='Profile picture'
                 width={150}
                 height={150}
@@ -65,27 +66,55 @@ export const ProfilePage = observer(() => {
           </div>
           <form className='flex flex-row flex-wrap  gap-5'>
             <div className='flex flex-1 flex-col gap-3'>
-              <input
-                type='text'
-                name='instagram'
-                className='bw solid input !border-background-600'
-                placeholder='Instagram'
-              />
-              <input
-                type='text'
-                name='email'
-                className='bw solid input !border-background-600'
-                placeholder='Email'
-              />
-
-              <input
-                type='text'
-                name='youtube'
-                className='bw solid input !border-background-600'
-                placeholder='Youtube'
-              />
+              <div className='flex flex-row flex-wrap items-center justify-between gap-3 rounded-lg bg-background-100 px-4 py-2'>
+                <span className='flex flex-row flex-wrap items-center justify-between gap-5'>
+                  <Instagram size={15} />
+                  <span>Instagram</span>
+                </span>
+                <div className='flex flex-row items-center'>
+                  <input
+                    type='text'
+                    name='instagram'
+                    className='rounded-lg bg-transparent px-2 py-1 text-right font-normal hover:bg-background-500 focus:bg-background-500 focus:outline-none disabled:opacity-80'
+                    placeholder='Instagram'
+                  />
+                  <button className='rounded-md p-2 text-background-900 hover:bg-primary-500'>
+                    <Trash size={15} />
+                  </button>
+                </div>
+              </div>
+              {/*  */}
+              <div className='flex flex-row flex-wrap items-center justify-between gap-3 rounded-lg bg-background-100 px-4 py-2'>
+                <span className='flex flex-row flex-wrap items-center justify-between gap-5'>
+                  <Mail size={15} />
+                  <span>Mail</span>
+                </span>
+                <div className='flex flex-row items-center'>
+                  <input
+                    type='text'
+                    name='mail'
+                    className='rounded-lg bg-transparent px-2 py-1 text-right font-normal hover:bg-background-500 focus:bg-background-500 focus:outline-none disabled:opacity-80'
+                    placeholder='Mail'
+                  />
+                  <button className='rounded-md p-2 text-background-900 hover:bg-primary-500'>
+                    <Trash size={15} />
+                  </button>
+                </div>
+              </div>
+              {/*  */}
             </div>
+
+            {/* <input
+              type='text'
+              name='youtube'
+              className='bw solid input !border-background-600'
+              placeholder='Youtube'
+            /> */}
           </form>
+
+          <button className='mt-5 flex w-full flex-row items-center justify-center gap-2 rounded-lg p-3 text-primary-900 hover:bg-background-100 '>
+            <Plus size={15} /> Add social
+          </button>
         </div>
       </AdminBaseLayout.Content>
       <AdminBaseLayout.RightPanel>

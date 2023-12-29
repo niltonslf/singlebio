@@ -62,7 +62,6 @@ const navbarItems: NavbarLinks = {
         title: 'go to settings page',
         name: 'Settings',
         Icon: <Settings2 width={18} />,
-        disabled: true,
       },
     ],
   },
