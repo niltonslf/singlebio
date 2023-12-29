@@ -89,7 +89,7 @@ export default function UserPage({params: {username}}: UserPageProps) {
   return (
     <main
       className={clsx([
-        'flex h-[100dvh] w-screen flex-wrap overflow-y-auto bg-cover bg-center',
+        'flex h-screen min-h-[100dvh] w-screen flex-wrap bg-cover bg-center',
         !user?.theme?.backgroundImage && !user?.theme?.backgroundColor
           ? defaultBg
           : '',
@@ -97,7 +97,7 @@ export default function UserPage({params: {username}}: UserPageProps) {
       style={user?.theme?.backgroundImage ? backgroundImageStyle : {}}>
       <section
         className={clsx([
-          'pb-50 flex w-full flex-col items-center p-5 pt-20 md:p-10',
+          'flex w-full flex-col items-center px-5 pb-8 pt-20 md:p-20',
         ])}
         style={user?.theme?.backgroundColor ? backgroundColorStyle : {}}>
         <div className='flex min-h-full w-full max-w-2xl flex-col'>
@@ -158,20 +158,20 @@ export default function UserPage({params: {username}}: UserPageProps) {
               })}
           </LinkCard>
 
-          <footer className='mt-auto flex w-full justify-center pt-5'>
+          <footer className='mt-auto flex w-full flex-row items-center justify-center pt-8'>
             <Link
               href='/'
               title='Home page'
-              className='flex flex-col items-center justify-end px-10 opacity-80'>
-              <p className='mb-1 text-xs font-semibold text-bw-300 opacity-80'>
-                Created using:{' '}
-              </p>
+              className='flex w-56 flex-row items-center justify-center gap-2 rounded-full bg-background-1100 bg-opacity-80 py-3 shadow-md backdrop-blur-md hover:bg-white'>
               <Image
-                src='/logo-black.png'
-                width={90}
-                height={23}
+                src='/logo-icon-black.png'
+                width={25}
+                height={25}
                 alt='lnktree logo'
               />
+              <p className='text-base font-semibold text-bw-50 opacity-80'>
+                Share your best here
+              </p>
             </Link>
           </footer>
         </div>
