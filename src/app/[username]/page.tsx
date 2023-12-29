@@ -42,6 +42,10 @@ export default function UserPage({params: {username}}: UserPageProps) {
     ...backgroundColorStyle,
   }
 
+  const usernameTextColorStyle = {
+    color: user?.theme?.usernameColor,
+  }
+
   const fetchData = useCallback(async () => {
     const q = query(
       collection(db, 'users'),
@@ -97,7 +101,7 @@ export default function UserPage({params: {username}}: UserPageProps) {
         ])}
         style={user?.theme?.backgroundColor ? backgroundColorStyle : {}}>
         <div className='flex min-h-full w-full max-w-2xl flex-col'>
-          <header className='w-full'>
+          <header className='mb-5 w-full'>
             <div className='mb-4 flex w-full justify-center'>
               <Avatar
                 name={user?.name || ''}
@@ -108,13 +112,19 @@ export default function UserPage({params: {username}}: UserPageProps) {
 
             <h2
               className='mb-3 flex items-center justify-center text-2xl font-semibold text-bw-300'
-              style={
-                user?.theme?.usernameColor
-                  ? {color: user.theme.usernameColor}
-                  : {}
-              }>
-              @{username}
+              style={user?.theme?.usernameColor ? usernameTextColorStyle : {}}>
+              {user?.name}
             </h2>
+
+            {user?.bio && (
+              <p
+                className='w-full break-all text-center text-base'
+                style={
+                  user?.theme?.usernameColor ? usernameTextColorStyle : {}
+                }>
+                {user?.bio}
+              </p>
+            )}
           </header>
 
           {isLoading && (
