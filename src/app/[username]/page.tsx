@@ -89,7 +89,8 @@ export default function UserPage({params: {username}}: UserPageProps) {
   return (
     <main
       className={clsx([
-        'flex h-screen min-h-[100dvh] w-screen flex-wrap bg-cover bg-center',
+        'flex h-[100dvh] w-full flex-wrap overflow-hidden bg-cover bg-center',
+        'bg-fixed',
         !user?.theme?.backgroundImage && !user?.theme?.backgroundColor
           ? defaultBg
           : '',
@@ -97,10 +98,11 @@ export default function UserPage({params: {username}}: UserPageProps) {
       style={user?.theme?.backgroundImage ? backgroundImageStyle : {}}>
       <section
         className={clsx([
-          'flex w-full flex-col items-center px-5 pb-8 pt-20 md:p-20',
+          'flex h-[100dvh] w-screen flex-col items-center overflow-y-auto',
+          'px-5 pb-8 pt-20',
         ])}
         style={user?.theme?.backgroundColor ? backgroundColorStyle : {}}>
-        <div className='flex min-h-full w-full max-w-2xl flex-col'>
+        <div className='flex w-full max-w-2xl flex-1 flex-row flex-wrap'>
           <header className='mb-5 w-full'>
             <div className='mb-4 flex w-full justify-center'>
               <Avatar
