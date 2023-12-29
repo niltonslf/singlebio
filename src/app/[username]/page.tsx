@@ -160,18 +160,18 @@ export default function UserPage({params: {username}}: UserPageProps) {
               })}
           </LinkCard>
 
-          <footer className='mt-auto flex w-full flex-row items-center justify-center pt-8'>
+          <footer className='mt-auto flex w-full flex-row items-center justify-center pt-10'>
             <Link
               href='/'
               title='Home page'
-              className='flex w-56 flex-row items-center justify-center gap-2 rounded-full bg-background-1100 bg-opacity-80 py-3 shadow-md backdrop-blur-md hover:bg-white'>
+              className='flex w-52 flex-row items-center justify-center gap-2 rounded-full bg-background-1100 bg-opacity-60 py-3 shadow-md backdrop-blur-md hover:bg-white'>
               <Image
                 src='/logo-icon-black.png'
                 width={25}
                 height={25}
                 alt='lnktree logo'
               />
-              <p className='text-base font-semibold text-bw-50 opacity-80'>
+              <p className='text-sm font-semibold text-bw-50 opacity-80'>
                 Share your best here
               </p>
             </Link>

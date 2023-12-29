@@ -12,8 +12,7 @@ export const AdminLayoutContent = ({
   className,
 }: ContentLayoutProps) => {
   return (
-    <section
-      className={merge(['flex h-full w-full flex-col pb-12 pt-6', className])}>
+    <section className={merge(['flex h-full w-full flex-col', className])}>
       {children}
     </section>
   )

@@ -10,7 +10,7 @@ type SidebarProps = {
 export const AdminLayoutRightPanel = ({children, className}: SidebarProps) => {
   return (
     <div className={merge(['grid w-full grid-rows-1', className])}>
-      <div className='flex flex-1 items-start justify-center px-6 pb-10 pt-4'>
+      <div className='mt-10 flex flex-1 items-start justify-center md:mt-0 md:pl-10'>
         <div
           className={merge([
             'sticky top-6 rounded-[60px] px-5 ',

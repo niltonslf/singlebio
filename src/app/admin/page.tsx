@@ -53,36 +53,37 @@ const Admin = observer(() => {
       <Modal onSave={onSubmitUsername} initialOpen={showUsernameModal} />
 
       <button
-        className='primary btn solid md fixed bottom-5 right-5 z-50 rounded-full shadow-md'
+        className='bw btn solid md fixed bottom-4 right-4 z-50 flex rounded-full shadow-md md:hidden'
         onClick={() => setShowMobilePreview(prev => !prev)}>
         {showMobilePreview ? (
           <>
             <X size={18} />
-            Close
+            <p>Close</p>
           </>
         ) : (
           <>
             <Eye size={18} />
-            Preview
+            <p>Preview</p>
           </>
         )}
       </button>
 
       <div
         className={merge([
-          'absolute -bottom-full left-0 z-30 flex h-[100dvh] w-full flex-row justify-center bg-transparent px-5 pt-[5dvh] backdrop-blur-md',
-          'transition-all duration-500',
+          'absolute -bottom-full left-0 z-30 flex h-[100vh] w-full flex-row justify-center bg-transparent px-3 pt-10 backdrop-blur-md',
+          'transition-all duration-500 md:hidden',
           showMobilePreview && 'bottom-0',
         ])}>
         <div
           className={merge([
             'aspect-[9/19] h-full w-full overflow-hidden',
-            'max-w-[90%] border-[20px] border-b-0 border-[#111]',
+            'max-w-[500px] border-[15px] border-b-0 border-[#111]',
             'rounded-tl-[40px] rounded-tr-[40px] bg-background-100',
             ' has-shadow',
           ])}>
           <iframe
-            src={parseUserPageUrl(user?.username || '')}
+            src='https://bc47-179-130-41-56.ngrok-free.app/nillslf'
+            // src={parseUserPageUrl(user?.username || '')}
             className='h-full w-full'
           />
         </div>
