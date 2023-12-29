@@ -16,7 +16,7 @@ export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
   return (
     <nav
       className={merge([
-        'absolute left-[-100%]  top-0 z-40 flex h-full border-background-600 bg-background-100',
+        'absolute left-[-100%]  top-0 z-40 flex h-full border-background-300 bg-background-100',
         'w-full max-w-full flex-col gap-5 border-r p-5 ',
         'bg-opacity-90 backdrop-blur-md transition-all ',
         'md:relative md:left-0 md:z-auto md:w-full md:bg-transparent',

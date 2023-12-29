@@ -1,6 +1,6 @@
 'use client'
 
-import {ExternalLink} from 'lucide-react'
+import {ChevronDown, ExternalLink} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 
 import {Dropdown} from '..'
@@ -10,7 +10,7 @@ import {ReactNode} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
 import {Avatar} from '@/app/components'
-import {merge, parseUserPageUrl} from '@/utils'
+import {displayUserPageUrl, merge} from '@/utils'
 
 type HeaderProps = {
   navbarHandler: ReactNode
@@ -23,7 +23,7 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
     <header
       className={merge([
         'flex min-w-full flex-row items-center justify-between py-2',
-        'border-b border-b-background-600 px-5 md:border-0 md:px-10',
+        'border-b border-b-background-300 px-5  md:px-10',
       ])}
       data-testid='admin-header'>
       <div className='flex flex-row items-center gap-3'>
@@ -32,26 +32,30 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
 
       <div className='flex flex-row items-center gap-5'>
         {user?.username && (
-          <>
+          <div className='flex flex-row items-center gap-5'>
             <Link
-              className='flex flex-row items-center gap-1 font-semibold text-primary-800 '
+              className='flex flex-row items-center gap-1 font-normal text-primary-800 '
               target='_blank'
               href={`/${user.username}`}>
               <span className='hidden md:inline-block'>
-                {parseUserPageUrl(user?.username)}
+                {displayUserPageUrl(user?.username)}
               </span>
 
               <span className='inline-block md:hidden'>@{user?.username}</span>
               <ExternalLink size={15} />
             </Link>
-          </>
+            <button className='bw btn outline sm'>Copy link</button>
+          </div>
         )}
         <Dropdown>
-          <Avatar
-            name={user?.name ?? 'User'}
-            pictureUrl={user?.pictureUrl}
-            size={40}
-          />
+          <div className='flex flex-row items-center'>
+            <Avatar
+              name={user?.name ?? 'User'}
+              pictureUrl={user?.pictureUrl}
+              size={40}
+            />
+            <ChevronDown size={18} />
+          </div>
         </Dropdown>
       </div>
     </header>

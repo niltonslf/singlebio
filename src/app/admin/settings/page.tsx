@@ -17,7 +17,7 @@ export const Settings = observer(() => {
   return (
     <AdminBaseLayout>
       <AdminBaseLayout.Content>
-        <h1 className='mb-10 text-2xl font-semibold'>Settings</h1>
+        <h1 className='mb-8 text-2xl font-semibold'>Settings</h1>
 
         <div className='flex w-full flex-col gap-2 overflow-hidden rounded-lg bg-background-300 p-6 shadow-lg'>
           <div className='mb-5 flex items-baseline'>

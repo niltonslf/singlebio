@@ -89,7 +89,7 @@ export default function UserPage({params: {username}}: UserPageProps) {
   return (
     <main
       className={clsx([
-        'flex h-[100dvh] w-full flex-wrap overflow-hidden bg-cover bg-center',
+        'flex h-[100vh] w-full flex-wrap overflow-hidden bg-cover bg-center',
         'bg-fixed',
         !user?.theme?.backgroundImage && !user?.theme?.backgroundColor
           ? defaultBg
@@ -103,24 +103,24 @@ export default function UserPage({params: {username}}: UserPageProps) {
         ])}
         style={user?.theme?.backgroundColor ? backgroundColorStyle : {}}>
         <div className='flex w-full max-w-2xl flex-1 flex-row flex-wrap'>
-          <header className='mb-5 w-full'>
+          <header className='mb-6 w-full'>
             <div className='mb-4 flex w-full justify-center'>
               <Avatar
                 name={user?.name || ''}
                 pictureUrl={user?.pictureUrl}
-                size={80}
+                size={100}
               />
             </div>
 
             <h2
-              className='mb-3 flex items-center justify-center text-2xl font-semibold text-bw-300'
+              className='mb-2 flex items-center justify-center text-2xl font-semibold text-bw-300'
               style={user?.theme?.usernameColor ? usernameTextColorStyle : {}}>
               {user?.name}
             </h2>
 
             {user?.bio && (
               <p
-                className='w-full break-all text-center text-base'
+                className='w-full break-all text-center text-sm'
                 style={
                   user?.theme?.usernameColor ? usernameTextColorStyle : {}
                 }>

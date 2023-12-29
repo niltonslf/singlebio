@@ -58,7 +58,7 @@ const AppearancePage = observer(() => {
   return (
     <AdminBaseLayout>
       <AdminBaseLayout.Content>
-        <h1 className='mb-10 text-2xl font-semibold'>Appearance</h1>
+        <h1 className='mb-8 text-2xl font-semibold'>Appearance</h1>
 
         {appearanceStore.hasChanges && (
           <div className='warn prompt mb-5 border-warn-600'>
