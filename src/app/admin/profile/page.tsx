@@ -17,7 +17,7 @@ export const ProfilePage = observer(() => {
 
   return (
     <AdminBaseLayout>
-      <AdminBaseLayout.Content>
+      <AdminBaseLayout.Content className='gap-5'>
         {user && <ProfileForm user={user} />}
         {user && <SocialCard user={user} />}
       </AdminBaseLayout.Content>

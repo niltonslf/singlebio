@@ -1,5 +1,6 @@
 import Image from 'next/image'
 
+import {SectionCard} from '@/app/admin/components'
 import {User} from '@/models'
 
 type ProfileFormProps = {
@@ -8,11 +9,8 @@ type ProfileFormProps = {
 
 export const ProfileForm = ({user}: ProfileFormProps) => {
   return (
-    <div className='flex w-full flex-col gap-2 overflow-hidden rounded-lg bg-background-300 p-6 shadow-lg'>
-      <div className='mb-5 flex items-baseline'>
-        <h3 className='text-xl font-semibold'>Profile</h3>
-      </div>
-      <form className='flex flex-row flex-wrap  gap-5'>
+    <SectionCard title='Profile'>
+      <div className='flex flex-row flex-wrap gap-5 '>
         <div className='flex flex-1 flex-col gap-3'>
           <input
             type='text'
@@ -47,7 +45,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
             height={150}
           />
         </div>
-      </form>
-    </div>
+      </div>
+    </SectionCard>
   )
 }
