@@ -19,7 +19,6 @@ export const ProfilePage = observer(() => {
     <AdminBaseLayout>
       <AdminBaseLayout.Content>
         {user && <ProfileForm user={user} />}
-
         {user && <SocialCard user={user} />}
       </AdminBaseLayout.Content>
       <AdminBaseLayout.RightPanel>

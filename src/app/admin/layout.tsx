@@ -44,7 +44,7 @@ const AdminLayout = observer(({children}: AdminLayoutProps) => {
           <div className='grid h-screen grid-rows-[56px_1fr]'>
             <Header navbarHandler={navbarHandler} />
 
-            <section className='h-[calc(100vh-56px)] min-w-full overflow-y-auto px-5 pb-14 md:px-10 md:pb-0'>
+            <section className='h-[calc(100vh-56px)] min-w-full overflow-y-auto px-5 pb-14 md:px-10 md:pb-0 md:pt-10'>
               {children}
             </section>
           </div>
