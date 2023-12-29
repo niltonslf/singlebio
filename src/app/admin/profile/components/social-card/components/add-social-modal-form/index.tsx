@@ -1,12 +1,12 @@
-import {Search, Instagram} from 'lucide-react'
+import {Search} from 'lucide-react'
 import {useState} from 'react'
 
+import {socialOptions} from '@/data/social-options'
 import {merge} from '@/utils'
 
 type SocialLink = {
   url: string
   social: string
-  icon: string
 }
 
 type AddSocialModalFormProps = {
@@ -18,14 +18,15 @@ export const AddSocialModalForm = ({
   isOpen,
   onClose,
 }: AddSocialModalFormProps) => {
-  const [formData, setFormData] = useState<SocialLink>({
-    icon: '',
-    url: '',
-    social: '',
-  })
+  const [formData, setFormData] = useState<SocialLink>({url: '', social: ''})
+  const [filter, setFilter] = useState('')
 
-  const onSelectIcon = (icon: string, social: string) => {
-    setFormData(prev => ({...prev, icon, social}))
+  const socialOptionsFilter = Object.keys(socialOptions).filter(social =>
+    social.includes(filter),
+  )
+
+  const onSelectIcon = (social: string) => {
+    setFormData(prev => ({...prev, social}))
   }
 
   const onChangeUrl = (url: string) => {
@@ -34,7 +35,12 @@ export const AddSocialModalForm = ({
 
   const handleSubmit = () => {
     onClose()
-    setFormData({icon: '', social: '', url: ''})
+    setFormData({social: '', url: ''})
+  }
+
+  const handleClose = () => {
+    onClose()
+    setFormData({social: '', url: ''})
   }
 
   return (
@@ -46,8 +52,10 @@ export const AddSocialModalForm = ({
           isOpen && 'show',
         ])}>
         <div className='flex w-full flex-row items-center justify-between'>
-          <h2 className='text-xl'>{formData.social || 'Socials'}</h2>
-          <button type='button' onClick={() => onClose()}>
+          <h2 className='text-xl'>
+            {socialOptions[formData.social]?.label || 'Socials'}
+          </h2>
+          <button type='button' onClick={() => handleClose()}>
             ✕
           </button>
         </div>
@@ -58,22 +66,25 @@ export const AddSocialModalForm = ({
             <>
               <div className='bw solid input !border-background-600'>
                 <Search size={18} />
-                <input placeholder='Search' />
+                <input
+                  placeholder='Search'
+                  onChange={event => setFilter(event.target.value)}
+                />
               </div>
 
               <ul className='flex max-h-[50dvh] w-full flex-col gap-3 overflow-y-auto'>
-                {[...Array.from(Array(20).keys())].map(social => {
+                {socialOptionsFilter.map(social => {
                   return (
                     <li
                       key={social}
                       className='flex w-full flex-row flex-wrap items-center justify-between rounded-lg border border-background-900 px-3 py-2 font-light'>
                       <div className='flex flex-row flex-wrap items-center justify-between gap-3'>
-                        <Instagram size={18} />
-                        <p>Instagram</p>
+                        {socialOptions[social].icon}
+                        <p>{socialOptions[social].label ?? social}</p>
                       </div>
                       <button
                         className='text-primary-900'
-                        onClick={() => onSelectIcon('icon', 'instagram')}>
+                        onClick={() => onSelectIcon(social)}>
                         Add
                       </button>
                     </li>

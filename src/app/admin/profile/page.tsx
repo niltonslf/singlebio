@@ -8,7 +8,7 @@ import {parseUserPageUrl} from '@/utils'
 
 import {AdminBaseLayout} from '../components'
 import {useSmartphone} from '../context'
-import {ProfileForm, SocialForm} from './components'
+import {ProfileForm, SocialCard} from './components'
 
 export const ProfilePage = observer(() => {
   const user = authStore.user
@@ -20,7 +20,7 @@ export const ProfilePage = observer(() => {
       <AdminBaseLayout.Content>
         {user && <ProfileForm user={user} />}
 
-        {user && <SocialForm user={user} />}
+        {user && <SocialCard user={user} />}
       </AdminBaseLayout.Content>
       <AdminBaseLayout.RightPanel>
         <div

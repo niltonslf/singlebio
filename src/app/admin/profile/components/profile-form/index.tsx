@@ -35,6 +35,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
             maxLength={100}
             wrap='soft'
             rows={2}
+            value={user?.bio}
           />
         </div>
         <div className='flex h-full items-center'>
