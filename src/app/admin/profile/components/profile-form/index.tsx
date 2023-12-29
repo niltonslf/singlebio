@@ -5,21 +5,19 @@ import * as z from 'zod'
 
 import {SectionCard} from '@/app/admin/components'
 import {authStore} from '@/app/auth/context/auth-store'
-import {Avatar} from '@/app/components'
+import {Avatar, InputErrorMsg} from '@/app/components'
 import {User} from '@/models'
 import {merge, useDebounce} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 import {useProfile} from '../../hooks/use-profile'
 
-import {UsernameInput, UsernameInputForm, usernameInputRules} from '..'
+import {UsernameInput, usernameInputRules} from '..'
 
 type ProfileFormProps = {
   user: User
 }
-type UserProfile =
-  | Required<Pick<User, 'username' | 'name' | 'bio'>>
-  | UsernameInputForm
+type UserProfile = Required<Pick<User, 'username' | 'name' | 'bio'>>
 
 export const ProfileForm = ({user}: ProfileFormProps) => {
   const formRef = useRef<HTMLFormElement>(null)
@@ -92,18 +90,33 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
 
           <input
             type='text'
-            className='bw solid input !border-background-600'
+            className={merge([
+              'bw solid input !border-background-600',
+              errors?.name?.message && '!border-red-400',
+            ])}
             placeholder='Name'
             {...register('name', {required: true})}
           />
+
+          {errors?.name?.message && (
+            <InputErrorMsg>{errors?.name?.message}</InputErrorMsg>
+          )}
+
           <textarea
             placeholder='Bio'
-            className='bw solid input !border-background-600'
+            className={merge([
+              'bw solid input !border-background-600',
+              errors?.bio?.message && '!border-red-400',
+            ])}
             maxLength={100}
             wrap='soft'
             rows={2}
             {...register('bio', {required: true})}
           />
+
+          {errors?.bio?.message && (
+            <InputErrorMsg>{errors?.bio?.message}</InputErrorMsg>
+          )}
         </div>
 
         <div className='relative w-28 md:w-auto'>

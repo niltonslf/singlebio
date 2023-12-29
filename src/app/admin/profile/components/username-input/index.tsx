@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import {Control, Controller, FieldErrors} from 'react-hook-form'
 import * as z from 'zod'
 
+import {InputErrorMsg} from '@/app/components'
 import {User} from '@/models'
 import {useMask} from '@react-input/mask'
 
@@ -19,7 +20,7 @@ export const usernameInputSchema = z.object({
 export type UsernameInputForm = Required<Pick<User, 'username'>>
 
 type UsernameInputProps = {
-  control: Control<UsernameInputForm, any>
+  control: Control<any, any>
   isUsernameValid: boolean
   errors: FieldErrors<UsernameInputForm>
   onChange: (value: string) => void
@@ -37,7 +38,7 @@ export const UsernameInput = ({
   })
 
   return (
-    <>
+    <div>
       <Controller
         control={control}
         name='username'
@@ -60,11 +61,11 @@ export const UsernameInput = ({
         )}
       />
       {errors.username && (
-        <p className='mt-1 text-sm text-red-400'>{errors.username.message}</p>
+        <InputErrorMsg>{errors.username.message}</InputErrorMsg>
       )}
       {!isUsernameValid && (
-        <p className='mt-1 text-sm text-red-400'>username already taken.</p>
+        <InputErrorMsg>username already taken</InputErrorMsg>
       )}
-    </>
+    </div>
   )
 }
