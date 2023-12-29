@@ -6,7 +6,7 @@ import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
 import {Link} from '@/models'
-import {merge, useDebounce} from '@/utils'
+import {merge, useDebounce, validateUrlRegex} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 type AddLinkFormProps = {
@@ -14,14 +14,13 @@ type AddLinkFormProps = {
   link: Link
 }
 
-const httpRegex = new RegExp(
-  /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/,
-)
-
 const schema = z.object({
   url: z
     .string()
-    .regex(httpRegex, 'Value must be a valid url. e.g. https://google.com ')
+    .regex(
+      validateUrlRegex,
+      'Value must be a valid url. e.g. https://google.com ',
+    )
     .refine(s => !s.includes(' '), 'White spaces are not allowed')
     .refine(s => !/[A-Z]/.test(s), 'Uppercase characters are not allowed'),
   label: z.string().min(3, {message: 'Required field'}),

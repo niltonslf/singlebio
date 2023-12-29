@@ -1,3 +1,7 @@
+export const validateUrlRegex = new RegExp(
+  /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/,
+)
+
 export const parseExternalUrl = (url: string): string => {
   const hasProtocol = url.match(/^http[s]?/) ? true : false
 

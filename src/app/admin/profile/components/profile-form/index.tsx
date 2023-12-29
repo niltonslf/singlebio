@@ -149,6 +149,14 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
 
         <div className='relative w-28 md:w-auto'>
           <Avatar name={user.name} pictureUrl={picture} size={150} />
+          <input
+            id='profile-picture'
+            type='file'
+            accept='image/x-png,image/jpeg'
+            multiple={false}
+            onChange={event => setPictureFile(event.target.files)}
+            className='hidden'
+          />
 
           {isUploadingImg && (
             <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-full bg-black bg-opacity-80'>
@@ -161,15 +169,6 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
               </span>
             </div>
           )}
-
-          <input
-            id='profile-picture'
-            type='file'
-            accept='image/x-png,image/jpeg'
-            multiple={false}
-            onChange={event => setPictureFile(event.target.files)}
-            className='hidden'
-          />
 
           {picture && !isUploadingImg && (
             <div

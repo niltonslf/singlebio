@@ -34,13 +34,14 @@ export const SocialCard = ({user}: SocialCardProps) => {
 
       <AddSocialModalForm
         isOpen={isOpenModal}
+        user={user}
         onClose={() => setIsOpenModal(false)}
       />
 
       <button
         className='mt-5 flex w-full flex-row items-center justify-center gap-2 rounded-lg p-3 text-primary-900 hover:bg-background-100'
         onClick={() => setIsOpenModal(true)}>
-        <Plus size={18} /> Add social
+        <Plus size={18} /> Add link
       </button>
     </SectionCard>
   )

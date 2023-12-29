@@ -1,8 +1,11 @@
 import {Search} from 'lucide-react'
 import {useState} from 'react'
 
+import {authStore} from '@/app/auth/context/auth-store'
+import {InputErrorMsg} from '@/app/components'
 import {socialOptions} from '@/data/social-options'
-import {merge} from '@/utils'
+import {User} from '@/models'
+import {merge, validateUrlRegex} from '@/utils'
 
 type SocialLink = {
   url: string
@@ -10,15 +13,18 @@ type SocialLink = {
 }
 
 type AddSocialModalFormProps = {
+  user: User
   isOpen: boolean
   onClose: () => void
 }
 
 export const AddSocialModalForm = ({
+  user,
   isOpen,
   onClose,
 }: AddSocialModalFormProps) => {
   const [formData, setFormData] = useState<SocialLink>({url: '', social: ''})
+  const [isUrlValid, setIsUrlValid] = useState<boolean | undefined>()
   const [filter, setFilter] = useState('')
 
   const socialOptionsFilter = Object.keys(socialOptions).filter(social =>
@@ -30,25 +36,40 @@ export const AddSocialModalForm = ({
   }
 
   const onChangeUrl = (url: string) => {
+    const isValid = validateUrlRegex.test(url)
+
+    if (!isValid) {
+      return setIsUrlValid(false)
+    }
+
+    setIsUrlValid(true)
+
     setFormData(prev => ({...prev, url}))
   }
 
-  const handleSubmit = () => {
-    onClose()
-    setFormData({social: '', url: ''})
+  const handleSubmit = async () => {
+    const social = {
+      ...user.social,
+      [formData.social]: formData.url,
+    }
+
+    authStore.updateUser({social})
+
+    handleClose()
   }
 
   const handleClose = () => {
     onClose()
+    setIsUrlValid(undefined)
     setFormData({social: '', url: ''})
   }
 
   return (
-    <div>
+    <>
       <label className='modal-overlay'></label>
       <div
         className={merge([
-          'modal flex w-[500px] max-w-full flex-col bg-background-300',
+          'modal flex w-[500px] max-w-[calc(100%-40px)] flex-col bg-background-300',
           isOpen && 'show',
         ])}>
         <div className='flex w-full flex-row items-center justify-between'>
@@ -99,18 +120,25 @@ export const AddSocialModalForm = ({
               <div className='w-full'>
                 <input
                   type='text'
-                  name='username'
                   className='bw solid input !border-background-600'
-                  placeholder='Url'
+                  placeholder='Profile url'
                   onChange={event => onChangeUrl(event.target.value)}
                 />
-                <p className='mt-1 w-full text-xs text-background-900'>
-                  Example: https://www.instagram.com/username
+                <p className='ml-1 mt-1 w-full text-xs text-background-900'>
+                  Insert the full link address. Example:{' '}
+                  <span className='text-background-1000'>
+                    https://instagram.com/username
+                  </span>
                 </p>
+                {isUrlValid === false && (
+                  <InputErrorMsg>The link format is not valid</InputErrorMsg>
+                )}
               </div>
+
               <button
                 type='button'
                 className='primary btn solid mt-3 w-full'
+                disabled={!(formData.social && formData.url)}
                 onClick={() => handleSubmit()}>
                 Save
               </button>
@@ -118,6 +146,6 @@ export const AddSocialModalForm = ({
           )}
         </div>
       </div>
-    </div>
+    </>
   )
 }

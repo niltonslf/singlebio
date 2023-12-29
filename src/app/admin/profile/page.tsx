@@ -23,6 +23,7 @@ export const ProfilePage = observer(() => {
         {user && <ProfileForm user={user} />}
         {user && <SocialCard user={user} />}
       </AdminBaseLayout.Content>
+
       <AdminBaseLayout.RightPanel>
         <Smartphone
           ref={iframeRef}
