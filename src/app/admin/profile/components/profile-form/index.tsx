@@ -4,6 +4,7 @@ import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
 import {SectionCard} from '@/app/admin/components'
+import {useImageCompressor, useImageUploader} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
 import {Avatar, InputErrorMsg} from '@/app/components'
 import {User} from '@/models'
@@ -17,21 +18,28 @@ import {UsernameInput, usernameInputRules} from '..'
 type ProfileFormProps = {
   user: User
 }
-type UserProfile = Required<Pick<User, 'username' | 'name' | 'bio'>>
+type UserProfile = Required<Pick<User, 'username' | 'name' | 'bio'>> & {
+  pictureUrl?: string
+}
 
 export const ProfileForm = ({user}: ProfileFormProps) => {
-  const formRef = useRef<HTMLFormElement>(null)
-  const {validateUsername} = useProfile()
-
-  const [picture, setPicture] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [validUsername, setValidUsername] = useState(true)
-
   const profileFormSchema = z.object({
     bio: z.string().nullable(),
     name: z.string().min(3, {message: 'Required field'}),
     ...usernameInputRules,
   })
+
+  const formRef = useRef<HTMLFormElement>(null)
+  const {validateUsername} = useProfile()
+  const {returnImageThumbnail, upload} = useImageUploader()
+  const {compress} = useImageCompressor()
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isUploadingImg, setIsUploadingImg] = useState(false)
+  const [validUsername, setValidUsername] = useState(true)
+
+  const [picture, setPicture] = useState(user.pictureUrl ?? '')
+  const [pictureFile, setPictureFile] = useState<FileList | null>(null)
 
   const {
     register,
@@ -47,9 +55,28 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
     resolver: zodResolver(profileFormSchema),
   })
 
-  const onSubmit = async (user: UserProfile) => {
+  const onSubmit = async (data: UserProfile) => {
     setIsSubmitting(true)
-    await authStore.updateUser(user)
+
+    const userData = {...data}
+
+    const file = pictureFile?.[0]
+
+    if (file) {
+      setIsUploadingImg(true)
+
+      const localUrl = returnImageThumbnail(file)
+      setPicture(localUrl)
+
+      const newImage = await compress(file)
+      const remoteUrl = await upload(newImage, 'profile')
+
+      userData['pictureUrl'] = remoteUrl
+      setPictureFile(null)
+    }
+
+    await authStore.updateUser(userData)
+    setIsUploadingImg(false)
     setIsSubmitting(false)
   }
 
@@ -62,8 +89,6 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
     const isValid = await validateUsername(username)
     setValidUsername(isValid)
   }
-
-  const handleSelectPicture = () => {}
 
   return (
     <SectionCard title='My data'>
@@ -120,13 +145,30 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
         </div>
 
         <div className='relative w-28 md:w-auto'>
-          <Avatar
-            name={user.name}
-            className='border-0'
-            pictureUrl={picture || ''}
-            size={150}
+          <Avatar name={user.name} pictureUrl={picture} size={150} />
+
+          {isUploadingImg && (
+            <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-full bg-black bg-opacity-80'>
+              <div className='primary sm loader '>
+                <div className='bar-bounce' />
+              </div>
+
+              <span className='mt-2 text-sm font-semibold text-white'>
+                Uploading...
+              </span>
+            </div>
+          )}
+
+          <input
+            id='profile-picture'
+            type='file'
+            accept='image/x-png,image/jpeg'
+            multiple={false}
+            onChange={event => setPictureFile(event.target.files)}
+            className='hidden'
           />
-          {picture && (
+
+          {picture && !isUploadingImg && (
             <div
               onClick={() => setPicture('')}
               className={merge([
@@ -143,9 +185,9 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
             </div>
           )}
 
-          {!picture && (
-            <div
-              onClick={() => handleSelectPicture}
+          {!picture && !isUploadingImg && (
+            <label
+              htmlFor='profile-picture'
               className={merge([
                 'flex h-7 w-7 items-center justify-center rounded-full',
                 'absolute right-0 top-0 cursor-pointer',
@@ -157,7 +199,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
                 size={18}
                 className='text-bw-50 group-hover:text-bw-1100'
               />
-            </div>
+            </label>
           )}
         </div>
       </form>

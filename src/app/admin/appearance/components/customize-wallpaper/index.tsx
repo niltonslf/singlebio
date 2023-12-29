@@ -8,12 +8,14 @@ import {useRef, ChangeEvent} from 'react'
 import {HexAlphaColorPicker} from 'react-colorful'
 
 import {appearanceStore} from '@/app/admin/appearance/context'
+import {useImageUploader} from '@/app/admin/hooks'
 import {useDebounce} from '@/utils'
 
 export const CustomizeWallpaper = observer(() => {
   const theme = appearanceStore?.theme
 
   const wallpaperRef = useRef<HTMLImageElement>(null)
+  const {returnImageThumbnail} = useImageUploader()
 
   const debouncedBackgroundColor = useDebounce((color: string) => {
     appearanceStore.setBackgroundColor(color)
@@ -23,8 +25,6 @@ export const CustomizeWallpaper = observer(() => {
     appearanceStore.setBackgroundImage('')
     appearanceStore.setBackgroundFile(undefined)
   }
-
-  const returnImageThumbnail = (file: File) => URL.createObjectURL(file)
 
   const handleSelectPicture = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event?.target?.files?.[0]

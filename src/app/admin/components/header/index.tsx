@@ -51,7 +51,6 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
             name={user?.name ?? 'User'}
             pictureUrl={user?.pictureUrl}
             size={40}
-            className='border-2 border-primary-700'
           />
         </Dropdown>
       </div>

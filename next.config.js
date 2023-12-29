@@ -5,8 +5,11 @@ const nextConfig = {
       {
         hostname: 'lh3.googleusercontent.com',
       },
+      {
+        hostname: 'firebasestorage.googleapis.com',
+      },
     ],
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

@@ -3,6 +3,7 @@
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
+import {useImageUploader, useImageCompressor} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
 import {Button, Smartphone} from '@/app/components'
 
@@ -14,7 +15,6 @@ import {
   CustomizeWallpaper,
 } from './components'
 import {appearanceStore} from './context'
-import {useBackgroundUpload, useImageCompressor} from './hooks'
 
 const AppearancePage = observer(() => {
   const {user} = authStore
@@ -22,7 +22,7 @@ const AppearancePage = observer(() => {
 
   const {iframeRef} = useSmartphone()
   const {compress} = useImageCompressor()
-  const {upload} = useBackgroundUpload()
+  const {upload} = useImageUploader()
 
   const [updated, setUpdated] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -37,7 +37,7 @@ const AppearancePage = observer(() => {
 
     if (aux.backgroundFile && theme.backgroundImage) {
       const newImage = await compress(aux.backgroundFile)
-      const url = await upload(newImage)
+      const url = await upload(newImage, 'wallpaper')
 
       data.theme.backgroundImage = url
       appearanceStore.setBackgroundFile(undefined)
