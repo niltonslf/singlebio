@@ -1,14 +1,15 @@
-import {ReactNode} from 'react'
+import {HTMLAttributes, ReactNode} from 'react'
 
 import {merge} from '@/utils'
 
 type SidebarProps = {
   children: ReactNode
+  className?: HTMLAttributes<HTMLElement>['className']
 }
 
-export const AdminLayoutRightPanel = ({children}: SidebarProps) => {
+export const AdminLayoutRightPanel = ({children, className}: SidebarProps) => {
   return (
-    <div className='grid w-full grid-rows-1'>
+    <div className={merge(['grid w-full grid-rows-1', className])}>
       <div className='flex flex-1 items-start justify-center px-6 pb-10 pt-4'>
         <div
           className={merge([
