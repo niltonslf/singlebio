@@ -165,12 +165,6 @@ export const CardList = ({user}: CardListProps) => {
             <Plus size={18} />
             Add link
           </button>
-          <button
-            onClick={handleAddNewLink}
-            className='bw btn solid  lg w-52 !text-sm uppercase'>
-            <Plus size={18} />
-            Add Social links
-          </button>
         </div>
 
         {isFetchingData ? (

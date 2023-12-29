@@ -68,7 +68,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
   const handleSelectPicture = () => {}
 
   return (
-    <SectionCard title='Profile'>
+    <SectionCard title='My data'>
       {isSubmitting && (
         <div className='absolute right-3 top-3'>
           <div className='bw sm loader'>
