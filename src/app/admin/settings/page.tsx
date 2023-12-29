@@ -62,14 +62,10 @@ export const Settings = observer(() => {
         </div>
       </AdminBaseLayout.Content>
       <AdminBaseLayout.RightPanel>
-        <div
-          className='sticky top-6 rounded-[60px] 
-                        px-5 shadow-[0px_0px_30px_0px_rgba(154,154,154,0.1)]'>
-          <Smartphone
-            ref={iframeRef}
-            iframeUrl={parseUserPageUrl(user?.username || '')}
-          />
-        </div>
+        <Smartphone
+          ref={iframeRef}
+          iframeUrl={parseUserPageUrl(user?.username || '')}
+        />
       </AdminBaseLayout.RightPanel>
     </AdminBaseLayout>
   )
