@@ -1,5 +1,6 @@
 import {Search} from 'lucide-react'
 import {useState} from 'react'
+import {SocialIcon} from 'react-social-icons'
 
 import {authStore} from '@/app/auth/context/auth-store'
 import {InputErrorMsg} from '@/app/components'
@@ -54,14 +55,15 @@ export const AddSocialModalForm = ({
     }
 
     authStore.updateUser({social})
-
     handleClose()
   }
 
   const handleClose = () => {
     onClose()
-    setIsUrlValid(undefined)
-    setFormData({social: '', url: ''})
+    setTimeout(() => {
+      setIsUrlValid(undefined)
+      setFormData({social: '', url: ''})
+    }, 200)
   }
 
   return (
@@ -100,7 +102,11 @@ export const AddSocialModalForm = ({
                       key={social}
                       className='flex w-full flex-row flex-wrap items-center justify-between rounded-lg border border-background-900 px-3 py-2 font-light'>
                       <div className='flex flex-row flex-wrap items-center justify-between gap-3'>
-                        {socialOptions[social].icon}
+                        <SocialIcon
+                          network={social}
+                          className='!h-8 !w-8'
+                          as='span'
+                        />
                         <p>{socialOptions[social].label ?? social}</p>
                       </div>
                       <button
