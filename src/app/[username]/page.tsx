@@ -12,12 +12,13 @@ import {
 } from 'firebase/firestore'
 import Image from 'next/image'
 import Link from 'next/link'
-import {useCallback, useEffect, useState} from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
 
 import {Avatar, LinkCard} from '@/app/components'
 import {app} from '@/libs/firebase'
 import {User} from '@/models'
 
+import {usePreviewCache} from './hooks/use-preview-cache'
 import {PreviewThemeParams, makePreviewStyles, makePageStyles} from './utils'
 
 type UserPageProps = {
@@ -37,17 +38,28 @@ export default function UserPage({
   const [user, setUser] = useState<User>()
   const [isLoading, setIsLoading] = useState(true)
 
-  // TODO: make a cache system to don't overload firebase when people are just updating their theme
+  const {createCacheData, getCachedData, hasCache} = usePreviewCache()
 
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
 
-  const isPreviewAccess = searchParams?.preview === 'true'
+  const isPreviewAccess = useMemo(() => searchParams?.preview === 'true', [])
 
   const pageStyles = isPreviewAccess
-    ? makePreviewStyles(searchParams)
+    ? makePreviewStyles(searchParams ?? {})
     : makePageStyles(user)
 
   const fetchData = useCallback(async () => {
+    const cacheExist = hasCache()
+
+    if (cacheExist && isPreviewAccess) {
+      const {user, links} = getCachedData()
+
+      setUser(user)
+      setLinks(links)
+      setIsLoading(false)
+      return
+    }
+
     const q = query(
       collection(db, 'users'),
       where('username', '==', username),
@@ -55,6 +67,10 @@ export default function UserPage({
     )
     const {docs: users} = await getDocs(q)
 
+    if (users.length === 0) {
+      setIsLoading(false)
+      return
+    }
     new Promise(resolve => {
       users.forEach(async curUser => {
         setUser(curUser.data() as User)
@@ -66,22 +82,27 @@ export default function UserPage({
 
         const {size, docs} = await getDocs(customQuery)
 
-        setLinks([])
-
         if (size === 0) {
           setIsLoading(false)
           return resolve(true)
         }
 
+        const linksTemp: any[] = []
         const validLinks = docs.filter(link => !!link.data().url)
-        validLinks.forEach(link => setLinks(prev => [...prev, link.data()]))
+        validLinks.forEach(link => linksTemp.push(link.data()))
+        setLinks(linksTemp)
+
+        if (isPreviewAccess) {
+          // Make a cache from the data when the access is coming from the admin page
+          // during the customization process. The goal is avoid to consume too much the firebase
+          createCacheData(curUser.data() as User, linksTemp)
+        }
 
         resolve(true)
+        setIsLoading(false)
       })
-    }).finally(() => {
-      setIsLoading(false)
     })
-  }, [username])
+  }, [createCacheData, getCachedData, hasCache, isPreviewAccess, username])
 
   useEffect(() => {
     fetchData()
@@ -121,7 +142,7 @@ export default function UserPage({
 
             {user?.bio && (
               <p
-                className='w-full break-all text-center text-sm'
+                className='w-full break-all text-center text-sm text-bw-300'
                 style={pageStyles.usernameColor}>
                 {user?.bio}
               </p>
@@ -139,8 +160,10 @@ export default function UserPage({
           )}
 
           {links.length === 0 && isLoading === false && (
-            <div className='info solid sm prompt w-full items-center'>
-              User not found
+            <div className='w-full'>
+              <div className='info solid sm prompt w-full items-center'>
+                User not found
+              </div>
             </div>
           )}
 
