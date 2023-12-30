@@ -2,18 +2,11 @@
 
 import {observer} from 'mobx-react-lite'
 
-import {authStore} from '@/app/auth/context/auth-store'
-import {Button, Smartphone} from '@/app/components'
-import {parseUserPageUrl} from '@/utils'
+import {Button} from '@/app/components'
 
 import {AdminBaseLayout} from '../components'
-import {useSmartphone} from '../context'
 
 export const Settings = observer(() => {
-  const user = authStore.user
-
-  const {iframeRef} = useSmartphone()
-
   return (
     <AdminBaseLayout>
       <AdminBaseLayout.Content>
@@ -63,12 +56,6 @@ export const Settings = observer(() => {
           </div>
         </div>
       </AdminBaseLayout.Content>
-      <AdminBaseLayout.RightPanel>
-        <Smartphone
-          ref={iframeRef}
-          iframeUrl={parseUserPageUrl(user?.username || '')}
-        />
-      </AdminBaseLayout.RightPanel>
     </AdminBaseLayout>
   )
 })

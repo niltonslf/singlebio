@@ -114,9 +114,9 @@ const AppearancePage = observer(() => {
         )}
       </AdminBaseLayout.Content>
 
-      <AdminBaseLayout.RightPanel className='hidden md:grid'>
+      <AdminBaseLayout.PagePreview className='hidden md:grid'>
         <Smartphone ref={iframeRef} iframeUrl={previewUrl} />
-      </AdminBaseLayout.RightPanel>
+      </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
   )
 })

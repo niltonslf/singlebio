@@ -24,12 +24,12 @@ export const ProfilePage = observer(() => {
         {user && <SocialCard user={user} />}
       </AdminBaseLayout.Content>
 
-      <AdminBaseLayout.RightPanel>
+      <AdminBaseLayout.PagePreview>
         <Smartphone
           ref={iframeRef}
           iframeUrl={parseUserPageUrl(user?.username || '')}
         />
-      </AdminBaseLayout.RightPanel>
+      </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
   )
 })

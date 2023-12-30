@@ -3,7 +3,7 @@ import {ReactNode} from 'react'
 import {merge} from '@/utils'
 
 import {AdminLayoutContent} from './admin-layout-content'
-import {AdminLayoutRightPanel} from './admin-layout-right-panel'
+import {AdminLayoutPagePreview} from './admin-layout-page-preview'
 
 type LayoutProps = {
   children: ReactNode
@@ -21,5 +21,5 @@ export const AdminBaseLayout = ({children}: LayoutProps) => {
   )
 }
 
-AdminBaseLayout.RightPanel = AdminLayoutRightPanel
+AdminBaseLayout.PagePreview = AdminLayoutPagePreview
 AdminBaseLayout.Content = AdminLayoutContent
