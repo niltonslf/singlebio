@@ -10,7 +10,7 @@ import {ReactNode} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
 import {Avatar} from '@/app/components'
-import {displayUrlShort, merge} from '@/utils'
+import {displayUrlShort, merge, parseUserPageUrl} from '@/utils'
 
 type HeaderProps = {
   navbarHandler: ReactNode
@@ -18,6 +18,10 @@ type HeaderProps = {
 
 export const Header = observer(({navbarHandler}: HeaderProps) => {
   const {user} = authStore
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(parseUserPageUrl(user?.username ?? ''))
+  }
 
   return (
     <header
@@ -36,7 +40,7 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
             <Link
               className='flex flex-row items-center gap-1 font-normal text-primary-800 '
               target='_blank'
-              href={`/${user.username}`}>
+              href={parseUserPageUrl(user.username)}>
               <span className='hidden md:inline-block'>
                 {displayUrlShort(user?.username)}
               </span>
@@ -44,7 +48,11 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
               <span className='inline-block md:hidden'>@{user?.username}</span>
               <ExternalLink size={15} />
             </Link>
-            <button className='bw btn outline sm'>Copy link</button>
+            <button
+              className='bw btn outline sm'
+              onClick={() => handleCopyLink()}>
+              Copy link
+            </button>
           </div>
         )}
         <Dropdown>
