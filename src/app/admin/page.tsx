@@ -45,7 +45,7 @@ const Admin = observer(() => {
         <AdminBaseLayout.PagePreview>
           <Smartphone
             ref={iframeRef}
-            iframeUrl={parseUserPageUrl(user?.username || '')}
+            iframeUrl={parseUserPageUrl(user?.username)}
           />
         </AdminBaseLayout.PagePreview>
       </AdminBaseLayout>

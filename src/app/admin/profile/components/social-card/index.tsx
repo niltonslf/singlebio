@@ -54,7 +54,7 @@ export const SocialCard = ({user}: SocialCardProps) => {
       />
 
       <button
-        className='mt-5 flex w-full flex-row items-center justify-center gap-2 rounded-lg p-3 text-primary-900 hover:bg-background-100'
+        className='mt-5 flex w-full flex-row items-center justify-center gap-2 rounded-lg p-3 text-primary hover:bg-base-100'
         onClick={() => setIsModalOpen(true)}>
         <Plus size={18} /> Add link
       </button>

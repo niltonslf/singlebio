@@ -15,7 +15,7 @@ type SocialItemProps = {
 
 export const SocialItem = ({social, onDelete}: SocialItemProps) => {
   return (
-    <div className='flex w-full flex-col flex-nowrap items-start justify-between gap-2 overflow-hidden rounded-lg bg-background-100 px-4 py-2 md:flex-row md:items-center'>
+    <div className='flex w-full flex-col flex-nowrap items-start justify-between gap-2 overflow-hidden rounded-lg bg-base-100 px-4 py-2 md:flex-row md:items-center'>
       <span className='flex flex-row flex-wrap items-center justify-between gap-2 text-sm md:text-base'>
         <SocialIcon
           url={social?.url}
@@ -24,7 +24,7 @@ export const SocialItem = ({social, onDelete}: SocialItemProps) => {
           fgColor='white'
           bgColor='transparent'
         />
-        <span className='text-slate-300'>
+        <span className='text-neutral-200'>
           {socialOptions[social?.social]?.label ?? social?.social}
         </span>
       </span>
@@ -39,7 +39,7 @@ export const SocialItem = ({social, onDelete}: SocialItemProps) => {
           </Link>
         </p>
         <button
-          className='rounded-md p-2 text-background-900 hover:bg-primary-500'
+          className='text-background-900 rounded-md p-2 hover:bg-primary'
           onClick={() => onDelete(social.social)}>
           <Trash size={18} />
         </button>

@@ -1,6 +1,6 @@
 'use client'
 
-import {ChevronDown, ExternalLink} from 'lucide-react'
+import {ExternalLink} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 
 import {Dropdown} from '..'
@@ -27,7 +27,7 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
     <header
       className={merge([
         'flex min-w-full flex-row items-center justify-between py-2',
-        'border-b border-b-background-300 px-5  md:px-10',
+        'border-b border-b-neutral px-5  md:px-10',
       ])}
       data-testid='admin-header'>
       <div className='flex flex-row items-center gap-3'>
@@ -38,7 +38,7 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
         {user?.username && (
           <div className='flex flex-row items-center gap-5'>
             <Link
-              className='flex flex-row items-center gap-1 font-normal text-primary-800 '
+              className='flex flex-row items-center gap-1 font-normal text-primary '
               target='_blank'
               href={parseUserPageUrl(user.username)}>
               <span className='hidden md:inline-block'>
@@ -49,21 +49,18 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
               <ExternalLink size={15} />
             </Link>
             <button
-              className='bw btn outline sm'
+              className='btn btn-outline btn-sm'
               onClick={() => handleCopyLink()}>
               Copy link
             </button>
           </div>
         )}
         <Dropdown>
-          <div className='flex flex-row items-center'>
-            <Avatar
-              name={user?.name ?? 'User'}
-              pictureUrl={user?.pictureUrl}
-              size={40}
-            />
-            <ChevronDown size={18} />
-          </div>
+          <Avatar
+            name={user?.name ?? 'User'}
+            pictureUrl={user?.pictureUrl}
+            size={40}
+          />
         </Dropdown>
       </div>
     </header>

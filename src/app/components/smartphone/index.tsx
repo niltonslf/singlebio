@@ -70,13 +70,11 @@ export const Smartphone = forwardRef<HTMLIFrameElement, SmartphoneProps>(
             <div
               data-testid='smartphone-loader'
               className={merge([
-                'flex h-full w-full bg-bw-800',
+                'flex h-full w-full bg-neutral-50',
                 'flex-1 items-center justify-center',
-                'w-[290px] max-w-full ',
+                'w-[290px] max-w-full',
               ])}>
-              <div className='bw danger lg loader'>
-                <div className='bar-bounce' />
-              </div>
+              <div className='loading loading-dots loading-lg text-primary' />
             </div>
           )}
         </div>

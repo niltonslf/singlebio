@@ -16,18 +16,16 @@ export const Dropdown = observer(({children}: DropdownProps) => {
   }
 
   return (
-    <div className='background dropdown' data-testid='header-dropdown'>
-      <label className='cursor-pointer' tabIndex={0}>
+    <details className='dropdown dropdown-end' data-testid='header-dropdown'>
+      <summary className='btn btn-circle btn-ghost cursor-pointer'>
         {children}
-      </label>
-      <div className='solid menu bottom-left !w-48'>
-        <span className='px-3 py-2'>
-          <button onClick={logout} className='bw btn outline md w-full'>
-            <p>Logout</p>
-            <LogOut size={18} />
-          </button>
-        </span>
-      </div>
-    </div>
+      </summary>
+      <ul className='px- menu dropdown-content z-[50] w-52 rounded-box bg-neutral py-5 shadow'>
+        <button onClick={logout} className='btn btn-outline btn-md w-full'>
+          <p>Logout</p>
+          <LogOut size={18} />
+        </button>
+      </ul>
+    </details>
   )
 })

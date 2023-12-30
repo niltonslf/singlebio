@@ -40,7 +40,7 @@ export const CustomizeWallpaper = observer(() => {
     <>
       <section className='flex flex-row flex-wrap items-start gap-10'>
         <div className='w-full md:w-auto md:flex-1'>
-          <h1 className='text-sm font-normal text-slate-300'>
+          <h1 className='text-sm font-normal text-neutral-200'>
             Select the wallpaper
           </h1>
 
@@ -92,7 +92,7 @@ export const CustomizeWallpaper = observer(() => {
         </div>
 
         <div className='w-full md:w-auto md:flex-1'>
-          <h2 className='text-sm font-normal text-slate-300'>
+          <h2 className='text-sm font-normal text-neutral-200'>
             You also can select a color as background
           </h2>
 

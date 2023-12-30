@@ -75,7 +75,7 @@ export const AddSocialModalForm = ({
       <label className='modal-overlay'></label>
       <div
         className={merge([
-          'modal flex w-[500px] max-w-[calc(100%-40px)] flex-col bg-background-300',
+          'modal flex w-[500px] max-w-[calc(100%-40px)] flex-col bg-neutral',
           isOpen && 'show',
         ])}>
         <div className='flex w-full flex-row items-center justify-between'>
@@ -91,7 +91,7 @@ export const AddSocialModalForm = ({
         <div className='mb-3 flex w-full flex-col gap-5 '>
           {!formData.social && (
             <>
-              <div className='bw solid input !border-background-600'>
+              <div className='bw solid !border-background-600 input'>
                 <Search size={18} />
                 <input
                   placeholder='Search'
@@ -104,7 +104,7 @@ export const AddSocialModalForm = ({
                   return (
                     <li
                       key={social}
-                      className='flex w-full flex-row flex-wrap items-center justify-between rounded-lg border border-background-900 px-3 py-2 font-light'>
+                      className='border-background-900 flex w-full flex-row flex-wrap items-center justify-between rounded-lg border px-3 py-2 font-light'>
                       <div className='flex flex-row flex-wrap items-center justify-between gap-3'>
                         <SocialIcon
                           network={social}
@@ -115,8 +115,8 @@ export const AddSocialModalForm = ({
                       </div>
                       <button
                         className={merge([
-                          'text-primary-900',
-                          checkIfSocialExist(social) && 'text-slate-400',
+                          'text-primary',
+                          checkIfSocialExist(social) && 'text-neutral-200',
                         ])}
                         disabled={checkIfSocialExist(social)}
                         onClick={() => onSelectIcon(social)}>
@@ -134,13 +134,13 @@ export const AddSocialModalForm = ({
               <div className='w-full'>
                 <input
                   type='text'
-                  className='bw solid input !border-background-600'
+                  className='bw solid !border-background-600 input'
                   placeholder='Profile url'
                   onChange={event => onChangeUrl(event.target.value)}
                 />
-                <p className='ml-1 mt-1 w-full text-xs text-background-900'>
+                <p className='text-background-900 ml-1 mt-1 w-full text-xs'>
                   Insert the full link address. Example:{' '}
-                  <span className='text-background-1000'>
+                  <span className='text-base-1000'>
                     https://instagram.com/username
                   </span>
                 </p>
@@ -151,7 +151,7 @@ export const AddSocialModalForm = ({
 
               <button
                 type='button'
-                className='primary btn solid mt-3 w-full'
+                className='primary solid btn mt-3 w-full'
                 disabled={!(formData.social && formData.url)}
                 onClick={() => handleSubmit()}>
                 Save

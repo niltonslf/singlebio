@@ -9,23 +9,27 @@ const config: Config = {
   theme: {
     extend: {},
   },
-  plugins: [
-    require('@sira-ui/tailwind')({
-      themes: [
-        {
-          name: 'dark',
-          colorScheme: 'dark',
-          prefersColorScheme: true,
-          colors: {
-            primary: '#B50048',
-            secondary: '#7A00B5',
-            background: '#1A1A1F',
-            danger: '#ff086c',
-            // warn: '#d48806',
-          },
+  plugins: [require('@tailwindcss/typography'), require('daisyui')],
+  daisyui: {
+    themes: [
+      'light',
+      'dark',
+      {
+        custom: {
+          'primary': '#B50048',
+          'secondary': '#C2EABD',
+          'accent': '#F9DC5C',
+          'neutral': '#25252c',
+          'base-100': '#1a1a1f',
+          'info': '#0047B3',
+          'success': '#00B36B',
+          'warning': '#B36B00',
+          'error': '#B5000A',
         },
-      ],
-    }),
-  ],
+      },
+    ],
+    default: 'dark',
+    darkTheme: 'custom',
+  },
 }
 export default config

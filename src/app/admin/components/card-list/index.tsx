@@ -9,7 +9,7 @@ import {
   addDoc,
   setDoc,
 } from 'firebase/firestore'
-import {Plus} from 'lucide-react'
+import {Info, Plus} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
 import {useSmartphone} from '@/app/admin/context'
@@ -161,7 +161,7 @@ export const CardList = ({user}: CardListProps) => {
         <div className='mb-10 flex w-full flex-1 flex-row flex-wrap gap-10'>
           <button
             onClick={handleAddNewLink}
-            className='primary btn solid lg flex-1 !text-sm uppercase'>
+            className='btn btn-primary flex-1 text-sm uppercase text-neutral-100'>
             <Plus size={18} />
             Add link
           </button>
@@ -192,7 +192,8 @@ export const CardList = ({user}: CardListProps) => {
         )}
 
         {!isFetchingData && !links.length && (
-          <div className='info prompt mb-5 border-info-600'>
+          <div className='alert alert-info'>
+            <Info />
             <p className='content'>It's time to create your first link!</p>
           </div>
         )}

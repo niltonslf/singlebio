@@ -1,9 +1,9 @@
-import clsx from 'clsx'
 import {Control, Controller, FieldErrors} from 'react-hook-form'
 import * as z from 'zod'
 
 import {InputErrorMsg} from '@/app/components'
 import {User} from '@/models'
+import {merge} from '@/utils'
 import {useMask} from '@react-input/mask'
 
 export const usernameInputRules = {
@@ -38,7 +38,7 @@ export const UsernameInput = ({
   })
 
   return (
-    <div>
+    <div className='w-full'>
       <Controller
         control={control}
         name='username'
@@ -47,10 +47,10 @@ export const UsernameInput = ({
             ref={inputRef}
             data-testid='modal-username-input'
             placeholder='Type your username'
-            className={clsx(
-              'bw solid input !border-background-600',
-              !isUsernameValid && '!border-red-400 outline-none',
-            )}
+            className={merge([
+              'input input-bordered w-full ',
+              !isUsernameValid && 'input-error ',
+            ])}
             onChange={event => {
               onChange(event.target.value)
               onChangeInput(event)

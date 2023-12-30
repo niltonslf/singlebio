@@ -88,37 +88,35 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
 
       <div
         className={merge([
+          'loading loading-spinner loading-xs text-neutral-50',
           'absolute right-2 top-2 hidden',
           isSubmitting && 'block',
-        ])}>
-        <div className='bw xs loader'>
-          <div className='spin' />
-        </div>
-      </div>
+        ])}
+      />
 
       <input
         placeholder='Type the label'
         {...register('label', {required: true})}
         className={clsx(
-          'rounded-lg bg-transparent px-2 py-1 font-normal text-slate-50 hover:bg-background-500 focus:bg-background-500 focus:outline-none disabled:opacity-80',
-          errors.label && 'border border-primary-600',
+          'input input-ghost input-sm',
+          errors.label && 'border border-primary',
         )}
       />
       {errors.label && (
-        <p className='my-2 text-sm text-primary-1000'>{errors.label.message}</p>
+        <p className='my-2 text-sm text-primary'>{errors.label.message}</p>
       )}
 
       <input
         placeholder='Type the url'
         {...register('url', {required: true})}
         className={clsx(
-          'mt-1 rounded-lg bg-transparent px-2 py-1 text-sm font-normal text-slate-300 hover:bg-background-500 focus:bg-background-500 focus:outline-none disabled:opacity-80',
-          errors.url && 'border border-primary-600',
+          'input input-ghost input-sm mt-1',
+          errors.url && 'input-error',
         )}
       />
 
       {errors.url && (
-        <p className='my-2 text-sm text-primary-1000'>{errors.url.message}</p>
+        <p className='my-2 text-sm text-primary'>{errors.url.message}</p>
       )}
     </form>
   )

@@ -21,7 +21,7 @@ const AdminLayout = observer(({children}: AdminLayoutProps) => {
 
   const navbarHandler = (
     <button
-      className='bw btn outline xs compact'
+      className='btn btn-square btn-outline btn-sm'
       onClick={() => setIsOpen(prev => !prev)}>
       <AlignJustify size={18} />
     </button>
@@ -32,7 +32,7 @@ const AdminLayout = observer(({children}: AdminLayoutProps) => {
       <main
         className={merge([
           'flex h-screen  w-screen flex-col items-center',
-          'bg-background-100',
+          'bg-base-100',
         ])}>
         <section
           className={merge([

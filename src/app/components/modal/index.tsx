@@ -40,6 +40,7 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
   }
 
   const checkUsername = async (username: string) => {
+    if (username.length === 0) return
     username = username.replace('@', '')
     setUsernameAlreadyTaken(false)
 
@@ -60,28 +61,25 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
 
   return (
     <>
-      {isOpen && <label className='modal-overlay'></label>}
-      <div
-        className={merge([
-          'w-max-[100%] modal flex w-96 flex-col gap-2 bg-background-100 ',
-          isOpen ? 'show' : '',
-        ])}>
-        <h2 className='text-xl'>Choose your username</h2>
-        <div>
+      <dialog className={merge(['modal', isOpen && 'modal-open'])}>
+        <div className='modal-box'>
+          <h3 className='text-lg font-bold'>Choose your username</h3>
+          <div className='divider'></div>
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='mt-2'>
-              <p className='text-sm text-slate-300'>
-                The <b className='text-primary-900'>username</b> will be used to
+              <p className='text-neutral-200 '>
+                The <b className='text-primary'>username</b> will be used to
                 create your unique page url.
               </p>
             </div>
 
-            <div className='mt-3'>
+            <div className='mt-3 w-full'>
               <UsernameInput
                 control={control}
                 onChange={checkUsername}
                 isUsernameValid={
-                  !!errors?.username?.message || usernameAlreadyTaken
+                  !errors?.username?.message && !usernameAlreadyTaken
                 }
                 errors={errors}
               />
@@ -91,14 +89,14 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
               <button
                 data-testid='modal-submit-button'
                 type='submit'
-                className='info btn solid'
+                className='btn btn-primary btn-wide mt-5'
                 disabled={submitDisabled}>
                 Save
               </button>
             </div>
           </form>
         </div>
-      </div>
+      </dialog>
     </>
   )
 }

@@ -119,7 +119,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
           <input
             type='text'
             className={merge([
-              'bw solid input !border-background-600',
+              'bw solid !border-background-600 input',
               errors?.name?.message && '!border-red-400',
             ])}
             placeholder='Name'
@@ -133,7 +133,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
           <textarea
             placeholder='Bio'
             className={merge([
-              'bw solid input !border-background-600',
+              'bw solid !border-background-600 input',
               errors?.bio?.message && '!border-red-400',
             ])}
             maxLength={100}
@@ -176,7 +176,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
               className={merge([
                 'flex h-7 w-7 items-center justify-center rounded-full',
                 'absolute right-0 top-0 cursor-pointer',
-                'group bg-background-100',
+                'group bg-base-100',
                 'hover:bg-background-1100',
                 'md:right-1 md:top-1',
               ])}>
@@ -193,7 +193,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
               className={merge([
                 'flex h-7 w-7 items-center justify-center rounded-full',
                 'absolute right-0 top-0 cursor-pointer',
-                'group hover:bg-background-50',
+                'hover:bg-background-50 group',
                 'bg-background-1100',
                 'md:right-1 md:top-1',
               ])}>

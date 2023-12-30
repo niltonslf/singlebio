@@ -21,7 +21,7 @@ export const Avatar = ({
   return (
     <div
       className={merge([
-        'relative flex aspect-square max-w-full items-center justify-center rounded-full bg-background-100 font-bold text-bw-1000',
+        'relative flex aspect-square max-w-full items-center justify-center rounded-full bg-base-100 font-bold text-neutral-50',
       ])}
       style={{width: size, fontSize: size * 0.5}}>
       <span>{name.charAt(0)}</span>

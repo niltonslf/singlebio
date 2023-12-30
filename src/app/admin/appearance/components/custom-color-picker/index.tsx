@@ -32,14 +32,14 @@ export const CustomColorPicker = ({
   return (
     <div
       ref={containerRef}
-      className='relative w-full  rounded-lg border border-background-300 bg-background-800 p-2'>
+      className='bg-background-800 relative  w-full rounded-lg border border-neutral p-2'>
       <div
         onClick={() => setShowBtnPicker(prev => !prev)}
         className='
                 flex w-full cursor-pointer flex-row items-center justify-end gap-2 rounded-md'>
         <Palette size={23} />
         <div
-          className='h-8 w-full rounded-md border border-background-300'
+          className='h-8 w-full rounded-md border border-neutral'
           style={{backgroundColor: color}}></div>
       </div>
       {showBtnPicker && (
