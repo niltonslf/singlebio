@@ -32,6 +32,10 @@ export const AddSocialModalForm = ({
     social.includes(filter),
   )
 
+  const checkIfSocialExist = (socialName: string) => {
+    return !!user.social?.[socialName]
+  }
+
   const onSelectIcon = (social: string) => {
     setFormData(prev => ({...prev, social}))
   }
@@ -110,9 +114,13 @@ export const AddSocialModalForm = ({
                         <p>{socialOptions[social].label ?? social}</p>
                       </div>
                       <button
-                        className='text-primary-900'
+                        className={merge([
+                          'text-primary-900',
+                          checkIfSocialExist(social) && 'text-slate-400',
+                        ])}
+                        disabled={checkIfSocialExist(social)}
                         onClick={() => onSelectIcon(social)}>
-                        Add
+                        {checkIfSocialExist(social) ? 'Added' : 'Add'}
                       </button>
                     </li>
                   )
