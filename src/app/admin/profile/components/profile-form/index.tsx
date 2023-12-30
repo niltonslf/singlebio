@@ -97,9 +97,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
     <SectionCard title='My data'>
       {isSubmitting && (
         <div className='absolute right-3 top-3'>
-          <div className='bw sm loader'>
-            <div className='spin' />
-          </div>
+          <div className='loading loading-spinner loading-xs text-neutral-50'></div>
         </div>
       )}
 
@@ -119,8 +117,8 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
           <input
             type='text'
             className={merge([
-              'bw solid !border-background-600 input',
-              errors?.name?.message && '!border-red-400',
+              'input input-bordered  input-md',
+              errors?.name?.message && 'input-error',
             ])}
             placeholder='Name'
             {...register('name', {required: true})}
@@ -133,8 +131,8 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
           <textarea
             placeholder='Bio'
             className={merge([
-              'bw solid !border-background-600 input',
-              errors?.bio?.message && '!border-red-400',
+              'textarea textarea-bordered',
+              errors?.bio?.message && 'textarea-error',
             ])}
             maxLength={100}
             wrap='soft'
@@ -159,12 +157,9 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
           />
 
           {isUploadingImg && (
-            <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-full bg-black bg-opacity-80'>
-              <div className='primary sm loader '>
-                <div className='bar-bounce' />
-              </div>
-
-              <span className='mt-2 text-sm font-semibold text-white'>
+            <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-full bg-neutral-950 bg-opacity-80'>
+              <div className='loading loading-spinner loading-xs text-neutral-50' />
+              <span className='mt-2 text-sm font-semibold text-neutral-200'>
                 Uploading...
               </span>
             </div>
@@ -176,13 +171,13 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
               className={merge([
                 'flex h-7 w-7 items-center justify-center rounded-full',
                 'absolute right-0 top-0 cursor-pointer',
-                'group bg-base-100',
-                'hover:bg-background-1100',
+                'group bg-neutral-950',
+                'hover:bg-neutral-200',
                 'md:right-1 md:top-1',
               ])}>
               <XCircle
                 size={25}
-                className='text-bw-1100 group-hover:text-bw-50'
+                className='text-neutral-200 group-hover:text-neutral-950'
               />
             </div>
           )}
@@ -193,13 +188,13 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
               className={merge([
                 'flex h-7 w-7 items-center justify-center rounded-full',
                 'absolute right-0 top-0 cursor-pointer',
-                'hover:bg-background-50 group',
-                'bg-background-1100',
+                'group hover:bg-neutral-200',
+                'bg-neutral-950',
                 'md:right-1 md:top-1',
               ])}>
               <Camera
                 size={18}
-                className='text-bw-50 group-hover:text-bw-1100'
+                className='text-neutral-200 group-hover:text-neutral-900'
               />
             </label>
           )}

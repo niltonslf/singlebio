@@ -47,17 +47,17 @@ export const SocialCard = ({user}: SocialCardProps) => {
         })}
       </div>
 
+      <button
+        className='btn btn-outline btn-primary btn-block mt-5'
+        onClick={() => setIsModalOpen(true)}>
+        <Plus size={18} /> Add link
+      </button>
+
       <AddSocialModalForm
         isOpen={isModalOpen}
         user={user}
         onClose={() => setIsModalOpen(false)}
       />
-
-      <button
-        className='mt-5 flex w-full flex-row items-center justify-center gap-2 rounded-lg p-3 text-primary hover:bg-base-100'
-        onClick={() => setIsModalOpen(true)}>
-        <Plus size={18} /> Add link
-      </button>
     </SectionCard>
   )
 }

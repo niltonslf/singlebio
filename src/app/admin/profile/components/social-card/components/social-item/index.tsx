@@ -34,12 +34,12 @@ export const SocialItem = ({social, onDelete}: SocialItemProps) => {
           <Link
             href={parseExternalUrl(social.url)}
             title={social.social}
-            className='text-blue-400'>
+            className='text-info'>
             {displayUrlShort(social.url, true)}
           </Link>
         </p>
         <button
-          className='text-background-900 rounded-md p-2 hover:bg-primary'
+          className='btn btn-square btn-xs hover:btn-primary'
           onClick={() => onDelete(social.social)}>
           <Trash size={18} />
         </button>

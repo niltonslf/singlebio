@@ -135,14 +135,14 @@ export default function UserPage({
             </div>
 
             <h2
-              className='mb-2 flex items-center justify-center text-2xl font-semibold text-bw-300'
+              className='mb-2 flex items-center justify-center text-2xl font-semibold text-neutral-900'
               style={pageStyles.usernameColor}>
               {user?.name}
             </h2>
 
             {user?.bio && (
               <p
-                className='w-full break-all text-center text-sm text-bw-300'
+                className='w-full break-all text-center text-sm text-neutral-900'
                 style={pageStyles.usernameColor}>
                 {user?.bio}
               </p>
@@ -150,12 +150,8 @@ export default function UserPage({
           </header>
 
           {isLoading && (
-            <div
-              data-theme='light'
-              className='flex w-full flex-1 items-center justify-center pt-20 text-lg'>
-              <div className=' bw md loader'>
-                <div className='bar-bounce' />
-              </div>
+            <div className='flex w-full flex-1 items-center justify-center pt-20 text-lg'>
+              <div className='loading loading-dots loading-lg text-neutral-950' />
             </div>
           )}
 
@@ -186,14 +182,14 @@ export default function UserPage({
             <Link
               href='/'
               title='Home page'
-              className='flex w-48 flex-row items-center justify-center gap-2 rounded-full bg-background-1100 bg-opacity-60 py-2 text-sm shadow-md backdrop-blur-md hover:bg-white'>
+              className='flex w-48 flex-row items-center justify-center gap-2 rounded-full bg-neutral-50 bg-opacity-60 py-2 text-sm shadow-md backdrop-blur-md'>
               <Image
                 src='/logo-icon-black.png'
                 width={22}
                 height={22}
                 alt='lnktree logo'
               />
-              <p className='text-sm font-semibold text-bw-50 opacity-80'>
+              <p className='text-sm font-semibold text-neutral-950 opacity-80'>
                 Share your best here
               </p>
             </Link>

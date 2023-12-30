@@ -1,4 +1,3 @@
-import {Search} from 'lucide-react'
 import {useState} from 'react'
 import {SocialIcon} from 'react-social-icons'
 
@@ -72,94 +71,92 @@ export const AddSocialModalForm = ({
 
   return (
     <>
-      <label className='modal-overlay'></label>
-      <div
-        className={merge([
-          'modal flex w-[500px] max-w-[calc(100%-40px)] flex-col bg-neutral',
-          isOpen && 'show',
-        ])}>
-        <div className='flex w-full flex-row items-center justify-between'>
-          <h2 className='text-xl'>
-            {socialOptions[formData.social]?.label || 'Socials'}
-          </h2>
-          <button type='button' onClick={() => handleClose()}>
-            ✕
-          </button>
-        </div>
-        <div className='background divider' />
+      <dialog className={merge(['modal', isOpen && 'modal-open'])}>
+        <div className='modal-box bg-neutral'>
+          <form method='dialog'>
+            <button
+              onClick={() => handleClose()}
+              className='btn btn-circle btn-ghost btn-sm absolute right-2 top-2'>
+              ✕
+            </button>
+          </form>
 
-        <div className='mb-3 flex w-full flex-col gap-5 '>
-          {!formData.social && (
-            <>
-              <div className='bw solid !border-background-600 input'>
-                <Search size={18} />
+          <h3 className='text-lg font-bold'>
+            {socialOptions[formData.social]?.label || 'Socials'}
+          </h3>
+          <div className='divider' />
+
+          <div className='mb-3 flex w-full flex-col gap-5 '>
+            {!formData.social && (
+              <>
                 <input
+                  className='input input-bordered input-md w-full'
                   placeholder='Search'
                   onChange={event => setFilter(event.target.value)}
                 />
-              </div>
 
-              <ul className='flex max-h-[50dvh] w-full flex-col gap-3 overflow-y-auto'>
-                {socialOptionsFilter.map(social => {
-                  return (
-                    <li
-                      key={social}
-                      className='border-background-900 flex w-full flex-row flex-wrap items-center justify-between rounded-lg border px-3 py-2 font-light'>
-                      <div className='flex flex-row flex-wrap items-center justify-between gap-3'>
-                        <SocialIcon
-                          network={social}
-                          className='!h-8 !w-8'
-                          as='span'
-                        />
-                        <p>{socialOptions[social].label ?? social}</p>
-                      </div>
-                      <button
-                        className={merge([
-                          'text-primary',
-                          checkIfSocialExist(social) && 'text-neutral-200',
-                        ])}
-                        disabled={checkIfSocialExist(social)}
-                        onClick={() => onSelectIcon(social)}>
-                        {checkIfSocialExist(social) ? 'Added' : 'Add'}
-                      </button>
-                    </li>
-                  )
-                })}
-              </ul>
-            </>
-          )}
+                <ul className='flex max-h-[50dvh] w-full flex-col gap-3 overflow-y-auto'>
+                  {socialOptionsFilter.map(social => {
+                    return (
+                      <li
+                        key={social}
+                        className='flex w-full flex-row flex-wrap items-center justify-between rounded-lg border border-base-200 px-3 py-3 font-light'>
+                        <div className='flex flex-row flex-wrap items-center justify-between gap-3'>
+                          <SocialIcon
+                            network={social}
+                            className='!h-8 !w-8'
+                            as='span'
+                          />
+                          <p>{socialOptions[social].label ?? social}</p>
+                        </div>
+                        <button
+                          className={merge([
+                            'btn btn-outline btn-primary btn-sm',
+                            checkIfSocialExist(social) && 'btn-neutral',
+                          ])}
+                          disabled={checkIfSocialExist(social)}
+                          onClick={() => onSelectIcon(social)}>
+                          {checkIfSocialExist(social) ? 'Added' : 'Add'}
+                        </button>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </>
+            )}
 
-          {formData.social && (
-            <>
-              <div className='w-full'>
-                <input
-                  type='text'
-                  className='bw solid !border-background-600 input'
-                  placeholder='Profile url'
-                  onChange={event => onChangeUrl(event.target.value)}
-                />
-                <p className='text-background-900 ml-1 mt-1 w-full text-xs'>
-                  Insert the full link address. Example:{' '}
-                  <span className='text-base-1000'>
-                    https://instagram.com/username
-                  </span>
-                </p>
-                {isUrlValid === false && (
-                  <InputErrorMsg>The link format is not valid</InputErrorMsg>
-                )}
-              </div>
+            {formData.social && (
+              <>
+                <div className='w-full'>
+                  <input
+                    type='text'
+                    className='input input-bordered input-md w-full'
+                    placeholder='Profile url'
+                    onChange={event => onChangeUrl(event.target.value)}
+                  />
+                  <p className='ml-1 mt-2 w-full text-xs text-neutral-400'>
+                    Insert the full link address. Example:{' '}
+                    <span className='text-base-1000'>
+                      https://instagram.com/username
+                    </span>
+                  </p>
+                  {isUrlValid === false && (
+                    <InputErrorMsg>The link format is not valid</InputErrorMsg>
+                  )}
+                </div>
 
-              <button
-                type='button'
-                className='primary solid btn mt-3 w-full'
-                disabled={!(formData.social && formData.url)}
-                onClick={() => handleSubmit()}>
-                Save
-              </button>
-            </>
-          )}
+                <button
+                  type='button'
+                  className='btn btn-primary btn-md w-full'
+                  disabled={!(formData.social && formData.url)}
+                  onClick={() => handleSubmit()}>
+                  Save
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      </dialog>
     </>
   )
 }

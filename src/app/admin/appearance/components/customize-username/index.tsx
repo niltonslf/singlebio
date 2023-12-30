@@ -19,7 +19,7 @@ export const CustomizeUsername = observer(() => {
   return (
     <>
       <div className='mt-3'>
-        <h2 className='text-sm font-normal text-neutral-200'>
+        <h2 className='text-md font-normal text-neutral-200'>
           Select the texts color
         </h2>
 

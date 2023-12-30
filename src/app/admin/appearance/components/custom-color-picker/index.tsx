@@ -32,7 +32,7 @@ export const CustomColorPicker = ({
   return (
     <div
       ref={containerRef}
-      className='bg-background-800 relative  w-full rounded-lg border border-neutral p-2'>
+      className='relative w-full rounded-lg border border-neutral bg-base-100 p-2'>
       <div
         onClick={() => setShowBtnPicker(prev => !prev)}
         className='
@@ -61,7 +61,7 @@ export const CustomColorPicker = ({
               style={{
                 borderRadius: 5,
                 width: '100%',
-                backgroundColor: '#1a1a1f',
+                backgroundColor: '#25252c',
                 padding: '3px 5px',
               }}
               color={color}

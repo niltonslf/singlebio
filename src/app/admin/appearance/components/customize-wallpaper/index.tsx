@@ -40,14 +40,14 @@ export const CustomizeWallpaper = observer(() => {
     <>
       <section className='flex flex-row flex-wrap items-start gap-10'>
         <div className='w-full md:w-auto md:flex-1'>
-          <h1 className='text-sm font-normal text-neutral-200'>
+          <h1 className='text-base font-normal text-neutral-200'>
             Select the wallpaper
           </h1>
 
           <div className='mt-3'>
             <label
               htmlFor='wallpaper-file'
-              className='group relative flex aspect-[1/0.82] min-h-[80px] w-full cursor-pointer flex-row items-center justify-center overflow-hidden rounded-lg border-2 border-dashed  border-gray-500 text-center text-xl text-gray-500 '>
+              className='group relative flex aspect-[1/0.82] min-h-[80px] w-full cursor-pointer flex-row items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-neutral-400  text-center text-xl text-neutral-400 '>
               {!theme.backgroundImage && (
                 <span className='cursor-pointer'>
                   Drag your file or click here to select your wallpaper
@@ -67,19 +67,19 @@ export const CustomizeWallpaper = observer(() => {
 
               {theme.backgroundImage && (
                 <div
-                  className='absolute left-0 top-0 z-50 hidden h-full w-full items-center justify-center bg-black bg-opacity-50 group-hover:flex'
+                  className='absolute left-0 top-0 z-50 hidden h-full w-full items-center justify-center bg-neutral-950 bg-opacity-50 group-hover:flex'
                   onClick={event => {
                     event.preventDefault()
                     handleRemoveWallpaper()
                   }}>
-                  <span className='group flex h-14 w-14 cursor-pointer items-center justify-center rounded-md bg-red-400 shadow-md hover:bg-red-600'>
+                  <span className='group btn btn-square btn-error btn-md'>
                     <Trash width={30} height={30} color='white' />
                   </span>
                 </div>
               )}
 
               <input
-                className='absolute left-0 top-0 h-full w-full border-2 border-red-700 opacity-0'
+                className='absolute left-0 top-0 h-full w-full border-2 border-error opacity-0'
                 id='wallpaper-file'
                 data-testid='wallpaper-file'
                 type='file'
@@ -92,8 +92,8 @@ export const CustomizeWallpaper = observer(() => {
         </div>
 
         <div className='w-full md:w-auto md:flex-1'>
-          <h2 className='text-sm font-normal text-neutral-200'>
-            You also can select a color as background
+          <h2 className='text-base font-normal text-neutral-200'>
+            Select the color background
           </h2>
 
           <div className='mt-3'>

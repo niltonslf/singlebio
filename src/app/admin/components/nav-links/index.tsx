@@ -131,7 +131,7 @@ export const NavLinks = ({onClick}: NavLinksProps) => {
                   onClick={event => handleOnClick(event, page)}
                   title={page.title}
                   className={merge([
-                    'text-md flex flex-row items-center gap-3 rounded-xl px-3 py-2 font-normal text-neutral-200 hover:text-neutral-50',
+                    'text-md flex flex-row items-center gap-3 rounded-md px-3 py-2 font-normal text-neutral-200 hover:text-neutral-50',
                     isCurrentPage(page.href) && 'bg-primary text-neutral-50',
                     !isCurrentPage(page.href) && 'hover:bg-neutral',
                     page.disabled &&
