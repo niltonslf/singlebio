@@ -2,6 +2,7 @@ import {Plus} from 'lucide-react'
 import {useState} from 'react'
 
 import {SectionCard} from '@/app/admin/components'
+import {authStore} from '@/app/auth/context/auth-store'
 import {User} from '@/models'
 
 import {AddSocialModalForm, SocialItem} from './components'
@@ -15,6 +16,21 @@ export const SocialCard = ({user}: SocialCardProps) => {
 
   const socialListKeys = user.social ? Object.keys(user.social) : []
 
+  const handleDeleteSocial = async (socialName: string) => {
+    const currentSocial = {...user.social}
+    const newObj: Record<string, string> = {}
+
+    const remainingKeys = Object.keys(currentSocial).filter(
+      social => social != socialName,
+    )
+
+    remainingKeys.forEach(key => {
+      newObj[key] = currentSocial[key]
+    })
+
+    await authStore.updateUser({social: newObj})
+  }
+
   return (
     <SectionCard title='Social links'>
       <div className='flex flex-col gap-3'>
@@ -22,6 +38,7 @@ export const SocialCard = ({user}: SocialCardProps) => {
           return (
             user?.social?.[name] && (
               <SocialItem
+                onDelete={handleDeleteSocial}
                 key={name}
                 social={{social: name, url: user?.social?.[name]}}
               />

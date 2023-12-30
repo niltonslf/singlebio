@@ -10,9 +10,10 @@ type SocialItemProps = {
     social: string
     url: string
   }
+  onDelete: (socialName: string) => Promise<void>
 }
 
-export const SocialItem = ({social}: SocialItemProps) => {
+export const SocialItem = ({social, onDelete}: SocialItemProps) => {
   return (
     <div className='flex w-full flex-col flex-nowrap items-start justify-between gap-2 overflow-hidden rounded-lg bg-background-100 px-4 py-2 md:flex-row md:items-center'>
       <span className='flex flex-row flex-wrap items-center justify-between gap-2 text-sm md:text-base'>
@@ -37,7 +38,9 @@ export const SocialItem = ({social}: SocialItemProps) => {
             {displayUrlShort(social.url, true)}
           </Link>
         </p>
-        <button className='rounded-md p-2 text-background-900 hover:bg-primary-500'>
+        <button
+          className='rounded-md p-2 text-background-900 hover:bg-primary-500'
+          onClick={() => onDelete(social.social)}>
           <Trash size={18} />
         </button>
       </div>
