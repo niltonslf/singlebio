@@ -1,8 +1,9 @@
 import {Trash} from 'lucide-react'
+import Link from 'next/link'
 import {SocialIcon} from 'react-social-icons'
 
 import {socialOptions} from '@/data/social-options'
-import {displayUrlShort} from '@/utils'
+import {displayUrlShort, parseExternalUrl} from '@/utils'
 
 type SocialItemProps = {
   social: {
@@ -13,7 +14,7 @@ type SocialItemProps = {
 
 export const SocialItem = ({social}: SocialItemProps) => {
   return (
-    <div className='flex flex-row flex-wrap items-center justify-between gap-3 overflow-hidden rounded-lg bg-background-100 px-4 py-2'>
+    <div className='flex w-full flex-col flex-nowrap items-start justify-between gap-2 overflow-hidden rounded-lg bg-background-100 px-4 py-2 md:flex-row md:items-center'>
       <span className='flex flex-row flex-wrap items-center justify-between gap-2 text-sm md:text-base'>
         <SocialIcon
           url={social?.url}
@@ -27,9 +28,14 @@ export const SocialItem = ({social}: SocialItemProps) => {
         </span>
       </span>
 
-      <div className='flex w-full flex-row items-center justify-between gap-3 md:w-auto md:flex-1 md:justify-end'>
-        <p className='max-w-[80%] overflow-hidden overflow-ellipsis whitespace-nowrap text-right font-normal'>
-          {displayUrlShort(social.url, true)}
+      <div className='flex w-full flex-row items-center justify-between gap-3 md:w-[65%]  md:justify-end'>
+        <p className='w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-left font-normal md:text-right '>
+          <Link
+            href={parseExternalUrl(social.url)}
+            title={social.social}
+            className='text-blue-400'>
+            {displayUrlShort(social.url, true)}
+          </Link>
         </p>
         <button className='rounded-md p-2 text-background-900 hover:bg-primary-500'>
           <Trash size={18} />
