@@ -10,7 +10,7 @@ import {ReactNode} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
 import {Avatar} from '@/app/components'
-import {displayUserPageUrl, merge} from '@/utils'
+import {displayUrlShort, merge} from '@/utils'
 
 type HeaderProps = {
   navbarHandler: ReactNode
@@ -38,7 +38,7 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
               target='_blank'
               href={`/${user.username}`}>
               <span className='hidden md:inline-block'>
-                {displayUserPageUrl(user?.username)}
+                {displayUrlShort(user?.username)}
               </span>
 
               <span className='inline-block md:hidden'>@{user?.username}</span>

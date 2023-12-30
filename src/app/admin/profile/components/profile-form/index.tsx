@@ -85,7 +85,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
 
   const triggerFormSubmit = useDebounce(() => {
     formRef.current?.requestSubmit()
-  })
+  }, 1000)
 
   const handleCheckUsername = async (username: string) => {
     setValidUsername(true)

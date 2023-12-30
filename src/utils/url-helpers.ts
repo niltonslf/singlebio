@@ -15,10 +15,15 @@ export const parseUserPageUrl = (username: string): string => {
   return `${baseUrl}/${username}`
 }
 
-export const displayUserPageUrl = (username: string): string => {
-  const fullURL = parseUserPageUrl(username)
+export const displayUrlShort = (
+  username: string,
+  isExternalUrl: boolean = false,
+): string => {
+  let fullURL = username
 
-  const beautify = fullURL.replace(/http(s)?:(\/){2}/, '').replace('www.', '')
+  if (!isExternalUrl) fullURL = parseUserPageUrl(username)
 
-  return beautify
+  const shortUrl = fullURL.replace(/http(s)?:(\/){2}/, '').replace('www.', '')
+
+  return shortUrl
 }

@@ -11,36 +11,34 @@ type SocialCardProps = {
 }
 
 export const SocialCard = ({user}: SocialCardProps) => {
-  const [isOpenModal, setIsOpenModal] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const socialListKeys = user.social ? Object.keys(user.social) : []
 
   return (
     <SectionCard title='Social links'>
       <div className='flex flex-col gap-3'>
-        {socialListKeys.map(social => {
+        {socialListKeys.map(name => {
           return (
-            <>
-              {user?.social?.[social] && (
-                <SocialItem
-                  key={social}
-                  social={{social, url: user?.social?.[social]}}
-                />
-              )}
-            </>
+            user?.social?.[name] && (
+              <SocialItem
+                key={name}
+                social={{social: name, url: user?.social?.[name]}}
+              />
+            )
           )
         })}
       </div>
 
       <AddSocialModalForm
-        isOpen={isOpenModal}
+        isOpen={isModalOpen}
         user={user}
-        onClose={() => setIsOpenModal(false)}
+        onClose={() => setIsModalOpen(false)}
       />
 
       <button
         className='mt-5 flex w-full flex-row items-center justify-center gap-2 rounded-lg p-3 text-primary-900 hover:bg-background-100'
-        onClick={() => setIsOpenModal(true)}>
+        onClick={() => setIsModalOpen(true)}>
         <Plus size={18} /> Add link
       </button>
     </SectionCard>
