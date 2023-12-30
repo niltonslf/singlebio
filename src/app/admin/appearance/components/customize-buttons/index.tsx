@@ -1,22 +1,23 @@
 'use client'
 
 import {observer} from 'mobx-react-lite'
-import {HexAlphaColorPicker} from 'react-colorful'
 
 import {useDebounce} from '@/utils'
 
 import {appearanceStore} from '../../context'
+
+import {CustomColorPicker} from '..'
 
 export const CustomizeButtons = observer(() => {
   const {theme} = appearanceStore
 
   const debouncedBackground = useDebounce((color: string) => {
     appearanceStore.setButtonBackground(color)
-  })
+  }, 1000)
 
   const debouncedTextColor = useDebounce((color: string) => {
     appearanceStore.setButtonTextColor(color)
-  })
+  }, 1000)
 
   return (
     <>
@@ -27,8 +28,7 @@ export const CustomizeButtons = observer(() => {
           </h2>
 
           <div className='mt-3'>
-            <HexAlphaColorPicker
-              className='!md:h-[300px] !h-[150px] !w-full'
+            <CustomColorPicker
               color={theme.buttonBackground}
               onChange={color => debouncedBackground(color)}
             />
@@ -39,8 +39,7 @@ export const CustomizeButtons = observer(() => {
           <h2 className='text-sm font-normal text-slate-300'>Button text</h2>
 
           <div className='mt-3'>
-            <HexAlphaColorPicker
-              className='!md:h-[300px] !h-[150px] !w-full'
+            <CustomColorPicker
               color={theme.buttonTextColor}
               onChange={color => debouncedTextColor(color)}
             />

@@ -5,11 +5,12 @@ import clsx from 'clsx'
 import {Trash} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useRef, ChangeEvent} from 'react'
-import {HexAlphaColorPicker} from 'react-colorful'
 
 import {appearanceStore} from '@/app/admin/appearance/context'
 import {useImageUploader} from '@/app/admin/hooks'
 import {useDebounce} from '@/utils'
+
+import {CustomColorPicker} from '..'
 
 export const CustomizeWallpaper = observer(() => {
   const theme = appearanceStore?.theme
@@ -96,8 +97,7 @@ export const CustomizeWallpaper = observer(() => {
           </h2>
 
           <div className='mt-3'>
-            <HexAlphaColorPicker
-              className='!md:h-[300px] !h-[150px] !w-full'
+            <CustomColorPicker
               color={theme.backgroundColor}
               onChange={color => debouncedBackgroundColor(color)}
             />

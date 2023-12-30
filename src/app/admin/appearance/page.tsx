@@ -79,14 +79,14 @@ const AppearancePage = observer(() => {
           </Collapse.Item>
 
           <Collapse.Item key={'button'} index={2}>
-            <Collapse.Header>Button Color</Collapse.Header>
+            <Collapse.Header>Buttons</Collapse.Header>
             <Collapse.Body>
               <CustomizeButtons />
             </Collapse.Body>
           </Collapse.Item>
 
           <Collapse.Item key={'username'} index={3}>
-            <Collapse.Header>Username color</Collapse.Header>
+            <Collapse.Header>Name and bio</Collapse.Header>
             <Collapse.Body>
               <CustomizeUsername />
             </Collapse.Body>
