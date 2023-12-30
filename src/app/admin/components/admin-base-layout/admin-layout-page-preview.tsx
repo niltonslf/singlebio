@@ -9,7 +9,7 @@ type SidebarProps = {
 }
 
 export const AdminLayoutPagePreview = ({children, className}: SidebarProps) => {
-  const [isPreviewOpen, setIsPreviewOpen] = useState(true)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
 
   return (
     <>
@@ -31,25 +31,6 @@ export const AdminLayoutPagePreview = ({children, className}: SidebarProps) => {
         {isPreviewOpen ? <X size={18} /> : <Eye size={18} />}
         {!isPreviewOpen && <p>Preview</p>}
       </button>
-      {/* <div
-        className={merge([
-          'absolute -bottom-full left-0 z-30 flex h-[100vh] w-full flex-row justify-center bg-transparent px-3 pt-10 backdrop-blur-md',
-          'transition-all duration-500 md:hidden',
-          showMobilePreview && 'bottom-0',
-        ])}>
-        <div
-          className={merge([
-            'aspect-[9/19] h-full w-full overflow-hidden',
-            'max-w-[500px] border-[15px] border-b-0 border-[#111]',
-            'rounded-tl-[40px] rounded-tr-[40px] bg-background-100',
-            ' has-shadow',
-          ])}>
-          <iframe
-            src={parseUserPageUrl(user?.username || '')}
-            className='h-full w-full'
-          />
-        </div>
-      </div> */}
     </>
   )
 }
