@@ -18,7 +18,7 @@ import {appearanceStore} from './context'
 
 const AppearancePage = observer(() => {
   const {user} = authStore
-  const {previewUrl, theme, aux} = appearanceStore
+  const {theme, aux} = appearanceStore
 
   const {iframeRef} = useSmartphone()
   const {compress} = useImageCompressor()
@@ -54,6 +54,8 @@ const AppearancePage = observer(() => {
   useEffect(() => {
     if (user?.theme) appearanceStore.setTheme(user?.theme)
   }, [user?.theme])
+
+  // if (!user) return <PageLoader />
 
   return (
     <AdminBaseLayout>
@@ -115,7 +117,10 @@ const AppearancePage = observer(() => {
       </AdminBaseLayout.Content>
 
       <AdminBaseLayout.PagePreview>
-        <Smartphone ref={iframeRef} iframeUrl={previewUrl} />
+        <Smartphone
+          ref={iframeRef}
+          iframeUrl={appearanceStore.getPreviewUrl(user?.username ?? '')}
+        />
       </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
   )

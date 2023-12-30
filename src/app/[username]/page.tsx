@@ -18,33 +18,34 @@ import {Avatar, LinkCard} from '@/app/components'
 import {app} from '@/libs/firebase'
 import {User} from '@/models'
 
+import {PreviewThemeParams, makePreviewStyles, makePageStyles} from './utils'
+
 type UserPageProps = {
   params: {
     username: string
   }
+  searchParams?: PreviewThemeParams & {preview: string}
 }
 
 const db = getFirestore(app)
 
-export default function UserPage({params: {username}}: UserPageProps) {
+export default function UserPage({
+  params: {username},
+  searchParams,
+}: UserPageProps) {
   const [links, setLinks] = useState<any[]>([])
   const [user, setUser] = useState<User>()
   const [isLoading, setIsLoading] = useState(true)
 
+  // TODO: make a cache system to don't overload firebase when people are just updating their theme
+
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
 
-  const backgroundColorStyle = {
-    backgroundColor: `${user?.theme?.backgroundColor}`,
-  }
+  const isPreviewAccess = searchParams?.preview === 'true'
 
-  const backgroundImageStyle = {
-    backgroundImage: `url(${user?.theme?.backgroundImage})`,
-    ...backgroundColorStyle,
-  }
-
-  const usernameTextColorStyle = {
-    color: user?.theme?.usernameColor,
-  }
+  const pageStyles = isPreviewAccess
+    ? makePreviewStyles(searchParams)
+    : makePageStyles(user)
 
   const fetchData = useCallback(async () => {
     const q = query(
@@ -91,22 +92,22 @@ export default function UserPage({params: {username}}: UserPageProps) {
       className={clsx([
         'flex h-[100vh] w-full flex-wrap overflow-hidden bg-cover bg-center',
         'bg-fixed',
-        !user?.theme?.backgroundImage && !user?.theme?.backgroundColor
+        !pageStyles.backgroundImage && !pageStyles.backgroundColor
           ? defaultBg
           : '',
       ])}
-      style={user?.theme?.backgroundImage ? backgroundImageStyle : {}}>
+      style={pageStyles.backgroundImage}>
       <section
         className={clsx([
           'flex h-[100dvh] w-screen flex-col items-center overflow-y-auto',
           'px-5 pb-8 pt-20',
         ])}
-        style={user?.theme?.backgroundColor ? backgroundColorStyle : {}}>
+        style={pageStyles.backgroundColor}>
         <div className='flex w-full max-w-2xl flex-1 flex-row flex-wrap'>
           <header className='mb-6 w-full'>
             <div className='mb-4 flex w-full justify-center'>
               <Avatar
-                name={user?.name || ''}
+                name={user?.name ?? ''}
                 pictureUrl={user?.pictureUrl}
                 size={100}
               />
@@ -114,16 +115,14 @@ export default function UserPage({params: {username}}: UserPageProps) {
 
             <h2
               className='mb-2 flex items-center justify-center text-2xl font-semibold text-bw-300'
-              style={user?.theme?.usernameColor ? usernameTextColorStyle : {}}>
+              style={pageStyles.usernameColor}>
               {user?.name}
             </h2>
 
             {user?.bio && (
               <p
                 className='w-full break-all text-center text-sm'
-                style={
-                  user?.theme?.usernameColor ? usernameTextColorStyle : {}
-                }>
+                style={pageStyles.usernameColor}>
                 {user?.bio}
               </p>
             )}
@@ -140,8 +139,8 @@ export default function UserPage({params: {username}}: UserPageProps) {
           )}
 
           {links.length === 0 && isLoading === false && (
-            <div className='rounded-md bg-red-300 p-2 shadow-md'>
-              No links in this profile
+            <div className='info solid sm prompt w-full items-center'>
+              User not found
             </div>
           )}
 
@@ -152,8 +151,8 @@ export default function UserPage({params: {username}}: UserPageProps) {
                   <LinkCard.Item
                     key={link.url}
                     path={link.url}
-                    bgColor={user?.theme?.buttonBackground}
-                    textColor={user?.theme?.buttonTextColor}>
+                    bgColor={pageStyles.buttonBackground}
+                    textColor={pageStyles.buttonTextColor}>
                     {link.label}
                   </LinkCard.Item>
                 )
@@ -164,11 +163,11 @@ export default function UserPage({params: {username}}: UserPageProps) {
             <Link
               href='/'
               title='Home page'
-              className='flex w-52 flex-row items-center justify-center gap-2 rounded-full bg-background-1100 bg-opacity-60 py-3 shadow-md backdrop-blur-md hover:bg-white'>
+              className='flex w-48 flex-row items-center justify-center gap-2 rounded-full bg-background-1100 bg-opacity-60 py-2 text-sm shadow-md backdrop-blur-md hover:bg-white'>
               <Image
                 src='/logo-icon-black.png'
-                width={25}
-                height={25}
+                width={22}
+                height={22}
                 alt='lnktree logo'
               />
               <p className='text-sm font-semibold text-bw-50 opacity-80'>
