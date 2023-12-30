@@ -24,7 +24,7 @@ export const CustomizeUsername = observer(() => {
 
         <div className='mt-3'>
           <HexAlphaColorPicker
-            style={{width: '300px', height: '300px'}}
+            className='!md:h-[300px] !h-[150px] !w-full'
             color={theme.usernameColor}
             onChange={color => debounced(color)}
           />

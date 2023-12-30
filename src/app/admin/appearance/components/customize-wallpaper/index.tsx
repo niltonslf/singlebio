@@ -92,12 +92,12 @@ export const CustomizeWallpaper = observer(() => {
 
         <div className='w-full md:w-auto md:flex-1'>
           <h2 className='text-sm font-normal text-slate-300'>
-            Customize the overlay
+            You also can select a color as background
           </h2>
 
           <div className='mt-3'>
             <HexAlphaColorPicker
-              style={{width: '100%', height: '300px'}}
+              className='!md:h-[300px] !h-[150px] !w-full'
               color={theme.backgroundColor}
               onChange={color => debouncedBackgroundColor(color)}
             />

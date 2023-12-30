@@ -1,6 +1,6 @@
 'use client'
 
-import {Eye, X} from 'lucide-react'
+import {X, Eye} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
@@ -44,7 +44,7 @@ const Admin = observer(() => {
           <CardList user={user} />
         </AdminBaseLayout.Content>
 
-        <AdminBaseLayout.RightPanel className='hidden md:grid'>
+        <AdminBaseLayout.RightPanel>
           <Smartphone
             ref={iframeRef}
             iframeUrl={parseUserPageUrl(user?.username || '')}

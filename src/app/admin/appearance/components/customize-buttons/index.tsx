@@ -28,7 +28,7 @@ export const CustomizeButtons = observer(() => {
 
           <div className='mt-3'>
             <HexAlphaColorPicker
-              style={{width: '100%', height: '300px'}}
+              className='!md:h-[300px] !h-[150px] !w-full'
               color={theme.buttonBackground}
               onChange={color => debouncedBackground(color)}
             />
@@ -40,7 +40,7 @@ export const CustomizeButtons = observer(() => {
 
           <div className='mt-3'>
             <HexAlphaColorPicker
-              style={{width: '100%', height: '300px'}}
+              className='!md:h-[300px] !h-[150px] !w-full'
               color={theme.buttonTextColor}
               onChange={color => debouncedTextColor(color)}
             />

@@ -1,5 +1,7 @@
 import {ReactNode} from 'react'
 
+import {merge} from '@/utils'
+
 import {AdminLayoutContent} from './admin-layout-content'
 import {AdminLayoutRightPanel} from './admin-layout-right-panel'
 
@@ -9,7 +11,11 @@ type LayoutProps = {
 
 export const AdminBaseLayout = ({children}: LayoutProps) => {
   return (
-    <div className='grid h-auto w-full grid-cols-1 grid-rows-[1fr] gap-10 md:grid-cols-[3fr_2fr]'>
+    <div
+      className={merge([
+        'flex h-auto w-full flex-col flex-wrap gap-10',
+        'md:flex-row',
+      ])}>
       {children}
     </div>
   )
