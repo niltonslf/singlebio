@@ -26,7 +26,7 @@ export const AdminLayoutPagePreview = ({children, className}: SidebarProps) => {
       </div>
 
       <button
-        className='btn btn-secondary btn-md fixed bottom-4 right-4 z-10 flex rounded-full shadow-md md:hidden'
+        className='btn btn-md fixed bottom-4 right-4 z-50 flex rounded-full bg-neutral-50 text-base-100 shadow-md hover:bg-base-100 hover:text-neutral-50 md:hidden'
         onClick={() => setIsPreviewOpen(prev => !prev)}>
         {isPreviewOpen ? <X size={18} /> : <Eye size={18} />}
         {!isPreviewOpen && <p>Preview</p>}

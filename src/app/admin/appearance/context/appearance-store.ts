@@ -18,6 +18,8 @@ class AppearanceStore {
     buttonBackground: '#FFF',
     buttonTextColor: '#000',
     usernameColor: '#000',
+    socialColor: '',
+    socialDefaultColor: true,
   }
   private themeConfig: UserTheme = {...this.initialData}
   private themeConfigInitial: UserTheme = {...this.initialData}

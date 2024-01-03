@@ -12,6 +12,7 @@ import {Collapse, AdminBaseLayout} from '../components'
 import {useSmartphone} from '../context/smartphone-context'
 import {
   CustomizeButtons,
+  CustomizeSocialLinks,
   CustomizeUsername,
   CustomizeWallpaper,
 } from './components'
@@ -71,24 +72,31 @@ const AppearancePage = observer(() => {
         )}
 
         <Collapse toggle defaultOpen={1}>
-          <Collapse.Item key={'wallpaper'} index={1}>
+          <Collapse.Item index={1}>
             <Collapse.Header>Page wallpaper</Collapse.Header>
             <Collapse.Body>
               <CustomizeWallpaper />
             </Collapse.Body>
           </Collapse.Item>
 
-          <Collapse.Item key={'button'} index={2}>
-            <Collapse.Header>Buttons</Collapse.Header>
+          <Collapse.Item index={2}>
+            <Collapse.Header>Header </Collapse.Header>
             <Collapse.Body>
-              <CustomizeButtons />
+              <CustomizeUsername />
             </Collapse.Body>
           </Collapse.Item>
 
-          <Collapse.Item key={'username'} index={3}>
-            <Collapse.Header>Name and bio</Collapse.Header>
+          <Collapse.Item index={3}>
+            <Collapse.Header>Social links</Collapse.Header>
             <Collapse.Body>
-              <CustomizeUsername />
+              <CustomizeSocialLinks />
+            </Collapse.Body>
+          </Collapse.Item>
+
+          <Collapse.Item index={4}>
+            <Collapse.Header>Link list</Collapse.Header>
+            <Collapse.Body>
+              <CustomizeButtons />
             </Collapse.Body>
           </Collapse.Item>
         </Collapse>
@@ -104,13 +112,13 @@ const AppearancePage = observer(() => {
 
             <div className='flex flex-row flex-nowrap items-center gap-5'>
               <button
-                className='btn btn-primary btn-md btn-wide '
+                className='btn btn-primary btn-md flex-1 md:btn-wide'
                 onClick={() => handleSaveAppearance()}>
                 {isLoading && <span className='loading loading-spinner'></span>}
                 Save
               </button>
               <button
-                className='btn btn-info btn-md btn-wide'
+                className='btn btn-info btn-md flex-1 md:btn-wide'
                 onClick={() => handleResetAppearance()}>
                 Reset
               </button>

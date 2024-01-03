@@ -10,11 +10,15 @@ import {
   limit,
   orderBy,
 } from 'firebase/firestore'
-import Image from 'next/image'
-import Link from 'next/link'
 import {useCallback, useEffect, useMemo, useState} from 'react'
 
-import {Avatar, LinkCard} from '@/app/components'
+import {
+  UserNotFound,
+  UserPageFooter,
+  UserPageHeader,
+  UserPageLinks,
+  UserPageSocial,
+} from '@/app/[username]/components'
 import {app} from '@/libs/firebase'
 import {User} from '@/models'
 
@@ -108,6 +112,12 @@ export default function UserPage({
     fetchData()
   }, [fetchData])
 
+  if (
+    (links.length === 0 && isLoading === false) ||
+    (isLoading === false && user === undefined)
+  )
+    return <UserNotFound />
+
   return (
     <main
       className={clsx([
@@ -120,80 +130,25 @@ export default function UserPage({
       style={pageStyles.backgroundImage}>
       <section
         className={clsx([
-          'flex h-[100dvh] w-screen flex-col items-center overflow-y-auto',
+          'flex h-[100dvh] w-screen flex-col items-center justify-start  overflow-y-auto',
           'px-5 pb-8 pt-20',
         ])}
         style={pageStyles.backgroundColor}>
-        <div className='flex w-full max-w-2xl flex-1 flex-row flex-wrap'>
-          <header className='mb-6 w-full'>
-            <div className='mb-4 flex w-full justify-center'>
-              <Avatar
-                name={user?.name ?? ''}
-                pictureUrl={user?.pictureUrl}
-                size={100}
-              />
-            </div>
-
-            <h2
-              className='mb-2 flex items-center justify-center text-2xl font-semibold text-neutral-900'
-              style={pageStyles.usernameColor}>
-              {user?.name}
-            </h2>
-
-            {user?.bio && (
-              <p
-                className='w-full break-all text-center text-sm text-neutral-900'
-                style={pageStyles.usernameColor}>
-                {user?.bio}
-              </p>
-            )}
-          </header>
-
+        <div className='flex w-full max-w-2xl flex-1 flex-col flex-wrap'>
           {isLoading && (
-            <div className='flex w-full flex-1 items-center justify-center pt-20 text-lg'>
+            <div className='flex h-full w-full flex-1 items-center justify-center'>
               <div className='loading loading-dots loading-lg text-neutral-950' />
             </div>
           )}
 
-          {links.length === 0 && isLoading === false && (
-            <div className='w-full'>
-              <div className='info solid sm prompt w-full items-center'>
-                User not found
-              </div>
-            </div>
+          {user && (
+            <>
+              <UserPageHeader user={user} pageStyles={pageStyles} />
+              {user.social && <UserPageSocial social={user.social} />}
+            </>
           )}
-
-          <LinkCard>
-            {links.length > 0 &&
-              links.map(link => {
-                return (
-                  <LinkCard.Item
-                    key={link.url}
-                    path={link.url}
-                    bgColor={pageStyles.buttonBackground}
-                    textColor={pageStyles.buttonTextColor}>
-                    {link.label}
-                  </LinkCard.Item>
-                )
-              })}
-          </LinkCard>
-
-          <footer className='mt-auto flex w-full flex-row items-center justify-center pt-10'>
-            <Link
-              href='/'
-              title='Home page'
-              className='flex w-48 flex-row items-center justify-center gap-2 rounded-full bg-neutral-50 bg-opacity-60 py-2 text-sm shadow-md backdrop-blur-md'>
-              <Image
-                src='/logo-icon-black.png'
-                width={22}
-                height={22}
-                alt='lnktree logo'
-              />
-              <p className='text-sm font-semibold text-neutral-950 opacity-80'>
-                Share your best here
-              </p>
-            </Link>
-          </footer>
+          <UserPageLinks links={links} pageStyles={pageStyles} />
+          <UserPageFooter />
         </div>
       </section>
     </main>
