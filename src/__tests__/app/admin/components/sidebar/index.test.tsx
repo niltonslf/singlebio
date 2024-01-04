@@ -16,6 +16,6 @@ describe('Sidebar component', () => {
 
     expect(logo).toBeVisible()
     expect(mobileBtn).toBeInTheDocument()
-    expect(menuSections).toHaveLength(4)
+    expect(menuSections).toHaveLength(3)
   })
 })
