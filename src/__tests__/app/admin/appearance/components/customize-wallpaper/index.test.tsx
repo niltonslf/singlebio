@@ -72,12 +72,23 @@ describe('Customize wallpaper', () => {
   it('should select background color', async () => {
     const {user} = makeSUT()
 
-    const colorPicker = document.querySelector('div[aria-label=Color]')
+    const colorPickerBox = screen.getByTestId('color-picker')
+    const colorPickerBtn = colorPickerBox.querySelector('div > div')
 
-    if (!colorPicker) return fail()
+    if (!colorPickerBtn) return fail()
+
+    await user.click(colorPickerBtn)
+
+    const colorPickerPicker = colorPickerBox.querySelector(
+      'div[aria-label=Color]',
+    )
+
+    if (!colorPickerPicker) return fail()
+
+    expect(colorPickerPicker).toBeInTheDocument()
 
     await user.pointer({
-      target: colorPicker,
+      target: colorPickerPicker,
       coords: {clientX: 100, clientY: 50},
       keys: '[MouseLeft]',
     })
