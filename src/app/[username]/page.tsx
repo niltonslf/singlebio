@@ -10,10 +10,10 @@ import {
   limit,
   orderBy,
 } from 'firebase/firestore'
+import {useRouter} from 'next/navigation'
 import {useCallback, useEffect, useMemo, useState} from 'react'
 
 import {
-  UserNotFound,
   UserPageFooter,
   UserPageHeader,
   UserPageLinks,
@@ -38,6 +38,8 @@ export default function UserPage({
   params: {username},
   searchParams,
 }: UserPageProps) {
+  const {push} = useRouter()
+
   const [links, setLinks] = useState<any[]>([])
   const [user, setUser] = useState<User>()
   const [isLoading, setIsLoading] = useState(true)
@@ -72,8 +74,7 @@ export default function UserPage({
     const {docs: users} = await getDocs(q)
 
     if (users.length === 0) {
-      setIsLoading(false)
-      return
+      return setIsLoading(false)
     }
     new Promise(resolve => {
       users.forEach(async curUser => {
@@ -112,11 +113,14 @@ export default function UserPage({
     fetchData()
   }, [fetchData])
 
-  if (
-    (links.length === 0 && isLoading === false) ||
-    (isLoading === false && user === undefined)
-  )
-    return <UserNotFound />
+  useEffect(() => {
+    if (
+      (links.length === 0 && isLoading === false) ||
+      (isLoading === false && user === undefined)
+    ) {
+      push('/not-found')
+    }
+  }, [isLoading, links.length, push, user])
 
   return (
     <main

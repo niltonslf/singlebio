@@ -1,20 +1,25 @@
 import * as firestore from 'firebase/firestore'
+import routerMock from 'next-router-mock'
 
 import {
   makeGetDocsResponse,
   makeLink,
   makeUser,
   makeUserTheme,
-  fail,
   setup,
 } from '@/__tests__/__helpers__'
 import UserPage from '@/app/[username]/page'
+import Layout from '@/app/layout'
 import {User} from '@/models'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('firebase/firestore', () => ({
   __esModule: true,
   ...jest.requireActual('firebase/firestore'),
+}))
+
+jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next-router-mock'),
 }))
 
 const handleFetchLinks = (firstData: any[], secondData: any[]) => {
@@ -31,6 +36,14 @@ const handleFetchLinks = (firstData: any[], secondData: any[]) => {
     .mockResolvedValueOnce(makeGetDocsResponse({docs: secondData}))
 }
 
+const makeSUT = ({usernameMock = ''} = {}) => {
+  return setup(
+    <Layout>
+      <UserPage params={{username: usernameMock ?? ''}} />
+    </Layout>,
+  )
+}
+
 describe('User page', () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -43,9 +56,7 @@ describe('User page', () => {
 
     handleFetchLinks([userMock], [linkMock])
 
-    await waitFor(() =>
-      setup(<UserPage params={{username: userMock.username}} />),
-    )
+    await waitFor(() => makeSUT())
 
     const username = screen.getByRole('heading', {level: 2})
     const linkList = await screen.queryByRole('list')
@@ -58,22 +69,18 @@ describe('User page', () => {
     )
   })
 
-  it("should show alert message when there isn't links saved", async () => {
-    const usernameMock = 'jsdevbr'
+  it("should redirect to /not-found if there isn't links", async () => {
+    const usernameMock = 'some-username'
 
     handleFetchLinks([makeUser()], [])
 
-    await waitFor(() => setup(<UserPage params={{username: usernameMock}} />))
-
-    const username = screen.getByRole('heading', {level: 2})
-    expect(username.textContent).toBe(`@${usernameMock}`)
+    await waitFor(() => makeSUT({usernameMock}))
 
     const linkList = await screen.queryByRole('list')
     expect(linkList?.children).toHaveLength(0)
 
     await waitFor(() => {
-      const alertMessage = screen.getByText('No links in this profile')
-      expect(alertMessage).toBeInTheDocument()
+      expect(routerMock.pathname).toBe('/not-found')
     })
   })
 
@@ -91,14 +98,12 @@ describe('User page', () => {
 
     handleFetchLinks([userMock], [linkMock])
 
-    await waitFor(() =>
-      setup(<UserPage params={{username: userMock.username}} />),
-    )
+    await waitFor(() => makeSUT({usernameMock: userMock.username}))
 
     const container = screen.getByRole('main')
     const containerOverlay = container.querySelector('section')
     const buttons = container.querySelectorAll('li')
-    const username = screen.getByText(`@${userMock.username}`)
+    const username = screen.getByText(userMock.name)
 
     if (!containerOverlay || !buttons) return fail()
 

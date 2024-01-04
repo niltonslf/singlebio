@@ -15,6 +15,7 @@ type SidebarProps = {
 export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
   return (
     <nav
+      data-testid='admin-sidebar'
       className={merge([
         'absolute left-[-100%]  top-0 z-40 flex h-full border-neutral bg-base-100',
         'w-full max-w-full flex-col gap-5 border-r p-5 ',

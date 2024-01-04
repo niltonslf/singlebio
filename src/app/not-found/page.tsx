@@ -3,15 +3,15 @@ import Link from 'next/link'
 
 import {merge} from '@/utils'
 
-export const UserNotFound = () => {
+export const NotFoundPage = () => {
   return (
     <main
       className={merge([
         'flex h-[100vh] w-full flex-wrap items-center justify-center',
       ])}>
-      <div className='flex flex-col items-center justify-center text-[40px] md:text-[90px]'>
+      <div className='flex flex-col items-center justify-center text-[40px] md:text-[60px]'>
         <XCircle size={80} className='text-primary' />
-        <h1 className='text-primary'>User not found :/</h1>
+        <h1 className='text-primary'>Page not found :/</h1>
         <Link
           href='/'
           title='go back home'
@@ -22,3 +22,5 @@ export const UserNotFound = () => {
     </main>
   )
 }
+
+export default NotFoundPage

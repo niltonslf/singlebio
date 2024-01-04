@@ -11,7 +11,7 @@ import AdminPage from '@/app/admin/page'
 import {authStore} from '@/app/auth/context/auth-store'
 import {parseUserPageUrl} from '@/utils'
 import {faker} from '@faker-js/faker'
-import {cleanup, screen, waitFor} from '@testing-library/react'
+import {act, cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
@@ -36,12 +36,10 @@ jest.mock('@/app/admin/context/smartphone-context', () => {
 })
 
 const makeSUT = async () => {
-  return await waitFor(() =>
-    setup(
-      <AdminLayout>
-        <AdminPage />
-      </AdminLayout>,
-    ),
+  return setup(
+    <AdminLayout>
+      <AdminPage />
+    </AdminLayout>,
   )
 }
 
@@ -49,22 +47,24 @@ describe('Admin page', () => {
   afterEach(() => {
     cleanup()
   })
-  it('should render page with header, links form and smartphone', async () => {
+  it('should render page with sidebar, header, links form and smartphone', async () => {
     const userMock = makeFbUser()
     handlePageAuthentication(userMock, faker.internet.userName())
     await makeSUT()
 
     await waitFor(async () => {
+      const sidebar = await screen.getByTestId('admin-sidebar')
       const header = await screen.getByTestId('admin-header')
       const linkForm = await screen.queryByText(/Add link/i)
       const smartphone = await document.querySelector('iframe')
 
+      expect(sidebar).toBeInTheDocument()
       expect(header).toBeInTheDocument()
       expect(linkForm).toBeInTheDocument()
       expect(smartphone).toBeInTheDocument()
       expect(smartphone).toHaveAttribute(
         'src',
-        parseUserPageUrl(authStore.user?.username || ''),
+        parseUserPageUrl(authStore.user?.username),
       )
     })
   })
@@ -78,14 +78,16 @@ describe('Admin page', () => {
     // spy method that saves username
     jest.spyOn(authStore, 'updateUser').mockImplementation()
 
-    const {user} = await makeSUT()
+    const {user} = await waitFor(() => makeSUT())
 
     await waitFor(async () => {
       const modalHeader = screen.getByText(/Choose your username/i)
-      const modal = modalHeader.parentElement
+      const modal = modalHeader.parentElement?.parentElement
+
+      await act(() => {})
 
       // modal should be visible
-      expect(modal?.classList.contains('show')).toBe(true)
+      expect(modal?.classList.contains('modal-open')).toBe(true)
 
       const usernameInput = modalHeader.parentElement?.querySelector('input')
       const usernameSubmit = modalHeader.parentElement?.querySelector('button')
@@ -96,7 +98,7 @@ describe('Admin page', () => {
       await user.click(usernameSubmit)
 
       expect(authStore.updateUser).toHaveBeenCalledTimes(1)
-      expect(modal?.classList.contains('show')).toBe(false)
+      expect(modal?.classList.contains('some-username')).toBe(false)
     })
   })
 })
