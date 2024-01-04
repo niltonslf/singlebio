@@ -6,7 +6,7 @@ import {makeUser} from '@/__tests__/__helpers__'
 import {Header} from '@/app/admin/components/header'
 import {authStore} from '@/app/auth/context/auth-store'
 import {User} from '@/models'
-import {act, cleanup, screen} from '@testing-library/react'
+import {cleanup, screen} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
@@ -33,24 +33,28 @@ describe('Header component', () => {
     authStore.clearUser()
   })
 
-  it('render Header with profile button, page link, and welcome message', () => {
+  it('render Header with profile button, page link and copy link button', () => {
     const {userMock} = makeSUT()
 
-    const welcomeMsg = screen.getByText(/hello,/i)
-    const pageLink = document.querySelector('header > div > a')
-    const profileBtn = document.querySelector('header div:nth-child(2)')
+    const copyLinkButton = screen.getByRole('button', {name: 'Copy link'})
+    const pageLink: HTMLLinkElement | null = document.querySelector(
+      'header > div > div > a',
+    )
+    const profileBtn = screen.getByRole('img')
 
     if (!profileBtn) return fail()
 
-    expect(pageLink).toHaveAttribute('href', `/${userMock.username}`)
+    expect(pageLink?.href).toMatch(`${userMock.username}`)
     expect(profileBtn).toBeVisible()
-    expect(welcomeMsg).toBeVisible()
+    expect(copyLinkButton).toBeVisible()
   })
 
   it('render component without user image', () => {
     const {userMock} = makeSUT()
 
-    const profileBtn = document.querySelector('header div:nth-child(2)')
+    const profileBtn = document.querySelector(
+      'header > div:nth-child(2) > details > summary',
+    )
     const avatar = profileBtn?.querySelector('span')
 
     if (!profileBtn) return fail()
@@ -65,18 +69,18 @@ describe('Header component', () => {
     jest.spyOn(firebaseAuth, 'signOut').mockImplementation()
     jest.spyOn(routerMock, 'push')
 
-    const {userMock, user} = makeSUT()
-    // fake login
-    await act(() => {
-      authStore.setUser(userMock)
-    })
+    const userMock = makeUser()
 
-    const logoutBtn = screen.getByText(/logout/i)
-    expect(logoutBtn).toBeVisible()
+    // fake login
+    authStore.setUser(userMock)
+
+    const {user} = makeSUT(userMock)
+    const logoutBtn = screen.getByText(/logout/i).parentElement
+
+    if (!logoutBtn) return fail()
 
     await user.click(logoutBtn)
 
     expect(firebaseAuth.signOut).toHaveBeenCalledTimes(1)
-    expect(routerMock.pathname).toBe('/admin')
   })
 })

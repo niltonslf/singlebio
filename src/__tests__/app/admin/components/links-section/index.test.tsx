@@ -1,12 +1,12 @@
 import * as firestore from 'firebase/firestore'
 
 import {fail, makeLink, makeUser, setup} from '@/__tests__/__helpers__'
-import {CardList} from '@/app/admin/components/card-list'
+import {LinksSection} from '@/app/admin/components/links-section'
 import {SmartphoneProvider} from '@/app/admin/context/smartphone-context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {Link, User} from '@/models'
 import {faker} from '@faker-js/faker'
-import {act, cleanup, screen} from '@testing-library/react'
+import {act, cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('firebase/firestore', () => ({
   __esModule: true,
@@ -24,17 +24,20 @@ const makeSUT = (user?: User) => {
   const userMock = user ?? makeUser()
   const sut = setup(
     <SmartphoneProvider>
-      <CardList user={userMock} />
+      <LinksSection user={userMock} />
     </SmartphoneProvider>,
   )
   return {userMock, ...sut}
 }
 
 const renderWithItems = (linksMock: Link[]) => {
-  const responseMock = linksMock.map(link => ({
-    data: () => link,
-    id: faker.string.uuid(),
-  }))
+  const responseMock = {
+    docs: linksMock.map(link => ({
+      data: () => link,
+      id: faker.string.uuid(),
+    })),
+    size: linksMock.length,
+  }
 
   jest.spyOn(firestore, 'query').mockImplementation()
   jest.spyOn(firestore, 'collection').mockImplementation()
@@ -58,20 +61,22 @@ describe('Links List component', () => {
     jest.clearAllMocks()
   })
 
-  it('render component empty', () => {
-    makeSUT()
+  it('render component empty', async () => {
+    renderWithItems([])
+
+    await waitFor(() => makeSUT())
 
     const list = screen.getByRole('list')
     expect(list.querySelectorAll('li')).toHaveLength(0)
   })
 
-  it('render component with 2 items', () => {
+  it('render component with 2 items', async () => {
     const {linksMock} = renderWithItems([
       {...makeLink(), order: 0},
       {...makeLink(), order: 1},
     ])
 
-    makeSUT()
+    await waitFor(() => makeSUT())
 
     const list = screen.getByRole('list')
     const items = list.querySelectorAll('li')

@@ -35,13 +35,13 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
-import {CardLink} from './card-link'
+import {CardLink} from './components/card-link'
 
 type CardListProps = {
   user: User
 }
 
-export const CardList = ({user}: CardListProps) => {
+export const LinksSection = ({user}: CardListProps) => {
   const {reloadSmartphoneList} = useSmartphone()
   const reloadSmartphoneListDebounced = useDebounce(() => {
     reloadSmartphoneList()
@@ -91,11 +91,13 @@ export const CardList = ({user}: CardListProps) => {
 
       let newLinks: Required<Link>[] = []
 
-      querySnapshot.forEach((doc: any) =>
-        newLinks.push({...doc.data(), id: doc.id}),
-      )
+      if (querySnapshot.size) {
+        querySnapshot.docs.forEach((doc: any) =>
+          newLinks.push({...doc.data(), id: doc.id}),
+        )
 
-      newLinks = newLinks.sort((prev, next) => next.order - prev.order)
+        newLinks = newLinks.sort((prev, next) => next.order - prev.order)
+      }
 
       setLinks(newLinks)
       setIsFetchingData(false)

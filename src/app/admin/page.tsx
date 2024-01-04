@@ -8,7 +8,7 @@ import {parseUserPageUrl} from '@/utils'
 
 import {authStore} from '../auth/context/auth-store'
 import {AdminBaseLayout, PageLoader} from './components'
-import {CardList} from './components/card-list'
+import {LinksSection} from './components/links-section'
 import {useSmartphone} from './context/smartphone-context'
 
 const Admin = observer(() => {
@@ -39,7 +39,7 @@ const Admin = observer(() => {
         <AdminBaseLayout.Content>
           <h1 className='mb-8 text-2xl font-semibold'>Your links</h1>
 
-          <CardList user={user} />
+          <LinksSection user={user} />
         </AdminBaseLayout.Content>
 
         <AdminBaseLayout.PagePreview>
