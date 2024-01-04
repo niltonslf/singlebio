@@ -8,9 +8,9 @@ describe('Home Page', () => {
     const brand = screen.getByRole('img')
     expect(brand).toBeInTheDocument()
 
-    const accessButton = screen.getByText('Access')
+    const accessButton = screen.getByText(/login/i)
     const text = screen.getByRole('heading')
-    const tryButton = screen.getByText('Try it now')
+    const tryButton = screen.getByText(/create my page/i)
 
     expect(accessButton).toBeInTheDocument()
     expect(text).toBeInTheDocument()
