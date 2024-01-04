@@ -11,7 +11,7 @@ import AdminPage from '@/app/admin/page'
 import {authStore} from '@/app/auth/context/auth-store'
 import {parseUserPageUrl} from '@/utils'
 import {faker} from '@faker-js/faker'
-import {act, cleanup, screen, waitFor} from '@testing-library/react'
+import {cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
@@ -84,7 +84,7 @@ describe('Admin page', () => {
       const modalHeader = screen.getByText(/Choose your username/i)
       const modal = modalHeader.parentElement?.parentElement
 
-      await act(() => {})
+      await waitFor(() => {})
 
       // modal should be visible
       expect(modal?.classList.contains('modal-open')).toBe(true)

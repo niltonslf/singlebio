@@ -71,6 +71,7 @@ describe('Customize buttons', () => {
       coords: {clientX: 100, clientY: 50},
       keys: '[MouseLeft]',
     })
+    await new Promise(resolve => setTimeout(resolve, 600))
 
     await waitFor(() => {
       expect(appearanceStore.theme.buttonTextColor).not.toBe('#000')

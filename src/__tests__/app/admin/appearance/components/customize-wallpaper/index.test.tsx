@@ -3,6 +3,15 @@ import {CustomizeWallpaper} from '@/app/admin/appearance/components'
 import {appearanceStore} from '@/app/admin/appearance/context'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
+jest.mock('@/app/admin/hooks/use-image-uploader', () => ({
+  useImageUploader: () => {
+    return {
+      upload: () => 'path-to-file',
+      returnImageThumbnail: () => 'image-path',
+    }
+  },
+}))
+
 export const makeImageFile = () => {
   const blob = b64toBlob(
     'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAALElEQVR4nGJZFhDCgAQ2MdUhc5kY8AKaSjM+lNqHzE/fcY9udhOQBgQAAP//FgsGSDtiJfMAAAAASUVORK5CYII=',
@@ -21,9 +30,6 @@ describe('Customize wallpaper', () => {
   })
 
   it('should select wallpaper', async () => {
-    const url = 'some-url'
-    global.URL.createObjectURL = jest.fn(() => url)
-
     const file = makeImageFile()
 
     const {user} = makeSUT()
@@ -36,17 +42,14 @@ describe('Customize wallpaper', () => {
     await user.upload(fileInput, file)
 
     // check if it's displaying the thumbnail
-    expect(thumbnail).toHaveAttribute('src', url)
+    expect(thumbnail).toHaveAttribute('src', 'image-path')
 
     // check if it has updated the store
-    expect(appearanceStore.theme.backgroundImage).toBe(url)
+    expect(appearanceStore.theme.backgroundImage).toBe('image-path')
     expect(appearanceStore.aux.backgroundFile).toBe(file)
   })
 
   it('should remove selected wallpaper', async () => {
-    const url = 'some-url'
-    global.URL.createObjectURL = jest.fn(() => url)
-
     const file = makeImageFile()
 
     const {user} = makeSUT()
@@ -59,7 +62,7 @@ describe('Customize wallpaper', () => {
 
     await user.upload(fileInput, file)
 
-    expect(appearanceStore.theme.backgroundImage).toBe(url)
+    expect(appearanceStore.theme.backgroundImage).toBe('image-path')
     expect(appearanceStore.aux.backgroundFile).toBe(file)
 
     await user.hover(imageArea)

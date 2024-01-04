@@ -57,8 +57,6 @@ const AppearancePage = observer(() => {
     if (user?.theme) appearanceStore.setTheme(user?.theme)
   }, [user?.theme])
 
-  // if (!user) return <PageLoader />
-
   return (
     <AdminBaseLayout>
       <AdminBaseLayout.Content>

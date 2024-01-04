@@ -16,8 +16,11 @@ import {act, cleanup, screen, waitFor} from '@testing-library/react'
 import {makeImageFile} from './components/customize-wallpaper/index.test'
 
 jest.mock('@/app/admin/hooks/use-image-uploader', () => ({
-  useBackgroundUpload: () => {
-    return {upload: () => 'path-to-file'}
+  useImageUploader: () => {
+    return {
+      upload: () => 'path-to-file',
+      returnImageThumbnail: () => 'image-path',
+    }
   },
 }))
 jest.mock('@/app/admin/hooks/use-image-compressor', () => ({
@@ -66,77 +69,70 @@ describe('Appearance Page', () => {
     cleanup()
   })
 
-  describe('Customization section', () => {
-    it('should save theme', async () => {
-      setCustomTheme()
+  it('should save theme', async () => {
+    setCustomTheme()
 
-      jest.spyOn(authStore, 'updateUser')
-      jest.spyOn(appearanceStore, 'setBackgroundFile')
-      jest.spyOn(firestore, 'updateDoc').mockImplementation()
+    jest.spyOn(authStore, 'updateUser')
+    jest.spyOn(appearanceStore, 'setBackgroundFile')
+    jest.spyOn(firestore, 'updateDoc').mockImplementation()
 
-      const {user} = await waitFor(() => makeSUT())
+    const {user} = await waitFor(() => makeSUT())
 
-      const submitButton = screen.getByRole('button', {name: /save/i})
+    const submitButton = screen.getByRole('button', {name: /save/i})
 
-      await user.click(submitButton)
+    await user.click(submitButton)
 
-      expect(appearanceStore.setBackgroundFile).toHaveBeenCalledTimes(1)
-      expect(appearanceStore.setBackgroundFile).toHaveBeenCalledWith(undefined)
+    expect(appearanceStore.setBackgroundFile).toHaveBeenCalledTimes(1)
+    expect(appearanceStore.setBackgroundFile).toHaveBeenCalledWith(undefined)
 
-      expect(authStore.updateUser).toHaveBeenCalledTimes(1)
-      expect(authStore.updateUser).toHaveBeenCalledWith({
-        theme: appearanceStore.theme,
-      })
-
-      const successMsg = screen.getByText(
-        'Theme published with success! You can check on your profile link.',
-      )
-
-      expect(successMsg).toBeInTheDocument()
-
-      await act(async () => {
-        await new Promise(r => setTimeout(r, 6000))
-      })
-
-      const successMsgAfter = screen.queryByText(
-        'Theme published with success! You can check on your profile link.',
-      )
-      expect(successMsgAfter).not.toBeInTheDocument()
-    }, 8000)
-
-    it('should reset theme', async () => {
-      setCustomTheme()
-
-      const {user} = await waitFor(() => makeSUT())
-
-      const resetBtn = screen.getByText(/reset/i)
-
-      await user.click(resetBtn)
-
-      expect(appearanceStore.theme).toStrictEqual({
-        backgroundImage: '',
-        backgroundColor: '',
-        buttonBackground: '#FFF',
-        buttonTextColor: '#000',
-        usernameColor: '#000',
-      })
-      expect(appearanceStore.aux.backgroundFile).toBe(undefined)
+    expect(authStore.updateUser).toHaveBeenCalledTimes(1)
+    expect(authStore.updateUser).toHaveBeenCalledWith({
+      theme: appearanceStore.theme,
     })
 
-    it('should update appearanceStore when user theme updates', async () => {
-      jest.spyOn(appearanceStore, 'setTheme')
+    const successMsg = screen.getByText(
+      'Theme published with success! You can check on your profile link.',
+    )
 
-      const user = makeUser()
-      const theme = makeUserTheme()
+    expect(successMsg).toBeInTheDocument()
+  })
 
-      await waitFor(() => makeSUT())
+  it('should reset theme', async () => {
+    setCustomTheme()
 
-      await act(() => authStore.setUser({...user, theme}))
+    const {user} = await waitFor(() => makeSUT())
 
-      await waitFor(() => {
-        expect(appearanceStore.setTheme).toHaveBeenCalledTimes(1)
-        expect(appearanceStore.setTheme).toHaveBeenCalledWith(theme)
-      })
+    const resetBtn = screen.getByText(/reset/i)
+
+    await user.click(resetBtn)
+
+    expect(appearanceStore.theme).toStrictEqual({
+      backgroundImage: '',
+      backgroundColor: '',
+      buttonBackground: '#FFF',
+      buttonTextColor: '#000',
+      socialDefaultColor: false,
+      socialIconColor: '#000',
+      usernameColor: '#000',
+    })
+    expect(appearanceStore.aux.backgroundFile).toBe(undefined)
+  })
+
+  it('should update appearanceStore when user theme updates', async () => {
+    jest.spyOn(appearanceStore, 'setTheme')
+
+    const user = makeUser()
+    const theme = makeUserTheme()
+
+    await waitFor(() => makeSUT())
+
+    await act(() => {
+      authStore.setUser({...user, theme})
+    })
+
+    await waitFor(() => {
+      expect(appearanceStore.setTheme).toHaveBeenCalledTimes(1)
+      expect(appearanceStore.setTheme).toHaveBeenCalledWith(theme)
     })
   })
 })

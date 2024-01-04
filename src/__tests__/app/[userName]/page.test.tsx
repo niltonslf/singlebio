@@ -9,7 +9,6 @@ import {
   setup,
 } from '@/__tests__/__helpers__'
 import UserPage from '@/app/[username]/page'
-import Layout from '@/app/layout'
 import {User} from '@/models'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
@@ -37,11 +36,7 @@ const handleFetchLinks = (firstData: any[], secondData: any[]) => {
 }
 
 const makeSUT = ({usernameMock = ''} = {}) => {
-  return setup(
-    <Layout>
-      <UserPage params={{username: usernameMock ?? ''}} />
-    </Layout>,
-  )
+  return setup(<UserPage params={{username: usernameMock ?? ''}} />)
 }
 
 describe('User page', () => {
