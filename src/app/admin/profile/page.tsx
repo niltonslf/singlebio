@@ -3,14 +3,17 @@
 import {observer} from 'mobx-react-lite'
 
 import {authStore} from '@/app/auth/context/auth-store'
+import {Smartphone} from '@/app/components'
+import {parseUserPageUrl} from '@/utils'
 
 import {AdminBaseLayout} from '../components'
+import {useSmartphone} from '../context'
 import {ProfileForm, SocialCard} from './components'
 
-export const ProfilePage = observer(() => {
+const Profile = observer(() => {
   const user = authStore.user
 
-  // const {iframeRef} = useSmartphone()
+  const {iframeRef} = useSmartphone()
 
   return (
     <AdminBaseLayout>
@@ -21,14 +24,14 @@ export const ProfilePage = observer(() => {
         {user && <SocialCard user={user} />}
       </AdminBaseLayout.Content>
 
-      {/* <AdminBaseLayout.PagePreview>
+      <AdminBaseLayout.PagePreview>
         <Smartphone
           ref={iframeRef}
           iframeUrl={parseUserPageUrl(user?.username || '')}
         />
-      </AdminBaseLayout.PagePreview> */}
+      </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
   )
 })
 
-export default ProfilePage
+export default Profile
