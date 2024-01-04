@@ -1,14 +1,6 @@
 import {User, UserTheme} from '@/models'
 
-export type PreviewThemeParams = {
-  backgroundColor?: string
-  backgroundImage?: string
-  buttonBackground?: string
-  buttonTextColor?: string
-  usernameColor?: string
-}
-
-export const makePreviewStyles = (params: PreviewThemeParams) => {
+export const makePreviewStyles = (params: UserTheme) => {
   const styles: Record<keyof UserTheme, any> = {} as any
 
   if (params?.backgroundColor) {
@@ -37,6 +29,10 @@ export const makePreviewStyles = (params: PreviewThemeParams) => {
 
     if (params?.buttonTextColor) {
       styles.buttonTextColor = decodeURIComponent(params?.buttonTextColor)
+    }
+
+    if (params?.socialIconColor) {
+      styles.socialIconColor = decodeURIComponent(params?.socialIconColor)
     }
   }
 
@@ -71,6 +67,10 @@ export const makePageStyles = (user?: User) => {
 
     if (user?.theme?.buttonTextColor) {
       styles.buttonTextColor = user?.theme?.buttonTextColor
+    }
+
+    if (user?.theme?.socialIconColor) {
+      styles.socialIconColor = user?.theme?.socialIconColor
     }
   }
 

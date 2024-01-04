@@ -4,6 +4,8 @@ export type UserTheme = {
   buttonBackground: string
   buttonTextColor: string
   usernameColor: string
+  socialIconColor: string
+  socialDefaultColor: boolean
 }
 
 export type UserSocial = Record<string, string>

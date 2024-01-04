@@ -5,7 +5,7 @@ import {makeAutoObservable} from 'mobx'
 import {UserTheme} from '@/models'
 import {parseUserPageUrl} from '@/utils'
 
-import {themeToQuery} from '../utils'
+import {parseThemeToQuery} from '../utils'
 
 type Aux = {
   backgroundFile?: File
@@ -18,7 +18,7 @@ class AppearanceStore {
     buttonBackground: '#FFF',
     buttonTextColor: '#000',
     usernameColor: '#000',
-    socialColor: '',
+    socialIconColor: '#000',
     socialDefaultColor: true,
   }
   private themeConfig: UserTheme = {...this.initialData}
@@ -46,12 +46,14 @@ class AppearanceStore {
         this.themeConfigInitial.buttonBackground ||
       this.themeConfig.buttonTextColor !=
         this.themeConfigInitial.buttonTextColor ||
-      this.themeConfig.usernameColor != this.themeConfigInitial.usernameColor
+      this.themeConfig.usernameColor != this.themeConfigInitial.usernameColor ||
+      this.themeConfig.socialIconColor !=
+        this.themeConfigInitial.socialIconColor
     )
   }
 
   getPreviewUrl(username: string) {
-    return `${parseUserPageUrl(username)}/?preview=true&${themeToQuery(
+    return `${parseUserPageUrl(username)}/?preview=true&${parseThemeToQuery(
       this.themeConfig,
     )}`
   }
@@ -59,6 +61,9 @@ class AppearanceStore {
   setTheme(theme: UserTheme) {
     this.themeConfig = {...theme}
     this.themeConfigInitial = {...theme}
+  }
+  setBackgroundFile(file?: File) {
+    this.aux.backgroundFile = file
   }
   setBackgroundImage(value: string) {
     this.themeConfig.backgroundImage = value
@@ -75,8 +80,8 @@ class AppearanceStore {
   setUsernameColor(value: string) {
     this.themeConfig.usernameColor = value
   }
-  setBackgroundFile(file?: File) {
-    this.aux.backgroundFile = file
+  setSocialIconColor(value: string) {
+    this.themeConfig.socialIconColor = value
   }
 
   reset() {

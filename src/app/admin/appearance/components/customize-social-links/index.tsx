@@ -13,7 +13,7 @@ export const CustomizeSocialLinks = observer(() => {
   const {theme} = appearanceStore
 
   const debounced = useDebounce((color: string) => {
-    appearanceStore.setUsernameColor(color)
+    appearanceStore.setSocialIconColor(color)
   })
 
   return (
@@ -24,13 +24,13 @@ export const CustomizeSocialLinks = observer(() => {
         </h2>
 
         <div className='mt-3'>
-          <label className='label cursor-pointer'>
+          {/* <label className='label cursor-pointer'>
             <span className='label-text'>Default colors</span>
             <input type='checkbox' className='toggle toggle-info' checked />
-          </label>
+          </label> */}
 
           <CustomColorPicker
-            color={theme.usernameColor}
+            color={theme.socialIconColor}
             onChange={color => debounced(color)}
           />
         </div>

@@ -20,16 +20,16 @@ import {
   UserPageSocial,
 } from '@/app/[username]/components'
 import {app} from '@/libs/firebase'
-import {User} from '@/models'
+import {User, UserTheme} from '@/models'
 
 import {usePreviewCache} from './hooks/use-preview-cache'
-import {PreviewThemeParams, makePreviewStyles, makePageStyles} from './utils'
+import {makePreviewStyles, makePageStyles} from './utils'
 
 type UserPageProps = {
   params: {
     username: string
   }
-  searchParams?: PreviewThemeParams & {preview: string}
+  searchParams?: UserTheme & {preview: string}
 }
 
 const db = getFirestore(app)
@@ -49,7 +49,7 @@ export default function UserPage({
   const isPreviewAccess = useMemo(() => searchParams?.preview === 'true', [])
 
   const pageStyles = isPreviewAccess
-    ? makePreviewStyles(searchParams ?? {})
+    ? makePreviewStyles(searchParams ?? ({} as UserTheme))
     : makePageStyles(user)
 
   const fetchData = useCallback(async () => {
@@ -144,7 +144,9 @@ export default function UserPage({
           {user && (
             <>
               <UserPageHeader user={user} pageStyles={pageStyles} />
-              {user.social && <UserPageSocial social={user.social} />}
+              {user.social && (
+                <UserPageSocial social={user.social} pageStyles={pageStyles} />
+              )}
             </>
           )}
           <UserPageLinks links={links} pageStyles={pageStyles} />

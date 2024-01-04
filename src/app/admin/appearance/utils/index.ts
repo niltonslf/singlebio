@@ -1,12 +1,6 @@
-type MakeUrlProps = {
-  backgroundImage?: string
-  backgroundColor?: string
-  buttonBackground?: string
-  buttonTextColor?: string
-  usernameColor?: string
-}
+import {UserTheme} from '@/models'
 
-export const themeToQuery = ({...props}: MakeUrlProps) => {
+export const parseThemeToQuery = ({...props}: UserTheme) => {
   const url = new URLSearchParams()
 
   if (props?.backgroundImage)
@@ -23,6 +17,9 @@ export const themeToQuery = ({...props}: MakeUrlProps) => {
 
   if (props?.buttonTextColor)
     url.set('buttonTextColor', encodeURIComponent(props?.buttonTextColor))
+
+  if (props?.socialIconColor)
+    url.set('socialIconColor', encodeURIComponent(props?.socialIconColor))
 
   return url.toString()
 }

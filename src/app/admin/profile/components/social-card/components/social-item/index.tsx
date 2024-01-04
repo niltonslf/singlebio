@@ -33,6 +33,7 @@ export const SocialItem = ({social, onDelete}: SocialItemProps) => {
         <p className='w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-left font-normal md:text-right '>
           <Link
             href={parseExternalUrl(social.url)}
+            target='_blank'
             title={social.social}
             className='text-info'>
             {displayUrlShort(social.url, true)}
