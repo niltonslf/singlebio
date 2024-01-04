@@ -19,9 +19,9 @@ const makeSUT = ({onSave = onSaveMock, initialOpen = true} = {}) => {
 }
 
 const getModalElements = () => {
-  const modal = document.querySelector('body > div > div')
-  const usernameInput = screen.getByRole('textbox')
-  const saveButton = screen.getByRole('button')
+  const modal = document.querySelector('body dialog')
+  const usernameInput = document.querySelector('input')
+  const saveButton = screen.getByTestId('modal-submit-button')
 
   return {
     modal,
@@ -36,15 +36,13 @@ describe('Modal Component', () => {
   })
 
   it('should display modal empty', async () => {
-    makeSUT()
+    await waitFor(() => makeSUT())
 
-    await waitFor(() => {
-      const {modal, saveButton, usernameInput} = getModalElements()
+    const {modal, saveButton, usernameInput} = getModalElements()
 
-      expect(modal?.classList.contains('show')).toBe(true)
-      expect(usernameInput).toHaveValue('')
-      expect(saveButton).toBeDisabled()
-    })
+    expect(modal?.classList.contains('modal-open')).toBe(true)
+    expect(usernameInput).toHaveValue('')
+    expect(saveButton).toBeDisabled()
   })
 
   it('should disable save button and show error when username exists', async () => {
@@ -67,12 +65,14 @@ describe('Modal Component', () => {
 
     const {saveButton, usernameInput} = getModalElements()
 
+    if (!usernameInput) return fail()
+
     await user.type(usernameInput, userMock?.username)
 
-    const errorMsg = screen.getByText(/username already taken./i)
+    const errorMsg = screen.getByText(/username already taken/i)
 
     expect(usernameInput).toHaveValue(userMock.username)
-    expect(errorMsg).toBeVisible()
+    expect(errorMsg).toBeInTheDocument()
     expect(saveButton).toBeDisabled()
   })
 
@@ -94,6 +94,8 @@ describe('Modal Component', () => {
     const {user} = makeSUT()
     const {saveButton, usernameInput, modal} = getModalElements()
 
+    if (!usernameInput) return fail()
+
     await user.type(usernameInput, userMock.username.toLowerCase())
 
     expect(usernameInput).toHaveValue(userMock.username)
@@ -102,6 +104,6 @@ describe('Modal Component', () => {
     await user.click(saveButton)
 
     expect(onSaveMock).toHaveBeenCalledTimes(1)
-    expect(modal?.classList.contains('show')).toBe(false)
+    expect(modal?.classList.contains('modal-open')).toBe(false)
   })
 })
