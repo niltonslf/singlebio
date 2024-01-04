@@ -31,7 +31,6 @@ export const Avatar = ({
           width={size}
           height={size}
           alt={name}
-          objectFit='cover'
           className={merge([
             'absolute left-0 top-0 h-full w-full rounded-full border-[3px] border-neutral-950 object-cover',
             className,

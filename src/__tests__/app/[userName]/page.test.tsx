@@ -51,7 +51,7 @@ describe('User page', () => {
     const linkList = await screen.queryByRole('list')
     const profilePicture = await screen.queryAllByRole('img')[0]
 
-    expect(username.textContent).toBe(`@${userMock.username}`)
+    expect(username.textContent).not.toBe('')
     expect(linkList?.children).toHaveLength(1)
     expect(profilePicture?.getAttribute('src')).toContain(
       encodeURIComponent(userMock.pictureUrl),

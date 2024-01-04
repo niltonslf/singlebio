@@ -7,9 +7,12 @@ const createJestConfig = nextJest({
 /** @type {import('jest').Config} */
 const config = {
   testEnvironment: 'jest-environment-jsdom',
-  modulePathIgnorePatterns: ['<rootDir>/src/__tests__/__helpers__/'],
-  testPathIgnorePatterns: ['/icons/'],
-  coveragePathIgnorePatterns: ['/node_modules/', '/icons/'],
+  modulePathIgnorePatterns: [
+    '<rootDir>/src/__tests__/__helpers__/',
+    '<rootDir>/node_modules/',
+  ],
+  testPathIgnorePatterns: ['/icons/', '<rootDir>/node_modules/'],
+  coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '/icons/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
