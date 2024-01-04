@@ -1,3 +1,5 @@
+'use client'
+
 import {ChevronDownIcon, ChevronUpIcon} from 'lucide-react'
 import {HTMLAttributes, ReactNode} from 'react'
 
@@ -26,14 +28,16 @@ export const CollapseHeader = ({children, className}: CollapseHeaderProps) => {
     <header className='flex w-full select-none' onClick={() => handleClick()}>
       <label
         className={merge([
-          'color flex w-full cursor-pointer justify-between bg-background-300 p-3',
+          'color flex w-full cursor-pointer justify-between bg-neutral px-5 py-4 ',
           className,
         ])}>
-        <div className='w-full text-slate-300'>{children}</div>
+        <div className='text-md w-full font-semibold text-neutral-200'>
+          {children}
+        </div>
         {isItemOpen(itemIndex) ? (
-          <ChevronUpIcon className='icon-up text-slate-300' />
+          <ChevronUpIcon className='icon-up text-neutral-200' />
         ) : (
-          <ChevronDownIcon className='icon-down text-slate-300' />
+          <ChevronDownIcon className='icon-down text-neutral-200' />
         )}
       </label>
     </header>

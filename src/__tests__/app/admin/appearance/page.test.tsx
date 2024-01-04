@@ -15,12 +15,12 @@ import {act, cleanup, screen, waitFor} from '@testing-library/react'
 
 import {makeImageFile} from './components/customize-wallpaper/index.test'
 
-jest.mock('@/app/admin/appearance/hooks/use-background-upload', () => ({
+jest.mock('@/app/admin/hooks/use-image-uploader', () => ({
   useBackgroundUpload: () => {
     return {upload: () => 'path-to-file'}
   },
 }))
-jest.mock('@/app/admin/appearance/hooks/use-image-compressor', () => ({
+jest.mock('@/app/admin/hooks/use-image-compressor', () => ({
   useImageCompressor: () => {
     return {compress: () => null}
   },

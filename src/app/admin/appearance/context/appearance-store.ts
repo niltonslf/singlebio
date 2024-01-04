@@ -3,6 +3,7 @@
 import {makeAutoObservable} from 'mobx'
 
 import {UserTheme} from '@/models'
+import {parseUserPageUrl} from '@/utils'
 
 import {themeToQuery} from '../utils'
 
@@ -17,9 +18,11 @@ class AppearanceStore {
     buttonBackground: '#FFF',
     buttonTextColor: '#000',
     usernameColor: '#000',
+    socialColor: '',
+    socialDefaultColor: true,
   }
-  private themeConfig: UserTheme = this.initialData
-  private themeConfigInitial: UserTheme = this.initialData
+  private themeConfig: UserTheme = {...this.initialData}
+  private themeConfigInitial: UserTheme = {...this.initialData}
 
   public aux: Aux = {
     backgroundFile: undefined,
@@ -33,9 +36,6 @@ class AppearanceStore {
     return {...this.themeConfig}
   }
 
-  get previewUrl() {
-    return `/username/preview/?&${themeToQuery(this.themeConfig)}`
-  }
   get hasChanges() {
     return (
       this.themeConfig.backgroundImage !=
@@ -48,6 +48,12 @@ class AppearanceStore {
         this.themeConfigInitial.buttonTextColor ||
       this.themeConfig.usernameColor != this.themeConfigInitial.usernameColor
     )
+  }
+
+  getPreviewUrl(username: string) {
+    return `${parseUserPageUrl(username)}/?preview=true&${themeToQuery(
+      this.themeConfig,
+    )}`
   }
 
   setTheme(theme: UserTheme) {

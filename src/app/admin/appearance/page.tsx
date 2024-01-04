@@ -1,28 +1,30 @@
 'use client'
 
+import {AlertTriangle, CheckCircle} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
+import {useImageUploader, useImageCompressor} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
-import {Button, Smartphone} from '@/app/components'
+import {Smartphone} from '@/app/components'
 
-import {Collapse, Layout} from '../components'
+import {Collapse, AdminBaseLayout} from '../components'
 import {useSmartphone} from '../context/smartphone-context'
 import {
   CustomizeButtons,
+  CustomizeSocialLinks,
   CustomizeUsername,
   CustomizeWallpaper,
 } from './components'
 import {appearanceStore} from './context'
-import {useBackgroundUpload, useImageCompressor} from './hooks'
 
 const AppearancePage = observer(() => {
   const {user} = authStore
-  const {previewUrl, theme, aux} = appearanceStore
+  const {theme, aux} = appearanceStore
 
   const {iframeRef} = useSmartphone()
   const {compress} = useImageCompressor()
-  const {upload} = useBackgroundUpload()
+  const {upload} = useImageUploader()
 
   const [updated, setUpdated] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -37,7 +39,7 @@ const AppearancePage = observer(() => {
 
     if (aux.backgroundFile && theme.backgroundImage) {
       const newImage = await compress(aux.backgroundFile)
-      const url = await upload(newImage)
+      const url = await upload(newImage, 'wallpaper')
 
       data.theme.backgroundImage = url
       appearanceStore.setBackgroundFile(undefined)
@@ -55,69 +57,83 @@ const AppearancePage = observer(() => {
     if (user?.theme) appearanceStore.setTheme(user?.theme)
   }, [user?.theme])
 
+  // if (!user) return <PageLoader />
+
   return (
-    <Layout>
-      <Layout.Content>
+    <AdminBaseLayout>
+      <AdminBaseLayout.Content>
+        <h1 className='mb-8 text-2xl font-semibold'>Appearance</h1>
+
         {appearanceStore.hasChanges && (
-          <div className='warn prompt mb-5 border-warn-600'>
-            <p className='content'>
-              The changes are not applied yet. You must save to apply them.
-            </p>
+          <div role='alert' className='alert alert-warning mb-5'>
+            <AlertTriangle />
+            <p>The changes are not applied yet. You must save to apply them.</p>
           </div>
         )}
 
-        <Collapse toggle>
-          <Collapse.Item key={'wallpaper'} index={1}>
+        <Collapse toggle defaultOpen={1}>
+          <Collapse.Item index={1}>
             <Collapse.Header>Page wallpaper</Collapse.Header>
             <Collapse.Body>
               <CustomizeWallpaper />
             </Collapse.Body>
           </Collapse.Item>
 
-          <Collapse.Item key={'button'} index={2}>
-            <Collapse.Header>Button Color</Collapse.Header>
+          <Collapse.Item index={2}>
+            <Collapse.Header>Header </Collapse.Header>
             <Collapse.Body>
-              <CustomizeButtons />
+              <CustomizeUsername />
             </Collapse.Body>
           </Collapse.Item>
 
-          <Collapse.Item key={'username'} index={3}>
-            <Collapse.Header>Username color</Collapse.Header>
+          <Collapse.Item index={3}>
+            <Collapse.Header>Social links</Collapse.Header>
             <Collapse.Body>
-              <CustomizeUsername />
+              <CustomizeSocialLinks />
+            </Collapse.Body>
+          </Collapse.Item>
+
+          <Collapse.Item index={4}>
+            <Collapse.Header>Link list</Collapse.Header>
+            <Collapse.Body>
+              <CustomizeButtons />
             </Collapse.Body>
           </Collapse.Item>
         </Collapse>
 
         {updated ? (
-          <div className='success prompt mt-5 border-success-600'>
+          <div role='alert' className='alert alert-success mb-5'>
+            <CheckCircle />
             Theme published with success! You can check on your profile link.
           </div>
         ) : (
-          <div className='mt-5 flex flex-row items-center justify-center gap-5 border-t border-t-background-600 pt-5 md:justify-start'>
-            <Button
-              className='w-full md:w-auto'
-              variant='primary'
-              onClick={() => handleSaveAppearance()}
-              isLoading={isLoading}>
-              Save
-            </Button>
-            <Button
-              className='w-full md:w-auto'
-              variant='error'
-              onClick={() => handleResetAppearance()}>
-              Reset
-            </Button>
-          </div>
-        )}
-      </Layout.Content>
+          <>
+            <div className='divider'></div>
 
-      <Layout.Sidebar>
-        <div className='sticky top-6'>
-          <Smartphone ref={iframeRef} iframeUrl={previewUrl} />
-        </div>
-      </Layout.Sidebar>
-    </Layout>
+            <div className='flex flex-row flex-nowrap items-center gap-5'>
+              <button
+                className='btn btn-primary btn-md flex-1 md:btn-wide'
+                onClick={() => handleSaveAppearance()}>
+                {isLoading && <span className='loading loading-spinner'></span>}
+                Save
+              </button>
+              <button
+                className='btn btn-info btn-md flex-1 md:btn-wide'
+                onClick={() => handleResetAppearance()}>
+                Reset
+              </button>
+            </div>
+          </>
+        )}
+      </AdminBaseLayout.Content>
+
+      <AdminBaseLayout.PagePreview>
+        <Smartphone
+          ref={iframeRef}
+          iframeUrl={appearanceStore.getPreviewUrl(user?.username ?? '')}
+        />
+      </AdminBaseLayout.PagePreview>
+    </AdminBaseLayout>
   )
 })
 

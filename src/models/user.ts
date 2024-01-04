@@ -6,11 +6,15 @@ export type UserTheme = {
   usernameColor: string
 }
 
+export type UserSocial = Record<string, string>
+
 export type User = {
   uid: string
   pictureUrl: string
-  username?: string
   name: string
   email: string
+  bio?: string
+  username?: string
   theme?: UserTheme
+  social?: UserSocial
 }

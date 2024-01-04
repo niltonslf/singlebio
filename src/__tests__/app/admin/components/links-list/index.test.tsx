@@ -1,7 +1,7 @@
 import * as firestore from 'firebase/firestore'
 
 import {fail, makeLink, makeUser, setup} from '@/__tests__/__helpers__'
-import {LinksList} from '@/app/admin/components/links-list'
+import {CardList} from '@/app/admin/components/card-list'
 import {SmartphoneProvider} from '@/app/admin/context/smartphone-context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {Link, User} from '@/models'
@@ -24,7 +24,7 @@ const makeSUT = (user?: User) => {
   const userMock = user ?? makeUser()
   const sut = setup(
     <SmartphoneProvider>
-      <LinksList user={userMock} />
+      <CardList user={userMock} />
     </SmartphoneProvider>,
   )
   return {userMock, ...sut}

@@ -2,11 +2,12 @@
 
 /* eslint-disable @next/next/no-img-element */
 import {observer} from 'mobx-react-lite'
-import {HexAlphaColorPicker} from 'react-colorful'
 
 import {useDebounce} from '@/utils'
 
 import {appearanceStore} from '../../context'
+
+import {CustomColorPicker} from '..'
 
 export const CustomizeUsername = observer(() => {
   const {theme} = appearanceStore
@@ -18,13 +19,12 @@ export const CustomizeUsername = observer(() => {
   return (
     <>
       <div className='mt-3'>
-        <h2 className='text-sm font-normal text-slate-300'>
-          Select the username color
+        <h2 className='text-md font-normal text-neutral-200'>
+          Select the texts color
         </h2>
 
         <div className='mt-3'>
-          <HexAlphaColorPicker
-            style={{width: '300px', height: '300px'}}
+          <CustomColorPicker
             color={theme.usernameColor}
             onChange={color => debounced(color)}
           />

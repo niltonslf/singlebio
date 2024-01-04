@@ -9,14 +9,14 @@ import {
   addDoc,
   setDoc,
 } from 'firebase/firestore'
-import {Plus} from 'lucide-react'
+import {Info, Plus} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
 import {useSmartphone} from '@/app/admin/context'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
-import {AddLinkForm} from '..'
+import {AddLinkForm, PageLoader} from '..'
 
 import {useDebounce} from '@/utils'
 import {
@@ -35,13 +35,13 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
-import {LinkCardItem} from './link-card-item'
+import {CardLink} from './card-link'
 
-type LinksListProps = {
+type CardListProps = {
   user: User
 }
 
-export const LinksList = ({user}: LinksListProps) => {
+export const CardList = ({user}: CardListProps) => {
   const {reloadSmartphoneList} = useSmartphone()
   const reloadSmartphoneListDebounced = useDebounce(() => {
     reloadSmartphoneList()
@@ -55,6 +55,7 @@ export const LinksList = ({user}: LinksListProps) => {
   )
 
   const [links, setLinks] = useState<Required<Link>[]>([])
+  const [isFetchingData, setIsFetchingData] = useState(false)
 
   const getLastOrder = () => {
     return links.reduce((prev, cur) => Math.max(prev, cur.order + 1), 0)
@@ -82,6 +83,8 @@ export const LinksList = ({user}: LinksListProps) => {
   }
 
   const fetchData = useCallback(() => {
+    setIsFetchingData(true)
+
     const customQuery = query(collection(db, 'users', user.uid, 'links'))
     const unsubscribe = onSnapshot(customQuery, querySnapshot => {
       setLinks([])
@@ -95,6 +98,7 @@ export const LinksList = ({user}: LinksListProps) => {
       newLinks = newLinks.sort((prev, next) => next.order - prev.order)
 
       setLinks(newLinks)
+      setIsFetchingData(false)
     })
 
     return unsubscribe
@@ -154,30 +158,45 @@ export const LinksList = ({user}: LinksListProps) => {
   return (
     <section className='flex w-full flex-col gap-5 px-0 py-3'>
       <div className='flex flex-1 flex-col gap-5'>
-        <button
-          onClick={handleAddNewLink}
-          className='danger btn solid md w-full'>
-          Add link
-          <Plus size={18} />
-        </button>
+        <div className='mb-10 flex w-full flex-1 flex-row flex-wrap gap-10'>
+          <button
+            onClick={handleAddNewLink}
+            className='btn btn-primary flex-1 text-sm uppercase text-neutral-100'>
+            <Plus size={18} />
+            Add link
+          </button>
+        </div>
 
-        <ul className='flex flex-1 flex-col gap-3'>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}>
-            <SortableContext
-              items={links}
-              key='links-list'
-              strategy={verticalListSortingStrategy}>
-              {links.map(link => (
-                <LinkCardItem key={link.id} onDelete={deleteLink} link={link}>
-                  <AddLinkForm saveLink={handleSubmitForm} link={link} />
-                </LinkCardItem>
-              ))}
-            </SortableContext>
-          </DndContext>
-        </ul>
+        {isFetchingData ? (
+          <div className='pt-5'>
+            <PageLoader />
+          </div>
+        ) : (
+          <ul className='flex flex-1 flex-col gap-3'>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}>
+              <SortableContext
+                items={links}
+                key='links-list'
+                strategy={verticalListSortingStrategy}>
+                {links.map(link => (
+                  <CardLink key={link.id} onDelete={deleteLink} link={link}>
+                    <AddLinkForm saveLink={handleSubmitForm} link={link} />
+                  </CardLink>
+                ))}
+              </SortableContext>
+            </DndContext>
+          </ul>
+        )}
+
+        {!isFetchingData && !links.length && (
+          <div className='alert alert-info'>
+            <Info />
+            <p className='content'>It's time to create your first link!</p>
+          </div>
+        )}
       </div>
     </section>
   )

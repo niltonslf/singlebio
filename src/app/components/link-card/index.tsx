@@ -1,14 +1,19 @@
-import {ReactNode} from 'react'
+import {HTMLAttributes, ReactNode} from 'react'
+
+import {merge} from '@/utils'
 
 import {LinkItem} from './link-item'
 
 type LinkContainerProps = {
   children: ReactNode
+  className?: HTMLAttributes<HTMLUListElement>['className']
 }
 
-export const LinkCard = ({children}: LinkContainerProps) => {
+export const LinkCard = ({children, className}: LinkContainerProps) => {
   return (
-    <ul aria-label='link-list' className='flex w-full flex-col gap-5 p-0 '>
+    <ul
+      aria-label='link-list'
+      className={merge(['flex h-auto w-full flex-col gap-5 p-0 ', className])}>
       {children}
     </ul>
   )

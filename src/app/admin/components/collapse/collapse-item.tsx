@@ -1,3 +1,5 @@
+'use client'
+
 import {HTMLAttributes, ReactNode, useEffect} from 'react'
 
 import {merge} from '@/utils'
@@ -27,7 +29,7 @@ export const CollapseItem = ({
     <CollapseItemProvider index={index}>
       <article
         className={merge([
-          'compact mb-3 h-min overflow-hidden rounded-xl bg-background-500 shadow-lg ',
+          'compact mb-3 h-min overflow-hidden rounded-xl bg-base-300 shadow-lg ',
           className,
         ])}>
         {children}

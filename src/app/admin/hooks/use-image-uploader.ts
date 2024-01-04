@@ -3,15 +3,17 @@ import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {authStore} from '@/app/auth/context/auth-store'
 import {firebaseStorage} from '@/libs/firebase'
 
-export const useBackgroundUpload = () => {
+export const useImageUploader = () => {
   const user = authStore.user
 
-  const upload = async (imageFile: File): Promise<string> => {
+  const returnImageThumbnail = (file: File) => URL.createObjectURL(file)
+
+  const upload = async (imageFile: File, filename: string): Promise<string> => {
     if (!user) throw new Error('user is not authenticated')
 
     const imageArray = await imageFile.arrayBuffer()
 
-    const fileRef = `wallpapers/${user.username}/wallpaper.jpg`
+    const fileRef = `uploads/${user.uid}/${filename}.jpg`
     const storageRef = ref(firebaseStorage, fileRef)
 
     await uploadBytes(storageRef, imageArray, {
@@ -22,5 +24,6 @@ export const useBackgroundUpload = () => {
 
   return {
     upload,
+    returnImageThumbnail,
   }
 }

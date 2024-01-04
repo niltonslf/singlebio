@@ -7,7 +7,8 @@ import {Modal, Smartphone} from '@/app/components'
 import {parseUserPageUrl} from '@/utils'
 
 import {authStore} from '../auth/context/auth-store'
-import {LinksList} from './components/links-list'
+import {AdminBaseLayout, PageLoader} from './components'
+import {CardList} from './components/card-list'
 import {useSmartphone} from './context/smartphone-context'
 
 const Admin = observer(() => {
@@ -30,34 +31,26 @@ const Admin = observer(() => {
     }
   }, [user, user?.username])
 
+  if (!user) return <PageLoader />
+
   return (
     <>
-      {!user ? (
-        <div className='flex h-full w-full items-center justify-center text-lg text-bw-1000'>
-          <div className='bw loader'>
-            <div className='bar-bounce' />
-          </div>
-        </div>
-      ) : (
-        <div className='grid h-auto w-full grid-cols-1 grid-rows-[1fr] md:grid-cols-[3fr_2fr]'>
-          <section className='flex h-full w-full flex-col pb-12 pt-4'>
-            <LinksList user={user} />
-          </section>
+      <AdminBaseLayout>
+        <AdminBaseLayout.Content>
+          <h1 className='mb-8 text-2xl font-semibold'>Your links</h1>
 
-          <aside className='grid w-full grid-rows-1'>
-            <div className=' flex flex-1 items-start justify-center px-6 pb-10 pt-4'>
-              <div className='sticky top-6 rounded-[60px] px-5 shadow-[0px_0px_30px_0px_rgba(154,154,154,0.1)]'>
-                <Smartphone
-                  ref={iframeRef}
-                  iframeUrl={parseUserPageUrl(user?.username || '')}
-                />
-              </div>
-            </div>
-          </aside>
+          <CardList user={user} />
+        </AdminBaseLayout.Content>
 
-          <Modal onSave={onSubmitUsername} initialOpen={showUsernameModal} />
-        </div>
-      )}
+        <AdminBaseLayout.PagePreview>
+          <Smartphone
+            ref={iframeRef}
+            iframeUrl={parseUserPageUrl(user?.username)}
+          />
+        </AdminBaseLayout.PagePreview>
+      </AdminBaseLayout>
+
+      <Modal onSave={onSubmitUsername} initialOpen={showUsernameModal} />
     </>
   )
 })
