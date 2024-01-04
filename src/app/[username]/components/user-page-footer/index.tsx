@@ -7,14 +7,14 @@ export const UserPageFooter = () => {
       <Link
         href='/'
         title='Home page'
-        className='bg- btn btn-neutral btn-md bg-neutral-50 text-base-100 opacity-80'>
+        className='btn btn-outline btn-md h-9 min-h-min bg-neutral-50 text-base-100 opacity-80'>
         <Image
           src='/logo-icon-black.png'
-          width={22}
-          height={22}
+          width={20}
+          height={20}
           alt='lnktree logo'
         />
-        <p className='text-sm font-semibold'>Created using lnktree</p>
+        <p className='text-xs font-semibold'>Created using lnktree</p>
       </Link>
     </footer>
   )

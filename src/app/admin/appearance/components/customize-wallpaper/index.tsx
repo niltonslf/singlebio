@@ -93,7 +93,7 @@ export const CustomizeWallpaper = observer(() => {
 
         <div className='w-full md:w-auto md:flex-1'>
           <h2 className='text-base font-normal text-neutral-200'>
-            Select the color background
+            Select the background color
           </h2>
 
           <div className='mt-3'>
