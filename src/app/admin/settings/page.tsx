@@ -7,7 +7,7 @@ import {authStore} from '@/app/auth/context/auth-store'
 
 import {AdminBaseLayout, SectionCard} from '../components'
 
-export const Settings = observer(() => {
+const Settings = observer(() => {
   const deleteAccount = async () => {
     await authStore.deleteUser()
   }

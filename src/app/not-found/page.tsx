@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import {merge} from '@/utils'
 
-export const NotFoundPage = () => {
+const NotFoundPage = () => {
   return (
     <main
       className={merge([
