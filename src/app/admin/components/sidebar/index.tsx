@@ -45,7 +45,7 @@ export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
       <NavLinks onClick={onClose} />
 
       <div className='mt-auto flex w-full flex-row items-center justify-between'>
-        <p className=' text-left text-xs text-neutral-200'>v1.0.1 (beta)</p>
+        <p className=' text-left text-xs text-neutral-200'>v0.0.1 (beta)</p>
       </div>
     </nav>
   )

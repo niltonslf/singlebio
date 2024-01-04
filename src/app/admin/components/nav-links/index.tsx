@@ -2,6 +2,7 @@
 
 import {
   BarChartHorizontalBig,
+  HelpCircle,
   Home,
   LayoutDashboard,
   Lock,
@@ -74,17 +75,23 @@ const navbarItems: NavbarLinks = {
         name: 'Profile',
         Icon: <User2 width={18} />,
       },
-    ],
-  },
-  support: {
-    label: 'Support',
-    links: [
       {
         href: '/admin/my-plan',
         title: 'go to plan page',
         name: 'My subscription',
         Icon: <LayoutDashboard width={18} />,
         disabled: true,
+      },
+    ],
+  },
+  support: {
+    label: 'Support',
+    links: [
+      {
+        href: '/admin/help',
+        title: 'go to help page',
+        name: 'Help',
+        Icon: <HelpCircle width={18} />,
       },
       {
         href: '/admin/privacy',
@@ -134,8 +141,7 @@ export const NavLinks = ({onClick}: NavLinksProps) => {
                     'text-md flex flex-row items-center gap-3 rounded-md px-3 py-2 font-normal text-neutral-200 hover:text-neutral-50',
                     isCurrentPage(page.href) && 'bg-primary text-neutral-50',
                     !isCurrentPage(page.href) && 'hover:bg-neutral',
-                    page.disabled &&
-                      'cursor-not-allowed opacity-50 hover:bg-transparent hover:text-neutral-200',
+                    page.disabled && 'hidden',
                   ])}>
                   {page.Icon}
                   <p>{page.name}</p>
