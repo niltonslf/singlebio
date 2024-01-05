@@ -3,7 +3,7 @@ import {HomeFooter} from '../components/home-footer'
 
 const PrivacyPolicyPage = () => {
   return (
-    <div className='mx-auto max-w-6xl '>
+    <div className='mx-auto max-w-6xl px-5'>
       <HomeHeader />
 
       <main className='w-full py-10'>
