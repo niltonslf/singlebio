@@ -20,7 +20,9 @@ type UserPageProps = {
 const fetchUserData = async (username: string) => {
   const user = await fetchUserProfile(username)
 
-  if (!user) return redirect('/not-found')
+  if (!user) {
+    redirect('/not-found')
+  }
 
   const linksRes = (await fetchUserLinks(user.uid)) as Required<Link>[]
   const links = linksRes.sort((cur, next) => next?.order - cur?.order)
@@ -53,7 +55,7 @@ export default async function UserPage({params, searchParams}: UserPageProps) {
         style={pageStyles.backgroundColor}>
         <div className='flex w-full max-w-2xl flex-1 flex-col flex-wrap'>
           <UserPageHeader user={user} pageStyles={pageStyles} />
-          {user.social && (
+          {user?.social && (
             <UserPageSocial social={user.social} pageStyles={pageStyles} />
           )}
           <UserPageLinks links={links} pageStyles={pageStyles} />

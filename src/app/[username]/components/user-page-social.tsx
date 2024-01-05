@@ -12,7 +12,7 @@ export const UserPageSocial = ({social, pageStyles}: UserPageSocialProps) => {
 
   return (
     <div className='mb-5 flex w-full flex-row justify-center '>
-      {social.map(item => {
+      {social?.map(item => {
         return (
           <div key={item.name}>
             <SocialIcon

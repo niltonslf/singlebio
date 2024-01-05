@@ -1,42 +1,32 @@
-import * as firestore from 'firebase/firestore'
 import routerMock from 'next-router-mock'
 
-import {
-  makeGetDocsResponse,
-  makeLink,
-  makeUser,
-  makeUserTheme,
-  setup,
-} from '@/__tests__/__helpers__'
+import {makeLink, makeUser, makeUserTheme, setup} from '@/__tests__/__helpers__'
+import * as fetchUser from '@/api/usecases/user'
 import UserPage from '@/app/[username]/page'
-import {User} from '@/models'
+import {Link, User} from '@/models'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
-jest.mock('firebase/firestore', () => ({
-  __esModule: true,
-  ...jest.requireActual('firebase/firestore'),
-}))
+jest.mock('@/api/usecases/user')
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
+  redirect: jest.fn(),
 }))
 
-const handleFetchLinks = (firstData: any[], secondData: any[]) => {
-  jest.spyOn(firestore, 'query').mockImplementation()
-  jest.spyOn(firestore, 'collection').mockImplementation()
-  jest.spyOn(firestore, 'where').mockImplementation()
+const handleFetchLinks = (user?: User, links?: Link[]) => {
+  const userMock = user ?? makeUser()
+  const linksMock = links ?? [makeLink(), makeLink(), makeLink()]
 
   jest
-    .spyOn(firestore, 'getDocs')
-    .mockResolvedValueOnce(makeGetDocsResponse({docs: firstData}))
-
+    .spyOn(fetchUser, 'fetchUserProfile')
+    .mockImplementation(() => Promise.resolve(userMock))
   jest
-    .spyOn(firestore, 'getDocs')
-    .mockResolvedValueOnce(makeGetDocsResponse({docs: secondData}))
+    .spyOn(fetchUser, 'fetchUserLinks')
+    .mockImplementation(() => Promise.resolve(linksMock))
 }
 
-const makeSUT = ({usernameMock = ''} = {}) => {
-  return setup(<UserPage params={{username: usernameMock ?? ''}} />)
+const makeSUT = async ({username = ''} = {}) => {
+  return setup(await UserPage({params: {username}}))
 }
 
 describe('User page', () => {
@@ -47,36 +37,24 @@ describe('User page', () => {
 
   it('should render page with links', async () => {
     const userMock = makeUser() as Required<User>
-    const linkMock = makeLink()
+    Object.assign(userMock, {theme: makeUserTheme()})
 
-    handleFetchLinks([userMock], [linkMock])
+    const linkMock = [makeLink(), makeLink(), makeLink()]
 
-    await waitFor(() => makeSUT())
+    routerMock.push(`/${userMock.username}`)
+    handleFetchLinks(userMock, linkMock)
 
-    const username = screen.getByRole('heading', {level: 2})
+    await waitFor(() => makeSUT({username: userMock.username}))
+
+    const name = screen.getByRole('heading', {level: 2})
     const linkList = await screen.queryByRole('list')
     const profilePicture = await screen.queryAllByRole('img')[0]
 
-    expect(username.textContent).not.toBe('')
-    expect(linkList?.children).toHaveLength(1)
+    expect(name.textContent).toBe(userMock.name)
+    expect(linkList?.children).toHaveLength(3)
     expect(profilePicture?.getAttribute('src')).toContain(
       encodeURIComponent(userMock.pictureUrl),
     )
-  })
-
-  it("should redirect to /not-found if there isn't links", async () => {
-    const usernameMock = 'some-username'
-
-    handleFetchLinks([makeUser()], [])
-
-    await waitFor(() => makeSUT({usernameMock}))
-
-    const linkList = await screen.queryByRole('list')
-    expect(linkList?.children).toHaveLength(0)
-
-    await waitFor(() => {
-      expect(routerMock.pathname).toBe('/not-found')
-    })
   })
 
   it('should load user custom theme', async () => {
@@ -91,9 +69,9 @@ describe('User page', () => {
 
     const linkMock = makeLink()
 
-    handleFetchLinks([userMock], [linkMock])
+    handleFetchLinks(userMock, [linkMock])
 
-    await waitFor(() => makeSUT({usernameMock: userMock.username}))
+    await waitFor(() => makeSUT({username: userMock.username}))
 
     const container = screen.getByRole('main')
     const containerOverlay = container.querySelector('section')

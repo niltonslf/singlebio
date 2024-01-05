@@ -13,7 +13,7 @@ type StylesObject = Record<keyof UserTheme, StylePropData>
 export const makePageStyles = ({params, user}: StylesProps): StylesObject => {
   const isPreviewAccess = params?.preview === 'true'
 
-  const source = isPreviewAccess ? params : user.theme
+  const source = isPreviewAccess ? params : user?.theme
 
   if (!source) return {} as StylesObject
 
