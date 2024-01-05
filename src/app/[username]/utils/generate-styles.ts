@@ -1,76 +1,64 @@
+import {CSSProperties} from 'react'
+
 import {User, UserTheme} from '@/models'
 
-export const makePreviewStyles = (params: UserTheme) => {
-  const styles: Record<keyof UserTheme, any> = {} as any
-
-  if (params?.backgroundColor) {
-    styles.backgroundColor = {
-      backgroundColor: decodeURIComponent(params?.backgroundColor),
-    }
-  }
-
-  if (params?.backgroundImage) {
-    const decodedImage = decodeURIComponent(params?.backgroundImage)
-
-    styles.backgroundImage = {
-      backgroundImage: `url(${decodedImage})`,
-      ...(styles?.backgroundColor ?? {}),
-    }
-
-    if (params?.usernameColor) {
-      styles.usernameColor = {
-        color: decodeURIComponent(params?.usernameColor),
-      }
-    }
-
-    if (params?.buttonBackground) {
-      styles.buttonBackground = decodeURIComponent(params?.buttonBackground)
-    }
-
-    if (params?.buttonTextColor) {
-      styles.buttonTextColor = decodeURIComponent(params?.buttonTextColor)
-    }
-
-    if (params?.socialIconColor) {
-      styles.socialIconColor = decodeURIComponent(params?.socialIconColor)
-    }
-  }
-
-  return styles
+type StylesProps = {
+  params?: UserTheme & {preview: string}
+  user: User
 }
-export const makePageStyles = (user?: User) => {
-  const styles: Record<keyof UserTheme, any> = {} as any
 
-  if (!user) return styles
+type StylePropData = CSSProperties | object
+type StylesObject = Record<keyof UserTheme, StylePropData>
 
-  if (user?.theme?.backgroundColor) {
+export const makePageStyles = ({params, user}: StylesProps): StylesObject => {
+  const isPreviewAccess = params?.preview === 'true'
+
+  const source = isPreviewAccess ? params : user.theme
+
+  if (!source) return {} as StylesObject
+
+  return stylesFactory(source, isPreviewAccess)
+}
+
+const stylesFactory = (source: UserTheme, isPreviewAccess: boolean) => {
+  const styles: StylesObject = {} as any
+
+  if (source?.backgroundColor) {
     styles.backgroundColor = {
-      backgroundColor: user?.theme?.backgroundColor,
+      backgroundColor: decodeURIComponent(source?.backgroundColor),
     }
   }
 
-  if (user?.theme?.backgroundImage) {
-    styles.backgroundImage = {
-      backgroundImage: `url(${user?.theme?.backgroundImage})`,
-      ...(styles?.backgroundColor ?? {}),
-    }
+  if (source?.backgroundImage) {
+    const decodedImage = isPreviewAccess
+      ? decodeURIComponent(source?.backgroundImage)
+      : source?.backgroundImage
 
-    if (user?.theme?.usernameColor) {
-      styles.usernameColor = {
-        color: user?.theme?.usernameColor,
-      }
-    }
+    styles.backgroundImage = {backgroundImage: `url(${decodedImage})`}
+    Object.assign(styles.backgroundImage, styles?.backgroundColor)
+  }
 
-    if (user?.theme?.buttonBackground) {
-      styles.buttonBackground = user?.theme?.buttonBackground
+  if (source?.usernameColor) {
+    styles.usernameColor = {
+      color: decodeURIComponent(source?.usernameColor),
     }
+  }
 
-    if (user?.theme?.buttonTextColor) {
-      styles.buttonTextColor = user?.theme?.buttonTextColor
+  if (source?.buttonBackground) {
+    styles.buttonBackground = {
+      value: decodeURIComponent(source?.buttonBackground),
     }
+  }
 
-    if (user?.theme?.socialIconColor) {
-      styles.socialIconColor = user?.theme?.socialIconColor
+  if (source?.buttonTextColor) {
+    styles.buttonTextColor = {
+      value: decodeURIComponent(source?.buttonTextColor),
+    }
+  }
+
+  if (source?.socialIconColor) {
+    styles.socialIconColor = {
+      value: decodeURIComponent(source?.socialIconColor),
     }
   }
 
