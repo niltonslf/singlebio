@@ -31,7 +31,7 @@ export const LinkItem = ({
     <Link href={parseExternalUrl(path)} target='_blank'>
       <li
         className={clsx([
-          'flex w-full flex-wrap items-center justify-center rounded-lg bg-white p-3 font-medium text-black shadow-md transition-all hover:scale-95 md:p-5',
+          'flex w-full flex-wrap items-center justify-center rounded-lg bg-white p-3 text-center font-medium text-black shadow-md transition-all hover:scale-95 md:p-5',
         ])}
         style={styles}>
         {children}
