@@ -2,22 +2,25 @@ import {Metadata} from 'next'
 import {ReactNode} from 'react'
 
 import {fetchUserProfile} from '@/api/usecases'
-import {UserTheme} from '@/models'
 
 type LayoutProps = {
   children: ReactNode
   params: {username: string}
-  searchParams?: UserTheme & {preview: string}
 }
 
 export const generateMetadata = async ({
   params,
-}: LayoutProps): Promise<Metadata> => {
+}: Pick<LayoutProps, 'params'>): Promise<Metadata> => {
   const user = await fetchUserProfile(params.username)
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL
 
-  if (!user) return {}
+  if (!user)
+    return {
+      metadataBase: new URL(baseUrl || ''),
+      title: 'Lnktree user page',
+      description: 'User personal page with his best content.',
+    }
 
   return {
     metadataBase: new URL(baseUrl || ''),
