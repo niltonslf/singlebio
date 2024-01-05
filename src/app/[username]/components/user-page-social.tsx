@@ -8,20 +8,20 @@ type UserPageSocialProps = {
 }
 
 export const UserPageSocial = ({social, pageStyles}: UserPageSocialProps) => {
+  if (!social.length) return <></>
+
   return (
     <div className='mb-5 flex w-full flex-row justify-center '>
-      {Object.keys(social).map(socialName => {
+      {social.map(item => {
         return (
-          <div key={socialName}>
-            {social[socialName] && (
-              <SocialIcon
-                url={social[socialName]}
-                className='!h-10 !w-10'
-                fgColor={pageStyles.socialIconColor.value}
-                bgColor='transparent'
-                target='_blank'
-              />
-            )}
+          <div key={item.name}>
+            <SocialIcon
+              url={item.url}
+              className='!h-10 !w-10'
+              fgColor={pageStyles.socialIconColor.value}
+              bgColor='transparent'
+              target='_blank'
+            />
           </div>
         )
       })}

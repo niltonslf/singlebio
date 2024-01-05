@@ -33,7 +33,7 @@ export const AddSocialModalForm = ({
   )
 
   const checkIfSocialExist = (socialName: string) => {
-    return !!user.social?.[socialName]
+    return !!user.social?.find(item => item.name == socialName)
   }
 
   const onSelectIcon = (social: string) => {
@@ -53,10 +53,8 @@ export const AddSocialModalForm = ({
   }
 
   const handleSubmit = async () => {
-    const social = {
-      ...user.social,
-      [formData.social]: formData.url,
-    }
+    const currentItems = user.social ?? []
+    const social = [...currentItems, {name: formData.social, url: formData.url}]
 
     await authStore.updateUser({social})
     revalidateUserPage()

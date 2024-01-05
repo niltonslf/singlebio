@@ -15,36 +15,25 @@ type SocialCardProps = {
 export const SocialCard = ({user}: SocialCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const socialListKeys = user.social ? Object.keys(user.social) : []
-
   const handleDeleteSocial = async (socialName: string) => {
-    const currentSocial = {...user.social}
-    const newObj: Record<string, string> = {}
+    const currentSocial = user?.social ? [...user?.social] : []
 
-    const remainingKeys = Object.keys(currentSocial).filter(
-      social => social != socialName,
-    )
+    const remainingKeys = currentSocial.filter(item => item.name != socialName)
 
-    remainingKeys.forEach(key => {
-      newObj[key] = currentSocial[key]
-    })
-
-    await authStore.updateUser({social: newObj})
+    await authStore.updateUser({social: remainingKeys})
     revalidateUserPage()
   }
 
   return (
     <SectionCard title='Social links'>
       <div className='flex flex-col gap-3'>
-        {socialListKeys.map(name => {
+        {user?.social?.map(item => {
           return (
-            user?.social?.[name] && (
-              <SocialItem
-                onDelete={handleDeleteSocial}
-                key={name}
-                social={{social: name, url: user?.social?.[name]}}
-              />
-            )
+            <SocialItem
+              onDelete={handleDeleteSocial}
+              key={item.name}
+              social={{social: item.name, url: item.url}}
+            />
           )
         })}
       </div>

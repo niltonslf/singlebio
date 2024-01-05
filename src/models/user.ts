@@ -8,7 +8,7 @@ export type UserTheme = {
   socialDefaultColor: boolean
 }
 
-export type UserSocial = Record<string, string>
+export type UserSocial = {name: string; url: string}[]
 
 export type User = {
   uid: string
