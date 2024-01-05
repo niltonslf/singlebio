@@ -1,4 +1,4 @@
-import {FirestoreResponseObject, parse} from 'firestore-rest-parser'
+import {parse} from 'firestore-document-parser'
 
 import {User} from '@/models'
 
@@ -34,7 +34,7 @@ export const fetchUserProfile = async (username: string) => {
 
   const userRes = parse(data?.[0]?.document)
 
-  return userRes as User
+  return userRes.fields as User
 }
 
 export const fetchUserLinks = async (uid: string) => {
@@ -46,8 +46,11 @@ export const fetchUserLinks = async (uid: string) => {
     throw new Error('Failed to fetch user links')
   }
   const data = await res.json()
-  const linksRes = data.documents.map((linkData: FirestoreResponseObject) =>
-    parse(linkData),
+
+  if (!data?.documents) return []
+
+  const linksRes = data?.documents?.map((linkData: any) =>
+    parse(linkData.fields),
   )
 
   return linksRes

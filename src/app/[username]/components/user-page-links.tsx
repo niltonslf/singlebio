@@ -14,7 +14,7 @@ export const UserPageLinks = ({links, pageStyles}: UserPageLinksProps) => {
           return (
             <LinkCard.Item
               key={link.url}
-              path={link.url}
+              path={link.url || '#'}
               bgColor={pageStyles.buttonBackground.value}
               textColor={pageStyles.buttonTextColor.value}>
               {link.label}

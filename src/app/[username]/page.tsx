@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import {Metadata} from 'next'
 import {redirect} from 'next/navigation'
 
 import {fetchUserLinks, fetchUserProfile} from '@/api/usecases'
@@ -18,7 +17,7 @@ type UserPageProps = {
   searchParams?: UserTheme & {preview: string}
 }
 
-const fetchUserData = async (username: string) => {
+export const fetchUserData = async (username: string) => {
   const user = await fetchUserProfile(username)
 
   if (!user) return redirect('/not-found')
@@ -26,42 +25,6 @@ const fetchUserData = async (username: string) => {
   const links = await fetchUserLinks(user.uid)
 
   return {user, links}
-}
-
-export const generateMetadata = async ({
-  params,
-}: UserPageProps): Promise<Metadata> => {
-  const {user} = await fetchUserData(params.username)
-
-  return {
-    title: user.name,
-    description: user.bio,
-    openGraph: {
-      images: [
-        {
-          url: user.pictureUrl,
-          width: 800,
-          height: 600,
-        },
-        {
-          url: user.pictureUrl,
-          width: 1920,
-          height: 1080,
-        },
-      ],
-      locale: 'en_US',
-      type: 'website',
-    },
-    icons: {
-      icon: user.pictureUrl,
-      shortcut: user.pictureUrl,
-      apple: user.pictureUrl,
-      other: {
-        rel: 'apple-touch-icon-precomposed',
-        url: user.pictureUrl,
-      },
-    },
-  }
 }
 
 export default async function UserPage({params, searchParams}: UserPageProps) {

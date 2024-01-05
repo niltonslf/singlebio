@@ -32,7 +32,7 @@
     "eslint": "8.48.0",
     "eslint-config-next": "^14.0.4",
     "firebase": "^10.6.0",
-    "firestore-rest-parser": "^1.1.1",
+    "firestore-document-parser": "^1.0.2",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lucide-react": "0.294.0",

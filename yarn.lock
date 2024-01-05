@@ -4299,12 +4299,10 @@ firebase@^10.6.0:
     "@firebase/storage-compat" "0.3.2"
     "@firebase/util" "1.9.3"
 
-firestore-rest-parser@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/firestore-rest-parser/-/firestore-rest-parser-1.1.1.tgz#855863edabb4287211aea6b02a7fb30431d01d67"
-  integrity sha512-9FQ7Fwh7EgIwhxKgUl96tqkONcQdNzC9CQTqY3q6jpRs6LhqipQxxp2pG4813/gjCCJFlPITCr1yQWh1WSOFxg==
-  dependencies:
-    lodash "^4.17.21"
+firestore-document-parser@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/firestore-document-parser/-/firestore-document-parser-1.0.2.tgz#01d43a3d667821d5709c87124d5ab308bb8ae01d"
+  integrity sha512-8iNaedQt+IySFSEermwMhd8lHwG/Vs7CbHaw74oyiMSVZc80RYoie+2KHQte4WLyGRKbp1xJxVP00pTAK2ZnPw==
 
 flat-cache@^3.0.4:
   version "3.1.0"
