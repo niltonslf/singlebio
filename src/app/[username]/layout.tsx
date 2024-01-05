@@ -15,9 +15,12 @@ export const generateMetadata = async ({
 }: LayoutProps): Promise<Metadata> => {
   const user = await fetchUserProfile(params.username)
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+
   if (!user) return {}
 
   return {
+    metadataBase: new URL(baseUrl || ''),
     title: user.name,
     description: user.bio,
     openGraph: {
