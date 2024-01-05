@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import {HomeFooter, HomeHeader} from './components'
+import {CookieConsentBanner, HomeFooter, HomeHeader} from './components'
 
 export default function Home() {
   return (
@@ -43,6 +43,7 @@ export default function Home() {
         </section>
       </div>
       <HomeFooter />
+      <CookieConsentBanner />
     </main>
   )
 }
