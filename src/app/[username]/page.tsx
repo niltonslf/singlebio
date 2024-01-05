@@ -34,8 +34,24 @@ export const generateMetadata = async ({
   const {user} = await fetchUserData(params.username)
 
   return {
-    title: `${user.name} | LnkList`,
+    title: user.name,
     description: user.bio,
+    openGraph: {
+      images: [
+        {
+          url: user.pictureUrl,
+          width: 800,
+          height: 600,
+        },
+        {
+          url: user.pictureUrl,
+          width: 1920,
+          height: 1080,
+        },
+      ],
+      locale: 'en_US',
+      type: 'website',
+    },
     icons: {
       icon: user.pictureUrl,
       shortcut: user.pictureUrl,
