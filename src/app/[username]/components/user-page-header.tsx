@@ -27,7 +27,7 @@ export const UserPageHeader = ({user, pageStyles}: UserPageHeaderProps) => {
 
       {user?.bio && (
         <p
-          className='w-full break-all text-center text-sm text-neutral-900'
+          className='w-full break-before-auto text-center text-sm text-neutral-900'
           style={pageStyles.usernameColor}>
           {user?.bio}
         </p>
