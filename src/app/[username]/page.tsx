@@ -8,7 +8,7 @@ import {
   UserPageLinks,
   UserPageSocial,
 } from '@/app/[username]/components'
-import {UserTheme} from '@/models'
+import {Link, UserTheme} from '@/models'
 
 import {makePageStyles} from './utils'
 
@@ -17,12 +17,13 @@ type UserPageProps = {
   searchParams?: UserTheme & {preview: string}
 }
 
-export const fetchUserData = async (username: string) => {
+const fetchUserData = async (username: string) => {
   const user = await fetchUserProfile(username)
 
   if (!user) return redirect('/not-found')
 
-  const links = await fetchUserLinks(user.uid)
+  const linksRes = (await fetchUserLinks(user.uid)) as Required<Link>[]
+  const links = linksRes.sort((cur, next) => next?.order - cur?.order)
 
   return {user, links}
 }

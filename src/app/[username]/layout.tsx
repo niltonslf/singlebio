@@ -1,9 +1,8 @@
 import {Metadata} from 'next'
 import {ReactNode} from 'react'
 
+import {fetchUserProfile} from '@/api/usecases'
 import {UserTheme} from '@/models'
-
-import {fetchUserData} from './page'
 
 type LayoutProps = {
   children: ReactNode
@@ -14,7 +13,7 @@ type LayoutProps = {
 export const generateMetadata = async ({
   params,
 }: LayoutProps): Promise<Metadata> => {
-  const {user} = await fetchUserData(params.username)
+  const user = await fetchUserProfile(params.username)
 
   if (!user) return {}
 
