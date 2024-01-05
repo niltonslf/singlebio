@@ -1,11 +1,13 @@
+import {HomeHeader} from '../components'
 import {HomeFooter} from '../components/home-footer'
 
 const PrivacyPolicyPage = () => {
   return (
-    <div className='mx-auto max-w-6xl'>
-      <header></header>
-      <main>
-        <div className='prose '>
+    <div className='mx-auto max-w-6xl '>
+      <HomeHeader />
+
+      <main className='w-full py-10'>
+        <div className='prose w-full max-w-full '>
           <h1>Privacy Policy</h1>
 
           <p>

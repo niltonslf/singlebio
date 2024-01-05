@@ -1,26 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import {HomeFooter} from './components/home-footer'
+import {HomeFooter, HomeHeader} from './components'
 
 export default function Home() {
   return (
     <main className='via-background-200 flex min-h-[100vh] w-full flex-col bg-gradient-to-tr from-base-100 via-base-300 to-base-100 p-5'>
       <div className='h-screen w-full'>
-        <nav className='mx-auto flex w-full max-w-6xl items-center justify-between py-2'>
-          <Link href='/' title='Brand' className='font-semibold'>
-            <Image
-              src='/logo-white.png'
-              width={114.72}
-              height={30}
-              alt='lnktree logo'
-            />
-          </Link>
-
-          <Link href='/auth' className='btn btn-outline btn-neutral px-10'>
-            Login
-          </Link>
-        </nav>
+        <HomeHeader />
 
         <section className='max:w-full mx-auto mt-14 flex w-full flex-row items-center justify-center md:max-w-6xl'>
           <article className='w-full text-center md:w-[55%] md:text-left'>
