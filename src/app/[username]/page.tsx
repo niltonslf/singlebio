@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import {Metadata} from 'next'
 import {redirect} from 'next/navigation'
 
 import {fetchUserLinks, fetchUserProfile} from '@/api/usecases'
@@ -25,6 +26,26 @@ const fetchUserData = async (username: string) => {
   const links = await fetchUserLinks(user.uid)
 
   return {user, links}
+}
+
+export const generateMetadata = async ({
+  params,
+}: UserPageProps): Promise<Metadata> => {
+  const {user} = await fetchUserData(params.username)
+
+  return {
+    title: `${user.name} | LnkList`,
+    description: user.bio,
+    icons: {
+      icon: user.pictureUrl,
+      shortcut: user.pictureUrl,
+      apple: user.pictureUrl,
+      other: {
+        rel: 'apple-touch-icon-precomposed',
+        url: user.pictureUrl,
+      },
+    },
+  }
 }
 
 export default async function UserPage({params, searchParams}: UserPageProps) {
