@@ -43,7 +43,7 @@ export default function Home() {
             </Link>
           </article>
 
-          <div className='w-35% ml-auto flex h-full flex-row items-center justify-center'>
+          <div className='md:w-35% ml-auto hidden h-full flex-row items-center justify-center md:flex'>
             <div className='rotate-[7deg] rounded-2xl '>
               <Image
                 src='/home/model.png'
