@@ -5376,6 +5376,18 @@ jest-message-util@^29.7.0:
     slash "^3.0.0"
     stack-utils "^2.0.3"
 
+jest-mock-fetch@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/jest-mock-fetch/-/jest-mock-fetch-2.0.5.tgz#066530d7627077ae84d3dd91ae1d89127213a3f7"
+  integrity sha512-SqjzvjLgehVvrhweq9r2pLxlz3ZwPC2p14yTZFxy+bejE+jDgpV+0aw/oysP088wlFbzEl3TRy0gWIYY25vVEA==
+  dependencies:
+    jest-mock-promise "^2.0.2"
+
+jest-mock-promise@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/jest-mock-promise/-/jest-mock-promise-2.0.2.tgz#560d2617d8d92c2e9be5ea03a8ede6557eb5ee34"
+  integrity sha512-JD5zcuoagmSJ+Gb05iD8o+Ze/viWLzI7QnrVY3Q8FyDVGUH5aXxZON+u7S9ouAt59sLNR97dSMWGezfTkkb5hg==
+
 jest-mock@^29.7.0:
   version "29.7.0"
   resolved "https://registry.yarnpkg.com/jest-mock/-/jest-mock-29.7.0.tgz#4e836cf60e99c6fcfabe9f99d017f3fdd50a6347"

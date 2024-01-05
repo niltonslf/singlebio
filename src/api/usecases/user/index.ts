@@ -24,6 +24,7 @@ export const fetchUserProfile = async (username: string) => {
     method: 'post',
     body: JSON.stringify(query),
     next: {tags: ['user-profile-data']},
+    cache: 'no-store',
   })
 
   if (!res.ok) {
@@ -40,7 +41,10 @@ export const fetchUserProfile = async (username: string) => {
 export const fetchUserLinks = async (uid: string) => {
   const path = `${FIREBASE_API_URL}/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/users/${uid}/links`
 
-  const res = await fetch(path, {next: {tags: ['user-links-data']}})
+  const res = await fetch(path, {
+    cache: 'no-store',
+    next: {tags: ['user-links-data']},
+  })
 
   if (!res.ok) {
     throw new Error('Failed to fetch user links')

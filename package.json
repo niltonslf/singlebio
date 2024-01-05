@@ -79,6 +79,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-extended": "^4.0.2",
     "jest-location-mock": "^2.0.0",
+    "jest-mock-fetch": "^2.0.5",
     "jest-transform-css": "^6.0.1",
     "lint-staged": "^15.2.0",
     "next-router-mock": "^0.9.10",

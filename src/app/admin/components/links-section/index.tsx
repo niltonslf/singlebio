@@ -12,7 +12,6 @@ import {
 import {Info, Plus} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
-import {revalidateUserPage} from '@/app/admin/actions'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
@@ -35,6 +34,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
+import {useSmartphone} from '../../context'
 import {CardLink} from './components/card-link'
 
 type CardListProps = {
@@ -42,8 +42,10 @@ type CardListProps = {
 }
 
 export const LinksSection = ({user}: CardListProps) => {
+  const {reloadSmartphoneList} = useSmartphone()
+
   const reloadSmartphoneListDebounced = useDebounce(() => {
-    revalidateUserPage()
+    reloadSmartphoneList()
   })
 
   const sensors = useSensors(
@@ -76,9 +78,11 @@ export const LinksSection = ({user}: CardListProps) => {
     reloadSmartphoneListDebounced()
   }
 
-  const deleteLink = (link: Link) => {
-    if (link.id) deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
-    revalidateUserPage()
+  const deleteLink = async (link: Link) => {
+    if (link.id) {
+      await deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
+      reloadSmartphoneList()
+    }
   }
 
   const fetchData = useCallback(() => {

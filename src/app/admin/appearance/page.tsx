@@ -8,7 +8,6 @@ import {useImageUploader, useImageCompressor} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
 import {Smartphone} from '@/app/components'
 
-import {revalidateUserPage} from '../actions'
 import {Collapse, AdminBaseLayout} from '../components'
 import {useSmartphone} from '../context/smartphone-context'
 import {
@@ -50,7 +49,6 @@ const AppearancePage = observer(() => {
     setUpdated(true)
     scheduleCloseSuccessMsg()
     setIsLoading(false)
-    revalidateUserPage()
   }
 
   const handleResetAppearance = () => appearanceStore.reset()
