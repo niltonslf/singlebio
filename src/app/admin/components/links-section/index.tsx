@@ -12,7 +12,7 @@ import {
 import {Info, Plus} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
-import {useSmartphone} from '@/app/admin/context'
+import {revalidateUserPage} from '@/app/admin/actions'
 import {db} from '@/libs/firebase'
 import {Link, User} from '@/models'
 
@@ -42,9 +42,8 @@ type CardListProps = {
 }
 
 export const LinksSection = ({user}: CardListProps) => {
-  const {reloadSmartphoneList} = useSmartphone()
   const reloadSmartphoneListDebounced = useDebounce(() => {
-    reloadSmartphoneList()
+    revalidateUserPage()
   })
 
   const sensors = useSensors(
@@ -79,7 +78,7 @@ export const LinksSection = ({user}: CardListProps) => {
 
   const deleteLink = (link: Link) => {
     if (link.id) deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
-    reloadSmartphoneList()
+    revalidateUserPage()
   }
 
   const fetchData = useCallback(() => {

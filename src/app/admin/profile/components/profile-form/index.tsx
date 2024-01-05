@@ -3,6 +3,7 @@ import {useRef, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
+import {revalidateUserPage} from '@/app/admin/actions'
 import {SectionCard} from '@/app/admin/components'
 import {useSmartphone} from '@/app/admin/context'
 import {useImageCompressor, useImageUploader} from '@/app/admin/hooks'
@@ -78,6 +79,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
     }
 
     await authStore.updateUser(userData)
+    revalidateUserPage()
     setIsUploadingImg(false)
     setIsSubmitting(false)
     reloadSmartphoneList()

@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {SocialIcon} from 'react-social-icons'
 
-import {useSmartphone} from '@/app/admin/context'
+import {revalidateUserPage} from '@/app/admin/actions'
 import {authStore} from '@/app/auth/context/auth-store'
 import {InputErrorMsg} from '@/app/components'
 import {socialOptions} from '@/data/social-options'
@@ -24,8 +24,6 @@ export const AddSocialModalForm = ({
   isOpen,
   onClose,
 }: AddSocialModalFormProps) => {
-  const {reloadSmartphoneList} = useSmartphone()
-
   const [formData, setFormData] = useState<SocialLink>({url: '', social: ''})
   const [isUrlValid, setIsUrlValid] = useState<boolean | undefined>()
   const [filter, setFilter] = useState('')
@@ -60,8 +58,8 @@ export const AddSocialModalForm = ({
       [formData.social]: formData.url,
     }
 
-    authStore.updateUser({social})
-    reloadSmartphoneList()
+    await authStore.updateUser({social})
+    revalidateUserPage()
     handleClose()
   }
 

@@ -1,8 +1,8 @@
 import {Plus} from 'lucide-react'
 import {useState} from 'react'
 
+import {revalidateUserPage} from '@/app/admin/actions'
 import {SectionCard} from '@/app/admin/components'
-import {useSmartphone} from '@/app/admin/context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {User} from '@/models'
 
@@ -13,8 +13,6 @@ type SocialCardProps = {
 }
 
 export const SocialCard = ({user}: SocialCardProps) => {
-  const {reloadSmartphoneList} = useSmartphone()
-
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const socialListKeys = user.social ? Object.keys(user.social) : []
@@ -32,7 +30,7 @@ export const SocialCard = ({user}: SocialCardProps) => {
     })
 
     await authStore.updateUser({social: newObj})
-    reloadSmartphoneList()
+    revalidateUserPage()
   }
 
   return (
