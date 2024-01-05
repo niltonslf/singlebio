@@ -1,126 +1,43 @@
-'use client'
-
 import clsx from 'clsx'
-import {
-  collection,
-  getFirestore,
-  getDocs,
-  query,
-  where,
-  limit,
-  orderBy,
-} from 'firebase/firestore'
-import {useRouter} from 'next/navigation'
-import {useCallback, useEffect, useMemo, useState} from 'react'
 
+import {fetchUserLinks, fetchUserProfile} from '@/api/usecases'
 import {
   UserPageFooter,
   UserPageHeader,
   UserPageLinks,
   UserPageSocial,
 } from '@/app/[username]/components'
-import {app} from '@/libs/firebase'
-import {User, UserTheme} from '@/models'
+import {UserTheme} from '@/models'
 
-import {usePreviewCache} from './hooks/use-preview-cache'
-import {makePreviewStyles, makePageStyles} from './utils'
+import {makePageStyles} from './utils'
 
 type UserPageProps = {
-  params: {
-    username: string
-  }
+  params: {username: string}
   searchParams?: UserTheme & {preview: string}
 }
 
-const db = getFirestore(app)
+const fetchUserData = async (username: string) => {
+  const user = await fetchUserProfile(username)
+  const links = await fetchUserLinks(user.uid)
 
-export default function UserPage({
-  params: {username},
-  searchParams,
-}: UserPageProps) {
-  const {push} = useRouter()
+  return {user, links}
+}
 
-  const [links, setLinks] = useState<any[]>([])
-  const [user, setUser] = useState<User>()
-  const [isLoading, setIsLoading] = useState(true)
-
-  const {createCacheData, getCachedData, hasCache} = usePreviewCache()
+export default async function UserPage({params, searchParams}: UserPageProps) {
+  const {user, links} = await fetchUserData(params.username)
 
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
 
-  const isPreviewAccess = useMemo(() => searchParams?.preview === 'true', [])
+  const pageStyles = makePageStyles({params: searchParams, user})
 
-  const pageStyles = isPreviewAccess
-    ? makePreviewStyles(searchParams ?? ({} as UserTheme))
-    : makePageStyles(user)
-
-  const fetchData = useCallback(async () => {
-    const cacheExist = hasCache()
-
-    if (cacheExist && isPreviewAccess) {
-      const {user, links} = getCachedData()
-
-      setUser(user)
-      setLinks(links)
-      setIsLoading(false)
-      return
-    }
-
-    const q = query(
-      collection(db, 'users'),
-      where('username', '==', username),
-      limit(1),
-    )
-    const {docs: users} = await getDocs(q)
-
-    if (users.length === 0) {
-      return setIsLoading(false)
-    }
-    new Promise(resolve => {
-      users.forEach(async curUser => {
-        setUser(curUser.data() as User)
-
-        const customQuery = query(
-          collection(db, curUser.ref.path, 'links'),
-          orderBy('order', 'desc'),
-        )
-
-        const {size, docs} = await getDocs(customQuery)
-
-        if (size === 0) {
-          setIsLoading(false)
-          return resolve(true)
-        }
-
-        const linksTemp: any[] = []
-        const validLinks = docs.filter(link => !!link.data().url)
-        validLinks.forEach(link => linksTemp.push(link.data()))
-        setLinks(linksTemp)
-
-        if (isPreviewAccess) {
-          // Make a cache from the data when the access is coming from the admin page
-          // during the customization process. The goal is avoid to consume too much the firebase
-          createCacheData(curUser.data() as User, linksTemp)
-        }
-
-        resolve(true)
-        setIsLoading(false)
-      })
-    })
-  }, [createCacheData, getCachedData, hasCache, isPreviewAccess, username])
-
-  useEffect(() => {
-    fetchData()
-  }, [fetchData])
-
-  useEffect(() => {
-    if (
-      (links.length === 0 && isLoading === false) ||
-      (isLoading === false && user === undefined)
-    ) {
-      push('/not-found')
-    }
-  }, [isLoading, links.length, push, user])
+  // useEffect(() => {
+  //   if (
+  //     (links.length === 0 && isLoading === false) ||
+  //     (isLoading === false && user === undefined)
+  //   ) {
+  //     push('/not-found')
+  //   }
+  // }, [isLoading, links.length, push, user])
 
   return (
     <main
@@ -139,12 +56,6 @@ export default function UserPage({
         ])}
         style={pageStyles.backgroundColor}>
         <div className='flex w-full max-w-2xl flex-1 flex-col flex-wrap'>
-          {isLoading && (
-            <div className='flex h-full w-full flex-1 items-center justify-center'>
-              <div className='loading loading-dots loading-lg text-neutral-950' />
-            </div>
-          )}
-
           {user && (
             <>
               <UserPageHeader user={user} pageStyles={pageStyles} />
