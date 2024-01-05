@@ -14,7 +14,7 @@ import {useSmartphone} from './context/smartphone-context'
 const Admin = observer(() => {
   const user = authStore.user
 
-  const {iframeRef, reloadSmartphoneList} = useSmartphone()
+  const {iframeRef, reloadSmartphoneList, key} = useSmartphone()
   const [showUsernameModal, setShowUsernameModal] = useState(false)
 
   const onSubmitUsername = async (username: string) => {
@@ -44,6 +44,7 @@ const Admin = observer(() => {
 
         <AdminBaseLayout.PagePreview>
           <Smartphone
+            key={key}
             ref={iframeRef}
             iframeUrl={parseUserPageUrl(user?.username)}
           />

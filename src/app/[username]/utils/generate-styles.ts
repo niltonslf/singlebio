@@ -7,21 +7,24 @@ type StylesProps = {
   user: User
 }
 
-type StylePropData = CSSProperties | object
-type StylesObject = Record<keyof UserTheme, StylePropData>
+type StylePropData = CSSProperties & {value?: string}
+export type PageStylesObject = Record<keyof UserTheme, StylePropData>
 
-export const makePageStyles = ({params, user}: StylesProps): StylesObject => {
+export const makePageStyles = ({
+  params,
+  user,
+}: StylesProps): PageStylesObject => {
   const isPreviewAccess = params?.preview === 'true'
 
   const source = isPreviewAccess ? params : user?.theme
 
-  if (!source) return {} as StylesObject
+  if (!source) return {} as PageStylesObject
 
   return stylesFactory(source, isPreviewAccess)
 }
 
 const stylesFactory = (source: UserTheme, isPreviewAccess: boolean) => {
-  const styles: StylesObject = {} as any
+  const styles: PageStylesObject = {} as any
 
   if (source?.backgroundColor) {
     styles.backgroundColor = {
@@ -61,6 +64,8 @@ const stylesFactory = (source: UserTheme, isPreviewAccess: boolean) => {
       value: decodeURIComponent(source?.socialIconColor),
     }
   }
+
+  // console.log({styles})
 
   return styles
 }

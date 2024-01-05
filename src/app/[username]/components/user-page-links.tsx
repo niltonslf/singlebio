@@ -1,9 +1,11 @@
 import {LinkCard} from '@/app/components'
 import {Link} from '@/models'
 
+import {PageStylesObject} from '../utils'
+
 type UserPageLinksProps = {
   links: Link[]
-  pageStyles: any
+  pageStyles: PageStylesObject
 }
 
 export const UserPageLinks = ({links, pageStyles}: UserPageLinksProps) => {
@@ -15,8 +17,8 @@ export const UserPageLinks = ({links, pageStyles}: UserPageLinksProps) => {
             <LinkCard.Item
               key={link.url}
               path={link.url || '#'}
-              bgColor={pageStyles.buttonBackground.value}
-              textColor={pageStyles.buttonTextColor.value}>
+              bgColor={pageStyles?.buttonBackground?.value}
+              textColor={pageStyles?.buttonTextColor?.value}>
               {link.label}
             </LinkCard.Item>
           )

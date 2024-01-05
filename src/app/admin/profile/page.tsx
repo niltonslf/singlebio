@@ -13,7 +13,7 @@ import {ProfileForm, SocialCard} from './components'
 const Profile = observer(() => {
   const user = authStore.user
 
-  const {iframeRef} = useSmartphone()
+  const {iframeRef, key} = useSmartphone()
 
   return (
     <AdminBaseLayout>
@@ -26,6 +26,7 @@ const Profile = observer(() => {
 
       <AdminBaseLayout.PagePreview>
         <Smartphone
+          key={key}
           ref={iframeRef}
           iframeUrl={parseUserPageUrl(user?.username || '')}
         />

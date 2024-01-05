@@ -18,7 +18,7 @@ export const UserPageSocial = ({social, pageStyles}: UserPageSocialProps) => {
             <SocialIcon
               url={item.url}
               className='!h-10 !w-10'
-              fgColor={pageStyles.socialIconColor.value}
+              fgColor={pageStyles?.socialIconColor?.value ?? '#000'}
               bgColor='transparent'
               target='_blank'
             />

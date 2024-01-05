@@ -35,6 +35,8 @@ export const fetchUserProfile = async (username: string) => {
 
   const userRes = parse(data?.[0]?.document)
 
+  if (!data?.[0]?.document) return null
+
   return userRes.fields as User
 }
 
