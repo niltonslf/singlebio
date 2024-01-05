@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import {redirect} from 'next/navigation'
 
 import {fetchUserLinks, fetchUserProfile} from '@/api/usecases'
 import {
@@ -18,6 +19,9 @@ type UserPageProps = {
 
 const fetchUserData = async (username: string) => {
   const user = await fetchUserProfile(username)
+
+  if (!user) return redirect('/not-found')
+
   const links = await fetchUserLinks(user.uid)
 
   return {user, links}
@@ -29,15 +33,6 @@ export default async function UserPage({params, searchParams}: UserPageProps) {
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
 
   const pageStyles = makePageStyles({params: searchParams, user})
-
-  // useEffect(() => {
-  //   if (
-  //     (links.length === 0 && isLoading === false) ||
-  //     (isLoading === false && user === undefined)
-  //   ) {
-  //     push('/not-found')
-  //   }
-  // }, [isLoading, links.length, push, user])
 
   return (
     <main
@@ -56,13 +51,9 @@ export default async function UserPage({params, searchParams}: UserPageProps) {
         ])}
         style={pageStyles.backgroundColor}>
         <div className='flex w-full max-w-2xl flex-1 flex-col flex-wrap'>
-          {user && (
-            <>
-              <UserPageHeader user={user} pageStyles={pageStyles} />
-              {user.social && (
-                <UserPageSocial social={user.social} pageStyles={pageStyles} />
-              )}
-            </>
+          <UserPageHeader user={user} pageStyles={pageStyles} />
+          {user.social && (
+            <UserPageSocial social={user.social} pageStyles={pageStyles} />
           )}
           <UserPageLinks links={links} pageStyles={pageStyles} />
           <UserPageFooter />
