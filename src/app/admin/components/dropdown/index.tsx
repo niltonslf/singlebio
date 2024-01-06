@@ -20,7 +20,7 @@ export const Dropdown = observer(({children}: DropdownProps) => {
       <summary className='btn btn-circle btn-ghost cursor-pointer'>
         {children}
       </summary>
-      <ul className='px- menu dropdown-content z-[50] w-52 rounded-box bg-neutral py-5 shadow'>
+      <ul className='px- menu dropdown-content z-[50] w-52 rounded-box bg-base-300 py-5 shadow'>
         <button onClick={logout} className='btn btn-outline btn-md w-full'>
           <p>Logout</p>
           <LogOut size={18} />

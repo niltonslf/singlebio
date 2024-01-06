@@ -67,7 +67,7 @@ export const Modal = ({onSave, initialOpen}: ModalProps) => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='mt-2'>
-            <p className='text-neutral-200 '>
+            <p className='text-base-content/70 '>
               The <b className='text-primary'>username</b> will be used to
               create your unique page url.
             </p>

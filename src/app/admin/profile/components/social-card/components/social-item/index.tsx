@@ -21,10 +21,10 @@ export const SocialItem = ({social, onDelete}: SocialItemProps) => {
           url={social?.url}
           className='!h-8 !w-8'
           as='span'
-          fgColor='white'
-          bgColor='transparent'
+          // fgColor='white'
+          // bgColor='transparent'
         />
-        <span className='text-neutral-200'>
+        <span className='text-base-content/70'>
           {socialOptions[social?.social]?.label ?? social?.social}
         </span>
       </span>

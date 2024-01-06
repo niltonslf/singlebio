@@ -11,7 +11,7 @@ export const CookieConsentBanner = () => {
       buttonText='ACCEPT COOKIES'
       cookieName='lnktreeCookiesConsent'
       disableStyles
-      containerClasses='w-full px-10 py-5 bg-neutral flex justify-between fixed left-0 bottom-0 items-center'
+      containerClasses='w-full px-10 py-5 bg-base-300 flex justify-between fixed left-0 bottom-0 items-center'
       buttonClasses='btn btn-outline text-xs border-info text-white '
       enableDeclineButton
       declineButtonText='DECLINE COOKIES'

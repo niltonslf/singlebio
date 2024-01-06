@@ -116,7 +116,7 @@ const AppearancePage = observer(() => {
                 Save
               </button>
               <button
-                className='btn btn-info btn-md flex-1 md:btn-wide'
+                className='btn btn-warning btn-md flex-1 md:btn-wide'
                 onClick={() => handleResetAppearance()}>
                 Reset
               </button>

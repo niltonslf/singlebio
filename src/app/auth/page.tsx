@@ -49,7 +49,7 @@ const SignIn = observer(() => {
         </Button>
 
         <div className='after:bg-red after:content-[" "] relative my-5 flex items-center justify-center after:absolute after:left-[0] after:top-[50%] after:w-full after:border-b after:border-gray-400'>
-          <span className='relative z-20 bg-base-100 px-4 text-neutral-200'>
+          <span className='relative z-20 bg-base-100 px-4 text-base-content/70'>
             Soon
           </span>
         </div>

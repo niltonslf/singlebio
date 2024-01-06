@@ -21,7 +21,7 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className='mb-10 mt-5 w-full text-lg font-normal text-neutral-200 md:w-[80%]'>
+            <p className='mb-10 mt-5 w-full text-lg font-normal text-base-content/70 md:w-[80%]'>
               Compile all your links into one, customized page and connect with
               your audience seamlessly.
             </p>
