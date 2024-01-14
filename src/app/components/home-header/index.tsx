@@ -5,12 +5,7 @@ export const HomeHeader = () => {
   return (
     <header className='mx-auto flex w-full max-w-6xl items-center justify-between py-2'>
       <Link href='/' title='Brand' className='font-semibold'>
-        <Image
-          src='/logo-white.png'
-          width={114.72}
-          height={30}
-          alt='lnktree logo'
-        />
+        <Image src='/logo-white.png' width={114.72} height={30} alt='Logo' />
       </Link>
 
       <Link href='/auth' className='btn btn-outline btn-neutral px-10'>

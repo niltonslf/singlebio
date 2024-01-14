@@ -2,6 +2,8 @@ import './globals.css'
 import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 
+import {APP_NAME} from '@/config/envs'
+
 import {Providers} from './providers'
 
 const inter = Inter({subsets: ['latin']})
@@ -9,7 +11,7 @@ const inter = Inter({subsets: ['latin']})
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL
 
 export const metadata: Metadata = {
-  title: 'Lnktree | Share your links',
+  title: `${APP_NAME} | Share your links`,
   description: 'Share your digital world with just a single link!',
 
   metadataBase: new URL(baseUrl || ''),

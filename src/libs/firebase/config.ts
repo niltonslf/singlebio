@@ -5,6 +5,8 @@ import {getFirestore} from 'firebase/firestore'
 import {getStorage} from 'firebase/storage'
 import {getCookieConsentValue} from 'react-cookie-consent'
 
+import {COOKIES_CONSENT_KEY} from '@/config/envs'
+
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -15,8 +17,7 @@ const firebaseConfig: FirebaseOptions = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 }
 
-const hasCookiesConsent =
-  getCookieConsentValue('lnktreeCookiesConsent') === 'true'
+const hasCookiesConsent = getCookieConsentValue(COOKIES_CONSENT_KEY) === 'true'
 
 export const app = initializeApp(firebaseConfig)
 app.automaticDataCollectionEnabled = hasCookiesConsent

@@ -38,7 +38,7 @@ export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
           src='/logo-white.png'
           width={114.72}
           height={30}
-          alt='lnktree logo'
+          alt='Logo'
           className='hidden dark:flex'
         />
 
@@ -46,7 +46,7 @@ export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
           src='/logo-black.png'
           width={114.72}
           height={30}
-          alt='lnktree logo'
+          alt='Logo'
           className='flex dark:hidden'
         />
       </Link>
