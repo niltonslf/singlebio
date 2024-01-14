@@ -10,11 +10,11 @@ describe('Sidebar component', () => {
   it('should render sidebar', () => {
     makeSUT()
 
-    const logo = screen.getByRole('img')
+    const logos = screen.getAllByRole('img')
     const mobileBtn = screen.getByRole('button')
     const menuSections = document.querySelectorAll('nav > div > div')
 
-    expect(logo).toBeVisible()
+    expect(logos.length).toBe(2)
     expect(mobileBtn).toBeInTheDocument()
     expect(menuSections).toHaveLength(3)
   })
