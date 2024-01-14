@@ -27,7 +27,9 @@ const SignIn = observer(() => {
   }
 
   return (
-    <main className='m-auto flex h-screen w-screen items-center justify-center bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-yellow-500 via-purple-500 to-blue-500 px-10'>
+    <main
+      data-theme='dark'
+      className='m-auto flex h-screen w-screen items-center justify-center bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-yellow-500 via-purple-500 to-blue-500 px-10'>
       <section className='relative flex w-[400px] max-w-full flex-col rounded-lg bg-base-100 px-4 py-10 text-neutral-50 shadow-2xl shadow-black'>
         <Link
           href='/'

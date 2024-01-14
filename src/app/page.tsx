@@ -5,7 +5,9 @@ import {CookieConsentBanner, HomeFooter, HomeHeader} from './components'
 
 export default function Home() {
   return (
-    <main className='via-background-200 flex min-h-[100vh] w-full flex-col bg-gradient-to-tr from-base-100 via-base-300 to-base-100 p-5'>
+    <main
+      data-theme='dark'
+      className='via-background-200 flex min-h-[100vh] w-full flex-col bg-gradient-to-tr from-base-100 via-base-300 to-base-100 p-5'>
       <div className='h-screen w-full'>
         <HomeHeader />
 
