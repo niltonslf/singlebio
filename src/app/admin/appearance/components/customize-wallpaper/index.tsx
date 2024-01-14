@@ -40,7 +40,7 @@ export const CustomizeWallpaper = observer(() => {
     <>
       <section className='flex flex-row flex-wrap items-start gap-10'>
         <div className='w-full md:w-auto md:flex-1'>
-          <h1 className='text-base font-normal text-neutral-200'>
+          <h1 className='text-base font-normal text-base-content/70'>
             Select the wallpaper
           </h1>
 
@@ -67,7 +67,7 @@ export const CustomizeWallpaper = observer(() => {
 
               {theme.backgroundImage && (
                 <div
-                  className='absolute left-0 top-0 z-50 hidden h-full w-full items-center justify-center bg-neutral-950 bg-opacity-50 group-hover:flex'
+                  className='absolute left-0 top-0 z-50 hidden h-full w-full items-center justify-center bg-base-300 bg-opacity-50 group-hover:flex'
                   onClick={event => {
                     event.preventDefault()
                     handleRemoveWallpaper()
@@ -92,7 +92,7 @@ export const CustomizeWallpaper = observer(() => {
         </div>
 
         <div className='w-full md:w-auto md:flex-1'>
-          <h2 className='text-base font-normal text-neutral-200'>
+          <h2 className='text-base font-normal text-base-content/70'>
             Select the background color
           </h2>
 

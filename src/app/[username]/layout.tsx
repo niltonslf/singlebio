@@ -2,6 +2,7 @@ import {Metadata} from 'next'
 import {ReactNode} from 'react'
 
 import {fetchUserProfile} from '@/api/usecases'
+import {APP_NAME} from '@/config/envs'
 
 type LayoutProps = {
   children: ReactNode
@@ -18,7 +19,7 @@ export const generateMetadata = async ({
   if (!user)
     return {
       metadataBase: new URL(baseUrl || ''),
-      title: 'Lnktree user page',
+      title: `${APP_NAME} user page`,
       description: 'User personal page with his best content.',
     }
 

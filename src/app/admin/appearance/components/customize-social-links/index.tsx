@@ -19,7 +19,7 @@ export const CustomizeSocialLinks = observer(() => {
   return (
     <>
       <div className='mt-3'>
-        <h2 className='text-md font-normal text-neutral-200'>
+        <h2 className='text-md font-normal text-base-content/70'>
           Select the icon color
         </h2>
 

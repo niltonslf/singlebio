@@ -7,7 +7,7 @@ type SectionCardProps = {
 
 export const SectionCard = ({children, title}: SectionCardProps) => {
   return (
-    <div className='relative flex w-full flex-col gap-2 overflow-hidden rounded-lg bg-neutral p-6 shadow-lg'>
+    <div className='relative flex w-full flex-col gap-2 overflow-hidden rounded-lg bg-base-300 p-6 shadow-lg'>
       <div className='mb-5 flex items-baseline'>
         <h3 className='text-xl font-semibold'>{title}</h3>
       </div>

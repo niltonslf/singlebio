@@ -1,7 +1,7 @@
 import {X} from 'lucide-react'
 import Image from 'next/image'
 
-import {NavLinks} from '..'
+import {NavLinks, ThemeSwitcher} from '..'
 
 import Link from 'next/link'
 
@@ -17,10 +17,10 @@ export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
     <nav
       data-testid='admin-sidebar'
       className={merge([
-        'absolute left-[-100%]  top-0 z-40 flex h-full border-neutral bg-base-100',
+        'absolute left-[-100%]  top-0 z-40 flex h-full border-base-300 bg-base-100',
         'w-full max-w-full flex-col gap-5 border-r p-5 ',
         'bg-opacity-90 backdrop-blur-md transition-all ',
-        'md:relative md:left-0 md:z-auto md:w-full md:bg-transparent',
+        'md:relative md:left-0 md:z-auto md:w-full md:bg-base-200 dark:md:bg-transparent',
         'overflow-y-auto',
         isOpen && 'left-0',
       ])}>
@@ -33,19 +33,32 @@ export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
       <Link
         href='/admin'
         title='Home page'
-        className='mb-8 flex w-full cursor-pointer justify-center'>
+        className='indicator mx-auto mb-8 flex cursor-pointer justify-center'>
+        <span className='indicator-end badge indicator-item badge-primary badge-sm'>
+          Beta
+        </span>
         <Image
           src='/logo-white.png'
           width={114.72}
           height={30}
-          alt='lnktree logo'
+          alt='Logo'
+          className='hidden dark:flex'
+        />
+
+        <Image
+          src='/logo-black.png'
+          width={114.72}
+          height={30}
+          alt='Logo'
+          className='flex dark:hidden'
         />
       </Link>
 
       <NavLinks onClick={onClose} />
 
       <div className='mt-auto flex w-full flex-row items-center justify-between'>
-        <p className=' text-left text-xs text-neutral-200'>v0.0.1 (beta)</p>
+        <p className=' text-left text-xs'>v0.0.1 (beta)</p>
+        <ThemeSwitcher />
       </div>
     </nav>
   )

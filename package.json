@@ -1,5 +1,5 @@
 {
-  "name": "lnktree",
+  "name": "SingleBio",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -39,9 +39,11 @@
     "mobx": "^6.12.0",
     "mobx-react-lite": "^4.0.5",
     "next": "^14.0.4",
+    "next-themes": "^0.2.1",
     "postcss": "8.4.28",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
+    "react-cookie-consent": "^9.0.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
     "react-social-icons": "^6.7.0",

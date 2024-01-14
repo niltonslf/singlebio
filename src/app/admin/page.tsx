@@ -3,11 +3,15 @@
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
-import {Modal, Smartphone} from '@/app/components'
+import {SetUsernameModal, Smartphone} from '@/app/components'
 import {parseUserPageUrl} from '@/utils'
 
 import {authStore} from '../auth/context/auth-store'
-import {AdminBaseLayout, PageLoader} from './components'
+import {
+  AdminBaseLayout,
+  BetaVersionWarningModal,
+  PageLoader,
+} from './components'
 import {LinksSection} from './components/links-section'
 import {useSmartphone} from './context/smartphone-context'
 
@@ -16,11 +20,13 @@ const Admin = observer(() => {
 
   const {iframeRef, reloadSmartphoneList, key} = useSmartphone()
   const [showUsernameModal, setShowUsernameModal] = useState(false)
+  const [showBetaWarningModal, setShowBetaWarningModal] = useState(false)
 
   const onSubmitUsername = async (username: string) => {
     await authStore.updateUser({username})
     reloadSmartphoneList()
     setShowUsernameModal(false)
+    setShowBetaWarningModal(true)
   }
 
   useEffect(() => {
@@ -51,7 +57,14 @@ const Admin = observer(() => {
         </AdminBaseLayout.PagePreview>
       </AdminBaseLayout>
 
-      <Modal onSave={onSubmitUsername} initialOpen={showUsernameModal} />
+      <SetUsernameModal
+        onSave={onSubmitUsername}
+        initialOpen={showUsernameModal}
+      />
+      <BetaVersionWarningModal
+        isOpen={showBetaWarningModal}
+        onClose={() => setShowBetaWarningModal(false)}
+      />
     </>
   )
 })

@@ -64,6 +64,7 @@ export const CustomColorPicker = ({
                 width: '100%',
                 backgroundColor: '#25252c',
                 padding: '3px 5px',
+                color: 'white',
               }}
               color={color}
               onChange={color => onChange(color)}

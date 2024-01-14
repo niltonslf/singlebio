@@ -1,11 +1,10 @@
 import {parse} from 'firestore-document-parser'
 
+import {FIREBASE_REST_BASE_URL} from '@/config/envs'
 import {User} from '@/models'
 
-const FIREBASE_API_URL = 'https://firestore.googleapis.com/v1'
-const FIREBASE_PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
 export const fetchUserProfile = async (username: string) => {
-  const path = `${FIREBASE_API_URL}/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents:runQuery`
+  const path = `${FIREBASE_REST_BASE_URL}/documents:runQuery`
 
   const query = {
     structuredQuery: {
@@ -41,7 +40,7 @@ export const fetchUserProfile = async (username: string) => {
 }
 
 export const fetchUserLinks = async (uid: string) => {
-  const path = `${FIREBASE_API_URL}/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/users/${uid}/links`
+  const path = `${FIREBASE_REST_BASE_URL}/documents/users/${uid}/links`
 
   const res = await fetch(path, {
     cache: 'no-store',

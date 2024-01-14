@@ -24,7 +24,7 @@ export const CardLink = ({link, onDelete, children}: CardLinkProps) => {
     <li
       ref={setNodeRef}
       style={style}
-      className='relative flex w-full flex-nowrap items-center justify-center gap-2 rounded-xl bg-neutral px-3  py-2 font-medium shadow-md md:px-5 md:py-3'>
+      className='relative flex w-full flex-nowrap items-center justify-center gap-2 rounded-xl bg-base-300 px-3  py-2 font-medium shadow-md md:px-5 md:py-3'>
       <button
         className='flex touch-none flex-col items-center'
         {...attributes}
@@ -43,7 +43,7 @@ export const CardLink = ({link, onDelete, children}: CardLinkProps) => {
         <Trash
           width={20}
           height={20}
-          className='text-neutral-400 hover:text-neutral-200'
+          className='text-neutral-400 hover:text-base-content/70'
         />
       </div>
     </li>

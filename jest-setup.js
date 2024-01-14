@@ -7,3 +7,10 @@ jest.mock('react-social-icons', () => {
     SocialIcon: <></>,
   }
 })
+
+jest.mock('firebase/analytics', () => {
+  return {
+    ...jest.requireActual('firebase/analytics'),
+    getAnalytics: jest.fn(),
+  }
+})

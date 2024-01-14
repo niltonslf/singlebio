@@ -1,7 +1,7 @@
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 
 import {authStore} from '@/app/auth/context/auth-store'
-import {firebaseStorage} from '@/libs/firebase'
+import {storage} from '@/libs/firebase'
 
 export const useImageUploader = () => {
   const user = authStore.user
@@ -14,7 +14,7 @@ export const useImageUploader = () => {
     const imageArray = await imageFile.arrayBuffer()
 
     const fileRef = `uploads/${user.uid}/${filename}.jpg`
-    const storageRef = ref(firebaseStorage, fileRef)
+    const storageRef = ref(storage, fileRef)
 
     await uploadBytes(storageRef, imageArray, {
       contentType: imageFile.type,

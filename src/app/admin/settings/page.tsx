@@ -5,7 +5,7 @@ import {observer} from 'mobx-react-lite'
 
 import {authStore} from '@/app/auth/context/auth-store'
 
-import {AdminBaseLayout, SectionCard} from '../components'
+import {AdminBaseLayout, SectionCard, ThemeSwitcher} from '../components'
 
 const Settings = observer(() => {
   const deleteAccount = async () => {
@@ -25,9 +25,7 @@ const Settings = observer(() => {
           {/*  */}
 
           <SectionCard title='App theme'>
-            <select className='bw solid select' disabled>
-              <option>Dark theme</option>
-            </select>
+            <ThemeSwitcher />
           </SectionCard>
           {/*  */}
           <SectionCard title='Delete Account'>

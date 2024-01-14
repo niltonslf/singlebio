@@ -1,7 +1,9 @@
 'use client'
 
+import {ArrowLeft} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import Image from 'next/image'
+import Link from 'next/link'
 import {useRouter} from 'next/navigation'
 import {useState} from 'react'
 
@@ -25,8 +27,17 @@ const SignIn = observer(() => {
   }
 
   return (
-    <main className='m-auto flex h-screen w-screen items-center justify-center bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-yellow-500 via-purple-500 to-blue-500 px-10'>
-      <section className='flex w-[400px] max-w-full flex-col rounded-lg bg-base-100 px-4 py-10 text-neutral-50 shadow-2xl shadow-black'>
+    <main
+      data-theme='dark'
+      className='m-auto flex h-screen w-screen items-center justify-center bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-yellow-500 via-purple-500 to-blue-500 px-10'>
+      <section className='relative flex w-[400px] max-w-full flex-col rounded-lg bg-base-100 px-4 py-10 text-neutral-50 shadow-2xl shadow-black'>
+        <Link
+          href='/'
+          title='Go back home'
+          className='btn btn-square btn-ghost btn-sm absolute left-4 top-4'>
+          <ArrowLeft size={20} />
+        </Link>
+
         <header className='mb-12 flex w-full justify-center'>
           <Image src='/logo-white.png' width={200} height={52} alt='logo' />
         </header>
@@ -40,7 +51,7 @@ const SignIn = observer(() => {
         </Button>
 
         <div className='after:bg-red after:content-[" "] relative my-5 flex items-center justify-center after:absolute after:left-[0] after:top-[50%] after:w-full after:border-b after:border-gray-400'>
-          <span className='relative z-20 bg-base-100 px-4 text-neutral-200'>
+          <span className='relative z-20 bg-base-100 px-4 text-base-content/70'>
             Soon
           </span>
         </div>

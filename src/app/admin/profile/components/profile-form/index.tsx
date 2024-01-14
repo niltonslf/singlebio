@@ -159,7 +159,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
           {isUploadingImg && (
             <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-full bg-neutral-950 bg-opacity-80'>
               <div className='loading loading-spinner loading-xs text-neutral-50' />
-              <span className='mt-2 text-sm font-semibold text-neutral-200'>
+              <span className='mt-2 text-sm font-semibold text-base-content/70'>
                 Uploading...
               </span>
             </div>
@@ -177,7 +177,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
               ])}>
               <XCircle
                 size={25}
-                className='text-neutral-200 group-hover:text-neutral-950'
+                className='text-base-content/70 group-hover:text-neutral-950'
               />
             </div>
           )}
@@ -194,7 +194,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
               ])}>
               <Camera
                 size={18}
-                className='text-neutral-200 group-hover:text-neutral-900'
+                className='text-base-content/70 group-hover:text-neutral-900'
               />
             </label>
           )}

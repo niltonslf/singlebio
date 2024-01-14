@@ -39,6 +39,7 @@ export default async function UserPage({params, searchParams}: UserPageProps) {
 
   return (
     <main
+      data-theme='dark'
       className={clsx([
         'flex h-[100vh] w-full flex-wrap overflow-hidden bg-cover bg-center',
         'bg-fixed',
