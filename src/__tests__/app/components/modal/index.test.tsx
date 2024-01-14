@@ -6,7 +6,7 @@ import {
   makeUser,
   setup,
 } from '@/__tests__/__helpers__'
-import {Modal} from '@/app/components'
+import {SetUsernameModal} from '@/app/components'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('firebase/firestore')
@@ -15,7 +15,7 @@ jest.mock('@react-input/mask')
 const onSaveMock = jest.fn(() => Promise.resolve())
 
 const makeSUT = ({onSave = onSaveMock, initialOpen = true} = {}) => {
-  return setup(<Modal onSave={onSave} initialOpen={initialOpen} />)
+  return setup(<SetUsernameModal onSave={onSave} initialOpen={initialOpen} />)
 }
 
 const getModalElements = () => {

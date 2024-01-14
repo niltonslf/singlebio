@@ -18,7 +18,7 @@ type ModalProps = {
   initialOpen: boolean
 }
 
-export const Modal = ({onSave, initialOpen}: ModalProps) => {
+export const SetUsernameModal = ({onSave, initialOpen}: ModalProps) => {
   const {
     handleSubmit,
     control,
