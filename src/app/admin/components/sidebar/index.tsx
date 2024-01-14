@@ -33,7 +33,10 @@ export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
       <Link
         href='/admin'
         title='Home page'
-        className='mb-8 flex w-full cursor-pointer justify-center'>
+        className='indicator mx-auto mb-8 flex cursor-pointer justify-center'>
+        <span className='indicator-end badge indicator-item badge-primary badge-sm'>
+          Beta
+        </span>
         <Image
           src='/logo-white.png'
           width={114.72}
