@@ -11,8 +11,18 @@ const inter = Inter({subsets: ['latin']})
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL
 
 export const metadata: Metadata = {
-  title: `${APP_NAME} | Share your links`,
-  description: 'Share your digital world with just a single link!',
+  title: `${APP_NAME}: Share your anything in your bio in seconds`,
+  description: `${APP_NAME} makes your life simple by marking room for you to share your digital world with just a single link. Put everything about you together in your exclusive personal page and be discovered easily sharing your links in a social media, blog page, anywhere.`,
+  keywords: [
+    'link sharing',
+    'share link on Instagram',
+    'share link on social media',
+    'link list',
+    'bio link',
+    'create page',
+    'personal page',
+    'share link',
+  ],
 
   metadataBase: new URL(baseUrl || ''),
   openGraph: {
