@@ -27,6 +27,17 @@ export const generateMetadata = async ({
     metadataBase: new URL(baseUrl || ''),
     title: user.name,
     description: user.bio,
+    keywords: [
+      'link sharing',
+      'share link on Instagram',
+      'share link on social media',
+      'link list',
+      'bio link',
+      'create page',
+      'personal page',
+      'share link',
+    ],
+
     openGraph: {
       images: [
         {

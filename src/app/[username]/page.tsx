@@ -10,6 +10,7 @@ import {
 } from '@/app/[username]/components'
 import {Link, UserTheme} from '@/models'
 
+import {CookieConsentBanner} from '../components'
 import {makePageStyles} from './utils'
 
 type UserPageProps = {
@@ -38,31 +39,34 @@ export default async function UserPage({params, searchParams}: UserPageProps) {
   const pageStyles = makePageStyles({params: searchParams, user})
 
   return (
-    <main
-      data-theme='dark'
-      className={clsx([
-        'flex h-[100vh] w-full flex-wrap overflow-hidden bg-cover bg-center',
-        'bg-fixed',
-        !pageStyles.backgroundImage && !pageStyles.backgroundColor
-          ? defaultBg
-          : '',
-      ])}
-      style={pageStyles.backgroundImage}>
-      <section
+    <>
+      <main
+        data-theme='dark'
         className={clsx([
-          'flex h-[100dvh] w-screen flex-col items-center justify-start  overflow-y-auto',
-          'px-5 pb-8 pt-20',
+          'flex h-[100vh] w-full flex-wrap overflow-hidden bg-cover bg-center',
+          'bg-fixed',
+          !pageStyles.backgroundImage && !pageStyles.backgroundColor
+            ? defaultBg
+            : '',
         ])}
-        style={pageStyles.backgroundColor}>
-        <div className='flex w-full max-w-2xl flex-1 flex-col flex-wrap'>
-          <UserPageHeader user={user} pageStyles={pageStyles} />
-          {user?.social && (
-            <UserPageSocial social={user.social} pageStyles={pageStyles} />
-          )}
-          <UserPageLinks links={links} pageStyles={pageStyles} />
-          <UserPageFooter />
-        </div>
-      </section>
-    </main>
+        style={pageStyles.backgroundImage}>
+        <section
+          className={clsx([
+            'flex h-[100dvh] w-screen flex-col items-center justify-start  overflow-y-auto',
+            'px-5 pb-8 pt-20',
+          ])}
+          style={pageStyles.backgroundColor}>
+          <div className='flex w-full max-w-2xl flex-1 flex-col flex-wrap'>
+            <UserPageHeader user={user} pageStyles={pageStyles} />
+            {user?.social && (
+              <UserPageSocial social={user.social} pageStyles={pageStyles} />
+            )}
+            <UserPageLinks links={links} pageStyles={pageStyles} />
+            <UserPageFooter />
+          </div>
+        </section>
+      </main>
+      <CookieConsentBanner />
+    </>
   )
 }

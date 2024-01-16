@@ -33,7 +33,7 @@ export default function Home() {
           </article>
 
           <div className='md:w-35% ml-auto hidden h-full flex-row items-center justify-center md:flex'>
-            <div className='rotate-[7deg] rounded-2xl '>
+            <div className='mr-10 rotate-[7deg] rounded-2xl '>
               <Image
                 src='/home/model.png'
                 alt='model'
