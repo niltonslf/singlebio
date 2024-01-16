@@ -5,7 +5,12 @@ import {HTMLAttributes, ReactNode} from 'react'
 
 import {merge} from '@/utils'
 
-export type ButtonVariants = 'info' | 'error' | 'warning' | 'success'
+export type ButtonVariants =
+  | 'primary'
+  | 'infor'
+  | 'error'
+  | 'warning'
+  | 'success'
 
 type ButtonProps = {
   children: ReactNode
@@ -20,7 +25,7 @@ export const Button = ({
   children,
   className,
   onClick,
-  variant = 'info',
+  variant = 'primary',
   isLoading,
   disabled,
 }: ButtonProps) => {

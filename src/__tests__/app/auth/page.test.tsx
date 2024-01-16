@@ -36,7 +36,7 @@ const mockSignInWithPopup = (result: any, isReject: boolean = false) => {
 }
 
 const validateGoogleBtn = () => {
-  const googleButton = screen.getByText('Sign up with Google')
+  const googleButton = screen.getByText('Sign in with Google')
   expect(googleButton).toBeVisible()
   return googleButton
 }

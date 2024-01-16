@@ -22,6 +22,7 @@ const SignIn = observer(() => {
     password: '',
     isCreate: false,
   })
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleLoginWithGoogle = async () => {
     try {
@@ -53,11 +54,14 @@ const SignIn = observer(() => {
 
   const handleRegisterWithEmailAndPassword = async () => {
     const {email, password} = emailPasswordForm
+    setIsLoading(true)
     try {
       await authStore.createWithEmailAndPassword(email, password)
       push('/admin')
+      setIsLoading(false)
     } catch (error: any) {
       setError(true)
+      setIsLoading(false)
     }
   }
 
@@ -95,6 +99,7 @@ const SignIn = observer(() => {
               type='email'
               className='input  input-bordered'
               placeholder='Email'
+              value={emailPasswordForm.email}
               onChange={ev =>
                 setEmailPasswordForm(prev => ({
                   ...prev,
@@ -106,6 +111,7 @@ const SignIn = observer(() => {
               type='password'
               className='input input-bordered'
               placeholder='Password'
+              value={emailPasswordForm.password}
               onChange={ev =>
                 setEmailPasswordForm(prev => ({
                   ...prev,
@@ -129,31 +135,46 @@ const SignIn = observer(() => {
             {emailPasswordForm.isCreate && (
               <Button
                 onClick={() => handleRegisterWithEmailAndPassword()}
-                className='flex w-full max-w-md items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-center text-sm  text-neutral-50 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'
+                className='flex w-full max-w-md text-base-content disabled:bg-white/30 disabled:text-base-100'
+                isLoading={isLoading}
                 disabled={
                   !emailPasswordForm.email && !emailPasswordForm.password
                 }>
-                Sign up
+                Sign up with email
               </Button>
             )}
 
             {!emailPasswordForm.isCreate && (
-              <span
-                className='mt-5 w-full  cursor-pointer text-center text-xs text-info'
-                onClick={() =>
-                  setEmailPasswordForm({
-                    email: '',
-                    password: '',
-                    isCreate: true,
-                  })
-                }>
-                Create an account
-              </span>
+              <div className='mt-2 flex items-center justify-between'>
+                <span
+                  className='w-full cursor-pointer text-center text-xs text-info'
+                  onClick={() =>
+                    setEmailPasswordForm({
+                      email: '',
+                      password: '',
+                      isCreate: true,
+                    })
+                  }>
+                  Forgot your password?
+                </span>
+
+                <span
+                  className='w-full cursor-pointer text-center text-xs text-info'
+                  onClick={() =>
+                    setEmailPasswordForm({
+                      email: '',
+                      password: '',
+                      isCreate: true,
+                    })
+                  }>
+                  Create an account
+                </span>
+              </div>
             )}
           </div>
 
           {!emailPasswordForm.isCreate && (
-            <div className='after:bg-red after:content-[" "] relative my-5 flex items-center justify-center after:absolute after:left-[0] after:top-[50%] after:w-full after:border-b after:border-gray-400'>
+            <div className='after:bg-red after:content-[" "] relative my-3 flex items-center justify-center after:absolute after:left-[0] after:top-[50%] after:w-full after:border-b after:border-gray-400'>
               <span className='relative z-20 bg-base-100 px-4 text-base-content/70'>
                 or
               </span>
@@ -163,6 +184,7 @@ const SignIn = observer(() => {
           {!emailPasswordForm.isCreate && (
             <div className='flex flex-col gap-3'>
               <Button
+                variant='infor'
                 isLoading={isFetchingUser}
                 onClick={handleLoginWithGoogle}
                 className='dark:focus:ring-[#4285F4]/55 !hover:bg-[#4285F4]/90  mb-2 mr-2 inline-flex w-full items-center justify-center rounded-lg !bg-[#4285F4] px-5 py-2.5 text-sm  text-neutral-50 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50'>

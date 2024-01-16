@@ -53,7 +53,7 @@ describe('parseToUser', () => {
 
     expect(user).toEqual({
       email: firebaseUser.email,
-      name: '',
+      name: firebaseUser?.email?.split('@')[0],
       pictureUrl: '',
       uid: firebaseUser.uid,
     })

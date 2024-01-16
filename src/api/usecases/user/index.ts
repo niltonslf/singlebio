@@ -60,3 +60,19 @@ export const fetchUserLinks = async (uid: string) => {
 
   return linksRes
 }
+
+export const fetchAllUsernames = async (): Promise<{username: string}[]> => {
+  const path = `${FIREBASE_REST_BASE_URL}/documents/users?mask.fieldPaths=username`
+
+  const res = await fetch(path)
+
+  if (!res.ok) throw new Error('failed to fetch users usernames')
+
+  const data = await res.json()
+
+  if (!data.documents.length) return []
+
+  const parsedData = data?.documents?.map((user: any) => parse(user.fields))
+
+  return parsedData
+}
