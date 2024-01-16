@@ -10,9 +10,11 @@ export const parseToUser = (
   if (!firebaseUser.email || !firebaseUser.uid)
     throw new Error('email and uid are required.')
 
+  const fallbackName = firebaseUser.email.split('@')[0]
+
   const response: User = {
     email: firebaseUser.email,
-    name: firebaseUser.displayName || '',
+    name: firebaseUser.displayName || fallbackName,
     pictureUrl: firebaseUser.photoURL || '',
     uid: firebaseUser.uid,
   }

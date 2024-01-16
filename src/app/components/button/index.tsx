@@ -13,6 +13,7 @@ type ButtonProps = {
   className?: HTMLAttributes<HTMLButtonElement>['className']
   variant?: ButtonVariants
   isLoading?: boolean
+  disabled?: boolean
 }
 
 export const Button = ({
@@ -21,13 +22,18 @@ export const Button = ({
   onClick,
   variant = 'info',
   isLoading,
+  disabled,
 }: ButtonProps) => {
   return (
     <button
       className={merge([`btn btn-${variant}`, className])}
-      onClick={onClick}>
+      onClick={onClick}
+      disabled={disabled}>
       {isLoading ? (
-        <span className='flex flex-row items-center justify-between gap-2'>
+        <span
+          className={merge([
+            'flex flex-row items-center justify-between gap-2',
+          ])}>
           <Loader2 className='animate-spin' />
         </span>
       ) : (

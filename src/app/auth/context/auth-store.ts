@@ -1,8 +1,10 @@
 import {
   User as FbUser,
+  createUserWithEmailAndPassword,
   deleteUser,
   getAuth,
   reauthenticateWithPopup,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
 } from 'firebase/auth'
@@ -34,6 +36,8 @@ class AuthStore {
       //action
       signInWithGoogle: action,
       signInWithGithub: action,
+      signInWithEmailAndPassword: action,
+      createWithEmailAndPassword: action,
       authUser: action,
       updateUser: action,
       logout: action,
@@ -61,6 +65,30 @@ class AuthStore {
   public async signInWithGithub(): Promise<User> {
     try {
       const {user} = await signInWithPopup(auth, githubProvider)
+      return this.authUser(user)
+    } catch (error) {
+      throw 'could not authenticate user'
+    }
+  }
+
+  public async createWithEmailAndPassword(
+    email: string,
+    password: string,
+  ): Promise<User> {
+    try {
+      const {user} = await createUserWithEmailAndPassword(auth, email, password)
+      return this.authUser(user)
+    } catch (error) {
+      throw 'could not authenticate user'
+    }
+  }
+
+  public async signInWithEmailAndPassword(
+    email: string,
+    password: string,
+  ): Promise<User> {
+    try {
+      const {user} = await signInWithEmailAndPassword(auth, email, password)
       return this.authUser(user)
     } catch (error) {
       throw 'could not authenticate user'
