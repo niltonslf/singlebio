@@ -14,7 +14,7 @@ export const BetaVersionWarningModal = ({
 }: BetaVersionWarningModalProps) => {
   return (
     <dialog className={merge(['modal', isOpen && 'modal-open'])}>
-      <div className='modal-box w-11/12 md:w-8/12'>
+      <div className='modal-box w-11/12 max-w-full md:w-8/12'>
         <h3 className='text-lg font-bold'>Message from the developer</h3>
         <div className='flex flex-col gap-5 py-4 md:flex-row'>
           <Image

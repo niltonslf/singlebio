@@ -1,4 +1,11 @@
-import {app, auth, storage, provider, db, analytics} from '@/libs/firebase'
+import {
+  app,
+  auth,
+  storage,
+  googleProvider,
+  db,
+  analytics,
+} from '@/libs/firebase'
 import {cleanup} from '@testing-library/react'
 
 jest.mock('firebase/analytics', () => {
@@ -20,7 +27,7 @@ describe('Firebase config', () => {
     expect(auth).toBeDefined()
     expect(db).toBeDefined()
     expect(storage).toBeDefined()
-    expect(provider).toBeDefined()
+    expect(googleProvider).toBeDefined()
   })
 
   it('should start analytics successfully', async () => {

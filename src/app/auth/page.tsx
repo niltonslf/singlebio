@@ -26,6 +26,15 @@ const SignIn = observer(() => {
     }
   }
 
+  const handleLoginWithGithub = async () => {
+    try {
+      await authStore.signInWithGithub()
+      push('/admin')
+    } catch (error: any) {
+      setError(true)
+    }
+  }
+
   return (
     <main
       data-theme='dark'
@@ -50,12 +59,13 @@ const SignIn = observer(() => {
             Sign up with Google
           </Button>
 
-          <button
-            type='button'
-            className='flex w-full max-w-md cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-center text-base font-semibold text-neutral-50 opacity-60 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'>
+          <Button
+            isLoading={isFetchingUser}
+            onClick={handleLoginWithGithub}
+            className='flex w-full max-w-md items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-center text-base font-semibold text-neutral-50 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'>
             <GithubIcon />
             Sign up with GitHub
-          </button>
+          </Button>
 
           <div className='after:bg-red after:content-[" "] relative flex items-center justify-center after:absolute after:left-[0] after:top-[50%] after:w-full after:border-b after:border-gray-400'>
             <span className='relative z-20 bg-base-100 px-4 text-base-content/70'>

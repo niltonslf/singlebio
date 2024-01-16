@@ -19,7 +19,7 @@ import {
 } from 'firebase/firestore'
 import {action, computed, makeObservable, observable} from 'mobx'
 
-import {app, auth, db, provider} from '@/libs/firebase'
+import {app, auth, db, githubProvider, googleProvider} from '@/libs/firebase'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
 
@@ -33,6 +33,7 @@ class AuthStore {
       firebaseUser: observable,
       //action
       signInWithGoogle: action,
+      signInWithGithub: action,
       authUser: action,
       updateUser: action,
       logout: action,
@@ -50,7 +51,16 @@ class AuthStore {
 
   public async signInWithGoogle(): Promise<User> {
     try {
-      const {user} = await signInWithPopup(auth, provider)
+      const {user} = await signInWithPopup(auth, googleProvider)
+      return this.authUser(user)
+    } catch (error) {
+      throw 'could not authenticate user'
+    }
+  }
+
+  public async signInWithGithub(): Promise<User> {
+    try {
+      const {user} = await signInWithPopup(auth, githubProvider)
       return this.authUser(user)
     } catch (error) {
       throw 'could not authenticate user'
@@ -110,7 +120,7 @@ class AuthStore {
 
     if (!this.user?.uid || !auth.currentUser) throw 'User not found.'
 
-    await reauthenticateWithPopup(auth.currentUser, provider)
+    await reauthenticateWithPopup(auth.currentUser, googleProvider)
     // delete links
     const queryLinks = query(collection(db, 'users', this.user.uid, 'links'))
     const {size, docs} = await getDocs(queryLinks)
