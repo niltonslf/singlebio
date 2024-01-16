@@ -1,6 +1,6 @@
 'use client'
 
-import {ArrowLeft} from 'lucide-react'
+import {ArrowLeft, Lock} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -8,7 +8,7 @@ import {useRouter} from 'next/navigation'
 import {useState} from 'react'
 
 import {useValidateAuth} from '../admin/hooks'
-import {Button, GithubIcon, GoogleIcon} from '../components'
+import {Button, GithubIcon, GoogleIcon, MicrosoftIcon} from '../components'
 import {authStore} from './context/auth-store'
 
 const SignIn = observer(() => {
@@ -41,27 +41,42 @@ const SignIn = observer(() => {
         <header className='mb-12 flex w-full justify-center'>
           <Image src='/logo-white.png' width={200} height={52} alt='logo' />
         </header>
+        <div className='flex flex-col gap-5'>
+          <Button
+            isLoading={isFetchingUser}
+            onClick={handleLoginWithGoogle}
+            className='dark:focus:ring-[#4285F4]/55 !hover:bg-[#4285F4]/90  mb-2 mr-2 inline-flex w-full items-center justify-center rounded-lg !bg-[#4285F4] px-5 py-2.5 text-sm font-medium text-neutral-50 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50'>
+            <GoogleIcon />
+            Sign up with Google
+          </Button>
 
-        <Button
-          isLoading={isFetchingUser}
-          onClick={handleLoginWithGoogle}
-          className='dark:focus:ring-[#4285F4]/55 !hover:bg-[#4285F4]/90  mb-2 mr-2 inline-flex w-full items-center justify-center rounded-lg !bg-[#4285F4] px-5 py-2.5 text-sm font-medium text-neutral-50 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50'>
-          <GoogleIcon />
-          Sign up with Google
-        </Button>
+          <button
+            type='button'
+            className='flex w-full max-w-md cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-center text-base font-semibold text-neutral-50 opacity-60 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'>
+            <GithubIcon />
+            Sign up with GitHub
+          </button>
 
-        <div className='after:bg-red after:content-[" "] relative my-5 flex items-center justify-center after:absolute after:left-[0] after:top-[50%] after:w-full after:border-b after:border-gray-400'>
-          <span className='relative z-20 bg-base-100 px-4 text-base-content/70'>
-            Soon
-          </span>
+          <div className='after:bg-red after:content-[" "] relative flex items-center justify-center after:absolute after:left-[0] after:top-[50%] after:w-full after:border-b after:border-gray-400'>
+            <span className='relative z-20 bg-base-100 px-4 text-base-content/70'>
+              Soon
+            </span>
+          </div>
+
+          <button
+            type='button'
+            className='flex w-full max-w-md cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-center text-base font-semibold text-neutral-50 opacity-60 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'>
+            <MicrosoftIcon />
+            Sign up with Microsoft
+          </button>
+
+          <button
+            type='button'
+            className='flex w-full max-w-md cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-center text-base font-semibold text-neutral-50 opacity-60 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'>
+            <Lock />
+            Email/Password
+          </button>
         </div>
-
-        <button
-          type='button'
-          className='flex w-full max-w-md cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-center text-base font-semibold text-neutral-50 opacity-60 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'>
-          <GithubIcon />
-          Sign up with GitHub
-        </button>
 
         {error && (
           <p
