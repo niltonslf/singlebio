@@ -17,7 +17,9 @@ const firebaseConfig: FirebaseOptions = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 }
 
-const hasCookiesConsent = getCookieConsentValue(COOKIES_CONSENT_KEY) === 'true'
+const hasCookiesConsent =
+  !getCookieConsentValue(COOKIES_CONSENT_KEY) ||
+  getCookieConsentValue(COOKIES_CONSENT_KEY) === 'true'
 
 export const app = initializeApp(firebaseConfig)
 app.automaticDataCollectionEnabled = hasCookiesConsent
