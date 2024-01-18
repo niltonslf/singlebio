@@ -124,7 +124,34 @@ describe('Auth Page', () => {
         query: {},
       })
     })
-    it.todo('should return an error when tried to sign in with email ')
+    it('should return an error when tried to sign in with email', async () => {
+      jest
+        .spyOn(authStore, 'signInWithEmailAndPassword')
+        .mockRejectedValue('error')
+
+      const {user} = await makeSUT()
+
+      const emailInput = screen.getByRole('textbox')
+      const passwordInput = screen.getByPlaceholderText(/password/i)
+      const signInButton = screen.getByText(/Sign in with email/i)
+
+      const emailMock = faker.internet.email()
+      const passwordMock = faker.internet.password({length: 8})
+
+      await user.type(emailInput, emailMock)
+      await user.type(passwordInput, passwordMock)
+      await user.click(signInButton)
+
+      const errorMsg = screen.getByTestId('error-msg')
+
+      expect(authStore.signInWithEmailAndPassword).toHaveBeenCalledWith(
+        emailMock,
+        passwordMock,
+      )
+
+      expect(errorMsg).toBeInTheDocument()
+      expect(mockRouter).toMatchObject({asPath: '/auth', pathname: '/auth'})
+    })
     it.todo('should redirect to forgot password page')
     it.todo('should redirect to create an account')
   })
