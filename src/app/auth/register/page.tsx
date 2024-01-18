@@ -13,6 +13,10 @@ import {zodResolver} from '@hookform/resolvers/zod'
 import {authStore} from '../context/auth-store'
 
 const schema = z.object({
+  displayName: z
+    .string()
+    .min(3, {message: 'Name field required at least 3 characters'}),
+  email: z.string().min(8, {message: 'Email is required'}),
   password: z
     .string()
     .min(8, {message: 'Password field requires at least 8 characters'}),
@@ -34,8 +38,8 @@ const Register = () => {
   const handleRegisterWithEmailAndPassword = async (
     data: SignUpWithEmailAndPassword,
   ) => {
-    setIsLoading(true)
     try {
+      setIsLoading(true)
       await authStore.createWithEmailAndPassword(data)
       setAccountCreated(true)
       setIsLoading(false)
@@ -70,6 +74,11 @@ const Register = () => {
             placeholder='Name'
             {...register('displayName')}
           />
+          {errors.displayName && (
+            <div className='text-xs text-error'>
+              {errors.displayName.message}
+            </div>
+          )}
 
           <input
             type='email'
@@ -77,6 +86,9 @@ const Register = () => {
             placeholder='Email'
             {...register('email')}
           />
+          {errors.email && (
+            <div className='text-xs text-error'>{errors.email.message}</div>
+          )}
 
           <input
             type='password'

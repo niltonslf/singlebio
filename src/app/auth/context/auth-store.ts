@@ -91,7 +91,7 @@ class AuthStore {
       await sendEmailVerification(user)
       this.logout()
     } catch (error) {
-      throw 'could not create user'
+      throw error
     }
   }
 
