@@ -5,6 +5,7 @@ import {
   getAuth,
   reauthenticateWithPopup,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -23,6 +24,7 @@ import {
 } from 'firebase/firestore'
 import {action, computed, makeObservable, observable} from 'mobx'
 
+import {APP_URL} from '@/config/envs'
 import {app, auth, db, githubProvider, googleProvider} from '@/libs/firebase'
 import {Providers, SignUpWithEmailAndPassword, User} from '@/models'
 import {parseToUser} from '@/utils/user'
@@ -46,6 +48,7 @@ class AuthStore {
       deleteUser: action,
       setUser: action,
       clearUser: action,
+      resetPassword: action,
       //computed
       user: computed,
     })
@@ -155,12 +158,27 @@ class AuthStore {
     if (!this.user?.uid || !auth.currentUser) throw 'User not found.'
 
     const userProviderId = auth.currentUser.providerData[0].providerId
+    // const width = 400
+    // const height = 500
 
-    let providerInstance = googleProvider
+    // const y = window.top.outerHeight / 2 + window.top.screenY - height / 2
+    // const x = window.top.outerWidth / 2 + window.top.screenX - width / 2
 
-    if (userProviderId === Providers.GITHUB) providerInstance = githubProvider
+    // let newWindow = open(
+    //   '/auth',
+    //   'Sign in',
+    //   `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${width}, height=${height}, top=${y}, left=${x}`,
+    // )
 
-    await reauthenticateWithPopup(auth.currentUser, providerInstance)
+    if (userProviderId === Providers.PASSWORD) {
+      // const credential = EmailAuthProvider.credential(email, password)
+      // reauthenticateWithCredential(auth.currentUser, credential)
+    } else {
+      let providerInstance = googleProvider
+      if (userProviderId === Providers.GITHUB) providerInstance = githubProvider
+      await reauthenticateWithPopup(auth.currentUser, providerInstance)
+    }
+
     // delete links
     const queryLinks = query(collection(db, 'users', this.user.uid, 'links'))
     const {size, docs} = await getDocs(queryLinks)
@@ -174,6 +192,10 @@ class AuthStore {
     await deleteDoc(doc(db, 'users', this.user.uid))
     await deleteUser(auth.currentUser)
     this.clearUser()
+  }
+
+  public async resetPassword(email: string) {
+    await sendPasswordResetEmail(auth, email, {url: `${APP_URL}/auth`})
   }
 }
 

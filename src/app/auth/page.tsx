@@ -86,9 +86,11 @@ const SignIn = observer(() => {
         </Button>
 
         <div className='mt-2 flex items-center justify-between'>
-          <span className='w-full cursor-pointer text-center text-xs text-info'>
+          <Link
+            href='/auth/reset-password'
+            className='w-full cursor-pointer text-center text-xs text-info'>
             Forgot your password?
-          </span>
+          </Link>
 
           <Link
             href='/auth/register'
