@@ -37,7 +37,7 @@ export const LoginEmailPasswordForm = ({
       <Button
         className='flex w-full max-w-md text-base-content disabled:bg-white/30 disabled:text-base-100'
         isLoading={isLoading}>
-        Sign in
+        Sign in with email
       </Button>
     </form>
   )

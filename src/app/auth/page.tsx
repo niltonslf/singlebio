@@ -90,7 +90,7 @@ const SignIn = observer(() => {
         <Button
           onClick={handleLoginWithGoogle}
           isLoading={isLoading}
-          variant='infor'
+          variant='info'
           className='dark:focus:ring-[#4285F4]/55 !hover:bg-[#4285F4]/90  mb-2 mr-2 inline-flex w-full items-center justify-center rounded-lg !bg-[#4285F4] px-5 py-2.5 text-sm  text-neutral-50 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50'>
           <GoogleIcon />
           Sign in with Google

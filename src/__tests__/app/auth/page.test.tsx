@@ -2,8 +2,9 @@ import * as firebaseAuth from 'firebase/auth'
 import * as firestore from 'firebase/firestore'
 import mockRouter from 'next-router-mock'
 
-import {makeFbUser, makeGetDocsResponse} from '@/__tests__/__helpers__'
+import {makeFbUser, makeGetDocsResponse, setup} from '@/__tests__/__helpers__'
 import {authStore} from '@/app/auth/context/auth-store'
+import AuthLayout from '@/app/auth/layout'
 import AuthPage from '@/app/auth/page'
 import {User} from '@/models'
 import {parseToUser} from '@/utils/user'
@@ -41,18 +42,49 @@ const validateGoogleBtn = () => {
   return googleButton
 }
 
+const validateGithubBtn = () => {
+  const githubButton = screen.getByText('Sign in with GitHub')
+  expect(githubButton).toBeVisible()
+  return githubButton
+}
+
+const makeSUT = async () => {
+  return await waitFor(() =>
+    setup(
+      <AuthLayout>
+        <AuthPage />
+      </AuthLayout>,
+    ),
+  )
+}
+
 describe('Auth Page', () => {
   beforeEach(() => {
     cleanup()
   })
 
-  it('should render Auth page with the login button', async () => {
-    await waitFor(() => render(<AuthPage />))
+  it('should render Auth page with all sign in methods', async () => {
+    await makeSUT()
 
     const formLogo = screen.getByRole('img')
+    const emailInput = screen.getByRole('textbox')
+    const passwordInput = screen.getByPlaceholderText(/password/i)
+    const signInButton = screen.getByText(/Sign in with email/i)
+    const forgotPasswordLink = screen.getByRole('link', {
+      name: /forgot your password\?/i,
+    })
+    const createAccountLink = screen.getByRole('link', {
+      name: /create an account/i,
+    })
 
     expect(formLogo).toHaveAttribute('alt', 'logo')
+    expect(emailInput).toBeVisible()
+    expect(passwordInput).toBeVisible()
+    expect(signInButton).toBeVisible()
+    expect(forgotPasswordLink).toBeVisible()
+    expect(createAccountLink).toBeVisible()
     validateGoogleBtn()
+    validateGithubBtn()
   })
 
   it('Should return an error when clicked to Login with Google', async () => {
