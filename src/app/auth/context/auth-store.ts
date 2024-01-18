@@ -1,8 +1,10 @@
 import {
+  EmailAuthProvider,
   User as FbUser,
   createUserWithEmailAndPassword,
   deleteUser,
   getAuth,
+  reauthenticateWithCredential,
   reauthenticateWithPopup,
   sendEmailVerification,
   sendPasswordResetEmail,
@@ -27,6 +29,7 @@ import {action, computed, makeObservable, observable} from 'mobx'
 import {APP_URL} from '@/config/envs'
 import {app, auth, db, githubProvider, googleProvider} from '@/libs/firebase'
 import {Providers, SignUpWithEmailAndPassword, User} from '@/models'
+import {createPopup} from '@/utils'
 import {parseToUser} from '@/utils/user'
 
 class AuthStore {
@@ -49,6 +52,7 @@ class AuthStore {
       setUser: action,
       clearUser: action,
       resetPassword: action,
+      reauthenticateWithEmailAndPassword: action,
       //computed
       user: computed,
     })
@@ -158,21 +162,9 @@ class AuthStore {
     if (!this.user?.uid || !auth.currentUser) throw 'User not found.'
 
     const userProviderId = auth.currentUser.providerData[0].providerId
-    // const width = 400
-    // const height = 500
-
-    // const y = window.top.outerHeight / 2 + window.top.screenY - height / 2
-    // const x = window.top.outerWidth / 2 + window.top.screenX - width / 2
-
-    // let newWindow = open(
-    //   '/auth',
-    //   'Sign in',
-    //   `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${width}, height=${height}, top=${y}, left=${x}`,
-    // )
 
     if (userProviderId === Providers.PASSWORD) {
-      // const credential = EmailAuthProvider.credential(email, password)
-      // reauthenticateWithCredential(auth.currentUser, credential)
+      await createPopup('/auth/reauthenticate', 'Sign in')
     } else {
       let providerInstance = googleProvider
       if (userProviderId === Providers.GITHUB) providerInstance = githubProvider
@@ -196,6 +188,16 @@ class AuthStore {
 
   public async resetPassword(email: string) {
     await sendPasswordResetEmail(auth, email, {url: `${APP_URL}/auth`})
+  }
+
+  public async reauthenticateWithEmailAndPassword(
+    email: string,
+    password: string,
+  ) {
+    if (!auth.currentUser) throw 'user not found'
+
+    const credential = EmailAuthProvider.credential(email, password)
+    await reauthenticateWithCredential(auth.currentUser, credential)
   }
 }
 

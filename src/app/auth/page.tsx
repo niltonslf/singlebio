@@ -4,16 +4,15 @@ import {observer} from 'mobx-react-lite'
 import Link from 'next/link'
 import {useRouter} from 'next/navigation'
 import {useState} from 'react'
-import {useForm} from 'react-hook-form'
 
 import {useValidateAuth} from '@/app/admin/hooks'
 import {Button, GoogleIcon, GithubIcon} from '@/app/components'
 import {LoginWithEmailAndPassword} from '@/models'
 
+import {LoginEmailPasswordForm} from './components'
 import {authStore} from './context/auth-store'
 
 const SignIn = observer(() => {
-  const {register, handleSubmit} = useForm<LoginWithEmailAndPassword>()
   const {isFetchingUser} = useValidateAuth()
 
   const {push} = useRouter()
@@ -62,43 +61,24 @@ const SignIn = observer(() => {
   }
   return (
     <div className='flex flex-col'>
-      <form
-        onSubmit={handleSubmit(handleLoginWithEmailAndPassword)}
-        className='flex w-full flex-col gap-3'>
-        <input
-          type='email'
-          className='input input-bordered'
-          placeholder='Email'
-          {...register('email')}
-        />
+      <LoginEmailPasswordForm
+        onSubmit={handleLoginWithEmailAndPassword}
+        isLoading={isLoading}
+      />
 
-        <input
-          type='password'
-          className='input input-bordered'
-          placeholder='Password'
-          {...register('password')}
-        />
+      <div className='mt-5 flex items-center justify-between'>
+        <Link
+          href='/auth/reset-password'
+          className='w-full cursor-pointer text-center text-xs text-info'>
+          Forgot your password?
+        </Link>
 
-        <Button
-          className='flex w-full max-w-md text-base-content disabled:bg-white/30 disabled:text-base-100'
-          isLoading={isLoading}>
-          Sign in
-        </Button>
-
-        <div className='mt-2 flex items-center justify-between'>
-          <Link
-            href='/auth/reset-password'
-            className='w-full cursor-pointer text-center text-xs text-info'>
-            Forgot your password?
-          </Link>
-
-          <Link
-            href='/auth/register'
-            className='w-full cursor-pointer text-center text-xs text-info'>
-            Create an account
-          </Link>
-        </div>
-      </form>
+        <Link
+          href='/auth/register'
+          className='w-full cursor-pointer text-center text-xs text-info'>
+          Create an account
+        </Link>
+      </div>
 
       <div className='after:bg-red after:content-[" "] relative my-3 flex items-center justify-center after:absolute after:left-[0] after:top-[50%] after:w-full after:border-b after:border-gray-400'>
         <span className='relative z-20 bg-base-100 px-4 text-base-content/70'>
