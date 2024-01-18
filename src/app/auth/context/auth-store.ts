@@ -4,9 +4,11 @@ import {
   deleteUser,
   getAuth,
   reauthenticateWithPopup,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from 'firebase/auth'
 import {
   DocumentSnapshot,
@@ -22,7 +24,7 @@ import {
 import {action, computed, makeObservable, observable} from 'mobx'
 
 import {app, auth, db, githubProvider, googleProvider} from '@/libs/firebase'
-import {User} from '@/models'
+import {SignUpWithEmailAndPassword, User} from '@/models'
 import {parseToUser} from '@/utils/user'
 
 class AuthStore {
@@ -71,15 +73,18 @@ class AuthStore {
     }
   }
 
-  public async createWithEmailAndPassword(
-    email: string,
-    password: string,
-  ): Promise<User> {
+  public async createWithEmailAndPassword({
+    email,
+    password,
+    displayName,
+  }: SignUpWithEmailAndPassword): Promise<void> {
     try {
       const {user} = await createUserWithEmailAndPassword(auth, email, password)
-      return this.authUser(user)
+      await updateProfile(user, {displayName})
+      await sendEmailVerification(user)
+      this.logout()
     } catch (error) {
-      throw 'could not authenticate user'
+      throw 'could not create user'
     }
   }
 
@@ -89,6 +94,12 @@ class AuthStore {
   ): Promise<User> {
     try {
       const {user} = await signInWithEmailAndPassword(auth, email, password)
+
+      if (!user.emailVerified) {
+        this.logout()
+        throw 'Email not activated. Please, check your inbox.'
+      }
+
       return this.authUser(user)
     } catch (error) {
       throw 'could not authenticate user'

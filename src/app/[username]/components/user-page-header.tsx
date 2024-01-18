@@ -12,7 +12,7 @@ export const UserPageHeader = ({user, pageStyles}: UserPageHeaderProps) => {
       <div className='mb-4 flex w-full justify-center'>
         <Avatar
           name={user?.name ?? ''}
-          pictureUrl={user?.pictureUrl}
+          pictureUrl={user?.pictureUrl ?? ''}
           size={100}
         />
       </div>
