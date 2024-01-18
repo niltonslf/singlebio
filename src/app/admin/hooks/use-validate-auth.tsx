@@ -19,6 +19,11 @@ export const useValidateAuth = () => {
         push('/auth')
       } else {
         await authStore.authUser(firebaseUser)
+
+        if (!firebaseUser.emailVerified) {
+          return push('/auth/verify-email')
+        }
+
         if (!pathName.startsWith('/admin')) push('/admin')
       }
       setIsFetchingUser(false)

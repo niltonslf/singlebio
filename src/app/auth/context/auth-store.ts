@@ -95,11 +95,6 @@ class AuthStore {
     try {
       const {user} = await signInWithEmailAndPassword(auth, email, password)
 
-      if (!user.emailVerified) {
-        this.logout()
-        throw 'Email not activated. Please, check your inbox.'
-      }
-
       return this.authUser(user)
     } catch (error) {
       throw 'could not authenticate user'
