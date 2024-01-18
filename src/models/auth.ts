@@ -8,3 +8,8 @@ export type SignUpWithEmailAndPassword = {
   password: string
   displayName: string
 }
+
+export enum Providers {
+  'GITHUB' = 'github.com',
+  'GOOGLE' = 'google.com',
+}

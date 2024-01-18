@@ -24,7 +24,7 @@ import {
 import {action, computed, makeObservable, observable} from 'mobx'
 
 import {app, auth, db, githubProvider, googleProvider} from '@/libs/firebase'
-import {SignUpWithEmailAndPassword, User} from '@/models'
+import {Providers, SignUpWithEmailAndPassword, User} from '@/models'
 import {parseToUser} from '@/utils/user'
 
 class AuthStore {
@@ -159,7 +159,13 @@ class AuthStore {
 
     if (!this.user?.uid || !auth.currentUser) throw 'User not found.'
 
-    await reauthenticateWithPopup(auth.currentUser, googleProvider)
+    const userProviderId = auth.currentUser.providerData[0].providerId
+
+    let providerInstance = googleProvider
+
+    if (userProviderId === Providers.GITHUB) providerInstance = githubProvider
+
+    await reauthenticateWithPopup(auth.currentUser, providerInstance)
     // delete links
     const queryLinks = query(collection(db, 'users', this.user.uid, 'links'))
     const {size, docs} = await getDocs(queryLinks)
