@@ -74,7 +74,7 @@ export const AddSocialModalForm = ({
   return (
     <>
       <dialog className={merge(['modal', isOpen && 'modal-open'])}>
-        <div className='modal-box bg-neutral'>
+        <div className='modal-box bg-base-100'>
           <form method='dialog'>
             <button
               onClick={() => handleClose()}
