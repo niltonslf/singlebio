@@ -4,14 +4,28 @@ import {CheckCircle} from 'lucide-react'
 import Link from 'next/link'
 import {useState} from 'react'
 import {useForm} from 'react-hook-form'
+import {z} from 'zod'
 
 import {Button} from '@/app/components'
 import {SignUpWithEmailAndPassword} from '@/models'
+import {zodResolver} from '@hookform/resolvers/zod'
 
 import {authStore} from '../context/auth-store'
 
+const schema = z.object({
+  password: z
+    .string()
+    .min(8, {message: 'Password field requires at least 8 characters'}),
+})
+
 const Register = () => {
-  const {register, handleSubmit} = useForm<SignUpWithEmailAndPassword>()
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<SignUpWithEmailAndPassword>({
+    resolver: zodResolver(schema),
+  })
 
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -48,6 +62,8 @@ const Register = () => {
         <form
           onSubmit={handleSubmit(handleRegisterWithEmailAndPassword)}
           className='flex w-full flex-col gap-3'>
+          <h1 className='mb-3 text-xl font-bold'>Sign up</h1>
+
           <input
             type='text'
             className='input input-bordered'
@@ -68,9 +84,12 @@ const Register = () => {
             placeholder='Password'
             {...register('password')}
           />
+          {errors.password && (
+            <div className='text-xs text-error'>{errors.password.message}</div>
+          )}
 
           <Button
-            className='flex w-full max-w-md text-base-content disabled:bg-white/30 disabled:text-base-100'
+            className='mt-5 flex w-full max-w-md text-base-content disabled:bg-white/30 disabled:text-base-100'
             isLoading={isLoading}>
             Sign up
           </Button>
