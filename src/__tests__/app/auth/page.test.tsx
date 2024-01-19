@@ -152,8 +152,6 @@ describe('Auth Page', () => {
       expect(errorMsg).toBeInTheDocument()
       expect(mockRouter).toMatchObject({asPath: '/auth', pathname: '/auth'})
     })
-    it.todo('should redirect to forgot password page')
-    it.todo('should redirect to create an account')
   })
 
   describe('Sign in with google', () => {
@@ -190,7 +188,7 @@ describe('Auth Page', () => {
       expect(authStore.authUser).toHaveBeenCalledTimes(0)
     })
 
-    it('Should Login with Google successfully  ', async () => {
+    it('Should sign in with Google successfully  ', async () => {
       const firebaseUserMock = makeFbUser()
       const userMock = parseToUser(firebaseUserMock) as User
 
@@ -247,5 +245,21 @@ describe('Auth Page', () => {
         query: {},
       })
     })
+  })
+
+  describe('sign in with gitHub', () => {
+    it('should sign in with github successfully', async () => {
+      const userMock = makeUser()
+
+      jest.spyOn(authStore, 'signInWithGithub').mockResolvedValue(userMock)
+
+      const {user} = await makeSUT()
+      const githubBtn = validateGithubBtn()
+
+      await user.click(githubBtn)
+
+      expect(mockRouter).toMatchObject({asPath: '/admin', pathname: '/admin'})
+    })
+    it.todo('should return an error when tried to sign in with github')
   })
 })
