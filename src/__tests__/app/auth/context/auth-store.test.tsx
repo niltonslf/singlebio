@@ -8,6 +8,7 @@ import {
   makeUserTheme,
 } from '@/__tests__/__helpers__'
 import {authStore} from '@/app/auth/context/auth-store'
+import {ERROR_MESSAGES} from '@/constants/error-msgs'
 import {parseToUser} from '@/utils/user'
 import {cleanup} from '@testing-library/react'
 
@@ -50,7 +51,7 @@ describe('AuthStore', () => {
       jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue(undefined)
 
       await expect(authStore.signInWithGoogle()).rejects.toBe(
-        'could not authenticate user',
+        ERROR_MESSAGES['error-to-authenticate-user'],
       )
     })
   })
@@ -91,7 +92,7 @@ describe('AuthStore', () => {
       const userMock = makeUser()
 
       await expect(authStore.updateUser(userMock)).rejects.toBe(
-        'user not found',
+        ERROR_MESSAGES['user-not-found'],
       )
     })
 
@@ -145,7 +146,7 @@ describe('AuthStore', () => {
       await expect(authStore.deleteUser()).rejects.toBe('User not found.')
     })
 
-    it('should delete user successfully', async () => {
+    it('should delete user with google provider', async () => {
       const fbUserMock = makeFbUser()
       const userMock = parseToUser(fbUserMock)
 
@@ -154,17 +155,23 @@ describe('AuthStore', () => {
       authStore.firebaseUser = fbUserMock
 
       // mock the getAuth method to return the fake logged in user
-      const authRes = {currentUser: fbUserMock} as firebaseAuth.Auth
+      const authRes = {
+        currentUser: {
+          ...fbUserMock,
+          providerData: [{providerId: 'google.com'}],
+        },
+      } as firebaseAuth.Auth
       jest.spyOn(firebaseAuth, 'getAuth').mockReturnValue(authRes)
       jest.spyOn(authStore, 'clearUser')
 
       jest.spyOn(firebaseAuth, 'reauthenticateWithPopup').mockImplementation()
-      jest.spyOn(firebaseAuth, 'deleteUser').mockImplementation()
-      jest.spyOn(firestore, 'deleteDoc').mockImplementation()
 
       const linksRes = makeGetDocsResponse({docs: [1, 2]})
-      jest.spyOn(firestore, 'doc').mockImplementation()
       jest.spyOn(firestore, 'getDocs').mockResolvedValue(linksRes)
+
+      jest.spyOn(firestore, 'doc').mockImplementation()
+      jest.spyOn(firestore, 'deleteDoc').mockImplementation()
+      jest.spyOn(firebaseAuth, 'deleteUser').mockImplementation()
 
       await authStore.deleteUser()
 

@@ -175,7 +175,9 @@ class AuthStore {
       await createPopup('/auth/reauthenticate', 'Sign in')
     } else {
       let providerInstance = googleProvider
+
       if (userProviderId === Providers.GITHUB) providerInstance = githubProvider
+
       await reauthenticateWithPopup(auth.currentUser, providerInstance)
     }
 
