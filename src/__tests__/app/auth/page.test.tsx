@@ -127,7 +127,7 @@ describe('Auth Page', () => {
     it('should return an error when tried to sign in with email', async () => {
       jest
         .spyOn(authStore, 'signInWithEmailAndPassword')
-        .mockRejectedValue('error')
+        .mockRejectedValue('error message')
 
       const {user} = await makeSUT()
 
@@ -149,43 +149,26 @@ describe('Auth Page', () => {
         passwordMock,
       )
 
-      expect(errorMsg).toBeInTheDocument()
+      expect(errorMsg).toHaveTextContent('error message')
       expect(mockRouter).toMatchObject({asPath: '/auth', pathname: '/auth'})
     })
   })
 
   describe('Sign in with google', () => {
     it('Should return an error when clicked to Login with Google', async () => {
-      const errorMsg = 'error'
-
-      mockSignInWithPopup(errorMsg, true)
-      jest
-        .spyOn(firestore, 'getDoc')
-        .mockResolvedValue(
-          makeGetDocsResponse({data: undefined, exists: false}),
-        )
-
-      jest.spyOn(authStore, 'authUser')
-      jest.spyOn(authStore, 'clearUser')
+      const errorMsg = 'error message'
+      jest.spyOn(authStore, 'signInWithGoogle').mockRejectedValue(errorMsg)
 
       const user = userEvent.setup()
 
       await waitFor(() => render(<AuthPage />))
-
       const googleButton = validateGoogleBtn()
 
       await user.click(googleButton)
 
       const errorBox = await screen.findByTestId('error-msg')
 
-      expect(firebaseAuth.signInWithPopup).rejects.toBe(errorMsg)
-      expect(authStore.clearUser).toHaveBeenCalledTimes(1)
-      expect(errorBox).toBeVisible()
-      expect(errorBox).toHaveTextContent(
-        /There was an error to access your account/i,
-      )
-
-      expect(authStore.authUser).toHaveBeenCalledTimes(0)
+      expect(errorBox).toHaveTextContent(errorMsg)
     })
 
     it('Should sign in with Google successfully  ', async () => {
