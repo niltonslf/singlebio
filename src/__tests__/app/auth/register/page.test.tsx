@@ -38,5 +38,29 @@ describe('Sign up', () => {
     })
   })
 
-  it.todo('should show error message if email already in use')
+  it('should show error message if fail', async () => {
+    jest
+      .spyOn(authStore, 'createWithEmailAndPassword')
+      .mockRejectedValue('error message')
+
+    const {user} = makeSUT()
+
+    const nameInput = screen.getByPlaceholderText(/name/i)
+    const emailInput = screen.getByPlaceholderText(/email/i)
+    const passwordInput = screen.getByPlaceholderText(/password/i)
+    const signUpButton = screen.getByRole('button', {name: /sign up/i})
+    const errorBox = screen.getByTestId('register-error-box')
+
+    const nameMock = faker.internet.displayName()
+    const emailMock = faker.internet.email()
+    const passwordMock = faker.internet.password({length: 8})
+
+    await user.type(nameInput, nameMock)
+    await user.type(emailInput, emailMock)
+    await user.type(passwordInput, passwordMock)
+
+    await user.click(signUpButton)
+
+    expect(errorBox).toHaveTextContent('error message')
+  })
 })

@@ -115,7 +115,7 @@ const RegisterPage = () => {
       )}
 
       <Appear isOpen={!!error} onClose={() => setError('')}>
-        <p data-testid='error-msg' className='alert alert-error mt-5'>
+        <p data-testid='register-error-box' className='alert alert-error mt-5'>
           {error}
         </p>
       </Appear>
