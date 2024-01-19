@@ -22,7 +22,7 @@ const schema = z.object({
     .min(8, {message: 'Password field requires at least 8 characters'}),
 })
 
-const Register = () => {
+const RegisterPage = () => {
   const {
     register,
     handleSubmit,
@@ -125,4 +125,4 @@ const Register = () => {
     </div>
   )
 }
-export default Register
+export default RegisterPage
