@@ -27,6 +27,7 @@ import {
 import {action, computed, makeObservable, observable} from 'mobx'
 
 import {APP_URL} from '@/config/envs'
+import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
 import {app, auth, db, githubProvider, googleProvider} from '@/libs/firebase'
 import {Providers, SignUpWithEmailAndPassword, User} from '@/models'
 import {createPopup} from '@/utils'
@@ -67,7 +68,7 @@ class AuthStore {
       const {user} = await signInWithPopup(auth, googleProvider)
       return this.authUser(user)
     } catch (error) {
-      throw 'could not authenticate user'
+      throw ERROR_MESSAGES['error-to-authenticate-user']
     }
   }
 
@@ -76,7 +77,7 @@ class AuthStore {
       const {user} = await signInWithPopup(auth, githubProvider)
       return this.authUser(user)
     } catch (error) {
-      throw 'could not authenticate user'
+      throw ERROR_MESSAGES['error-to-authenticate-user']
     }
   }
 
@@ -90,8 +91,11 @@ class AuthStore {
       await updateProfile(user, {displayName})
       await sendEmailVerification(user)
       this.logout()
-    } catch (error) {
-      throw error
+    } catch (error: any) {
+      const code = error.code as ErrorMessagesKeys
+
+      if (Object.hasOwn(ERROR_MESSAGES, code)) throw ERROR_MESSAGES[code]
+      throw ERROR_MESSAGES['error-to-create-account']
     }
   }
 
@@ -104,7 +108,7 @@ class AuthStore {
 
       return this.authUser(user)
     } catch (error) {
-      throw 'could not authenticate user'
+      throw ERROR_MESSAGES['error-to-authenticate-user']
     }
   }
 
@@ -133,7 +137,7 @@ class AuthStore {
   }
 
   public async updateUser(user: Partial<User>): Promise<User> {
-    if (!this?.user?.uid) throw 'user not found'
+    if (!this?.user?.uid) throw ERROR_MESSAGES['user-not-found']
 
     const newUser = {...this.userModel, ...user} as User
 
@@ -159,7 +163,8 @@ class AuthStore {
   public async deleteUser(): Promise<void> {
     const auth = getAuth(app)
 
-    if (!this.user?.uid || !auth.currentUser) throw 'User not found.'
+    if (!this.user?.uid || !auth.currentUser)
+      throw ERROR_MESSAGES['user-not-found']
 
     const userProviderId = auth.currentUser.providerData[0].providerId
 
@@ -194,7 +199,7 @@ class AuthStore {
     email: string,
     password: string,
   ) {
-    if (!auth.currentUser) throw 'user not found'
+    if (!auth.currentUser) throw ERROR_MESSAGES['user-not-found']
 
     const credential = EmailAuthProvider.credential(email, password)
     await reauthenticateWithCredential(auth.currentUser, credential)

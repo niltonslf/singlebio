@@ -4,7 +4,7 @@ import {SocialIcon} from 'react-social-icons'
 import {useSmartphone} from '@/app/admin/context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {InputErrorMsg} from '@/app/components'
-import {socialOptions} from '@/data/social-options'
+import {socialOptions} from '@/constants/social-options'
 import {User} from '@/models'
 import {merge, validateUrlRegex} from '@/utils'
 

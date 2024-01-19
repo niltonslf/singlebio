@@ -6,7 +6,7 @@ import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 import {z} from 'zod'
 
-import {Button} from '@/app/components'
+import {Appear, Button} from '@/app/components'
 import {SignUpWithEmailAndPassword} from '@/models'
 import {zodResolver} from '@hookform/resolvers/zod'
 
@@ -31,7 +31,7 @@ const RegisterPage = () => {
     resolver: zodResolver(schema),
   })
 
-  const [error, setError] = useState(false)
+  const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [accountCreated, setAccountCreated] = useState(false)
 
@@ -43,8 +43,8 @@ const RegisterPage = () => {
       await authStore.createWithEmailAndPassword(data)
       setAccountCreated(true)
       setIsLoading(false)
-    } catch (error: any) {
-      setError(true)
+    } catch (error) {
+      setError(error as string)
       setIsLoading(false)
       setAccountCreated(false)
     }
@@ -114,14 +114,11 @@ const RegisterPage = () => {
         </form>
       )}
 
-      {error && (
-        <p
-          data-testid='error-msg'
-          className='mt-5 rounded-md bg-red-200 p-2 text-sm text-black'>
-          There was an error to create your account. Please, try again later or
-          use a different email.
+      <Appear isOpen={!!error} onClose={() => setError('')}>
+        <p data-testid='error-msg' className='alert alert-error mt-5'>
+          {error}
         </p>
-      )}
+      </Appear>
     </div>
   )
 }
