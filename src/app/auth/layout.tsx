@@ -50,7 +50,13 @@ const AuthLayout = ({children}: {children: React.ReactNode}) => {
         </Link>
 
         <header className='mb-12 flex w-full justify-center'>
-          <Image src='/logo-white.png' width={200} height={52} alt='logo' />
+          <Image
+            priority
+            src='/logo-white.png'
+            width={200}
+            height={52}
+            alt='logo'
+          />
         </header>
         <div className='flex flex-col'>{children}</div>
       </section>
