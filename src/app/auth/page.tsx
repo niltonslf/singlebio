@@ -6,7 +6,7 @@ import {useRouter} from 'next/navigation'
 import {useState} from 'react'
 
 import {useValidateAuth} from '@/app/admin/hooks'
-import {Button, GoogleIcon, GithubIcon} from '@/app/components'
+import {Button, GoogleIcon, GithubIcon, Appear} from '@/app/components'
 import {LoginWithEmailAndPassword} from '@/models'
 
 import {LoginEmailPasswordForm} from './components'
@@ -17,7 +17,7 @@ const SignIn = observer(() => {
 
   const {push} = useRouter()
 
-  const [error, setError] = useState(false)
+  const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(isFetchingUser)
 
   const handleLoginWithGoogle = async () => {
@@ -28,7 +28,7 @@ const SignIn = observer(() => {
       setIsLoading(false)
     } catch (error: any) {
       setIsLoading(false)
-      setError(true)
+      setError(error)
     }
   }
 
@@ -40,7 +40,7 @@ const SignIn = observer(() => {
       setIsLoading(false)
     } catch (error: any) {
       setIsLoading(false)
-      setError(true)
+      setError(error)
     }
   }
 
@@ -56,7 +56,7 @@ const SignIn = observer(() => {
       setIsLoading(false)
     } catch (error: any) {
       setIsLoading(false)
-      setError(true)
+      setError(error)
     }
   }
   return (
@@ -105,14 +105,11 @@ const SignIn = observer(() => {
         </Button>
       </div>
 
-      {error && (
-        <p
-          data-testid='error-msg'
-          className='mt-5 rounded-md bg-red-200 p-2 text-sm text-black'>
-          There was an error to access your account. Please, try again later or
-          use a different account.
+      <Appear isOpen={!!error} onClose={() => setError('')}>
+        <p data-testid='error-msg' className='alert alert-error mt-5'>
+          {error}
         </p>
-      )}
+      </Appear>
     </div>
   )
 })

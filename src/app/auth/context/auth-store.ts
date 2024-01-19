@@ -8,7 +8,7 @@ import {
   reauthenticateWithPopup,
   sendEmailVerification,
   sendPasswordResetEmail,
-  signInWithEmailAndPassword,
+  signInWithEmailAndPassword as signInWithEmailAndPasswordFB,
   signInWithPopup,
   signOut,
   updateProfile,
@@ -104,10 +104,13 @@ class AuthStore {
     password: string,
   ): Promise<User> {
     try {
-      const {user} = await signInWithEmailAndPassword(auth, email, password)
+      const {user} = await signInWithEmailAndPasswordFB(auth, email, password)
 
       return this.authUser(user)
-    } catch (error) {
+    } catch (error: any) {
+      const code = error.code as ErrorMessagesKeys
+
+      if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
       throw ERROR_MESSAGES['error-to-authenticate-user']
     }
   }

@@ -45,7 +45,7 @@ const ResetPasswordPage = () => {
           />
 
           <Button
-            className='flex w-full max-w-md text-base-content disabled:bg-white/30 disabled:text-base-100'
+            className='mt-5 flex w-full max-w-md text-base-content disabled:bg-white/30 disabled:text-base-100'
             isLoading={isLoading}>
             Reset password
           </Button>
