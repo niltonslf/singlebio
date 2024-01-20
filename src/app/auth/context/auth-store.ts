@@ -27,7 +27,7 @@ import {action, computed, makeObservable, observable} from 'mobx'
 
 import {APP_URL} from '@/config/envs'
 import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
-import {Providers, ProvidersValueType} from '@/domain/enums'
+import {Providers, ProvidersValues} from '@/domain/enums'
 import {SignUpWithEmailAndPassword, User} from '@/domain/models'
 import {auth, db, githubProvider, googleProvider} from '@/services/firebase'
 import {createPopup, parseToUser} from '@/utils'
@@ -174,7 +174,7 @@ class AuthStore {
     const userProvider = this.firebaseUser?.providerData[0].providerId
 
     await this.reauthenticateByProvider(
-      userProvider as ProvidersValueType,
+      userProvider as ProvidersValues,
       this.firebaseUser,
     )
 
@@ -186,7 +186,7 @@ class AuthStore {
   }
 
   public async reauthenticateByProvider(
-    providerId: ProvidersValueType,
+    providerId: ProvidersValues,
     firebaseUser: FbUser,
   ) {
     if (providerId === Providers.PASSWORD) {
@@ -222,8 +222,16 @@ class AuthStore {
   ) {
     if (!auth.currentUser) throw ERROR_MESSAGES['user-not-found']
 
-    const credential = EmailAuthProvider.credential(email, password)
-    await reauthenticateWithCredential(auth.currentUser, credential)
+    try {
+      const credential = EmailAuthProvider.credential(email, password)
+      await reauthenticateWithCredential(auth.currentUser, credential)
+    } catch (error: any) {
+      const code = error.code as ErrorMessagesKeys
+
+      if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
+
+      throw ERROR_MESSAGES['error-to-authenticate-user']
+    }
   }
 }
 

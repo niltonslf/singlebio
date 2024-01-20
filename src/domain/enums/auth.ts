@@ -4,4 +4,4 @@ export const Providers = {
   PASSWORD: 'password',
 } as const
 
-export type ProvidersValueType = (typeof Providers)[keyof typeof Providers]
+export type ProvidersValues = (typeof Providers)[keyof typeof Providers]
