@@ -70,7 +70,9 @@ class AuthStore {
     try {
       const {user} = await signInWithPopup(auth, googleProvider)
       return this.authUser(user)
-    } catch (error) {
+    } catch (error: any) {
+      const code = error.code as ErrorMessagesKeys
+      if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
       throw ERROR_MESSAGES['error-to-authenticate-user']
     }
   }
@@ -79,7 +81,9 @@ class AuthStore {
     try {
       const {user} = await signInWithPopup(auth, githubProvider)
       return this.authUser(user)
-    } catch (error) {
+    } catch (error: any) {
+      const code = error.code as ErrorMessagesKeys
+      if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
       throw ERROR_MESSAGES['error-to-authenticate-user']
     }
   }
