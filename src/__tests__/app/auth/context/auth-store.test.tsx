@@ -58,7 +58,7 @@ describe('AuthStore', () => {
     })
 
     it('should call google signin and throw an error', async () => {
-      jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue(undefined)
+      jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue({code: ''})
 
       await expect(authStore.signInWithGoogle()).rejects.toBe(
         ERROR_MESSAGES['error-to-authenticate-user'],

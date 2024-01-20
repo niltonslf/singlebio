@@ -71,7 +71,7 @@ class AuthStore {
       const {user} = await signInWithPopup(auth, googleProvider)
       return this.authUser(user)
     } catch (error: any) {
-      const code = error.code as ErrorMessagesKeys
+      const code = error?.code as ErrorMessagesKeys
       if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
       throw ERROR_MESSAGES['error-to-authenticate-user']
     }
@@ -82,7 +82,7 @@ class AuthStore {
       const {user} = await signInWithPopup(auth, githubProvider)
       return this.authUser(user)
     } catch (error: any) {
-      const code = error.code as ErrorMessagesKeys
+      const code = error?.code as ErrorMessagesKeys
       if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
       throw ERROR_MESSAGES['error-to-authenticate-user']
     }
@@ -99,7 +99,7 @@ class AuthStore {
       await sendEmailVerification(user)
       this.logout()
     } catch (error: any) {
-      const code = error.code as ErrorMessagesKeys
+      const code = error?.code as ErrorMessagesKeys
 
       if (Object.hasOwn(ERROR_MESSAGES, code)) throw ERROR_MESSAGES[code]
       throw ERROR_MESSAGES['error-to-create-account']
@@ -115,7 +115,7 @@ class AuthStore {
 
       return this.authUser(user)
     } catch (error: any) {
-      const code = error.code as ErrorMessagesKeys
+      const code = error?.code as ErrorMessagesKeys
 
       if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
       throw ERROR_MESSAGES['error-to-authenticate-user']
@@ -230,7 +230,7 @@ class AuthStore {
       const credential = EmailAuthProvider.credential(email, password)
       await reauthenticateWithCredential(auth.currentUser, credential)
     } catch (error: any) {
-      const code = error.code as ErrorMessagesKeys
+      const code = error?.code as ErrorMessagesKeys
 
       if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
 
