@@ -10,7 +10,8 @@ import {
 import {authStore} from '@/app/auth/context/auth-store'
 import {ERROR_MESSAGES} from '@/constants/error-msgs'
 import {Providers} from '@/domain/enums'
-import {parseToUser} from '@/utils/user'
+import {parseToUser} from '@/utils'
+import * as windowUtils from '@/utils/window'
 import {cleanup} from '@testing-library/react'
 
 jest.mock('firebase/firestore', () => ({
@@ -21,6 +22,11 @@ jest.mock('firebase/firestore', () => ({
 jest.mock('firebase/auth', () => ({
   __esModule: true,
   ...jest.requireActual('firebase/auth'),
+}))
+
+jest.mock('@/utils/window', () => ({
+  __esModule: true,
+  ...jest.requireActual('@/utils/window'),
 }))
 
 describe('AuthStore', () => {
@@ -183,6 +189,7 @@ describe('AuthStore', () => {
 
       jest.spyOn(authStore, 'clearUser')
 
+      // SUT
       await authStore.deleteUser()
 
       expect(firebaseAuth.reauthenticateWithPopup).toHaveBeenCalledTimes(1)
@@ -194,24 +201,72 @@ describe('AuthStore', () => {
       expect(authStore.user).toBe(undefined)
     })
 
-    // it('should delete user with github provider', async () => {
-    //   const fbUserMock = makeFbUser()
-    //   const userMock = parseToUser(fbUserMock)
+    it('should delete user with github provider', async () => {
+      const fbUserMock = makeFbUser({providerId: Providers.GITHUB})
+      const userMock = parseToUser(fbUserMock)
 
-    //   // simulate an user logged in
-    //   authStore.userModel = userMock
-    //   authStore.firebaseUser = fbUserMock
+      // simulate an user logged in
+      authStore.setUser(userMock)
+      authStore.setFirebaseUser(fbUserMock)
 
-    //   // mock the getAuth method to return the fake logged in user
-    //   const authRes = {
-    //     currentUser: {
-    //       ...fbUserMock,
-    //       providerData: [{providerId: 'google.com'}],
-    //     },
-    //   } as firebaseAuth.Auth
+      jest
+        .spyOn(firebaseAuth, 'reauthenticateWithPopup')
+        .mockResolvedValue({} as firebaseAuth.UserCredential)
 
-    //   // SUT
-    //   await authStore.deleteUser()
-    // })
+      // simulate links in the profile
+      const linksRes = makeGetDocsResponse({docs: [1, 2]})
+      jest.spyOn(firestore, 'getDocs').mockResolvedValue(linksRes)
+      jest.spyOn(firestore, 'doc').mockImplementation()
+      jest.spyOn(firestore, 'deleteDoc').mockImplementation()
+
+      jest.spyOn(firebaseAuth, 'deleteUser').mockResolvedValue()
+
+      jest.spyOn(authStore, 'clearUser')
+
+      // SUT
+      await authStore.deleteUser()
+
+      expect(firebaseAuth.reauthenticateWithPopup).toHaveBeenCalledTimes(1)
+      expect(firestore.getDocs).toHaveBeenCalledTimes(1)
+      expect(firestore.deleteDoc).toHaveBeenCalled()
+      expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
+      expect(authStore.clearUser).toHaveBeenCalledTimes(1)
+      expect(authStore.firebaseUser).toBe(undefined)
+      expect(authStore.user).toBe(undefined)
+    })
+
+    it('should delete user with password provider', async () => {
+      const fbUserMock = makeFbUser({providerId: Providers.PASSWORD})
+      const userMock = parseToUser(fbUserMock)
+
+      // simulate an user logged in
+      authStore.setUser(userMock)
+      authStore.setFirebaseUser(fbUserMock)
+
+      jest
+        .spyOn(windowUtils, 'createPopup')
+        .mockImplementation(() => Promise.resolve())
+
+      // simulate links in the profile
+      const linksRes = makeGetDocsResponse({docs: [1, 2]})
+      jest.spyOn(firestore, 'getDocs').mockResolvedValue(linksRes)
+      jest.spyOn(firestore, 'doc').mockImplementation()
+      jest.spyOn(firestore, 'deleteDoc').mockImplementation()
+
+      jest.spyOn(firebaseAuth, 'deleteUser').mockResolvedValue()
+
+      jest.spyOn(authStore, 'clearUser')
+
+      // SUT
+      await authStore.deleteUser()
+
+      expect(windowUtils.createPopup).toHaveBeenCalledTimes(1)
+      expect(firestore.getDocs).toHaveBeenCalledTimes(1)
+      expect(firestore.deleteDoc).toHaveBeenCalled()
+      expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
+      expect(authStore.clearUser).toHaveBeenCalledTimes(1)
+      expect(authStore.firebaseUser).toBe(undefined)
+      expect(authStore.user).toBe(undefined)
+    })
   })
 })

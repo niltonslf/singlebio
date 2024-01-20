@@ -30,8 +30,7 @@ import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
 import {Providers, ProvidersValueType} from '@/domain/enums'
 import {SignUpWithEmailAndPassword, User} from '@/domain/models'
 import {auth, db, githubProvider, googleProvider} from '@/services/firebase'
-import {createPopup} from '@/utils'
-import {parseToUser} from '@/utils/user'
+import {createPopup, parseToUser} from '@/utils'
 
 class AuthStore {
   public userModel: User | undefined = undefined
