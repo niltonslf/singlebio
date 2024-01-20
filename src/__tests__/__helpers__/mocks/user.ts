@@ -1,4 +1,4 @@
-import {User, UserSocial, UserTheme} from '@/models'
+import {User, UserSocial, UserTheme} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 
 export const makeUser = (

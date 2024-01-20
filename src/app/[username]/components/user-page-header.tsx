@@ -1,5 +1,5 @@
 import {Avatar} from '@/app/components'
-import {User} from '@/models'
+import {User} from '@/domain/models'
 
 type UserPageHeaderProps = {
   user: User
@@ -12,7 +12,7 @@ export const UserPageHeader = ({user, pageStyles}: UserPageHeaderProps) => {
       <div className='mb-4 flex w-full justify-center'>
         <Avatar
           name={user?.name ?? ''}
-          pictureUrl={user?.pictureUrl}
+          pictureUrl={user?.pictureUrl ?? ''}
           size={100}
         />
       </div>

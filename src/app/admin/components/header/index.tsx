@@ -59,6 +59,7 @@ export const Header = observer(({navbarHandler}: HeaderProps) => {
           <Avatar
             name={user?.name ?? 'User'}
             pictureUrl={user?.pictureUrl}
+            className='border-[2px] border-primary'
             size={40}
           />
         </Dropdown>

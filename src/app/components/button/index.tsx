@@ -7,7 +7,7 @@ import {merge} from '@/utils'
 
 export type ButtonVariants =
   | 'primary'
-  | 'infor'
+  | 'info'
   | 'error'
   | 'warning'
   | 'success'

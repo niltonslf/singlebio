@@ -2,7 +2,7 @@ import {Trash} from 'lucide-react'
 import Link from 'next/link'
 import {SocialIcon} from 'react-social-icons'
 
-import {socialOptions} from '@/data/social-options'
+import {socialOptions} from '@/constants/social-options'
 import {displayUrlShort, parseExternalUrl} from '@/utils'
 
 type SocialItemProps = {

@@ -1,6 +1,6 @@
 import {makeLink, setup} from '@/__tests__/__helpers__'
 import {AddLinkForm} from '@/app/admin/components'
-import {Link} from '@/models'
+import {Link} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 

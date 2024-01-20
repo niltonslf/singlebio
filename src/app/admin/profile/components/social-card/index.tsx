@@ -4,7 +4,7 @@ import {useState} from 'react'
 import {SectionCard} from '@/app/admin/components'
 import {useSmartphone} from '@/app/admin/context'
 import {authStore} from '@/app/auth/context/auth-store'
-import {User} from '@/models'
+import {User} from '@/domain/models'
 
 import {AddSocialModalForm, SocialItem} from './components'
 

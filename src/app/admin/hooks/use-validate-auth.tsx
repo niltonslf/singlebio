@@ -3,7 +3,7 @@ import {useRouter, usePathname} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
-import {auth} from '@/libs/firebase'
+import {auth} from '@/services/firebase'
 
 export const useValidateAuth = () => {
   const {push} = useRouter()
@@ -19,6 +19,11 @@ export const useValidateAuth = () => {
         push('/auth')
       } else {
         await authStore.authUser(firebaseUser)
+
+        if (!firebaseUser.emailVerified) {
+          return push('/auth/verify-email')
+        }
+
         if (!pathName.startsWith('/admin')) push('/admin')
       }
       setIsFetchingUser(false)

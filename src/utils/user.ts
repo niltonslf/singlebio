@@ -1,6 +1,6 @@
 import {User as FbUser} from 'firebase/auth'
 
-import {User, UserTheme} from '@/models'
+import {User, UserTheme} from '@/domain/models'
 
 export const parseToUser = (
   firebaseUser: FbUser,

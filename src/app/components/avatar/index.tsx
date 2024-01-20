@@ -21,7 +21,8 @@ export const Avatar = ({
   return (
     <div
       className={merge([
-        'relative flex aspect-square max-w-full items-center justify-center rounded-full bg-base-100 font-bold text-neutral-50',
+        'relative flex aspect-square max-w-full items-center justify-center rounded-full  bg-base-100 font-bold text-neutral-50',
+        !pictureUrl ? className : '',
       ])}
       style={{width: size, fontSize: size * 0.5}}>
       <span>{name.charAt(0)}</span>
@@ -32,7 +33,7 @@ export const Avatar = ({
           height={size}
           alt={name}
           className={merge([
-            'absolute left-0 top-0 h-full w-full rounded-full border-[3px] border-neutral-950 object-cover',
+            'absolute left-0 top-0 h-full w-full rounded-full border-[3px] border-neutral object-cover',
             className,
           ])}
         />

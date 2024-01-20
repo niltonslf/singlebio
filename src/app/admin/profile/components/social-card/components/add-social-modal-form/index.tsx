@@ -4,8 +4,8 @@ import {SocialIcon} from 'react-social-icons'
 import {useSmartphone} from '@/app/admin/context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {InputErrorMsg} from '@/app/components'
-import {socialOptions} from '@/data/social-options'
-import {User} from '@/models'
+import {socialOptions} from '@/constants/social-options'
+import {User} from '@/domain/models'
 import {merge, validateUrlRegex} from '@/utils'
 
 type SocialLink = {
@@ -74,7 +74,7 @@ export const AddSocialModalForm = ({
   return (
     <>
       <dialog className={merge(['modal', isOpen && 'modal-open'])}>
-        <div className='modal-box bg-neutral'>
+        <div className='modal-box bg-base-100'>
           <form method='dialog'>
             <button
               onClick={() => handleClose()}

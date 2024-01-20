@@ -1,4 +1,4 @@
-import {UserTheme} from '@/models'
+import {UserTheme} from '@/domain/models'
 
 export const parseThemeToQuery = ({...props}: UserTheme) => {
   const url = new URLSearchParams()

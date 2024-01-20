@@ -8,7 +8,7 @@ import {useSmartphone} from '@/app/admin/context'
 import {useImageCompressor, useImageUploader} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
 import {Avatar, InputErrorMsg} from '@/app/components'
-import {User} from '@/models'
+import {User} from '@/domain/models'
 import {merge, useDebounce} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
 

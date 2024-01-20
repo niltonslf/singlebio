@@ -2,7 +2,7 @@ import {Control, Controller, FieldErrors} from 'react-hook-form'
 import * as z from 'zod'
 
 import {InputErrorMsg} from '@/app/components'
-import {User} from '@/models'
+import {User} from '@/domain/models'
 import {merge} from '@/utils'
 import {useMask} from '@react-input/mask'
 

@@ -1,7 +1,7 @@
 import {Metadata} from 'next'
 import {ReactNode} from 'react'
 
-import {fetchUserProfile} from '@/api/usecases'
+import {fetchUserProfile} from '@/data/usecases'
 import {APP_NAME} from '@/config/envs'
 
 type LayoutProps = {
@@ -26,7 +26,7 @@ export const generateMetadata = async ({
   return {
     metadataBase: new URL(baseUrl || ''),
     title: user.name,
-    description: user.bio,
+    description: user?.bio || 'My personal page',
     keywords: [
       'link sharing',
       'share link on Instagram',
@@ -41,12 +41,12 @@ export const generateMetadata = async ({
     openGraph: {
       images: [
         {
-          url: user.pictureUrl,
+          url: user?.pictureUrl || `${baseUrl}/logo-icon-black.png`,
           width: 800,
           height: 600,
         },
         {
-          url: user.pictureUrl,
+          url: user?.pictureUrl || `${baseUrl}/logo-icon-black.png`,
           width: 1920,
           height: 1080,
         },
@@ -55,12 +55,12 @@ export const generateMetadata = async ({
       type: 'website',
     },
     icons: {
-      icon: user.pictureUrl,
-      shortcut: user.pictureUrl,
-      apple: user.pictureUrl,
+      icon: user?.pictureUrl || `${baseUrl}/logo-icon-black.png`,
+      shortcut: user?.pictureUrl || `${baseUrl}/logo-icon-black.png`,
+      apple: user?.pictureUrl || `${baseUrl}/logo-icon-black.png`,
       other: {
         rel: 'apple-touch-icon-precomposed',
-        url: user.pictureUrl,
+        url: user?.pictureUrl || `${baseUrl}/logo-icon-black.png`,
       },
     },
     robots: {

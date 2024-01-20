@@ -5,7 +5,7 @@ import {
   googleProvider,
   db,
   analytics,
-} from '@/libs/firebase'
+} from '@/services/firebase'
 import {cleanup} from '@testing-library/react'
 
 jest.mock('firebase/analytics', () => {

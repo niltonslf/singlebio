@@ -1,6 +1,6 @@
 import {SocialIcon} from 'react-social-icons'
 
-import {UserSocial} from '@/models'
+import {UserSocial} from '@/domain/models'
 
 type UserPageSocialProps = {
   social: UserSocial

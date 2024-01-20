@@ -4,7 +4,7 @@ import {fail, makeLink, makeUser, setup} from '@/__tests__/__helpers__'
 import {LinksSection} from '@/app/admin/components/links-section'
 import {SmartphoneProvider} from '@/app/admin/context/smartphone-context'
 import {authStore} from '@/app/auth/context/auth-store'
-import {Link, User} from '@/models'
+import {Link, User} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 import {act, cleanup, screen, waitFor} from '@testing-library/react'
 

@@ -1,12 +1,16 @@
 import {
+  EmailAuthProvider,
   User as FbUser,
   createUserWithEmailAndPassword,
   deleteUser,
-  getAuth,
+  reauthenticateWithCredential,
   reauthenticateWithPopup,
-  signInWithEmailAndPassword,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword as signInWithEmailAndPasswordFB,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from 'firebase/auth'
 import {
   DocumentSnapshot,
@@ -21,9 +25,12 @@ import {
 } from 'firebase/firestore'
 import {action, computed, makeObservable, observable} from 'mobx'
 
-import {app, auth, db, githubProvider, googleProvider} from '@/libs/firebase'
-import {User} from '@/models'
-import {parseToUser} from '@/utils/user'
+import {APP_URL} from '@/config/envs'
+import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
+import {Providers, ProvidersValues} from '@/domain/enums'
+import {SignUpWithEmailAndPassword, User} from '@/domain/models'
+import {auth, db, githubProvider, googleProvider} from '@/services/firebase'
+import {createPopup, parseToUser} from '@/utils'
 
 class AuthStore {
   public userModel: User | undefined = undefined
@@ -43,7 +50,13 @@ class AuthStore {
       logout: action,
       deleteUser: action,
       setUser: action,
+      setFirebaseUser: action,
       clearUser: action,
+      resetPassword: action,
+      reauthenticateWithEmailAndPassword: action,
+      reauthenticateByProvider: action,
+      deleteUserLinks: action,
+
       //computed
       user: computed,
     })
@@ -53,64 +66,72 @@ class AuthStore {
     return this.userModel
   }
 
-  public async signInWithGoogle(): Promise<User> {
+  public async signInWithGoogle(): Promise<void> {
     try {
       const {user} = await signInWithPopup(auth, googleProvider)
       return this.authUser(user)
     } catch (error) {
-      throw 'could not authenticate user'
+      throw ERROR_MESSAGES['error-to-authenticate-user']
     }
   }
 
-  public async signInWithGithub(): Promise<User> {
+  public async signInWithGithub(): Promise<void> {
     try {
       const {user} = await signInWithPopup(auth, githubProvider)
       return this.authUser(user)
     } catch (error) {
-      throw 'could not authenticate user'
+      throw ERROR_MESSAGES['error-to-authenticate-user']
     }
   }
 
-  public async createWithEmailAndPassword(
-    email: string,
-    password: string,
-  ): Promise<User> {
+  public async createWithEmailAndPassword({
+    email,
+    password,
+    displayName,
+  }: SignUpWithEmailAndPassword): Promise<void> {
     try {
       const {user} = await createUserWithEmailAndPassword(auth, email, password)
-      return this.authUser(user)
-    } catch (error) {
-      throw 'could not authenticate user'
+      await updateProfile(user, {displayName})
+      await sendEmailVerification(user)
+      this.logout()
+    } catch (error: any) {
+      const code = error.code as ErrorMessagesKeys
+
+      if (Object.hasOwn(ERROR_MESSAGES, code)) throw ERROR_MESSAGES[code]
+      throw ERROR_MESSAGES['error-to-create-account']
     }
   }
 
   public async signInWithEmailAndPassword(
     email: string,
     password: string,
-  ): Promise<User> {
+  ): Promise<void> {
     try {
-      const {user} = await signInWithEmailAndPassword(auth, email, password)
+      const {user} = await signInWithEmailAndPasswordFB(auth, email, password)
+
       return this.authUser(user)
-    } catch (error) {
-      throw 'could not authenticate user'
+    } catch (error: any) {
+      const code = error.code as ErrorMessagesKeys
+
+      if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
+      throw ERROR_MESSAGES['error-to-authenticate-user']
     }
   }
 
-  public async authUser(firebaseUser: FbUser): Promise<User> {
-    this.firebaseUser = firebaseUser
+  public async authUser(firebaseUser: FbUser): Promise<void> {
+    this.setFirebaseUser(firebaseUser)
 
     const res = await this.fetchFirebaseUser(firebaseUser)
 
     if (res.exists() && res.data()) {
-      const user = res.data() as User
-      this.setUser(user)
-      return user
+      return this.setUser(res.data() as User)
     }
 
+    // create new user
     const newUser = parseToUser(firebaseUser)
-
     await setDoc(doc(db, 'users', newUser.uid), newUser)
-    this.userModel = {...newUser}
-    return newUser
+
+    this.setUser({...newUser})
   }
 
   private async fetchFirebaseUser(
@@ -120,9 +141,9 @@ class AuthStore {
   }
 
   public async updateUser(user: Partial<User>): Promise<User> {
-    if (!this?.user?.uid) throw 'user not found'
+    if (!this?.user?.uid) throw ERROR_MESSAGES['user-not-found']
 
-    const newUser = {...this.userModel, ...user} as User
+    const newUser = {...this.user, ...user} as User
 
     this.setUser(newUser)
 
@@ -132,6 +153,10 @@ class AuthStore {
 
   public setUser(user?: User): void {
     this.userModel = user
+  }
+
+  public setFirebaseUser(firebaseUser?: FbUser): void {
+    this.firebaseUser = firebaseUser
   }
 
   public clearUser(): void {
@@ -144,13 +169,40 @@ class AuthStore {
   }
 
   public async deleteUser(): Promise<void> {
-    const auth = getAuth(app)
+    if (!this.user || !this.firebaseUser) throw ERROR_MESSAGES['user-not-found']
 
-    if (!this.user?.uid || !auth.currentUser) throw 'User not found.'
+    const userProvider = this.firebaseUser?.providerData[0].providerId
 
-    await reauthenticateWithPopup(auth.currentUser, googleProvider)
-    // delete links
-    const queryLinks = query(collection(db, 'users', this.user.uid, 'links'))
+    await this.reauthenticateByProvider(
+      userProvider as ProvidersValues,
+      this.firebaseUser,
+    )
+
+    await this.deleteUserLinks(this.user)
+
+    await deleteDoc(doc(db, 'users', this.user.uid))
+    await deleteUser(this.firebaseUser)
+    this.clearUser()
+  }
+
+  public async reauthenticateByProvider(
+    providerId: ProvidersValues,
+    firebaseUser: FbUser,
+  ) {
+    if (providerId === Providers.PASSWORD) {
+      return await createPopup('/auth/reauthenticate', 'Sign in')
+    }
+
+    const provider = {
+      [Providers.GOOGLE]: googleProvider,
+      [Providers.GITHUB]: githubProvider,
+    }
+
+    await reauthenticateWithPopup(firebaseUser, provider[providerId])
+  }
+
+  public async deleteUserLinks(user: User) {
+    const queryLinks = query(collection(db, 'users', user.uid, 'links'))
     const {size, docs} = await getDocs(queryLinks)
 
     if (size) {
@@ -158,10 +210,28 @@ class AuthStore {
         await deleteDoc(doc(db, linkDoc.ref.path))
       }
     }
+  }
 
-    await deleteDoc(doc(db, 'users', this.user.uid))
-    await deleteUser(auth.currentUser)
-    this.clearUser()
+  public async resetPassword(email: string) {
+    await sendPasswordResetEmail(auth, email, {url: `${APP_URL}/auth`})
+  }
+
+  public async reauthenticateWithEmailAndPassword(
+    email: string,
+    password: string,
+  ) {
+    if (!auth.currentUser) throw ERROR_MESSAGES['user-not-found']
+
+    try {
+      const credential = EmailAuthProvider.credential(email, password)
+      await reauthenticateWithCredential(auth.currentUser, credential)
+    } catch (error: any) {
+      const code = error.code as ErrorMessagesKeys
+
+      if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
+
+      throw ERROR_MESSAGES['error-to-authenticate-user']
+    }
   }
 }
 

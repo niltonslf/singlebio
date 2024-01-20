@@ -5,7 +5,7 @@ import {fail, setup} from '@/__tests__/__helpers__'
 import {makeUser} from '@/__tests__/__helpers__'
 import {Header} from '@/app/admin/components/header'
 import {authStore} from '@/app/auth/context/auth-store'
-import {User} from '@/models'
+import {User} from '@/domain/models'
 import {cleanup, screen} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({

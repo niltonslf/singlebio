@@ -12,8 +12,8 @@ import {
 import {Info, Plus} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
-import {db} from '@/libs/firebase'
-import {Link, User} from '@/models'
+import {db} from '@/services/firebase'
+import {Link, User} from '@/domain/models'
 
 import {AddLinkForm, PageLoader} from '..'
 

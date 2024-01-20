@@ -1,7 +1,7 @@
 import {Grip, Trash} from 'lucide-react'
 import {ReactNode} from 'react'
 
-import {Link} from '@/models'
+import {Link} from '@/domain/models'
 import {useSortable} from '@dnd-kit/sortable'
 import {CSS} from '@dnd-kit/utilities'
 

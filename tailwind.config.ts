@@ -40,7 +40,7 @@ const config: Config = {
           'info': '#1c92f2' /* Info */,
           'success': '#009485' /* Success */,
           'warning': '#ff9900' /* Warning */,
-          'error': '#ff2424' /* Error */,
+          'error': '#e13132' /* Error */,
         },
       },
       {
