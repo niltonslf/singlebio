@@ -1,78 +1,48 @@
-import {parse} from 'firestore-document-parser'
+'use server'
 
-import {FIREBASE_REST_BASE_URL} from '@/config/envs'
 import {User} from '@/domain/models'
+import {firestoreAdmin} from '@/services/firebase-admin'
 
+/**
+ * Fetch user profile information: name, email, theme...
+ * @param username
+ * @returns User type
+ */
 export const fetchUserProfile = async (username: string) => {
-  const path = `${FIREBASE_REST_BASE_URL}/documents:runQuery`
+  const userDoc = await firestoreAdmin
+    .collection('users')
+    .where('username', '==', username)
+    .get()
 
-  const query = {
-    structuredQuery: {
-      from: [{collectionId: 'users'}],
-      where: {
-        fieldFilter: {
-          field: {fieldPath: 'username'},
-          op: 'EQUAL',
-          value: {stringValue: username},
-        },
-      },
-    },
-  }
-
-  const res = await fetch(path, {
-    method: 'post',
-    body: JSON.stringify(query),
-    next: {tags: ['user-profile-data']},
-    cache: 'no-store',
-  })
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch user')
-  }
-
-  const data = await res.json()
-
-  const userRes = parse(data?.[0]?.document)
-
-  if (!data?.[0]?.document) return null
-
-  return userRes.fields as User
+  if (userDoc.empty) return {}
+  const docRes = userDoc.docs[0]
+  return docRes.data() as User
 }
 
+/**
+ * fetch all links from the provided user uid
+ * @param uid
+ * @returns Array of Link
+ */
 export const fetchUserLinks = async (uid: string) => {
-  const path = `${FIREBASE_REST_BASE_URL}/documents/users/${uid}/links`
+  const linksReq = await firestoreAdmin.collection(`users/${uid}/links`).get()
 
-  const res = await fetch(path, {
-    cache: 'no-store',
-    next: {tags: ['user-links-data']},
-  })
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch user links')
-  }
-  const data = await res.json()
-
-  if (!data?.documents) return []
-
-  const linksRes = data?.documents?.map((linkData: any) =>
-    parse(linkData.fields),
-  )
-
-  return linksRes
+  if (linksReq.empty) return []
+  const links = linksReq.docs.map(link => link.data())
+  return links
 }
 
+/**
+ * Fetch all usernames from the platform
+ * @returns ```Array<{username: string}>```
+ */
 export const fetchAllUsernames = async (): Promise<{username: string}[]> => {
-  const path = `${FIREBASE_REST_BASE_URL}/documents/users?mask.fieldPaths=username`
+  const usersReq = await firestoreAdmin
+    .collection('users')
+    .select('username')
+    .get()
 
-  const res = await fetch(path)
-
-  if (!res.ok) throw new Error('failed to fetch users usernames')
-
-  const data = await res.json()
-
-  if (!data.documents.length) return []
-
-  const parsedData = data?.documents?.map((user: any) => parse(user.fields))
-
-  return parsedData
+  if (usersReq.empty) return []
+  const users = usersReq.docs.map(user => user.data()) as {username: string}[]
+  return users
 }

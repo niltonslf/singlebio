@@ -65,7 +65,5 @@ const stylesFactory = (source: UserTheme, isPreviewAccess: boolean) => {
     }
   }
 
-  // console.log({styles})
-
   return styles
 }
