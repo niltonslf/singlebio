@@ -1,6 +1,6 @@
 'use client'
 
-import {AlertOctagon} from 'lucide-react'
+import {AlertOctagon, Trash} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 
 import {authStore} from '@/app/auth/context/auth-store'
@@ -30,17 +30,19 @@ const Settings = observer(() => {
           {/*  */}
           <SectionCard title='Delete Account'>
             <div>
-              <div className='alert alert-warning mb-10'>
+              <div className='alert alert-warning mb-10 text-sm'>
                 <AlertOctagon />
-                <p>
+                <span>
                   Be aware that this action will delete all your data and it's
                   not possible to come back.
-                </p>
+                </span>
               </div>
+
               <button
                 className='btn btn-error btn-md'
                 onClick={() => deleteAccount()}>
-                Delete account
+                <Trash size={18} />
+                <span>Delete account</span>
               </button>
             </div>
           </SectionCard>

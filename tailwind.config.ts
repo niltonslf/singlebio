@@ -38,9 +38,12 @@ const config: Config = {
           'base-content': '#ebecf0' /* Foreground content color  */,
 
           'info': '#1c92f2' /* Info */,
-          'success': '#009485' /* Success */,
-          'warning': '#ff9900' /* Warning */,
-          'error': '#e13132' /* Error */,
+          'success': '#15a99a' /* Success */,
+          'warning': '#ffaa2b' /* Warning */,
+          'error': '#ed5d63' /* Error */,
+
+          '--rounded-box': '.5rem',
+          '--rounded-btn': '.5rem',
         },
       },
       {
@@ -67,9 +70,9 @@ const config: Config = {
           'base-content': '#1e2734' /* Foreground content color  */,
 
           'info': '#1c92f2' /* Info */,
-          'success': '#009485' /* Success */,
-          'warning': '#ff9900' /* Warning */,
-          'error': '#ff5724' /* Error */,
+          'success': '#15a99a' /* Success */,
+          'warning': '#ffaa2b' /* Warning */,
+          'error': '#ed5d63' /* Error */,
         },
       },
     ],
