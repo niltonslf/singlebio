@@ -25,7 +25,7 @@ export const generateMetadata = async ({
 
   return {
     metadataBase: new URL(baseUrl || ''),
-    title: user.name,
+    title: user?.name || APP_NAME,
     description: user?.bio || 'My personal page',
     keywords: [
       'link sharing',

@@ -14,7 +14,7 @@ export const fetchUserProfile = async (username: string) => {
     .where('username', '==', username)
     .get()
 
-  if (userDoc.empty) return {}
+  if (userDoc.empty) return null
   const docRes = userDoc.docs[0]
   return docRes.data() as User
 }
