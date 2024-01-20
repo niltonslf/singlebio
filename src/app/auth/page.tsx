@@ -7,7 +7,7 @@ import {useState} from 'react'
 
 import {useValidateAuth} from '@/app/admin/hooks'
 import {Button, GoogleIcon, GithubIcon, Appear} from '@/app/components'
-import {LoginWithEmailAndPassword} from '@/models'
+import {LoginWithEmailAndPassword} from '@/domain/models'
 
 import {LoginEmailPasswordForm} from './components'
 import {authStore} from './context/auth-store'

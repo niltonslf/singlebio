@@ -1,5 +1,5 @@
 import {LinkCard} from '@/app/components'
-import {Link} from '@/models'
+import {Link} from '@/domain/models'
 
 import {PageStylesObject} from '../utils'
 

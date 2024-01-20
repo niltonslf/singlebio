@@ -7,7 +7,7 @@ import {useForm} from 'react-hook-form'
 import {z} from 'zod'
 
 import {Appear, Button} from '@/app/components'
-import {SignUpWithEmailAndPassword} from '@/models'
+import {SignUpWithEmailAndPassword} from '@/domain/models'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 import {authStore} from '../context/auth-store'

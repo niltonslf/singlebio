@@ -1,7 +1,7 @@
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 
 import {authStore} from '@/app/auth/context/auth-store'
-import {storage} from '@/libs/firebase'
+import {storage} from '@/services/firebase'
 
 export const useImageUploader = () => {
   const user = authStore.user

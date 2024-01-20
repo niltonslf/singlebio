@@ -5,7 +5,7 @@ import {useEffect, useRef, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
-import {Link} from '@/models'
+import {Link} from '@/domain/models'
 import {merge, useDebounce, validateUrlRegex} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
 

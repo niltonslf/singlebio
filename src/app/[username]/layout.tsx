@@ -1,7 +1,7 @@
 import {Metadata} from 'next'
 import {ReactNode} from 'react'
 
-import {fetchUserProfile} from '@/api/usecases'
+import {fetchUserProfile} from '@/data/usecases'
 import {APP_NAME} from '@/config/envs'
 
 type LayoutProps = {

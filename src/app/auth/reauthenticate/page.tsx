@@ -1,6 +1,6 @@
 'use client'
 
-import {LoginWithEmailAndPassword} from '@/models'
+import {LoginWithEmailAndPassword} from '@/domain/models'
 
 import {LoginEmailPasswordForm} from '../components'
 import {authStore} from '../context/auth-store'

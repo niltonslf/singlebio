@@ -1,7 +1,7 @@
 import {collection, getDocs, query, where} from 'firebase/firestore'
 
 import {authStore} from '@/app/auth/context/auth-store'
-import {db} from '@/libs/firebase'
+import {db} from '@/services/firebase'
 
 export const useProfile = () => {
   const uploadProfilePicture = async (): Promise<string> => {

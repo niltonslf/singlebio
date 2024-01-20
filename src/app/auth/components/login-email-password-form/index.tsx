@@ -3,7 +3,7 @@
 import {useForm} from 'react-hook-form'
 
 import {Button} from '@/app/components'
-import {LoginWithEmailAndPassword} from '@/models'
+import {LoginWithEmailAndPassword} from '@/domain/models'
 
 type LoginEmailPasswordFormProps = {
   onSubmit: (data: LoginWithEmailAndPassword) => void

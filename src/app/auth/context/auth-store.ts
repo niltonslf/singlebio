@@ -3,7 +3,6 @@ import {
   User as FbUser,
   createUserWithEmailAndPassword,
   deleteUser,
-  getAuth,
   reauthenticateWithCredential,
   reauthenticateWithPopup,
   sendEmailVerification,
@@ -28,8 +27,9 @@ import {action, computed, makeObservable, observable} from 'mobx'
 
 import {APP_URL} from '@/config/envs'
 import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
-import {app, auth, db, githubProvider, googleProvider} from '@/libs/firebase'
-import {Providers, SignUpWithEmailAndPassword, User} from '@/models'
+import {Providers} from '@/domain/enums'
+import {SignUpWithEmailAndPassword, User} from '@/domain/models'
+import {auth, db, githubProvider, googleProvider} from '@/services/firebase'
 import {createPopup} from '@/utils'
 import {parseToUser} from '@/utils/user'
 
@@ -142,7 +142,7 @@ class AuthStore {
   public async updateUser(user: Partial<User>): Promise<User> {
     if (!this?.user?.uid) throw ERROR_MESSAGES['user-not-found']
 
-    const newUser = {...this.userModel, ...user} as User
+    const newUser = {...this.user, ...user} as User
 
     this.setUser(newUser)
 
@@ -164,12 +164,10 @@ class AuthStore {
   }
 
   public async deleteUser(): Promise<void> {
-    const auth = getAuth(app)
-
-    if (!this.user?.uid || !auth.currentUser)
+    if (!this.user?.uid || !this.firebaseUser)
       throw ERROR_MESSAGES['user-not-found']
 
-    const userProviderId = auth.currentUser.providerData[0].providerId
+    const userProviderId = this.firebaseUser?.providerData[0].providerId
 
     if (userProviderId === Providers.PASSWORD) {
       await createPopup('/auth/reauthenticate', 'Sign in')
@@ -178,7 +176,7 @@ class AuthStore {
 
       if (userProviderId === Providers.GITHUB) providerInstance = githubProvider
 
-      await reauthenticateWithPopup(auth.currentUser, providerInstance)
+      await reauthenticateWithPopup(this.firebaseUser, providerInstance)
     }
 
     // delete links

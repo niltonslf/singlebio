@@ -3,7 +3,7 @@ import {useRouter, usePathname} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
-import {auth} from '@/libs/firebase'
+import {auth} from '@/services/firebase'
 
 export const useValidateAuth = () => {
   const {push} = useRouter()

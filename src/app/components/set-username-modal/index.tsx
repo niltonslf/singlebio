@@ -9,7 +9,7 @@ import {
   UsernameInputForm,
   usernameInputSchema,
 } from '@/app/admin/profile/components'
-import {db} from '@/libs/firebase'
+import {db} from '@/services/firebase'
 import {merge} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
 

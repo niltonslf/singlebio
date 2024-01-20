@@ -1,7 +1,7 @@
 import {parse} from 'firestore-document-parser'
 
 import {FIREBASE_REST_BASE_URL} from '@/config/envs'
-import {User} from '@/models'
+import {User} from '@/domain/models'
 
 export const fetchUserProfile = async (username: string) => {
   const path = `${FIREBASE_REST_BASE_URL}/documents:runQuery`

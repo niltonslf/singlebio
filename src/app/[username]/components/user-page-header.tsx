@@ -1,5 +1,5 @@
 import {Avatar} from '@/app/components'
-import {User} from '@/models'
+import {User} from '@/domain/models'
 
 type UserPageHeaderProps = {
   user: User

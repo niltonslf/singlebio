@@ -1,14 +1,14 @@
 import clsx from 'clsx'
 import {redirect} from 'next/navigation'
 
-import {fetchUserLinks, fetchUserProfile} from '@/api/usecases'
+import {fetchUserLinks, fetchUserProfile} from '@/data/usecases'
 import {
   UserPageFooter,
   UserPageHeader,
   UserPageLinks,
   UserPageSocial,
 } from '@/app/[username]/components'
-import {Link, UserTheme} from '@/models'
+import {Link, UserTheme} from '@/domain/models'
 
 import {CookieConsentBanner} from '../components'
 import {makePageStyles} from './utils'

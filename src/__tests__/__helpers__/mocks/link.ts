@@ -1,4 +1,4 @@
-import {Link} from '@/models'
+import {Link} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 
 export const makeLink = (

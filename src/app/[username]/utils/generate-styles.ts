@@ -1,6 +1,6 @@
 import {CSSProperties} from 'react'
 
-import {User, UserTheme} from '@/models'
+import {User, UserTheme} from '@/domain/models'
 
 type StylesProps = {
   params?: UserTheme & {preview: string}

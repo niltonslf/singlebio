@@ -12,7 +12,11 @@ import {ERROR_MESSAGES} from '@/constants/error-msgs'
 import {parseToUser} from '@/utils/user'
 import {cleanup} from '@testing-library/react'
 
-jest.mock('firebase/firestore')
+jest.mock('firebase/firestore', () => ({
+  __esModule: true,
+  ...jest.requireActual('firebase/firestore'),
+}))
+
 jest.mock('firebase/auth', () => ({
   __esModule: true,
   ...jest.requireActual('firebase/auth'),
@@ -101,8 +105,11 @@ describe('AuthStore', () => {
       // simulate an user already logged in
       authStore.setUser(initialUserData)
 
+      jest.spyOn(firestore, 'updateDoc').mockResolvedValue()
+
       const userNewData = {theme: makeUserTheme()}
 
+      // SUT
       const updateRes = await authStore.updateUser(userNewData)
 
       const mergedUserData = {...initialUserData, ...userNewData}
@@ -143,7 +150,9 @@ describe('AuthStore', () => {
       const authRes = {currentUser: null} as firebaseAuth.Auth
       jest.spyOn(firebaseAuth, 'getAuth').mockReturnValue(authRes)
 
-      await expect(authStore.deleteUser()).rejects.toBe('User not found.')
+      await expect(authStore.deleteUser()).rejects.toBe(
+        ERROR_MESSAGES['user-not-found'],
+      )
     })
 
     it('should delete user with google provider', async () => {
@@ -151,27 +160,32 @@ describe('AuthStore', () => {
       const userMock = parseToUser(fbUserMock)
 
       // simulate an user logged in
-      authStore.userModel = userMock
-      authStore.firebaseUser = fbUserMock
+      authStore.setUser(userMock)
 
+      // firebaseAuth.signInWithPopup(auth,)
+
+      // firebaseConfig.auth
       // mock the getAuth method to return the fake logged in user
-      const authRes = {
-        currentUser: {
-          ...fbUserMock,
-          providerData: [{providerId: 'google.com'}],
-        },
-      } as firebaseAuth.Auth
-      jest.spyOn(firebaseAuth, 'getAuth').mockReturnValue(authRes)
-      jest.spyOn(authStore, 'clearUser')
+      // const authRes = {
+      //   currentUser: {
+      //     ...fbUserMock,
+      //     providerData: [{providerId: 'google.com'}],
+      //   },
+      // } as firebaseAuth.Auth
 
-      jest.spyOn(firebaseAuth, 'reauthenticateWithPopup').mockImplementation()
+      // jest.spyOn(firebaseAuth, 'getAuth').mockReturnValue(authRes)
 
-      const linksRes = makeGetDocsResponse({docs: [1, 2]})
-      jest.spyOn(firestore, 'getDocs').mockResolvedValue(linksRes)
+      // jest.spyOn(firebaseAuth, 'getAuth').mockReturnValue(authRes)
+      // jest.spyOn(authStore, 'clearUser')
 
-      jest.spyOn(firestore, 'doc').mockImplementation()
-      jest.spyOn(firestore, 'deleteDoc').mockImplementation()
-      jest.spyOn(firebaseAuth, 'deleteUser').mockImplementation()
+      // jest.spyOn(firebaseAuth, 'reauthenticateWithPopup').mockImplementation()
+
+      // const linksRes = makeGetDocsResponse({docs: [1, 2]})
+      // jest.spyOn(firestore, 'getDocs').mockResolvedValue(linksRes)
+
+      // jest.spyOn(firestore, 'doc').mockImplementation()
+      // jest.spyOn(firestore, 'deleteDoc').mockImplementation()
+      // jest.spyOn(firebaseAuth, 'deleteUser').mockImplementation()
 
       await authStore.deleteUser()
 
@@ -188,5 +202,25 @@ describe('AuthStore', () => {
       expect(authStore.firebaseUser).toBe(undefined)
       expect(authStore.user).toBe(undefined)
     })
+
+    // it('should delete user with github provider', async () => {
+    //   const fbUserMock = makeFbUser()
+    //   const userMock = parseToUser(fbUserMock)
+
+    //   // simulate an user logged in
+    //   authStore.userModel = userMock
+    //   authStore.firebaseUser = fbUserMock
+
+    //   // mock the getAuth method to return the fake logged in user
+    //   const authRes = {
+    //     currentUser: {
+    //       ...fbUserMock,
+    //       providerData: [{providerId: 'google.com'}],
+    //     },
+    //   } as firebaseAuth.Auth
+
+    //   // SUT
+    //   await authStore.deleteUser()
+    // })
   })
 })

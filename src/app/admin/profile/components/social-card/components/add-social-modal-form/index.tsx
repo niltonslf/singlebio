@@ -5,7 +5,7 @@ import {useSmartphone} from '@/app/admin/context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {InputErrorMsg} from '@/app/components'
 import {socialOptions} from '@/constants/social-options'
-import {User} from '@/models'
+import {User} from '@/domain/models'
 import {merge, validateUrlRegex} from '@/utils'
 
 type SocialLink = {

@@ -2,7 +2,7 @@
 
 import {makeAutoObservable} from 'mobx'
 
-import {UserTheme} from '@/models'
+import {UserTheme} from '@/domain/models'
 import {parseUserPageUrl} from '@/utils'
 
 import {parseThemeToQuery} from '../utils'

@@ -5,7 +5,7 @@ import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 
 import {Appear, Button, Disappear} from '@/app/components'
-import {LoginWithEmailAndPassword} from '@/models'
+import {LoginWithEmailAndPassword} from '@/domain/models'
 
 import {authStore} from '../context/auth-store'
 
