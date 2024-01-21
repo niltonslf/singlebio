@@ -37,7 +37,6 @@ const UserPage = async ({params, searchParams}: UserPageProps) => {
   const {user, links, socialPages} = await fetchUserData(params.username)
 
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
-
   const pageStyles = makePageStyles({params: searchParams, user})
 
   return (

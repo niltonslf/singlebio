@@ -12,7 +12,7 @@ import {
 import {Info, Plus} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
-import {Link, User} from '@/domain/models'
+import {Link, LinkCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
 
 import {AddLinkForm, PageLoader} from '..'
@@ -64,7 +64,7 @@ export const LinksSection = ({user}: CardListProps) => {
 
   const handleAddNewLink = async () => {
     const res = await doc(db, 'users', user.uid)
-    const emptyLink: Link = {
+    const emptyLink: LinkCreation = {
       label: '',
       url: '',
       clicks: 0,

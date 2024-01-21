@@ -31,7 +31,7 @@ export const fetchUserLinks = async (uid: string) => {
     .get()
 
   if (linksReq.empty) return []
-  const links = linksReq.docs.map(link => link.data()) as Required<Link>[]
+  const links = linksReq.docs.map(link => link.data()) as Link[]
   return links
 }
 
