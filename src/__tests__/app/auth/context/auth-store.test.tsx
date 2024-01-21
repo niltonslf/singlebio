@@ -472,4 +472,23 @@ describe('AuthStore', () => {
       )
     })
   })
+
+  describe('reauthenticateWithEmailAndPassword', () => {
+    it('should return error to reauthenticate user', async () => {
+      const emailMock = faker.internet.email()
+      const passwordMock = faker.internet.password({length: 8})
+
+      authStore.setFirebaseUser(undefined)
+
+      // SUT
+      const sut = authStore.reauthenticateWithEmailAndPassword(
+        emailMock,
+        passwordMock,
+      )
+
+      expect(sut).rejects.toBe(ERROR_MESSAGES['user-not-found'])
+    })
+
+    it.todo('should reauthenticate user')
+  })
 })

@@ -225,11 +225,11 @@ class AuthStore {
     email: string,
     password: string,
   ) {
-    if (!auth.currentUser) throw ERROR_MESSAGES['user-not-found']
+    if (!this.firebaseUser) throw ERROR_MESSAGES['user-not-found']
 
     try {
       const credential = EmailAuthProvider.credential(email, password)
-      await reauthenticateWithCredential(auth.currentUser, credential)
+      await reauthenticateWithCredential(this.firebaseUser, credential)
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
 
