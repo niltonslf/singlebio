@@ -33,7 +33,7 @@ export const SocialItem = ({social, onDelete}: SocialItemProps) => {
         </p>
         <button
           className='btn btn-square btn-xs hover:btn-primary'
-          onClick={() => onDelete(social.name)}>
+          onClick={() => onDelete(social.id)}>
           <Trash size={18} />
         </button>
       </div>

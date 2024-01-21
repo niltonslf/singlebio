@@ -1,5 +1,3 @@
-import {SocialPage} from '.'
-
 export type UserTheme = {
   backgroundImage: string
   backgroundColor: string
@@ -18,6 +16,5 @@ export type User = {
   bio?: string
   username?: string
   theme?: UserTheme
-  social?: SocialPage[]
   pageViews: number
 }

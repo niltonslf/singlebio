@@ -14,6 +14,7 @@ import {
   query,
   addDoc,
   updateDoc,
+  deleteDoc,
 } from '@firebase/firestore'
 
 import {AddSocialModalForm, SocialItem} from './components'
@@ -35,10 +36,12 @@ export const SocialCard = ({user}: SocialCardProps) => {
     await fetchSocialPages()
   }
 
-  const handleDelete = async (socialName: string) => {
-    const currentSocial = user?.social ? [...user?.social] : []
-    const remainingKeys = currentSocial.filter(item => item.name != socialName)
-    await authStore.updateUser({social: remainingKeys})
+  const handleDelete = async (socialId: string) => {
+    if (!authStore.user) return
+
+    const ref = doc(db, 'users', authStore.user?.uid, 'social-pages', socialId)
+    await deleteDoc(ref)
+    await fetchSocialPages()
     reloadSmartphoneList()
   }
 
