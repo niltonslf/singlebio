@@ -474,7 +474,7 @@ describe('AuthStore', () => {
   })
 
   describe('reauthenticateWithEmailAndPassword', () => {
-    it('should return error to reauthenticate user', async () => {
+    it('should return error if firebaseUser does not exists', async () => {
       const emailMock = faker.internet.email()
       const passwordMock = faker.internet.password({length: 8})
 
@@ -489,6 +489,58 @@ describe('AuthStore', () => {
       expect(sut).rejects.toBe(ERROR_MESSAGES['user-not-found'])
     })
 
-    it.todo('should reauthenticate user')
+    it('should reauthenticate user', async () => {
+      const emailMock = faker.internet.email()
+      const passwordMock = faker.internet.password({length: 8})
+      const authResponseDummy = {
+        user: makeFbUser(),
+        operationType: 'signIn',
+        providerId: 'some-id',
+      } as firebaseAuth.UserCredential
+
+      authStore.setFirebaseUser(makeFbUser())
+
+      jest
+        .spyOn(firebaseAuth.EmailAuthProvider, 'credential')
+        .mockImplementation()
+      jest
+        .spyOn(firebaseAuth, 'reauthenticateWithCredential')
+        .mockResolvedValue(authResponseDummy)
+
+      // SUT
+      const sut = authStore.reauthenticateWithEmailAndPassword(
+        emailMock,
+        passwordMock,
+      )
+
+      expect(sut).resolves.toBe(undefined)
+    })
+
+    it('should return an error to reauthenticate user', async () => {
+      const emailMock = faker.internet.email()
+      const passwordMock = faker.internet.password({length: 8})
+      const authResponseDummy = {
+        user: makeFbUser(),
+        operationType: 'signIn',
+        providerId: 'some-id',
+      } as firebaseAuth.UserCredential
+
+      authStore.setFirebaseUser(makeFbUser())
+
+      jest
+        .spyOn(firebaseAuth.EmailAuthProvider, 'credential')
+        .mockImplementation()
+      jest
+        .spyOn(firebaseAuth, 'reauthenticateWithCredential')
+        .mockResolvedValue(authResponseDummy)
+
+      // SUT
+      const sut = authStore.reauthenticateWithEmailAndPassword(
+        emailMock,
+        passwordMock,
+      )
+
+      expect(sut).resolves.toBe(undefined)
+    })
   })
 })
