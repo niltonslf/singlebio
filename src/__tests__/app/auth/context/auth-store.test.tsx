@@ -179,7 +179,45 @@ describe('AuthStore', () => {
       expect(authStore.logout).toHaveBeenCalled()
     })
 
-    it.todo('should create an account using email and password')
+    it('should return an error to create an account', async () => {
+      const firebaseUserMock = makeFbUser()
+      const userMock = parseToUser(firebaseUserMock)
+      const passwordMock = faker.internet.password({length: 8})
+      const displayNameMock = faker.internet.userName()
+
+      jest
+        .spyOn(firebaseAuth, 'createUserWithEmailAndPassword')
+        .mockRejectedValue('error')
+
+      // SUT
+      const sut = authStore.createWithEmailAndPassword({
+        email: userMock.email,
+        password: passwordMock,
+        displayName: displayNameMock,
+      })
+
+      expect(sut).rejects.toBe(ERROR_MESSAGES['error-to-create-account'])
+    })
+
+    it('should return a custom error to create an account', async () => {
+      const firebaseUserMock = makeFbUser()
+      const userMock = parseToUser(firebaseUserMock)
+      const passwordMock = faker.internet.password({length: 8})
+      const displayNameMock = faker.internet.userName()
+
+      jest
+        .spyOn(firebaseAuth, 'createUserWithEmailAndPassword')
+        .mockRejectedValue({code: 'auth/email-already-in-use'})
+
+      // SUT
+      const sut = authStore.createWithEmailAndPassword({
+        email: userMock.email,
+        password: passwordMock,
+        displayName: displayNameMock,
+      })
+
+      expect(sut).rejects.toBe(ERROR_MESSAGES['auth/email-already-in-use'])
+    })
   })
 
   describe('signInWithGithub', () => {
