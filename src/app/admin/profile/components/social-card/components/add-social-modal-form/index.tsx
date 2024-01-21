@@ -2,11 +2,12 @@ import {useState} from 'react'
 import {SocialIcon} from 'react-social-icons'
 
 import {useSmartphone} from '@/app/admin/context'
-import {authStore} from '@/app/auth/context/auth-store'
 import {InputErrorMsg} from '@/app/components'
 import {socialOptions} from '@/constants/social-options'
-import {SocialLink, User} from '@/domain/models'
+import {SocialLinkCreation, User} from '@/domain/models'
+import {db} from '@/services/firebase'
 import {merge, validateUrlRegex} from '@/utils'
+import {addDoc, collection, doc} from '@firebase/firestore'
 
 type AddSocialModalFormProps = {
   user: User
@@ -21,10 +22,11 @@ export const AddSocialModalForm = ({
 }: AddSocialModalFormProps) => {
   const {reloadSmartphoneList} = useSmartphone()
 
-  const [formData, setFormData] = useState<SocialLink>({
+  const [formData, setFormData] = useState<SocialLinkCreation>({
     url: '',
     name: '',
     clicks: 0,
+    order: 0,
   })
   const [isUrlValid, setIsUrlValid] = useState<boolean | undefined>()
   const [filter, setFilter] = useState('')
@@ -54,13 +56,9 @@ export const AddSocialModalForm = ({
   }
 
   const handleSubmit = async () => {
-    const currentItems = user.social ?? []
-    const social = [
-      ...currentItems,
-      {name: formData.name, url: formData.url, clicks: 0},
-    ]
+    const userRef = doc(db, 'users', user.uid)
+    addDoc(collection(userRef, 'social-pages'), formData)
 
-    await authStore.updateUser({social})
     reloadSmartphoneList()
     handleClose()
   }
@@ -69,7 +67,7 @@ export const AddSocialModalForm = ({
     onClose()
     setTimeout(() => {
       setIsUrlValid(undefined)
-      setFormData({name: '', url: '', clicks: 0})
+      setFormData({name: '', url: '', clicks: 0, order: 0})
     }, 200)
   }
 

@@ -4,12 +4,8 @@ import {authStore} from '@/app/auth/context/auth-store'
 import {db} from '@/services/firebase'
 
 export const useProfile = () => {
-  const uploadProfilePicture = async (): Promise<string> => {
-    return ''
-  }
-
   const validateUsername = async (data: string): Promise<boolean> => {
-    const username = data.includes('@') ? data.replace('@', '') : data
+    const username = data
 
     if (username === authStore.user?.username) return true
 
@@ -21,6 +17,5 @@ export const useProfile = () => {
 
   return {
     validateUsername,
-    uploadProfilePicture,
   }
 }

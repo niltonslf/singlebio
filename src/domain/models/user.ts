@@ -10,8 +10,6 @@ export type UserTheme = {
   socialDefaultColor: boolean
 }
 
-export type UserSocial = SocialLink[]
-
 export type User = {
   uid: string
   pictureUrl: string
@@ -20,6 +18,6 @@ export type User = {
   bio?: string
   username?: string
   theme?: UserTheme
-  social?: UserSocial
+  social?: SocialLink[]
   pageViews: number
 }
