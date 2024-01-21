@@ -54,13 +54,34 @@ describe('AuthStore', () => {
 
       jest.spyOn(authStore, 'authUser').mockResolvedValue()
 
-      await expect(authStore.signInWithGoogle()).resolves.toBeFalsy()
+      await expect(authStore.signInWithGoogle()).resolves.toBeUndefined()
     })
 
     it('should call google signin and throw an error', async () => {
       jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue({code: ''})
 
       await expect(authStore.signInWithGoogle()).rejects.toBe(
+        ERROR_MESSAGES['error-to-authenticate-user'],
+      )
+    })
+  })
+
+  describe('signInWithGithub', () => {
+    it('should call github, signin and update user data', async () => {
+      const firebaseUserMock = makeFbUser()
+
+      jest
+        .spyOn(firebaseAuth, 'signInWithPopup')
+        .mockResolvedValue({user: firebaseUserMock} as any)
+
+      jest.spyOn(authStore, 'authUser').mockResolvedValue()
+
+      await expect(authStore.signInWithGithub()).resolves.toBeUndefined()
+    })
+    it('should call github, signin and throw an error', async () => {
+      jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue({code: ''})
+
+      await expect(authStore.signInWithGithub()).rejects.toBe(
         ERROR_MESSAGES['error-to-authenticate-user'],
       )
     })
