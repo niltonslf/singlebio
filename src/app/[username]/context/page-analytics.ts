@@ -1,5 +1,6 @@
 import {
   collection,
+  doc,
   getDocs,
   limit,
   query,
@@ -42,7 +43,19 @@ class PageAnalytics {
   }
 
   public async updateSocialClick(url: string) {
-    return url
+    if (!this.user || !this.user?.social) return
+
+    const changedItem = this.user.social?.find(social => social.url === url)
+
+    if (!changedItem) return
+
+    const newData = {...changedItem, clicks: (changedItem?.clicks || 0) + 1}
+    const filter = this.user.social.filter(({url}) => url != changedItem?.url)
+    const newSocialData = [...filter, newData]
+
+    const userRef = doc(db, 'users', this.user.uid)
+    await updateDoc(userRef, {social: newSocialData})
+    this.setUser({...this.user, social: newSocialData})
   }
 }
 
