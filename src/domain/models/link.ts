@@ -3,4 +3,5 @@ export type Link = {
   url: string
   label: string
   order?: number
+  clicks: number
 }
