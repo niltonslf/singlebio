@@ -94,14 +94,15 @@ class AuthStore {
     displayName,
   }: SignUpWithEmailAndPassword): Promise<void> {
     try {
+      const continueUrl = `${APP_URL}/auth`
       const {user} = await createUserWithEmailAndPassword(auth, email, password)
       await updateProfile(user, {displayName})
-      await sendEmailVerification(user)
-      this.logout()
+      await sendEmailVerification(user, {url: continueUrl})
+      await this.logout()
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
 
-      if (Object.hasOwn(ERROR_MESSAGES, code)) throw ERROR_MESSAGES[code]
+      if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
       throw ERROR_MESSAGES['error-to-create-account']
     }
   }

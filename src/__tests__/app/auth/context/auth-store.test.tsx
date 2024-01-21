@@ -8,6 +8,7 @@ import {
   makeUserTheme,
 } from '@/__tests__/__helpers__'
 import {authStore} from '@/app/auth/context/auth-store'
+import {APP_URL} from '@/config/envs'
 import {ERROR_MESSAGES} from '@/constants/error-msgs'
 import {Providers} from '@/domain/enums'
 import {auth} from '@/services/firebase'
@@ -136,6 +137,51 @@ describe('AuthStore', () => {
       )
     })
   })
+
+  describe('createWithEmailAndPassword', () => {
+    it('should create an account using email and password', async () => {
+      const firebaseUserMock = makeFbUser()
+      const userMock = parseToUser(firebaseUserMock)
+      const passwordMock = faker.internet.password({length: 8})
+      const displayNameMock = faker.internet.userName()
+
+      jest
+        .spyOn(firebaseAuth, 'createUserWithEmailAndPassword')
+        .mockResolvedValue({
+          user: firebaseUserMock,
+          operationType: 'signIn',
+          providerId: 'some-id',
+        })
+      jest.spyOn(firebaseAuth, 'updateProfile').mockResolvedValue()
+      jest.spyOn(firebaseAuth, 'sendEmailVerification').mockResolvedValue()
+      jest.spyOn(authStore, 'logout')
+
+      // SUT
+      await authStore.createWithEmailAndPassword({
+        email: userMock.email,
+        password: passwordMock,
+        displayName: displayNameMock,
+      })
+
+      expect(firebaseAuth.createUserWithEmailAndPassword).toHaveBeenCalledWith(
+        auth,
+        userMock.email,
+        passwordMock,
+      )
+      expect(firebaseAuth.updateProfile).toHaveBeenCalledWith(
+        firebaseUserMock,
+        {displayName: displayNameMock},
+      )
+      expect(firebaseAuth.sendEmailVerification).toHaveBeenCalledWith(
+        firebaseUserMock,
+        {url: `${APP_URL}/auth`},
+      )
+      expect(authStore.logout).toHaveBeenCalled()
+    })
+
+    it.todo('should create an account using email and password')
+  })
+
   describe('signInWithGithub', () => {
     it('should call github, signin and update user data', async () => {
       const firebaseUserMock = makeFbUser()
