@@ -2,7 +2,6 @@ import clsx from 'clsx'
 import {redirect} from 'next/navigation'
 
 import {
-  PageAnalyticsLoader,
   UserPageFooter,
   UserPageHeader,
   UserPageLinks,
@@ -68,11 +67,11 @@ const UserPage = async ({params, searchParams}: UserPageProps) => {
         </section>
       </main>
       <CookieConsentBanner />
-      <PageAnalyticsLoader
+      {/* <PageAnalyticsLoader
         linkItemClass='user-link-item'
         socialItemClass='user-social-icon'
         user={user}
-      />
+      /> */}
     </>
   )
 }
