@@ -57,11 +57,21 @@ describe('AuthStore', () => {
       await expect(authStore.signInWithGoogle()).resolves.toBeUndefined()
     })
 
-    it('should call google signin and throw an error', async () => {
+    it('should call google, signin and throw an error', async () => {
       jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue({code: ''})
 
       await expect(authStore.signInWithGoogle()).rejects.toBe(
         ERROR_MESSAGES['error-to-authenticate-user'],
+      )
+    })
+
+    it('should call google, signin and throw an custom error', async () => {
+      jest
+        .spyOn(firebaseAuth, 'signInWithPopup')
+        .mockRejectedValue({code: 'auth/email-already-in-use'})
+
+      await expect(authStore.signInWithGoogle()).rejects.toBe(
+        ERROR_MESSAGES['auth/email-already-in-use'],
       )
     })
   })
@@ -83,6 +93,16 @@ describe('AuthStore', () => {
 
       await expect(authStore.signInWithGithub()).rejects.toBe(
         ERROR_MESSAGES['error-to-authenticate-user'],
+      )
+    })
+
+    it('should call github, signin and throw an custom error', async () => {
+      jest
+        .spyOn(firebaseAuth, 'signInWithPopup')
+        .mockRejectedValue({code: 'auth/email-already-in-use'})
+
+      await expect(authStore.signInWithGithub()).rejects.toBe(
+        ERROR_MESSAGES['auth/email-already-in-use'],
       )
     })
   })
