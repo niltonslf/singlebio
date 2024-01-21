@@ -1,9 +1,15 @@
 import routerMock from 'next-router-mock'
 
-import {makeLink, makeUser, makeUserTheme, setup} from '@/__tests__/__helpers__'
+import {
+  makeLink,
+  makeSocialPage,
+  makeUser,
+  makeUserTheme,
+  setup,
+} from '@/__tests__/__helpers__'
 import UserPage from '@/app/[username]/page'
 import * as fetchUser from '@/data/usecases/user'
-import {Link, User} from '@/domain/models'
+import {Link, SocialPage, User} from '@/domain/models'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('@/data/usecases/user')
@@ -13,9 +19,14 @@ jest.mock('next/navigation', () => ({
   redirect: jest.fn(),
 }))
 
-const handleFetchLinks = (user?: User, links?: Link[]) => {
+const handleFetchLinks = (
+  user?: User,
+  links?: Link[],
+  socials?: SocialPage[],
+) => {
   const userMock = user ?? makeUser()
-  const linksMock = links ?? [makeLink(), makeLink(), makeLink()]
+  const linksMock = links ?? [makeLink(), makeLink()]
+  const socialsMock = socials ?? [makeSocialPage(), makeSocialPage()]
 
   jest
     .spyOn(fetchUser, 'fetchUserProfile')
@@ -23,10 +34,14 @@ const handleFetchLinks = (user?: User, links?: Link[]) => {
   jest
     .spyOn(fetchUser, 'fetchUserLinks')
     .mockImplementation(() => Promise.resolve(linksMock))
+  jest
+    .spyOn(fetchUser, 'fetchUserSocialPages')
+    .mockImplementation(() => Promise.resolve(socialsMock))
 }
 
-const makeSUT = async ({username = ''} = {}) => {
-  return setup(await UserPage({params: {username}}))
+const makeSUT = async (username: string) => {
+  const sut = await UserPage({params: {username: username}})
+  return setup(sut)
 }
 
 describe('User page', () => {
@@ -39,19 +54,19 @@ describe('User page', () => {
     const userMock = makeUser() as Required<User>
     Object.assign(userMock, {theme: makeUserTheme()})
 
-    const linkMock = [makeLink(), makeLink(), makeLink()]
-
     routerMock.push(`/${userMock.username}`)
-    handleFetchLinks(userMock, linkMock)
+    handleFetchLinks(userMock)
 
-    await waitFor(() => makeSUT({username: userMock.username}))
+    const {debug} = await waitFor(() => makeSUT(userMock.username))
+
+    debug()
 
     const name = screen.getByRole('heading', {level: 2})
     const linkList = await screen.queryByRole('list')
     const profilePicture = await screen.queryAllByRole('img')[0]
 
     expect(name.textContent).toBe(userMock.name)
-    expect(linkList?.children).toHaveLength(3)
+    expect(linkList?.children).toHaveLength(2)
     expect(profilePicture?.getAttribute('src')).toContain(
       encodeURIComponent(userMock.pictureUrl),
     )
@@ -69,9 +84,10 @@ describe('User page', () => {
 
     const linkMock = makeLink()
 
+    routerMock.push(`/${userMock.username}`)
     handleFetchLinks(userMock, [linkMock])
 
-    await waitFor(() => makeSUT({username: userMock.username}))
+    await waitFor(() => makeSUT(userMock.username))
 
     const container = screen.getByRole('main')
     const containerOverlay = container.querySelector('section')

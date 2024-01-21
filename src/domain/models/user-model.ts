@@ -8,8 +8,6 @@ export type UserTheme = {
   socialDefaultColor: boolean
 }
 
-export type UserSocial = {name: string; url: string}[]
-
 export type User = {
   uid: string
   pictureUrl: string
@@ -18,5 +16,5 @@ export type User = {
   bio?: string
   username?: string
   theme?: UserTheme
-  social?: UserSocial
+  pageViews: number
 }

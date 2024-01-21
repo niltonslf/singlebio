@@ -154,6 +154,7 @@ describe('AuthStore', () => {
         })
       jest.spyOn(firebaseAuth, 'updateProfile').mockResolvedValue()
       jest.spyOn(firebaseAuth, 'sendEmailVerification').mockResolvedValue()
+      jest.spyOn(authStore, 'authUser').mockResolvedValue()
       jest.spyOn(authStore, 'logout')
 
       // SUT
@@ -478,12 +479,11 @@ describe('AuthStore', () => {
       const emailMock = faker.internet.email()
       const passwordMock = faker.internet.password({length: 8})
 
-      authStore.setFirebaseUser(undefined)
-
       // SUT
       const sut = authStore.reauthenticateWithEmailAndPassword(
         emailMock,
         passwordMock,
+        null,
       )
 
       expect(sut).rejects.toBe(ERROR_MESSAGES['user-not-found'])
@@ -498,8 +498,6 @@ describe('AuthStore', () => {
         providerId: 'some-id',
       } as firebaseAuth.UserCredential
 
-      authStore.setFirebaseUser(makeFbUser())
-
       jest
         .spyOn(firebaseAuth.EmailAuthProvider, 'credential')
         .mockImplementation()
@@ -511,6 +509,7 @@ describe('AuthStore', () => {
       const sut = authStore.reauthenticateWithEmailAndPassword(
         emailMock,
         passwordMock,
+        makeFbUser(),
       )
 
       expect(sut).resolves.toBe(undefined)
@@ -519,8 +518,6 @@ describe('AuthStore', () => {
     it('should return an error to reauthenticate user', async () => {
       const emailMock = faker.internet.email()
       const passwordMock = faker.internet.password({length: 8})
-
-      authStore.setFirebaseUser(makeFbUser())
 
       jest
         .spyOn(firebaseAuth.EmailAuthProvider, 'credential')
@@ -533,6 +530,7 @@ describe('AuthStore', () => {
       const sut = authStore.reauthenticateWithEmailAndPassword(
         emailMock,
         passwordMock,
+        makeFbUser(),
       )
 
       expect(sut).rejects.toBe(ERROR_MESSAGES['error-to-authenticate-user'])
@@ -541,8 +539,6 @@ describe('AuthStore', () => {
     it('should return a custom error to reauthenticate user', async () => {
       const emailMock = faker.internet.email()
       const passwordMock = faker.internet.password({length: 8})
-
-      authStore.setFirebaseUser(makeFbUser())
 
       jest
         .spyOn(firebaseAuth.EmailAuthProvider, 'credential')
@@ -555,6 +551,7 @@ describe('AuthStore', () => {
       const sut = authStore.reauthenticateWithEmailAndPassword(
         emailMock,
         passwordMock,
+        makeFbUser(),
       )
 
       expect(sut).rejects.toBe(ERROR_MESSAGES['auth/invalid-login-credentials'])

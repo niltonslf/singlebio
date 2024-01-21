@@ -1,15 +1,15 @@
-import {Link} from '@/domain/models'
+import {SocialPage} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 
-export const makeLink = (
+export const makeSocialPage = (
   id?: string,
-  label?: string,
+  name?: string,
   url?: string,
   order?: number,
-): Link => {
+): SocialPage => {
   return {
     id: id ?? faker.string.uuid(),
-    label: label ?? faker.word.words(2),
+    name: name ?? faker.person.firstName(),
     url: url ?? faker.internet.url(),
     order: order ?? faker.number.int(),
     clicks: 0,

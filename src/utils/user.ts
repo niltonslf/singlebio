@@ -17,6 +17,7 @@ export const parseToUser = (
     name: firebaseUser.displayName || fallbackName,
     pictureUrl: firebaseUser.photoURL || '',
     uid: firebaseUser.uid,
+    pageViews: 0,
   }
 
   if (theme) response.theme = theme

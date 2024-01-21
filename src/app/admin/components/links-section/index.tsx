@@ -12,8 +12,8 @@ import {
 import {Info, Plus} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
+import {Link, LinkCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
-import {Link, User} from '@/domain/models'
 
 import {AddLinkForm, PageLoader} from '..'
 
@@ -64,7 +64,12 @@ export const LinksSection = ({user}: CardListProps) => {
 
   const handleAddNewLink = async () => {
     const res = await doc(db, 'users', user.uid)
-    const emptyLink: Link = {label: '', url: '', order: getLastOrder()}
+    const emptyLink: LinkCreation = {
+      label: '',
+      url: '',
+      clicks: 0,
+      order: getLastOrder(),
+    }
     addDoc(collection(res, 'links'), emptyLink)
   }
 

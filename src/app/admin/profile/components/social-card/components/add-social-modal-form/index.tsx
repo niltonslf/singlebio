@@ -2,31 +2,32 @@ import {useState} from 'react'
 import {SocialIcon} from 'react-social-icons'
 
 import {useSmartphone} from '@/app/admin/context'
-import {authStore} from '@/app/auth/context/auth-store'
 import {InputErrorMsg} from '@/app/components'
 import {socialOptions} from '@/constants/social-options'
-import {User} from '@/domain/models'
+import {SocialPage, SocialPageCreation} from '@/domain/models'
 import {merge, validateUrlRegex} from '@/utils'
 
-type SocialLink = {
-  url: string
-  social: string
-}
-
 type AddSocialModalFormProps = {
-  user: User
+  socialPages: SocialPage[]
+  onSubmit: (data: SocialPageCreation) => Promise<void>
   isOpen: boolean
   onClose: () => void
 }
 
 export const AddSocialModalForm = ({
-  user,
+  socialPages,
+  onSubmit,
   isOpen,
   onClose,
 }: AddSocialModalFormProps) => {
   const {reloadSmartphoneList} = useSmartphone()
 
-  const [formData, setFormData] = useState<SocialLink>({url: '', social: ''})
+  const [formData, setFormData] = useState<SocialPageCreation>({
+    url: '',
+    name: '',
+    clicks: 0,
+    order: 0,
+  })
   const [isUrlValid, setIsUrlValid] = useState<boolean | undefined>()
   const [filter, setFilter] = useState('')
 
@@ -35,30 +36,24 @@ export const AddSocialModalForm = ({
   )
 
   const checkIfSocialExist = (socialName: string) => {
-    return !!user.social?.find(item => item.name == socialName)
+    return !!socialPages.find(item => item.name == socialName)
   }
 
-  const onSelectIcon = (social: string) => {
-    setFormData(prev => ({...prev, social}))
+  const onSelectIcon = (name: string) => {
+    setFormData(prev => ({...prev, name}))
   }
 
   const onChangeUrl = (url: string) => {
     const isValid = validateUrlRegex.test(url)
-
-    if (!isValid) {
-      return setIsUrlValid(false)
-    }
+    if (!isValid) return setIsUrlValid(false)
 
     setIsUrlValid(true)
-
     setFormData(prev => ({...prev, url}))
   }
 
   const handleSubmit = async () => {
-    const currentItems = user.social ?? []
-    const social = [...currentItems, {name: formData.social, url: formData.url}]
+    await onSubmit(formData)
 
-    await authStore.updateUser({social})
     reloadSmartphoneList()
     handleClose()
   }
@@ -67,7 +62,7 @@ export const AddSocialModalForm = ({
     onClose()
     setTimeout(() => {
       setIsUrlValid(undefined)
-      setFormData({social: '', url: ''})
+      setFormData({name: '', url: '', clicks: 0, order: 0})
     }, 200)
   }
 
@@ -84,12 +79,12 @@ export const AddSocialModalForm = ({
           </form>
 
           <h3 className='text-lg font-bold'>
-            {socialOptions[formData.social]?.label || 'Socials'}
+            {socialOptions[formData.name]?.label || 'Social pages'}
           </h3>
           <div className='divider' />
 
           <div className='mb-3 flex w-full flex-col gap-5 '>
-            {!formData.social && (
+            {!formData.name && (
               <>
                 <input
                   className='input input-bordered input-md w-full'
@@ -98,27 +93,27 @@ export const AddSocialModalForm = ({
                 />
 
                 <ul className='flex max-h-[50dvh] w-full flex-col gap-3 overflow-y-auto'>
-                  {socialOptionsFilter.map(social => {
+                  {socialOptionsFilter.map(name => {
                     return (
                       <li
-                        key={social}
+                        key={name}
                         className='flex w-full flex-row flex-wrap items-center justify-between rounded-lg border border-base-200 px-3 py-3 font-light'>
                         <div className='flex flex-row flex-wrap items-center justify-between gap-3'>
                           <SocialIcon
-                            network={social}
+                            network={name}
                             className='!h-8 !w-8'
                             as='span'
                           />
-                          <p>{socialOptions[social].label ?? social}</p>
+                          <p>{socialOptions[name].label ?? name}</p>
                         </div>
                         <button
                           className={merge([
                             'btn btn-outline btn-primary btn-sm',
-                            checkIfSocialExist(social) && 'btn-neutral',
+                            checkIfSocialExist(name) && 'btn-neutral',
                           ])}
-                          disabled={checkIfSocialExist(social)}
-                          onClick={() => onSelectIcon(social)}>
-                          {checkIfSocialExist(social) ? 'Added' : 'Add'}
+                          disabled={checkIfSocialExist(name)}
+                          onClick={() => onSelectIcon(name)}>
+                          {checkIfSocialExist(name) ? 'Added' : 'Add'}
                         </button>
                       </li>
                     )
@@ -127,7 +122,7 @@ export const AddSocialModalForm = ({
               </>
             )}
 
-            {formData.social && (
+            {formData.name && (
               <>
                 <div className='w-full'>
                   <input
@@ -150,7 +145,7 @@ export const AddSocialModalForm = ({
                 <button
                   type='button'
                   className='btn btn-primary btn-md w-full'
-                  disabled={!(formData.social && formData.url)}
+                  disabled={!(formData.name && formData.url)}
                   onClick={() => handleSubmit()}>
                   Save
                 </button>
