@@ -4,7 +4,7 @@ import Chart from 'react-apexcharts'
 
 import {SectionCard} from '../components'
 
-export const AnalyticsPage = () => {
+const AnalyticsPage = () => {
   const pageViewsChartOptions: ApexCharts.ApexOptions = {
     chart: {id: 'area', toolbar: {show: false}},
   }
