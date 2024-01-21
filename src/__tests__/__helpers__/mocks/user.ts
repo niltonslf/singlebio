@@ -18,6 +18,7 @@ export const makeUser = (
     username: username ?? faker.internet.userName(),
     theme: theme,
     social: social ?? [],
+    pageViews: 0,
   }
 }
 

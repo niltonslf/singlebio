@@ -21,4 +21,5 @@ export type User = {
   username?: string
   theme?: UserTheme
   social?: UserSocial
+  pageViews: number
 }
