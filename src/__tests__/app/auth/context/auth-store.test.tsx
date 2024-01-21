@@ -10,8 +10,10 @@ import {
 import {authStore} from '@/app/auth/context/auth-store'
 import {ERROR_MESSAGES} from '@/constants/error-msgs'
 import {Providers} from '@/domain/enums'
+import {auth} from '@/services/firebase'
 import {parseToUser} from '@/utils'
 import * as windowUtils from '@/utils/window'
+import {faker} from '@faker-js/faker'
 import {cleanup} from '@testing-library/react'
 
 jest.mock('firebase/firestore', () => ({
@@ -76,6 +78,64 @@ describe('AuthStore', () => {
     })
   })
 
+  describe('signInWithEmailAndPassword', () => {
+    it('should call firebase, signin and update user data', async () => {
+      const firebaseUserMock = makeFbUser()
+      const emailMock = firebaseUserMock.email as string
+      const passwordMock = faker.internet.password({length: 8})
+
+      jest
+        .spyOn(firebaseAuth, 'signInWithEmailAndPassword')
+        .mockResolvedValue({user: firebaseUserMock} as any)
+
+      jest.spyOn(authStore, 'authUser').mockResolvedValue()
+
+      const signIn = authStore.signInWithEmailAndPassword(
+        emailMock,
+        passwordMock,
+      )
+
+      await expect(signIn).resolves.toBeUndefined()
+      expect(firebaseAuth.signInWithEmailAndPassword).toHaveBeenCalledWith(
+        auth,
+        emailMock,
+        passwordMock,
+      )
+    })
+    it('should call firebase, signin and throw an error', async () => {
+      const emailMock = faker.internet.email()
+      const passwordMock = faker.internet.password({length: 8})
+
+      jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue({code: ''})
+
+      const signIn = authStore.signInWithEmailAndPassword(
+        emailMock,
+        passwordMock,
+      )
+
+      await expect(signIn).rejects.toBe(
+        ERROR_MESSAGES['error-to-authenticate-user'],
+      )
+    })
+
+    it('should call firebase, signin and throw an custom error', async () => {
+      const emailMock = faker.internet.email()
+      const passwordMock = faker.internet.password({length: 8})
+
+      jest
+        .spyOn(firebaseAuth, 'signInWithEmailAndPassword')
+        .mockRejectedValue({code: 'auth/email-already-in-use'})
+
+      const signIn = authStore.signInWithEmailAndPassword(
+        emailMock,
+        passwordMock,
+      )
+
+      await expect(signIn).rejects.toBe(
+        ERROR_MESSAGES['auth/email-already-in-use'],
+      )
+    })
+  })
   describe('signInWithGithub', () => {
     it('should call github, signin and update user data', async () => {
       const firebaseUserMock = makeFbUser()
