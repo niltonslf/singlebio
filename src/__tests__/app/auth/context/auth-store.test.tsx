@@ -519,11 +519,6 @@ describe('AuthStore', () => {
     it('should return an error to reauthenticate user', async () => {
       const emailMock = faker.internet.email()
       const passwordMock = faker.internet.password({length: 8})
-      const authResponseDummy = {
-        user: makeFbUser(),
-        operationType: 'signIn',
-        providerId: 'some-id',
-      } as firebaseAuth.UserCredential
 
       authStore.setFirebaseUser(makeFbUser())
 
@@ -532,7 +527,7 @@ describe('AuthStore', () => {
         .mockImplementation()
       jest
         .spyOn(firebaseAuth, 'reauthenticateWithCredential')
-        .mockResolvedValue(authResponseDummy)
+        .mockRejectedValue('')
 
       // SUT
       const sut = authStore.reauthenticateWithEmailAndPassword(
@@ -540,7 +535,29 @@ describe('AuthStore', () => {
         passwordMock,
       )
 
-      expect(sut).resolves.toBe(undefined)
+      expect(sut).rejects.toBe(ERROR_MESSAGES['error-to-authenticate-user'])
+    })
+
+    it('should return a custom error to reauthenticate user', async () => {
+      const emailMock = faker.internet.email()
+      const passwordMock = faker.internet.password({length: 8})
+
+      authStore.setFirebaseUser(makeFbUser())
+
+      jest
+        .spyOn(firebaseAuth.EmailAuthProvider, 'credential')
+        .mockImplementation()
+      jest
+        .spyOn(firebaseAuth, 'reauthenticateWithCredential')
+        .mockRejectedValue({code: 'auth/invalid-login-credentials'})
+
+      // SUT
+      const sut = authStore.reauthenticateWithEmailAndPassword(
+        emailMock,
+        passwordMock,
+      )
+
+      expect(sut).rejects.toBe(ERROR_MESSAGES['auth/invalid-login-credentials'])
     })
   })
 })
