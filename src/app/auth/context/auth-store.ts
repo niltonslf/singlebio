@@ -98,6 +98,7 @@ class AuthStore {
       const {user} = await createUserWithEmailAndPassword(auth, email, password)
       await updateProfile(user, {displayName})
       await sendEmailVerification(user, {url: continueUrl})
+      await this.authUser({...user, displayName})
       await this.logout()
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
@@ -113,7 +114,6 @@ class AuthStore {
   ): Promise<void> {
     try {
       const {user} = await signInWithEmailAndPasswordFB(auth, email, password)
-
       return this.authUser(user)
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
@@ -225,11 +225,11 @@ class AuthStore {
     email: string,
     password: string,
   ) {
-    if (!this.firebaseUser) throw ERROR_MESSAGES['user-not-found']
+    if (!auth.currentUser) throw ERROR_MESSAGES['user-not-found']
 
     try {
       const credential = EmailAuthProvider.credential(email, password)
-      await reauthenticateWithCredential(this.firebaseUser, credential)
+      await reauthenticateWithCredential(auth.currentUser, credential)
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
 
