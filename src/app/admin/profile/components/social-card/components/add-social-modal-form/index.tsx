@@ -4,7 +4,7 @@ import {SocialIcon} from 'react-social-icons'
 import {useSmartphone} from '@/app/admin/context'
 import {InputErrorMsg} from '@/app/components'
 import {socialOptions} from '@/constants/social-options'
-import {SocialLinkCreation, User} from '@/domain/models'
+import {SocialPageCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
 import {merge, validateUrlRegex} from '@/utils'
 import {addDoc, collection, doc} from '@firebase/firestore'
@@ -22,7 +22,7 @@ export const AddSocialModalForm = ({
 }: AddSocialModalFormProps) => {
   const {reloadSmartphoneList} = useSmartphone()
 
-  const [formData, setFormData] = useState<SocialLinkCreation>({
+  const [formData, setFormData] = useState<SocialPageCreation>({
     url: '',
     name: '',
     clicks: 0,
@@ -45,13 +45,9 @@ export const AddSocialModalForm = ({
 
   const onChangeUrl = (url: string) => {
     const isValid = validateUrlRegex.test(url)
-
-    if (!isValid) {
-      return setIsUrlValid(false)
-    }
+    if (!isValid) return setIsUrlValid(false)
 
     setIsUrlValid(true)
-
     setFormData(prev => ({...prev, url}))
   }
 
@@ -84,7 +80,7 @@ export const AddSocialModalForm = ({
           </form>
 
           <h3 className='text-lg font-bold'>
-            {socialOptions[formData.name]?.label || 'Socials'}
+            {socialOptions[formData.name]?.label || 'Social pages'}
           </h3>
           <div className='divider' />
 

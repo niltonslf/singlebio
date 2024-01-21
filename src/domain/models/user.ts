@@ -1,4 +1,4 @@
-import {SocialLink} from '.'
+import {SocialPage} from '.'
 
 export type UserTheme = {
   backgroundImage: string
@@ -18,6 +18,6 @@ export type User = {
   bio?: string
   username?: string
   theme?: UserTheme
-  social?: SocialLink[]
+  social?: SocialPage[]
   pageViews: number
 }

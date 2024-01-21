@@ -1,4 +1,4 @@
-export type SocialLink = {
+export type SocialPage = {
   id: string
   url: string
   name: string
@@ -6,4 +6,4 @@ export type SocialLink = {
   clicks: number
 }
 
-export type SocialLinkCreation = Omit<SocialLink, 'id'>
+export type SocialPageCreation = Omit<SocialPage, 'id'>
