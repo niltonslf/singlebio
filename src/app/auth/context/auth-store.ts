@@ -195,7 +195,7 @@ class AuthStore {
     firebaseUser: FbUser,
   ) {
     if (providerId === Providers.PASSWORD) {
-      return await createPopup('/auth/reauthenticate', 'Sign in')
+      return await createPopup('/auth/reauthenticate')
     }
 
     const provider = {
@@ -224,12 +224,13 @@ class AuthStore {
   public async reauthenticateWithEmailAndPassword(
     email: string,
     password: string,
+    currentUser: FbUser | null,
   ) {
-    if (!auth.currentUser) throw ERROR_MESSAGES['user-not-found']
+    if (!currentUser) throw ERROR_MESSAGES['user-not-found']
 
     try {
       const credential = EmailAuthProvider.credential(email, password)
-      await reauthenticateWithCredential(auth.currentUser, credential)
+      await reauthenticateWithCredential(currentUser, credential)
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
 
