@@ -4,9 +4,17 @@ import {useCallback, useEffect, useState} from 'react'
 import {SectionCard} from '@/app/admin/components'
 import {useSmartphone} from '@/app/admin/context'
 import {authStore} from '@/app/auth/context/auth-store'
-import {SocialPage, User} from '@/domain/models'
+import {SocialPage, SocialPageCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
-import {doc, collection, getDocs, orderBy, query} from '@firebase/firestore'
+import {
+  doc,
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  addDoc,
+  updateDoc,
+} from '@firebase/firestore'
 
 import {AddSocialModalForm, SocialItem} from './components'
 
@@ -20,11 +28,16 @@ export const SocialCard = ({user}: SocialCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [socialPages, setSocialPages] = useState<SocialPage[]>([])
 
-  const handleDeleteSocial = async (socialName: string) => {
+  const handleCreate = async (data: SocialPageCreation) => {
+    const userRef = doc(db, 'users', user.uid)
+    const docRef = await addDoc(collection(userRef, 'social-pages'), data)
+    await updateDoc(docRef, {id: docRef.id})
+    await fetchSocialPages()
+  }
+
+  const handleDelete = async (socialName: string) => {
     const currentSocial = user?.social ? [...user?.social] : []
-
     const remainingKeys = currentSocial.filter(item => item.name != socialName)
-
     await authStore.updateUser({social: remainingKeys})
     reloadSmartphoneList()
   }
@@ -52,11 +65,7 @@ export const SocialCard = ({user}: SocialCardProps) => {
       <div className='flex flex-col gap-3'>
         {socialPages?.map(item => {
           return (
-            <SocialItem
-              onDelete={handleDeleteSocial}
-              key={item.name}
-              social={item}
-            />
+            <SocialItem onDelete={handleDelete} key={item.id} social={item} />
           )
         })}
       </div>
@@ -69,7 +78,8 @@ export const SocialCard = ({user}: SocialCardProps) => {
 
       <AddSocialModalForm
         isOpen={isModalOpen}
-        user={user}
+        socialPages={socialPages}
+        onSubmit={handleCreate}
         onClose={() => setIsModalOpen(false)}
       />
     </SectionCard>

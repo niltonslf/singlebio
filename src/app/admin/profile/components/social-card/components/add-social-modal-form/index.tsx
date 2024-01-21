@@ -4,19 +4,19 @@ import {SocialIcon} from 'react-social-icons'
 import {useSmartphone} from '@/app/admin/context'
 import {InputErrorMsg} from '@/app/components'
 import {socialOptions} from '@/constants/social-options'
-import {SocialPageCreation, User} from '@/domain/models'
-import {db} from '@/services/firebase'
+import {SocialPage, SocialPageCreation} from '@/domain/models'
 import {merge, validateUrlRegex} from '@/utils'
-import {addDoc, collection, doc} from '@firebase/firestore'
 
 type AddSocialModalFormProps = {
-  user: User
+  socialPages: SocialPage[]
+  onSubmit: (data: SocialPageCreation) => Promise<void>
   isOpen: boolean
   onClose: () => void
 }
 
 export const AddSocialModalForm = ({
-  user,
+  socialPages,
+  onSubmit,
   isOpen,
   onClose,
 }: AddSocialModalFormProps) => {
@@ -36,7 +36,7 @@ export const AddSocialModalForm = ({
   )
 
   const checkIfSocialExist = (socialName: string) => {
-    return !!user.social?.find(item => item.name == socialName)
+    return !!socialPages.find(item => item.name == socialName)
   }
 
   const onSelectIcon = (name: string) => {
@@ -52,8 +52,7 @@ export const AddSocialModalForm = ({
   }
 
   const handleSubmit = async () => {
-    const userRef = doc(db, 'users', user.uid)
-    addDoc(collection(userRef, 'social-pages'), formData)
+    await onSubmit(formData)
 
     reloadSmartphoneList()
     handleClose()
