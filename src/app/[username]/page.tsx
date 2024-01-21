@@ -7,8 +7,12 @@ import {
   UserPageLinks,
   UserPageSocial,
 } from '@/app/[username]/components'
-import {fetchUserLinks, fetchUserProfile} from '@/data/usecases'
-import {Link, UserTheme} from '@/domain/models'
+import {
+  fetchUserLinks,
+  fetchUserProfile,
+  fetchUserSocialPages,
+} from '@/data/usecases'
+import {UserTheme} from '@/domain/models'
 
 import {CookieConsentBanner} from '../components'
 import {makePageStyles} from './utils'
@@ -21,18 +25,16 @@ type UserPageProps = {
 const fetchUserData = async (username: string) => {
   const user = await fetchUserProfile(username)
 
-  if (!user) {
-    redirect('/not-found')
-  }
+  if (!user) redirect('/not-found')
 
-  const linksRes = (await fetchUserLinks(user.uid)) as Required<Link>[]
-  const links = linksRes.sort((cur, next) => next?.order - cur?.order)
+  const links = await fetchUserLinks(user.uid)
+  const socialPages = await fetchUserSocialPages(user.uid)
 
-  return {user, links}
+  return {user, links, socialPages}
 }
 
 const UserPage = async ({params, searchParams}: UserPageProps) => {
-  const {user, links} = await fetchUserData(params.username)
+  const {user, links, socialPages} = await fetchUserData(params.username)
 
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
 
@@ -58,9 +60,7 @@ const UserPage = async ({params, searchParams}: UserPageProps) => {
           style={pageStyles.backgroundColor}>
           <div className='flex w-full max-w-2xl flex-1 flex-col flex-wrap'>
             <UserPageHeader user={user} pageStyles={pageStyles} />
-            {user?.social && (
-              <UserPageSocial social={user.social} pageStyles={pageStyles} />
-            )}
+            <UserPageSocial socialPages={socialPages} pageStyles={pageStyles} />
             <UserPageLinks links={links} pageStyles={pageStyles} />
             <UserPageFooter />
           </div>

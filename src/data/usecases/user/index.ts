@@ -1,6 +1,6 @@
 'use server'
 
-import {User} from '@/domain/models'
+import {Link, SocialPage, User} from '@/domain/models'
 import {firestoreAdmin} from '@/services/firebase-admin'
 
 /**
@@ -25,11 +25,30 @@ export const fetchUserProfile = async (username: string) => {
  * @returns Array of Link
  */
 export const fetchUserLinks = async (uid: string) => {
-  const linksReq = await firestoreAdmin.collection(`users/${uid}/links`).get()
+  const linksReq = await firestoreAdmin
+    .collection(`users/${uid}/links`)
+    .orderBy('order', 'asc')
+    .get()
 
   if (linksReq.empty) return []
-  const links = linksReq.docs.map(link => link.data())
+  const links = linksReq.docs.map(link => link.data()) as Required<Link>[]
   return links
+}
+
+/**
+ * fetch all social pages from the provided user uid
+ * @param uid
+ * @returns Array of Social Page
+ */
+export const fetchUserSocialPages = async (uid: string) => {
+  const req = await firestoreAdmin
+    .collection(`users/${uid}/social-pages`)
+    .orderBy('order', 'asc')
+    .get()
+
+  if (req.empty) return []
+  const pages = req.docs.map(pages => pages.data()) as SocialPage[]
+  return pages
 }
 
 /**

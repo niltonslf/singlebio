@@ -1,18 +1,21 @@
 import {SocialIcon} from 'react-social-icons'
 
-import {UserSocial} from '@/domain/models'
+import {SocialPage} from '@/domain/models'
 
 type UserPageSocialProps = {
-  social: UserSocial
+  socialPages: SocialPage[]
   pageStyles: any
 }
 
-export const UserPageSocial = ({social, pageStyles}: UserPageSocialProps) => {
-  if (!social.length) return <></>
+export const UserPageSocial = ({
+  socialPages,
+  pageStyles,
+}: UserPageSocialProps) => {
+  if (!socialPages.length) return <></>
 
   return (
     <div className='mb-5 flex w-full flex-row justify-center '>
-      {social?.map(item => (
+      {socialPages?.map(item => (
         <div key={item.name}>
           <SocialIcon
             url={item.url}
