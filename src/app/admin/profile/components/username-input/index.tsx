@@ -33,7 +33,7 @@ export const UsernameInput = ({
   onChange,
 }: UsernameInputProps) => {
   const inputRef = useMask({
-    mask: '@==============================',
+    mask: '==============================',
     replacement: {'=': /[a-z0-9\-\_]/},
   })
 
