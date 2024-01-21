@@ -5,7 +5,7 @@ import {useCallback, useEffect} from 'react'
 
 import {User} from '@/domain/models'
 
-import {pageAnalytics} from '../../context/page-analytics'
+import {pageAnalyticsStore} from '../../context/page-analytics-store'
 
 type PageAnalyticsLoaderProps = {
   linkItemClass: string
@@ -18,19 +18,19 @@ export const PageAnalyticsLoader = observer(
     const {linkItemClass, socialItemClass, user} = props
 
     const handleSocialClick = useCallback(function (this: HTMLAnchorElement) {
-      if (this.href) pageAnalytics.updateSocialClick(this.href)
+      if (this.href) pageAnalyticsStore.updateSocialClick(this.href)
     }, [])
 
-    const handlePageClick = useCallback(function (this: HTMLAnchorElement) {
-      if (this.href) pageAnalytics.updateLinkClick(this.href)
+    const handlePageLinkClick = useCallback(function (this: HTMLAnchorElement) {
+      if (this.href) pageAnalyticsStore.updateLinkClick(this.href)
     }, [])
 
     const handlePageView = () => {
-      pageAnalytics.updatePageView()
+      pageAnalyticsStore.updatePageView()
     }
 
     useEffect(() => {
-      pageAnalytics.setUser(user)
+      pageAnalyticsStore.setUser(user)
 
       const socialLinks = document.querySelectorAll(`.${socialItemClass}`)
       const pageLinks = document.querySelectorAll(`.${linkItemClass}`)
@@ -43,10 +43,9 @@ export const PageAnalyticsLoader = observer(
 
       if (pageLinks.length) {
         pageLinks.forEach(item => {
-          item.addEventListener('click', handlePageClick)
+          item.addEventListener('click', handlePageLinkClick)
         })
       }
-
       handlePageView()
 
       return () => {
@@ -55,11 +54,11 @@ export const PageAnalyticsLoader = observer(
         })
 
         pageLinks.forEach(item => {
-          item.removeEventListener('click', handlePageClick)
+          item.removeEventListener('click', handlePageLinkClick)
         })
       }
     }, [
-      handlePageClick,
+      handlePageLinkClick,
       handleSocialClick,
       linkItemClass,
       socialItemClass,

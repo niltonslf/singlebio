@@ -12,7 +12,7 @@ import {makeAutoObservable} from 'mobx'
 import {Link, User} from '@/domain/models'
 import {db} from '@/services/firebase'
 
-class PageAnalytics {
+class PageAnalyticsStore {
   constructor() {
     makeAutoObservable(this)
   }
@@ -23,7 +23,14 @@ class PageAnalytics {
     this.user = user
   }
 
-  public async updatePageView() {}
+  public async updatePageView() {
+    if (!this.user) return
+
+    const newPageViews = (this.user?.pageViews || 0) + 1
+
+    const userRef = doc(db, 'users', this.user.uid)
+    await updateDoc(userRef, {pageViews: newPageViews})
+  }
 
   public async updateLinkClick(url: string) {
     if (!this.user) return
@@ -59,4 +66,4 @@ class PageAnalytics {
   }
 }
 
-export const pageAnalytics = new PageAnalytics()
+export const pageAnalyticsStore = new PageAnalyticsStore()
