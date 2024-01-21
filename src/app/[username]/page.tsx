@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import {redirect} from 'next/navigation'
 
 import {
+  PageAnalyticsLoader,
   UserPageFooter,
   UserPageHeader,
   UserPageLinks,
@@ -31,7 +32,7 @@ const fetchUserData = async (username: string) => {
   return {user, links}
 }
 
-export default async function UserPage({params, searchParams}: UserPageProps) {
+const UserPage = async ({params, searchParams}: UserPageProps) => {
   const {user, links} = await fetchUserData(params.username)
 
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
@@ -67,6 +68,13 @@ export default async function UserPage({params, searchParams}: UserPageProps) {
         </section>
       </main>
       <CookieConsentBanner />
+      <PageAnalyticsLoader
+        linkItemClass='user-link-item'
+        socialItemClass='user-social-icon'
+        user={user}
+      />
     </>
   )
 }
+
+export default UserPage

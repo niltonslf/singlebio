@@ -1,6 +1,6 @@
 'use client'
 
-export const createPopup = (url: string, title: string) => {
+export const createPopup = (url: string) => {
   return new Promise((resolve, reject) => {
     if (!window?.top) return reject('Error to create popup')
 
@@ -12,7 +12,7 @@ export const createPopup = (url: string, title: string) => {
 
     const popup = open(
       url,
-      title,
+      '_blank',
       `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${width}, height=${height}, top=${y}, left=${x}`,
     )
 

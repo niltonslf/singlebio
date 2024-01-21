@@ -56,7 +56,6 @@ const navbarItems: NavbarLinks = {
         title: 'go to analytics page',
         name: 'Analytics',
         Icon: <BarChartHorizontalBig width={18} />,
-        disabled: true,
       },
       {
         href: '/admin/settings',

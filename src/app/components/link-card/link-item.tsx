@@ -28,7 +28,10 @@ export const LinkItem = ({
   }
 
   return (
-    <Link href={parseExternalUrl(path)} target='_blank'>
+    <Link
+      href={parseExternalUrl(path)}
+      target='_blank'
+      className='user-link-item'>
       <li
         className={clsx([
           'flex w-full flex-wrap items-center justify-center rounded-lg bg-white p-3 text-center font-medium text-black shadow-md transition-all hover:scale-95 md:p-5',

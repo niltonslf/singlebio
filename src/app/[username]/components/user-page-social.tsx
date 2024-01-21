@@ -12,19 +12,17 @@ export const UserPageSocial = ({social, pageStyles}: UserPageSocialProps) => {
 
   return (
     <div className='mb-5 flex w-full flex-row justify-center '>
-      {social?.map(item => {
-        return (
-          <div key={item.name}>
-            <SocialIcon
-              url={item.url}
-              className='!h-10 !w-10'
-              fgColor={pageStyles?.socialIconColor?.value ?? '#000'}
-              bgColor='transparent'
-              target='_blank'
-            />
-          </div>
-        )
-      })}
+      {social?.map(item => (
+        <div key={item.name}>
+          <SocialIcon
+            url={item.url}
+            className='user-social-icon !h-10 !w-10'
+            fgColor={pageStyles?.socialIconColor?.value ?? '#000'}
+            bgColor='transparent'
+            target='_blank'
+          />
+        </div>
+      ))}
     </div>
   )
 }

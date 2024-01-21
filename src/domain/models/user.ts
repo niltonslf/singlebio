@@ -1,3 +1,5 @@
+import {SocialLink} from '.'
+
 export type UserTheme = {
   backgroundImage: string
   backgroundColor: string
@@ -8,7 +10,7 @@ export type UserTheme = {
   socialDefaultColor: boolean
 }
 
-export type UserSocial = {name: string; url: string}[]
+export type UserSocial = SocialLink[]
 
 export type User = {
   uid: string
@@ -19,4 +21,5 @@ export type User = {
   username?: string
   theme?: UserTheme
   social?: UserSocial
+  pageViews: number
 }
