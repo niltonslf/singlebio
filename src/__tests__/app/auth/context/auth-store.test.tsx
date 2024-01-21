@@ -454,4 +454,22 @@ describe('AuthStore', () => {
       expect(authStore.user).toBe(undefined)
     })
   })
+
+  describe('resetPassword', () => {
+    it('should send password reset email', async () => {
+      const emailMock = faker.internet.email()
+      const continueUrl = `${APP_URL}/auth`
+
+      jest.spyOn(firebaseAuth, 'sendPasswordResetEmail').mockResolvedValue()
+
+      // SUT
+      await authStore.resetPassword(emailMock)
+
+      expect(firebaseAuth.sendPasswordResetEmail).toHaveBeenCalledWith(
+        auth,
+        emailMock,
+        {url: continueUrl},
+      )
+    })
+  })
 })
