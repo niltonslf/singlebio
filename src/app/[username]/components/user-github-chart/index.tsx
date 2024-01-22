@@ -12,7 +12,7 @@ export const UserGithubChart = ({user}: UserGithubChartProps) => {
   return (
     <>
       {github && (
-        <div className='mt-5 bg-white p-5'>
+        <div className='mt-5 bg-white p-2 md:p-5'>
           <Link
             href='https://github.com/niltonslf'
             target='_blank'
