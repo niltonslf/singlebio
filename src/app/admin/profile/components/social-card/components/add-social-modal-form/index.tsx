@@ -40,7 +40,7 @@ export const AddSocialModalForm = ({
   }
 
   const onSelectIcon = (name: string) => {
-    setFormData(prev => ({...prev, name}))
+    setFormData(prev => ({...prev, name, url: socialOptions[name].baseUrl}))
   }
 
   const onChangeUrl = (url: string) => {
@@ -58,11 +58,15 @@ export const AddSocialModalForm = ({
     handleClose()
   }
 
+  const resetForm = () => {
+    setFormData({name: '', url: '', clicks: 0, order: 0})
+  }
+
   const handleClose = () => {
     onClose()
     setTimeout(() => {
       setIsUrlValid(undefined)
-      setFormData({name: '', url: '', clicks: 0, order: 0})
+      resetForm()
     }, 200)
   }
 
@@ -129,26 +133,30 @@ export const AddSocialModalForm = ({
                     type='text'
                     className='input input-bordered input-md w-full'
                     placeholder='Profile url'
+                    value={formData.url}
                     onChange={event => onChangeUrl(event.target.value)}
                   />
-                  <p className='ml-1 mt-2 w-full text-xs text-neutral-400'>
-                    Insert the full link address. Example:{' '}
-                    <span className='text-base-1000'>
-                      https://instagram.com/username
-                    </span>
-                  </p>
+
                   {isUrlValid === false && (
                     <InputErrorMsg>The link format is not valid</InputErrorMsg>
                   )}
                 </div>
 
-                <button
-                  type='button'
-                  className='btn btn-primary btn-md w-full'
-                  disabled={!(formData.name && formData.url)}
-                  onClick={() => handleSubmit()}>
-                  Save
-                </button>
+                <div className='flex gap-5'>
+                  <button
+                    type='button'
+                    className='btn btn-primary btn-md flex-1'
+                    disabled={!(formData.name && formData.url)}
+                    onClick={() => handleSubmit()}>
+                    Save
+                  </button>
+                  <button
+                    type='button'
+                    className='btn btn-md flex-1'
+                    onClick={() => resetForm()}>
+                    Go back
+                  </button>
+                </div>
               </>
             )}
           </div>
