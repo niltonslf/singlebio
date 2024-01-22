@@ -3,6 +3,7 @@ import {useRouter, usePathname} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
+import {Providers} from '@/domain/enums'
 import {auth} from '@/services/firebase'
 
 export const useValidateAuth = () => {
@@ -20,7 +21,10 @@ export const useValidateAuth = () => {
       } else {
         await authStore.authUser(firebaseUser)
 
-        if (!firebaseUser.emailVerified) {
+        const isEmailAccount =
+          firebaseUser.providerData[0].providerId === Providers.PASSWORD
+
+        if (!firebaseUser.emailVerified && isEmailAccount) {
           return push('/auth/verify-email')
         }
 

@@ -80,6 +80,7 @@ class AuthStore {
   public async signInWithGithub(): Promise<void> {
     try {
       const {user} = await signInWithPopup(auth, githubProvider)
+
       return this.authUser(user)
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
