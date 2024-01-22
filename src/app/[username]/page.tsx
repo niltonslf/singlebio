@@ -27,7 +27,9 @@ const fetchUserData = async (username: string) => {
 
   if (!user) redirect('/not-found')
 
-  const links = await fetchUserLinks(user.uid)
+  const linksRes = await fetchUserLinks(user.uid)
+  const links = linksRes.sort((cur, next) => next?.order - cur?.order)
+
   const socialPages = await fetchUserSocialPages(user.uid)
 
   return {user, links, socialPages}
