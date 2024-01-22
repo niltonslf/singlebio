@@ -20,6 +20,12 @@ export type UserTheme = {
   socialDefaultColor: boolean
 }
 
+export type UserFeatures = {
+  github: {
+    username: string
+  }
+}
+
 export type User = {
   uid: string
   pictureUrl: string
@@ -29,4 +35,5 @@ export type User = {
   username?: string
   theme?: UserTheme
   pageViews: number
+  features?: UserFeatures
 }
