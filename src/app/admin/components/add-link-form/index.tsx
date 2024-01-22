@@ -42,7 +42,6 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
   } = useForm<Link>({
     resolver: zodResolver(schema),
     defaultValues: link,
-    disabled: isSubmitting,
   })
 
   const url = watch('url')
