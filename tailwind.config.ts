@@ -33,8 +33,8 @@ const config: Config = {
           'neutral-content': '#ebecf0' /* Foreground content color */,
 
           'base-100': '#23232a' /* Base color of page, used for blank bg */,
-          'base-200': '#1e1e24' /* Base color, a little darker */,
-          'base-300': '#1a1a1f' /* Base color, even more darker */,
+          'base-200': '#1a1a1f' /* Base color, a little darker */,
+          'base-300': '#17171d' /* Base color, even more darker */,
           'base-content': '#ebecf0' /* Foreground content color  */,
 
           'info': '#1c92f2' /* Info */,
