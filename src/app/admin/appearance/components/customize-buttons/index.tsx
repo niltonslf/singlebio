@@ -22,7 +22,7 @@ export const CustomizeButtons = observer(() => {
   return (
     <>
       <div className='flex flex-row flex-wrap justify-between gap-10'>
-        <div className='mt-3 flex-1'>
+        <div className='mt-3 w-full md:flex-1'>
           <h2 className='text-base font-normal text-base-content/70'>
             Button background
           </h2>
@@ -35,7 +35,7 @@ export const CustomizeButtons = observer(() => {
           </div>
         </div>
 
-        <div className='mt-3 w-full flex-1'>
+        <div className='mt-3 w-full md:flex-1'>
           <h2 className='text-base font-normal text-base-content/70'>
             Button text
           </h2>
@@ -48,8 +48,11 @@ export const CustomizeButtons = observer(() => {
           </div>
         </div>
       </div>
+
       <div className='mt-5 flex w-full flex-row flex-wrap gap-5'>
-        <p className='font-semibold'>Button styles</p>
+        <h2 className='text-base font-normal text-base-content/70'>
+          Button styles
+        </h2>
         <div className='flex w-full flex-wrap gap-5 '>
           <input
             type='radio'
