@@ -50,6 +50,9 @@ export const metadata: Metadata = {
       url: '/logo-icon-black.png',
     },
   },
+  alternates: {
+    canonical: `${baseUrl}`,
+  },
   robots: {
     index: true,
     follow: true,
