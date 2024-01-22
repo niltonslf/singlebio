@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main
       data-theme='dark'
-      className='via-background-200 flex min-h-[100vh] w-full flex-col bg-gradient-to-tr from-base-100 via-base-300 to-base-100 p-5'>
+      className='via-background-200 flex min-h-[100vh] w-full flex-col bg-gradient-to-tr from-base-100 via-base-300 to-base-100'>
       <div className='h-screen w-full'>
         <HomeHeader />
 

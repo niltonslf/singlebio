@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const HomeHeader = () => {
   return (
-    <header className='mx-auto flex w-full max-w-6xl items-center justify-between py-2'>
+    <header className='m-5 mx-auto flex w-full max-w-6xl items-center justify-between py-2'>
       <Link href='/' title='Brand' className='indicator font-semibold'>
         <span className='indicator-end badge indicator-item badge-primary badge-sm'>
           Beta

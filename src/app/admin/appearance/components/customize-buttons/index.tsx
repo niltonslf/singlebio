@@ -49,6 +49,8 @@ export const CustomizeButtons = observer(() => {
         </div>
       </div>
 
+      <div className='divider'></div>
+
       <div className='mt-5 flex w-full flex-row flex-wrap gap-5'>
         <h2 className='text-base font-normal text-base-content/70'>
           Button styles
