@@ -8,7 +8,12 @@ export const HomeHeader = () => {
         <span className='indicator-end badge indicator-item badge-primary badge-sm'>
           Beta
         </span>
-        <Image src='/logo-white.png' width={114.72} height={30} alt='Logo' />
+        <Image
+          src='/logo-white.png'
+          width={114.72}
+          height={30}
+          alt='App logo'
+        />
       </Link>
 
       <Link href='/auth' className='btn btn-outline btn-neutral px-10'>

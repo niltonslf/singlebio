@@ -5,7 +5,7 @@ describe('Home Page', () => {
   it('render home page', () => {
     render(<HomePage />)
 
-    const brand = screen.getByRole('img', {name: /logo/i})
+    const brand = screen.getByRole('img', {name: /app logo/i})
     expect(brand).toBeInTheDocument()
 
     const accessButton = screen.getByText(/login/i)
