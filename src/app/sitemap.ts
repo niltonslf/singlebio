@@ -10,8 +10,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const usersProfilePage: MetadataRoute.Sitemap = usersProfile.map(user => ({
     url: `${appUrl}/${user.username}`,
     lastModified: new Date(),
-    changeFrequency: 'daily',
-    priority: 0.7,
+    changeFrequency: 'always',
+    priority: 1,
   }))
 
   return [
