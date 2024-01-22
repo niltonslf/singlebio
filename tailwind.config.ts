@@ -24,8 +24,8 @@ const config: Config = {
           'secondary-focus': '#5b1339' /* Secondary color - focused */,
           'secondary-content': '#faf7f5' /* Foreground content color */,
 
-          'accent': '#3b2c48' /* Accent color */,
-          'accent-focus': '#372943' /* Accent color - focused */,
+          'accent': '#478c18' /* Accent color */,
+          'accent-focus': '#203f0a' /* Accent color - focused */,
           'accent-content': '#faf7f5' /* Foreground content color  */,
 
           'neutral': '#1e1e24' /* Neutral color */,

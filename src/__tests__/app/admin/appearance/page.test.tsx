@@ -111,6 +111,7 @@ describe('Appearance Page', () => {
       backgroundColor: '',
       buttonBackground: '#FFF',
       buttonTextColor: '#000',
+      buttonStyle: 'default',
       socialDefaultColor: false,
       socialIconColor: '#000',
       usernameColor: '#000',

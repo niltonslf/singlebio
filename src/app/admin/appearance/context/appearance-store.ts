@@ -2,7 +2,7 @@
 
 import {makeAutoObservable} from 'mobx'
 
-import {UserTheme} from '@/domain/models'
+import {ThemeButtonStyles, UserTheme} from '@/domain/models'
 import {parseUserPageUrl} from '@/utils'
 
 import {parseThemeToQuery} from '../utils'
@@ -12,11 +12,12 @@ type Aux = {
 }
 
 class AppearanceStore {
-  private initialData = {
+  private initialData: UserTheme = {
     backgroundImage: '',
     backgroundColor: '',
     buttonBackground: '#FFF',
     buttonTextColor: '#000',
+    buttonStyle: 'default',
     usernameColor: '#000',
     socialIconColor: '#000',
     socialDefaultColor: false,
@@ -48,7 +49,8 @@ class AppearanceStore {
         this.themeConfigInitial.buttonTextColor ||
       this.themeConfig.usernameColor != this.themeConfigInitial.usernameColor ||
       this.themeConfig.socialIconColor !=
-        this.themeConfigInitial.socialIconColor
+        this.themeConfigInitial.socialIconColor ||
+      this.themeConfig.buttonStyle != this.themeConfigInitial.buttonStyle
     )
   }
 
@@ -76,6 +78,9 @@ class AppearanceStore {
   }
   setButtonTextColor(value: string) {
     this.themeConfig.buttonTextColor = value
+  }
+  setButtonStyle(value: string) {
+    this.themeConfig.buttonStyle = value as ThemeButtonStyles
   }
   setUsernameColor(value: string) {
     this.themeConfig.usernameColor = value

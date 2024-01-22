@@ -21,5 +21,8 @@ export const parseThemeToQuery = ({...props}: UserTheme) => {
   if (props?.socialIconColor)
     url.set('socialIconColor', encodeURIComponent(props?.socialIconColor))
 
+  if (props?.buttonStyle)
+    url.set('buttonStyle', encodeURIComponent(props?.buttonStyle))
+
   return url.toString()
 }

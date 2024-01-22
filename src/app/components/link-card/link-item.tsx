@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import Link from 'next/link'
-import {ReactNode} from 'react'
+import {HTMLAttributes, ReactNode} from 'react'
 
 import {parseExternalUrl} from '@/utils'
 
@@ -9,6 +9,7 @@ type LinkItemProps = {
   children: ReactNode
   bgColor?: string
   textColor?: string
+  className?: HTMLAttributes<HTMLElement>['className']
 }
 
 export const LinkItem = ({
@@ -16,6 +17,7 @@ export const LinkItem = ({
   children,
   bgColor,
   textColor,
+  className,
 }: LinkItemProps) => {
   const styles = {} as any
 
@@ -34,7 +36,8 @@ export const LinkItem = ({
       className='user-link-item'>
       <li
         className={clsx([
-          'flex w-full flex-wrap items-center justify-center rounded-lg bg-white p-3 text-center font-medium text-black shadow-md transition-all hover:scale-95 md:p-5',
+          'btn btn-md flex h-auto w-full flex-wrap items-center justify-center bg-white p-3 text-center font-medium shadow-md transition-all hover:scale-95 md:py-5',
+          className,
         ])}
         style={styles}>
         {children}

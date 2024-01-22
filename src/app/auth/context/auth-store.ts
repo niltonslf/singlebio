@@ -33,9 +33,6 @@ import {auth, db, githubProvider, googleProvider} from '@/services/firebase'
 import {createPopup, parseToUser} from '@/utils'
 
 class AuthStore {
-  public userModel: User | undefined = undefined
-  public firebaseUser: FbUser | undefined = undefined
-
   constructor() {
     makeObservable(this, {
       userModel: observable,
@@ -61,6 +58,9 @@ class AuthStore {
       user: computed,
     })
   }
+
+  public userModel: User | undefined = undefined
+  public firebaseUser: FbUser | undefined = undefined
 
   get user() {
     return this.userModel

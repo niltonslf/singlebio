@@ -1,6 +1,6 @@
 import {CSSProperties} from 'react'
 
-import {User, UserTheme} from '@/domain/models'
+import {ThemeButtonStyles, User, UserTheme} from '@/domain/models'
 
 type StylesProps = {
   params?: UserTheme & {preview: string}
@@ -15,7 +15,6 @@ export const makePageStyles = ({
   user,
 }: StylesProps): PageStylesObject => {
   const isPreviewAccess = params?.preview === 'true'
-
   const source = isPreviewAccess ? params : user?.theme
 
   if (!source) return {} as PageStylesObject
@@ -50,6 +49,34 @@ const stylesFactory = (source: UserTheme, isPreviewAccess: boolean) => {
   if (source?.buttonBackground) {
     styles.buttonBackground = {
       value: decodeURIComponent(source?.buttonBackground),
+    }
+  }
+
+  if (source?.buttonStyle) {
+    const style = decodeURIComponent(source?.buttonStyle) as ThemeButtonStyles
+
+    switch (style) {
+      case 'square':
+        styles.buttonStyle = {value: 'rounded-none border-none'}
+        break
+      case 'circle':
+        styles.buttonStyle = {value: 'btn-circle border-none'}
+        break
+      case 'outline':
+        styles.buttonStyle = {value: 'btn-outline'}
+        break
+      case 'circle-outline':
+        styles.buttonStyle = {value: 'btn-circle btn-outline'}
+        break
+      case 'square-outline':
+        styles.buttonStyle = {value: 'rounded-none btn-outline'}
+        break
+
+      default:
+        styles.buttonStyle = {
+          value: 'border-none',
+        }
+        break
     }
   }
 

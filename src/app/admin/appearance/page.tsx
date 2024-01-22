@@ -69,7 +69,7 @@ const AppearancePage = observer(() => {
           </div>
         )}
 
-        <Collapse toggle defaultOpen={1}>
+        <Collapse toggle defaultOpen={4}>
           <Collapse.Item index={1}>
             <Collapse.Header>Page wallpaper</Collapse.Header>
             <Collapse.Body>
@@ -92,7 +92,7 @@ const AppearancePage = observer(() => {
           </Collapse.Item>
 
           <Collapse.Item index={4}>
-            <Collapse.Header>Link list</Collapse.Header>
+            <Collapse.Header>Page Links</Collapse.Header>
             <Collapse.Body>
               <CustomizeButtons />
             </Collapse.Body>
