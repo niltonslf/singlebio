@@ -5,6 +5,8 @@ const nextConfig = {
       {hostname: 'lh3.googleusercontent.com'},
       {hostname: 'firebasestorage.googleapis.com'},
       {hostname: 'avatars.githubusercontent.com'},
+      {hostname: 'ghchart.rshah.org'},
+      {hostname: 'rshah.org'},
     ],
   },
 }

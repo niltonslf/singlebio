@@ -19,5 +19,5 @@ export const PageViewsChart = observer(() => {
     fetchData()
   }, [fetchData, user])
 
-  return <div>Under development...</div>
+  return <div></div>
 })

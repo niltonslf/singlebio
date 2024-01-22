@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import {redirect} from 'next/navigation'
 
 import {
+  UserGithubChart,
   UserPageFooter,
   UserPageHeader,
   UserPageLinks,
@@ -63,6 +64,8 @@ const UserPage = async ({params, searchParams}: UserPageProps) => {
             <UserPageHeader user={user} pageStyles={pageStyles} />
             <UserPageSocial socialPages={socialPages} pageStyles={pageStyles} />
             <UserPageLinks links={links} pageStyles={pageStyles} />
+            <UserGithubChart user={user} />
+
             <UserPageFooter />
           </div>
         </section>

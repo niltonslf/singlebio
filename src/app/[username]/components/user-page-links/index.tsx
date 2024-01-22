@@ -1,7 +1,7 @@
 import {LinkCard} from '@/app/components'
 import {Link} from '@/domain/models'
 
-import {PageStylesObject} from '../utils'
+import {PageStylesObject} from '../../utils'
 
 type UserPageLinksProps = {
   links: Link[]
