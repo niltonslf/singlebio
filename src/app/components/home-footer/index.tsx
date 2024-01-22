@@ -6,7 +6,12 @@ export const HomeFooter = () => {
   return (
     <footer className='footer mx-auto items-center p-4 text-xs text-neutral-content'>
       <aside className='grid-flow-col items-center'>
-        <Image src='/logo-icon-white.png' width={20} height={20} alt='Logo' />
+        <Image
+          src='/logo-icon-white.png'
+          width={20}
+          height={20}
+          alt='Logo icon'
+        />
         <p>Copyright © 2024 - All right reserved</p>•
         <Link href='/privacy-policy' className='link'>
           Privacy Policy
