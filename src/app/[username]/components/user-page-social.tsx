@@ -19,6 +19,7 @@ export const UserPageSocial = ({
             <div key={item.id}>
               <SocialIcon
                 url={item.url}
+                network={item.name}
                 className='user-social-icon !h-10 !w-10'
                 fgColor={pageStyles?.socialIconColor?.value ?? '#000'}
                 bgColor='transparent'
