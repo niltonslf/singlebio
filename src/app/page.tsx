@@ -7,8 +7,8 @@ export default function Home() {
   return (
     <main
       data-theme='dark'
-      className='via-background-200 flex min-h-[100vh] w-full flex-col bg-gradient-to-tr from-base-100 via-base-300 to-base-100'>
-      <div className='h-screen w-full'>
+      className='via-background-200 flex h-full min-h-[100vh] w-full flex-col bg-gradient-to-tr from-base-100 via-base-300 to-base-100'>
+      <div className='min-h-screen w-full'>
         <HomeHeader />
 
         <section className='max:w-full mx-auto mt-14 flex w-full flex-row items-center justify-center md:max-w-6xl'>
