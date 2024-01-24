@@ -2,10 +2,9 @@ import {useState} from 'react'
 import {SocialIcon} from 'react-social-icons'
 
 import {useSmartphone} from '@/app/admin/context'
-import {InputErrorMsg} from '@/app/components'
 import {socialOptions} from '@/constants/social-options'
 import {SocialPage, SocialPageCreation} from '@/domain/models'
-import {merge, validateUrlRegex} from '@/utils'
+import {merge} from '@/utils'
 
 type AddSocialModalFormProps = {
   socialPages: SocialPage[]
@@ -28,7 +27,6 @@ export const AddSocialModalForm = ({
     clicks: 0,
     order: 0,
   })
-  const [isUrlValid, setIsUrlValid] = useState<boolean | undefined>()
   const [filter, setFilter] = useState('')
 
   const socialOptionsFilter = Object.keys(socialOptions).filter(social =>
@@ -44,10 +42,6 @@ export const AddSocialModalForm = ({
   }
 
   const onChangeUrl = (url: string) => {
-    const isValid = validateUrlRegex.test(url)
-    if (!isValid) return setIsUrlValid(false)
-
-    setIsUrlValid(true)
     setFormData(prev => ({...prev, url}))
   }
 
@@ -65,7 +59,6 @@ export const AddSocialModalForm = ({
   const handleClose = () => {
     onClose()
     setTimeout(() => {
-      setIsUrlValid(undefined)
       resetForm()
     }, 200)
   }
@@ -136,10 +129,6 @@ export const AddSocialModalForm = ({
                     value={formData.url}
                     onChange={event => onChangeUrl(event.target.value)}
                   />
-
-                  {isUrlValid === false && (
-                    <InputErrorMsg>The link format is not valid</InputErrorMsg>
-                  )}
                 </div>
 
                 <div className='flex gap-5'>
