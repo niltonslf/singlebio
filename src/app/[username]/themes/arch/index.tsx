@@ -19,7 +19,7 @@ export const ArchTheme = ({
       <Wrapper user={user}>
         <Header02 user={user} pageStyles={pageStyles} />
         <SocialPages01 socialPages={socialPages} pageStyles={pageStyles} />
-        <PageLinks01 links={links} pageStyles={pageStyles} />
+        <PageLinks01 links={links} user={user} />
         <GithubChart01 user={user} />
         <Footer01 />
       </Wrapper>

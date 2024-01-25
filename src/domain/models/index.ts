@@ -1,4 +1,5 @@
 export * from './user-model'
+export * from './user-theme-model'
 export * from './link-model'
 export * from './auth-model'
 export * from './social-model'

@@ -21,6 +21,7 @@ class AppearanceStore {
     usernameColor: '#000',
     socialIconColor: '#000',
     socialDefaultColor: false,
+    name: '',
   }
   private themeConfig: UserTheme = {...this.initialData}
   private themeConfigInitial: UserTheme = {...this.initialData}

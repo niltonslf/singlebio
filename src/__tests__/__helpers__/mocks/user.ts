@@ -1,4 +1,4 @@
-import {User, UserSocial, UserTheme} from '@/domain/models'
+import {User, UserTheme} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 
 export const makeUser = (
@@ -8,7 +8,6 @@ export const makeUser = (
   uid?: string,
   username?: string,
   theme?: UserTheme,
-  social?: UserSocial,
 ): User => {
   return {
     email: email ?? faker.internet.email(),
@@ -17,7 +16,6 @@ export const makeUser = (
     uid: uid ?? faker.string.uuid(),
     username: username ?? faker.internet.userName(),
     theme: theme,
-    social: social ?? [],
     pageViews: 0,
   }
 }
@@ -39,5 +37,7 @@ export const makeUserTheme = (
     usernameColor: usernameColor ?? faker.color.rgb({format: 'css'}),
     socialDefaultColor: socialDefaultColor ?? false,
     socialIconColor: socialIconColor ?? faker.color.rgb({format: 'css'}),
+    buttonStyle: 'circle',
+    name: 'default',
   }
 }

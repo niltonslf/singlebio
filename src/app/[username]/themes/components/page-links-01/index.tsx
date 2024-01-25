@@ -1,13 +1,24 @@
-import {PageStylesObject} from '@/app/[username]/utils'
-import {LinkCard} from '@/app/components'
-import {Link} from '@/domain/models'
+import {CSSProperties} from 'react'
+
+import {LinkCard} from '@/app/[username]/components/link-card'
+import {Link, User} from '@/domain/models'
 
 type PageLinks01Props = {
   links: Link[]
-  pageStyles: PageStylesObject
+  user: User
 }
 
-export const PageLinks01 = ({links, pageStyles}: PageLinks01Props) => {
+export const PageLinks01 = ({links, user}: PageLinks01Props) => {
+  const styles: CSSProperties = {}
+
+  if (user.theme?.buttonBackground) {
+    styles.backgroundColor = user.theme?.buttonBackground
+  }
+
+  if (user.theme?.buttonTextColor) {
+    styles.color = user.theme?.buttonTextColor
+  }
+
   return (
     <LinkCard>
       {links.length > 0 &&
@@ -16,9 +27,8 @@ export const PageLinks01 = ({links, pageStyles}: PageLinks01Props) => {
             <LinkCard.Item
               key={link.url}
               path={link.url || '#'}
-              className={pageStyles.buttonStyle?.value}
-              bgColor={pageStyles?.buttonBackground?.value}
-              textColor={pageStyles?.buttonTextColor?.value}>
+              variant={user.theme?.buttonStyle}
+              styles={styles}>
               {link.label}
             </LinkCard.Item>
           )
