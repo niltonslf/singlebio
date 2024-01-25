@@ -10,7 +10,7 @@ type Header02Props = {
 
 export const Header02 = ({user, pageStyles}: Header02Props) => {
   return (
-    <header className='relative z-10 mb-5 w-full'>
+    <header className='relative z-20 mb-5 w-full'>
       <div className='mb-4 flex w-full justify-center'>
         <div
           className={clsx(['rounded-full border-[10px]'])}
@@ -22,7 +22,7 @@ export const Header02 = ({user, pageStyles}: Header02Props) => {
             <Avatar
               name={user?.name ?? ''}
               pictureUrl={user?.pictureUrl ?? ''}
-              size={140}
+              size={120}
             />
           </div>
         </div>

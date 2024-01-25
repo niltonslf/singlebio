@@ -20,7 +20,7 @@ export type ThemeOptions = Record<string, Option<ThemeProps>>
 
 export const themeOptions: ThemeOptions = {
   default: {
-    name: 'Arch',
+    name: 'Default',
     component: DefaultTheme,
   },
   arch: {

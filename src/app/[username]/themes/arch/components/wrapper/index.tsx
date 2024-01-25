@@ -20,13 +20,13 @@ export const Wrapper = ({user, children}: WrapperProps) => {
         defaultBg,
       ])}>
       <div
-        className='w-full bg-cover bg-center'
+        className='relative z-10 w-full bg-cover bg-center'
         style={{
           backgroundImage: `url(${user.theme?.backgroundImage})`,
         }}>
         <div className='w-full backdrop-blur-md'>
           <div
-            className='mx-auto h-52 w-full max-w-5xl bg-base-300 bg-cover bg-center'
+            className='mx-auto h-44 w-full max-w-5xl bg-base-300 bg-cover bg-center md:h-52'
             style={{
               backgroundImage: `url(${user.theme?.backgroundImage})`,
             }}></div>
