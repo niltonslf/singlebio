@@ -10,8 +10,10 @@ import {
   setDoc,
 } from 'firebase/firestore'
 import {Info, Plus} from 'lucide-react'
+import {observer} from 'mobx-react-lite'
 import {useCallback, useEffect, useState} from 'react'
 
+import {authStore} from '@/app/auth/context/auth-store'
 import {Link, LinkCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
 
@@ -41,7 +43,7 @@ type CardListProps = {
   user: User
 }
 
-export const LinksSection = ({user}: CardListProps) => {
+export const LinksSection = observer(({user}: CardListProps) => {
   const {reloadSmartphoneList} = useSmartphone()
 
   const reloadSmartphoneListDebounced = useDebounce(() => {
@@ -99,15 +101,16 @@ export const LinksSection = ({user}: CardListProps) => {
 
       let newLinks: Required<Link>[] = []
 
-      if (querySnapshot.size) {
-        querySnapshot.docs.forEach((doc: any) =>
-          newLinks.push({...doc.data(), id: doc.id}),
-        )
+      if (!querySnapshot.size) return setIsFetchingData(false)
 
-        newLinks = newLinks.sort((prev, next) => next.order - prev.order)
-      }
+      querySnapshot.docs.forEach((doc: any) =>
+        newLinks.push({...doc.data(), id: doc.id}),
+      )
+
+      newLinks = newLinks.sort((prev, next) => next.order - prev.order)
 
       setLinks(newLinks)
+      authStore.setPageLinks(newLinks)
       setIsFetchingData(false)
     })
 
@@ -210,4 +213,4 @@ export const LinksSection = ({user}: CardListProps) => {
       </div>
     </section>
   )
-}
+})

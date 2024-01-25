@@ -1,13 +1,11 @@
 import {CSSProperties, HTMLAttributes, ReactNode} from 'react'
 
-import {PageStylesObject} from '@/app/[username]/utils'
 import {Link, SocialPage, User} from '@/domain/models'
 
 export type ThemeProps = {
-  pageStyles: PageStylesObject
-  links: Link[]
-  socialPages: SocialPage[]
   user: User
+  links?: Link[]
+  socialPages?: SocialPage[]
 }
 
 export type ThemeButtonProps = {

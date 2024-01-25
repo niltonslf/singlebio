@@ -9,8 +9,6 @@ import {
 } from '@/data/usecases'
 import {UserTheme} from '@/domain/models'
 
-import {makePageStyles} from './utils'
-
 type UserPageProps = {
   params: {username: string}
   searchParams?: UserTheme & {preview: string}
@@ -31,21 +29,14 @@ const fetchUserData = async (username: string) => {
   return {user, links, socialPages}
 }
 
-const UserPage = async ({params, searchParams}: UserPageProps) => {
+const UserPage = async ({params}: UserPageProps) => {
   const {user, links, socialPages} = await fetchUserData(params.username)
-
-  const pageStyles = makePageStyles({params: searchParams, user})
 
   const Theme = themeOptions[user?.theme?.name || 'default'].component
 
   return (
     <>
-      <Theme
-        pageStyles={pageStyles}
-        links={links}
-        socialPages={socialPages}
-        user={user}
-      />
+      <Theme links={links} socialPages={socialPages} user={user} />
       <CookieConsentBanner />
     </>
   )

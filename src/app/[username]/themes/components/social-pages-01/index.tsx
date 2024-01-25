@@ -1,19 +1,16 @@
 import {SocialIcon} from 'react-social-icons'
 
-import {SocialPage} from '@/domain/models'
+import {SocialPage, UserTheme} from '@/domain/models'
 
 type SocialPages01Props = {
-  socialPages: SocialPage[]
-  pageStyles: any
+  socialPages?: SocialPage[]
+  theme?: UserTheme
 }
 
-export const SocialPages01 = ({
-  socialPages,
-  pageStyles,
-}: SocialPages01Props) => {
+export const SocialPages01 = ({socialPages, theme}: SocialPages01Props) => {
   return (
     <>
-      {socialPages.length > 0 && (
+      {socialPages && socialPages?.length > 0 && (
         <div className='mb-5 flex w-full flex-row justify-center '>
           {socialPages?.map(item => (
             <div key={item.id}>
@@ -21,7 +18,7 @@ export const SocialPages01 = ({
                 url={item.url}
                 network={item.name}
                 className='user-social-icon !h-10 !w-10'
-                fgColor={pageStyles?.socialIconColor?.value ?? '#000'}
+                fgColor={theme?.socialIconColor ?? '#000'}
                 bgColor='transparent'
                 target='_blank'
               />

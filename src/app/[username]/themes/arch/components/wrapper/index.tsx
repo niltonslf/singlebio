@@ -20,13 +20,13 @@ export const Wrapper = ({user, children}: WrapperProps) => {
         defaultBg,
       ])}>
       <div
-        className='relative z-10 w-full bg-cover bg-center'
+        className='relative z-10 h-44 w-full bg-cover bg-center md:h-52 '
         style={{
           backgroundImage: `url(${user.theme?.backgroundImage})`,
         }}>
         <div className='w-full backdrop-blur-md'>
           <div
-            className='mx-auto h-44 w-full max-w-5xl bg-base-300 bg-cover bg-center md:h-52'
+            className='mx-auto h-full w-full max-w-5xl bg-base-300 bg-cover bg-center'
             style={{
               backgroundImage: `url(${user.theme?.backgroundImage})`,
             }}></div>
@@ -34,7 +34,7 @@ export const Wrapper = ({user, children}: WrapperProps) => {
       </div>
       <section
         className={clsx([
-          '-mt-[75px] flex w-full flex-col items-center px-5 pb-8',
+          '-mt-[75px] flex min-h-full w-full flex-col items-center px-5 pb-8',
         ])}
         style={{
           backgroundColor: user.theme?.backgroundColor,

@@ -4,12 +4,11 @@ import {AlertTriangle, CheckCircle} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
+import {SmartphonePreview} from '@/app/admin/components'
 import {useImageUploader, useImageCompressor} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
-import {Smartphone} from '@/app/components'
 
 import {Collapse, AdminBaseLayout} from '../components'
-import {useSmartphone} from '../context/smartphone-context'
 import {
   CustomizeButtons,
   CustomizeSocialLinks,
@@ -22,7 +21,6 @@ const AppearancePage = observer(() => {
   const {user} = authStore
   const {theme, aux} = appearanceStore
 
-  const {iframeRef} = useSmartphone()
   const {compress} = useImageCompressor()
   const {upload} = useImageUploader()
 
@@ -126,10 +124,7 @@ const AppearancePage = observer(() => {
       </AdminBaseLayout.Content>
 
       <AdminBaseLayout.PagePreview>
-        <Smartphone
-          ref={iframeRef}
-          iframeUrl={appearanceStore.getPreviewUrl(user?.username ?? '')}
-        />
+        <SmartphonePreview />
       </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
   )

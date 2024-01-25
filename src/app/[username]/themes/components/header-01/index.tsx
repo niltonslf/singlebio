@@ -5,10 +5,9 @@ import {User} from '@/domain/models'
 
 type Header01Props = {
   user: User
-  pageStyles: any
 }
 
-export const Header01 = ({user, pageStyles}: Header01Props) => {
+export const Header01 = ({user}: Header01Props) => {
   return (
     <header className='mb-5 w-full'>
       <div className='mb-4 flex w-full justify-center'>
@@ -27,7 +26,7 @@ export const Header01 = ({user, pageStyles}: Header01Props) => {
       {user?.name && (
         <h2
           className='mb-2 flex items-center justify-center text-2xl font-semibold text-neutral-900'
-          style={pageStyles.usernameColor}>
+          style={{color: user.theme?.usernameColor}}>
           {user?.name}
         </h2>
       )}
@@ -35,7 +34,7 @@ export const Header01 = ({user, pageStyles}: Header01Props) => {
       {user?.bio && (
         <p
           className='w-full break-before-auto text-center text-sm text-neutral-900'
-          style={pageStyles.usernameColor}>
+          style={{color: user.theme?.usernameColor}}>
           {user?.bio}
         </p>
       )}

@@ -4,7 +4,7 @@ import {LinkCard} from '@/app/[username]/components/link-card'
 import {Link, User} from '@/domain/models'
 
 type PageLinks01Props = {
-  links: Link[]
+  links?: Link[]
   user: User
 }
 
@@ -21,7 +21,8 @@ export const PageLinks01 = ({links, user}: PageLinks01Props) => {
 
   return (
     <LinkCard>
-      {links.length > 0 &&
+      {links &&
+        links?.length > 0 &&
         links.map(link => {
           return (
             <LinkCard.Item

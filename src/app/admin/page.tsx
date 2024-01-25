@@ -3,13 +3,14 @@
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
-import {SetUsernameModal, SmartphonePreview} from '@/app/components'
+import {SetUsernameModal} from '@/app/components'
 
 import {authStore} from '../auth/context/auth-store'
 import {
   AdminBaseLayout,
   BetaVersionWarningModal,
   PageLoader,
+  SmartphonePreview,
 } from './components'
 import {LinksSection} from './components/links-section'
 import {useSmartphone} from './context/smartphone-context'

@@ -1,5 +1,5 @@
 import {setup} from '@/__tests__/__helpers__'
-import {Smartphone} from '@/app/components'
+import {Smartphone} from '@/app/admin/components'
 import {faker} from '@faker-js/faker'
 import {screen} from '@testing-library/react'
 

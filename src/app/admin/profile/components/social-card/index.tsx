@@ -57,6 +57,7 @@ export const SocialCard = ({user}: SocialCardProps) => {
 
     const data = socialReq.docs.map(social => social.data()) as SocialPage[]
     setSocialPages(data)
+    authStore.setSocialPages(data)
   }, [user.uid])
 
   useEffect(() => {

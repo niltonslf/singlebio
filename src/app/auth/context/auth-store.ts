@@ -28,7 +28,12 @@ import {action, computed, makeObservable, observable} from 'mobx'
 import {APP_URL} from '@/config/envs'
 import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
 import {Providers, ProvidersValues} from '@/domain/enums'
-import {SignUpWithEmailAndPassword, User} from '@/domain/models'
+import {
+  Link,
+  SignUpWithEmailAndPassword,
+  SocialPage,
+  User,
+} from '@/domain/models'
 import {auth, db, githubProvider, googleProvider} from '@/services/firebase'
 import {createPopup, parseToUser} from '@/utils'
 
@@ -37,6 +42,8 @@ class AuthStore {
     makeObservable(this, {
       userModel: observable,
       firebaseUser: observable,
+      socialPages: observable,
+      pageLinks: observable,
       //action
       signInWithGoogle: action,
       signInWithGithub: action,
@@ -48,6 +55,8 @@ class AuthStore {
       deleteUser: action,
       setUser: action,
       setFirebaseUser: action,
+      setSocialPages: action,
+      setPageLinks: action,
       clearUser: action,
       resetPassword: action,
       reauthenticateWithEmailAndPassword: action,
@@ -61,6 +70,9 @@ class AuthStore {
 
   public userModel: User | undefined = undefined
   public firebaseUser: FbUser | undefined = undefined
+
+  public socialPages: SocialPage[] | undefined = undefined
+  public pageLinks: Link[] | undefined = undefined
 
   get user() {
     return this.userModel
@@ -165,9 +177,19 @@ class AuthStore {
     this.firebaseUser = firebaseUser
   }
 
+  public setSocialPages(socialPages?: SocialPage[]): void {
+    this.socialPages = socialPages
+  }
+
+  public setPageLinks(pageLinks?: Link[]): void {
+    this.pageLinks = pageLinks
+  }
+
   public clearUser(): void {
     this.userModel = undefined
     this.firebaseUser = undefined
+    this.socialPages = undefined
+    this.pageLinks = undefined
   }
 
   public async logout(): Promise<void> {
