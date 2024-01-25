@@ -1,7 +1,7 @@
 import {ComponentType} from 'react'
 
-import {ArchTheme, DefaultTheme} from '@/app/[username]/components/themes'
-import {ThemeProps} from '@/app/[username]/components/themes/types'
+import {DefaultTheme, ArchTheme} from '@/app/[username]/themes'
+import {ThemeProps} from '@/app/[username]/themes/types'
 
 export type Option = {
   name: string

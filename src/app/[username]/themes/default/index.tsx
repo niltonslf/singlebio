@@ -1,14 +1,14 @@
-import {Wrapper} from '@/app/[username]/components/themes/arch/components'
 import {
   Footer01,
   GithubChart01,
-  Header02,
+  Header01,
   PageLinks01,
   SocialPages01,
-} from '@/app/[username]/components/themes/components'
-import {ThemeProps} from '@/app/[username]/components/themes/types'
+} from '@/app/[username]/themes/components'
+import {Wrapper} from '@/app/[username]/themes/default/components'
+import {ThemeProps} from '@/app/[username]/themes/types'
 
-export const ArchTheme = ({
+export const DefaultTheme = ({
   pageStyles,
   links,
   socialPages,
@@ -16,8 +16,8 @@ export const ArchTheme = ({
 }: ThemeProps) => {
   return (
     <>
-      <Wrapper user={user}>
-        <Header02 user={user} pageStyles={pageStyles} />
+      <Wrapper pageStyles={pageStyles}>
+        <Header01 user={user} pageStyles={pageStyles} />
         <SocialPages01 socialPages={socialPages} pageStyles={pageStyles} />
         <PageLinks01 links={links} pageStyles={pageStyles} />
         <GithubChart01 user={user} />
@@ -27,4 +27,4 @@ export const ArchTheme = ({
   )
 }
 
-ArchTheme.displayName = 'ArchTheme'
+DefaultTheme.displayName = 'DefaultTheme'
