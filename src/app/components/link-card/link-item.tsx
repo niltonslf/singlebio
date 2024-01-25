@@ -36,7 +36,7 @@ export const LinkItem = ({
       className='user-link-item'>
       <li
         className={clsx([
-          'btn btn-md flex h-auto w-full flex-wrap items-center justify-center bg-white p-3 text-center font-medium shadow-md transition-all hover:scale-95 md:py-5',
+          'btn btn-md flex h-auto w-full flex-wrap items-center justify-center bg-white p-3 text-center font-medium text-base-200 shadow-md transition-all hover:scale-95 hover:text-base-content md:py-5',
           className,
         ])}
         style={styles}>

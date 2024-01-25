@@ -18,6 +18,8 @@ export type UserTheme = {
 
   socialIconColor: string
   socialDefaultColor: boolean
+
+  name: string
 }
 
 export type UserFeatures = {

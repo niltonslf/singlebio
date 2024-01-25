@@ -1,3 +1,5 @@
+'use client'
+
 import {getAnalytics, setAnalyticsCollectionEnabled} from 'firebase/analytics'
 import {FirebaseOptions, initializeApp} from 'firebase/app'
 import {GithubAuthProvider, GoogleAuthProvider, getAuth} from 'firebase/auth'
@@ -16,7 +18,6 @@ const firebaseConfig: FirebaseOptions = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 }
-
 const hasCookiesConsent =
   !getCookieConsentValue(COOKIES_CONSENT_KEY) ||
   getCookieConsentValue(COOKIES_CONSENT_KEY) === 'true'
@@ -33,6 +34,7 @@ const initializeAnalytics = () => {
 }
 
 export const analytics = initializeAnalytics()
+
 if (analytics) setAnalyticsCollectionEnabled(analytics, hasCookiesConsent)
 
 export const auth = getAuth(app)

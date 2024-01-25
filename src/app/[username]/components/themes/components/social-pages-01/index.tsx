@@ -2,15 +2,15 @@ import {SocialIcon} from 'react-social-icons'
 
 import {SocialPage} from '@/domain/models'
 
-type UserPageSocialProps = {
+type SocialPages01Props = {
   socialPages: SocialPage[]
   pageStyles: any
 }
 
-export const UserPageSocial = ({
+export const SocialPages01 = ({
   socialPages,
   pageStyles,
-}: UserPageSocialProps) => {
+}: SocialPages01Props) => {
   return (
     <>
       {socialPages.length > 0 && (

@@ -3,8 +3,7 @@
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
-import {SetUsernameModal, Smartphone} from '@/app/components'
-import {parseUserPageUrl} from '@/utils'
+import {SetUsernameModal, SmartphonePreview} from '@/app/components'
 
 import {authStore} from '../auth/context/auth-store'
 import {
@@ -18,7 +17,7 @@ import {useSmartphone} from './context/smartphone-context'
 const Admin = observer(() => {
   const user = authStore.user
 
-  const {iframeRef, reloadSmartphoneList, key} = useSmartphone()
+  const {reloadSmartphoneList} = useSmartphone()
   const [showUsernameModal, setShowUsernameModal] = useState(false)
   const [showBetaWarningModal, setShowBetaWarningModal] = useState(false)
 
@@ -49,11 +48,7 @@ const Admin = observer(() => {
         </AdminBaseLayout.Content>
 
         <AdminBaseLayout.PagePreview>
-          <Smartphone
-            key={key}
-            ref={iframeRef}
-            iframeUrl={parseUserPageUrl(user?.username)}
-          />
+          <SmartphonePreview />
         </AdminBaseLayout.PagePreview>
       </AdminBaseLayout>
 

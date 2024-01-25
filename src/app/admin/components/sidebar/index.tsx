@@ -17,7 +17,7 @@ export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
     <nav
       data-testid='admin-sidebar'
       className={merge([
-        'absolute left-[-100%]  top-0 z-40 flex h-full border-base-300 bg-base-100',
+        'absolute left-[-100%]  top-0 z-40 flex h-full border-base-200 bg-base-100',
         'w-full max-w-full flex-col gap-5 border-r p-5 ',
         'bg-opacity-90 backdrop-blur-md transition-all ',
         'md:relative md:left-0 md:z-auto md:w-full md:bg-base-200 dark:md:bg-transparent',

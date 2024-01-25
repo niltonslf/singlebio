@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import {APP_NAME} from '@/config/envs'
 
-export const UserPageFooter = () => {
+export const Footer01 = () => {
   return (
     <footer className='mt-auto flex w-full flex-row items-center justify-center pt-10'>
       <Link

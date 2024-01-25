@@ -3,11 +3,11 @@ import Link from 'next/link'
 
 import {User} from '@/domain/models'
 
-type UserGithubChartProps = {
+type GithubChart01Props = {
   user: User
 }
 
-export const UserGithubChart = ({user}: UserGithubChartProps) => {
+export const GithubChart01 = ({user}: GithubChart01Props) => {
   const github = user.features?.github.username
   return (
     <>

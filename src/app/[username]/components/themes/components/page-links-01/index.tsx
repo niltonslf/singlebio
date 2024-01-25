@@ -1,14 +1,13 @@
+import {PageStylesObject} from '@/app/[username]/utils'
 import {LinkCard} from '@/app/components'
 import {Link} from '@/domain/models'
 
-import {PageStylesObject} from '../../utils'
-
-type UserPageLinksProps = {
+type PageLinks01Props = {
   links: Link[]
   pageStyles: PageStylesObject
 }
 
-export const UserPageLinks = ({links, pageStyles}: UserPageLinksProps) => {
+export const PageLinks01 = ({links, pageStyles}: PageLinks01Props) => {
   return (
     <LinkCard>
       {links.length > 0 &&
