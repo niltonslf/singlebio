@@ -16,15 +16,20 @@ export type Option<T> = {
   name: string
   component: ComponentType<T>
 }
-export type ThemeOptions = Record<string, Option<ThemeProps>>
 
-export const themeOptions: ThemeOptions = {
+export interface ThemeOption<T> extends Option<T> {
+  image: string
+}
+
+export const themeOptions: Record<string, ThemeOption<ThemeProps>> = {
   default: {
-    name: 'Default',
+    image: '/theme/theme-arch.png',
+    name: 'default',
     component: DefaultTheme,
   },
   arch: {
-    name: 'Arch',
+    image: '/theme/theme-arch.png',
+    name: 'arch',
     component: ArchTheme,
   },
 }

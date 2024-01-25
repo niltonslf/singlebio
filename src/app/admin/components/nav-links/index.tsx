@@ -3,9 +3,10 @@
 import {
   BarChartHorizontalBig,
   HelpCircle,
-  Home,
+  Info,
   LayoutDashboard,
-  Lock,
+  Link2,
+  Paintbrush,
   Palette,
   Settings2,
   User2,
@@ -42,8 +43,8 @@ const navbarItems: NavbarLinks = {
       {
         href: '/admin',
         title: 'go to home page',
-        name: 'Home',
-        Icon: <Home width={18} />,
+        name: 'Links',
+        Icon: <Link2 width={18} />,
       },
       {
         href: '/admin/appearance',
@@ -52,16 +53,17 @@ const navbarItems: NavbarLinks = {
         Icon: <Palette width={18} />,
       },
       {
+        href: '/admin/theme',
+        title: 'go to theme page',
+        name: 'Theme',
+        Icon: <Paintbrush width={18} />,
+      },
+      {
         href: '/admin/analytics',
         title: 'go to analytics page',
         name: 'Analytics',
         Icon: <BarChartHorizontalBig width={18} />,
-      },
-      {
-        href: '/admin/settings',
-        title: 'go to settings page',
-        name: 'Settings',
-        Icon: <Settings2 width={18} />,
+        disabled: true,
       },
     ],
   },
@@ -83,9 +85,15 @@ const navbarItems: NavbarLinks = {
       },
     ],
   },
-  support: {
-    label: 'Support',
+  settings: {
+    label: 'Settings',
     links: [
+      {
+        href: '/admin/settings',
+        title: 'go to settings page',
+        name: 'Settings',
+        Icon: <Settings2 width={18} />,
+      },
       {
         href: '/admin/help',
         title: 'go to help page',
@@ -93,11 +101,10 @@ const navbarItems: NavbarLinks = {
         Icon: <HelpCircle width={18} />,
       },
       {
-        href: '/admin/privacy',
-        title: 'go to plan page',
-        name: 'Privacy policies',
-        Icon: <Lock width={18} />,
-        disabled: true,
+        href: '/privacy-policy',
+        title: 'go to privacy policy page',
+        name: 'Privacy policie',
+        Icon: <Info width={18} />,
       },
     ],
   },
