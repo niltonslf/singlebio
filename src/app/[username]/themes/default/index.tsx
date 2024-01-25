@@ -11,7 +11,7 @@ import {ThemeProps} from '@/app/[username]/themes/types'
 export const DefaultTheme = ({links, socialPages, user}: ThemeProps) => {
   return (
     <>
-      <Wrapper user={user}>
+      <Wrapper theme={user.theme}>
         <Header01 user={user} />
         <SocialPages01 theme={user.theme} socialPages={socialPages} />
         <PageLinks01 links={links} user={user} />

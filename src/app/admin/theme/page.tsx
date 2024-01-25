@@ -7,7 +7,7 @@ import Image from 'next/image'
 import {ThemeProps} from '@/app/[username]/themes/types'
 import {authStore} from '@/app/auth/context/auth-store'
 import {ThemeOption, themeOptions} from '@/constants/theme-options'
-import { UserTheme } from '@/domain/models'
+import {UserTheme} from '@/domain/models'
 
 import {AdminBaseLayout, SectionCard, SmartphonePreview} from '../components'
 
@@ -27,7 +27,7 @@ const ThemePage = observer(() => {
         <h1 className='mb-8 text-2xl font-semibold'>Theme</h1>
 
         <SectionCard>
-          <div className='carousel-end carousel w-full gap-3 '>
+          <div className='carousel carousel-end w-full gap-3 '>
             {themes.map(theme => (
               <div
                 key={theme.name}

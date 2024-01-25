@@ -11,7 +11,7 @@ import {ThemeProps} from '@/app/[username]/themes/types'
 export const ArchTheme = ({links, socialPages, user}: ThemeProps) => {
   return (
     <>
-      <Wrapper user={user}>
+      <Wrapper theme={user.theme}>
         <Header02 user={user} />
         <SocialPages01 socialPages={socialPages} theme={user.theme} />
         <PageLinks01 links={links} user={user} />
