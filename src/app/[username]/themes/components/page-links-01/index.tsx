@@ -1,22 +1,22 @@
 import {CSSProperties} from 'react'
 
 import {LinkCard} from '@/app/[username]/components/link-card'
-import {Link, User} from '@/domain/models'
+import {Link, UserTheme} from '@/domain/models'
 
 type PageLinks01Props = {
   links?: Link[]
-  user: User
+  theme?: UserTheme
 }
 
-export const PageLinks01 = ({links, user}: PageLinks01Props) => {
+export const PageLinks01 = ({links, theme}: PageLinks01Props) => {
   const styles: CSSProperties = {}
 
-  if (user.theme?.buttonBackground) {
-    styles.backgroundColor = user.theme?.buttonBackground
+  if (theme?.buttonBackground) {
+    styles.backgroundColor = theme?.buttonBackground
   }
 
-  if (user.theme?.buttonTextColor) {
-    styles.color = user.theme?.buttonTextColor
+  if (theme?.buttonTextColor) {
+    styles.color = theme?.buttonTextColor
   }
 
   return (
@@ -28,7 +28,7 @@ export const PageLinks01 = ({links, user}: PageLinks01Props) => {
             <LinkCard.Item
               key={link.url}
               path={link.url || '#'}
-              variant={user.theme?.buttonStyle}
+              variant={theme?.buttonStyle}
               styles={styles}>
               {link.label}
             </LinkCard.Item>

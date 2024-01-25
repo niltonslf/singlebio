@@ -14,7 +14,7 @@ export const ArchTheme = ({links, socialPages, user}: ThemeProps) => {
       <Wrapper theme={user.theme}>
         <Header02 user={user} />
         <SocialPages01 socialPages={socialPages} theme={user.theme} />
-        <PageLinks01 links={links} user={user} />
+        <PageLinks01 links={links} theme={user.theme} />
         <GithubChart01 user={user} />
         <Footer01 />
       </Wrapper>

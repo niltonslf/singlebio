@@ -9,37 +9,35 @@ type WrapperProps = {
 }
 
 export const Wrapper = ({theme, children}: WrapperProps) => {
-  const defaultBg = 'bg-[#f9f9f9]'
-
   return (
     <main
       data-theme='dark'
       className={clsx([
-        'flex h-[100vh] w-full flex-wrap overflow-y-auto bg-cover bg-center',
-        'bg-fixed',
-        defaultBg,
+        'flex h-[100vh] w-full flex-wrap overflow-hidden overflow-y-auto bg-[#f9f9f9]',
       ])}>
-      <div
-        className='relative z-10 h-44 w-full bg-cover bg-center md:h-52 '
-        style={{
-          backgroundImage: `url(${theme?.backgroundImage})`,
-        }}>
-        <div className='w-full backdrop-blur-md'>
-          <div
-            className='mx-auto h-full w-full max-w-5xl bg-base-300 bg-cover bg-center'
-            style={{
-              backgroundImage: `url(${theme?.backgroundImage})`,
-            }}></div>
-        </div>
-      </div>
       <section
         className={clsx([
-          '-mt-[75px] flex min-h-full w-full flex-col items-center px-5 pb-8',
+          'flex min-h-[100dvh] w-screen flex-col items-center justify-start',
         ])}
-        style={{
-          backgroundColor: theme?.backgroundColor,
-        }}>
-        <div className='flex w-full max-w-2xl flex-1 flex-col flex-wrap'>
+        style={{backgroundColor: theme?.backgroundColor}}>
+        <div
+          className={clsx([
+            'relative z-10 h-44 w-full bg-cover bg-center md:h-52 ',
+            !theme?.backgroundImage ? 'bg-gray-300' : '',
+          ])}
+          style={{
+            backgroundImage: `url(${theme?.backgroundImage})`,
+          }}>
+          <div className='h-full w-full backdrop-blur-md'>
+            <div
+              className='mx-auto h-full w-full max-w-5xl bg-base-300 bg-cover bg-center'
+              style={{
+                backgroundImage: `url(${theme?.backgroundImage})`,
+              }}></div>
+          </div>
+        </div>
+
+        <div className='-mt-[75px] flex w-full max-w-2xl flex-1 flex-col flex-wrap px-5 pb-8 '>
           {children}
         </div>
       </section>

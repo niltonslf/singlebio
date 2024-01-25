@@ -16,7 +16,10 @@ const ThemePage = observer(() => {
   const themes = Object.keys(themeOptions).map(key => themeOptions[key])
 
   const handleSelectTheme = async (theme: ThemeOption<ThemeProps>) => {
-    const newData = {...user?.theme, name: theme.name} as UserTheme
+    const newData = {
+      ...theme.defaultTheme,
+      backgroundImage: user?.theme?.backgroundImage,
+    } as UserTheme
 
     await authStore.updateUser({theme: newData})
   }
@@ -27,7 +30,7 @@ const ThemePage = observer(() => {
         <h1 className='mb-8 text-2xl font-semibold'>Theme</h1>
 
         <SectionCard>
-          <div className='carousel carousel-end w-full gap-3 '>
+          <div className='carousel-end carousel w-full gap-3 '>
             {themes.map(theme => (
               <div
                 key={theme.name}

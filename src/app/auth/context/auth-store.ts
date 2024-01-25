@@ -27,6 +27,7 @@ import {action, computed, makeObservable, observable} from 'mobx'
 
 import {APP_URL} from '@/config/envs'
 import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
+import {themeOptions} from '@/constants/theme-options'
 import {Providers, ProvidersValues} from '@/domain/enums'
 import {
   Link,
@@ -146,7 +147,8 @@ class AuthStore {
     }
 
     // create new user
-    const newUser = parseToUser(firebaseUser)
+    const defaultTheme = themeOptions['default'].defaultTheme
+    const newUser = parseToUser(firebaseUser, undefined, defaultTheme)
     await setDoc(doc(db, 'users', newUser.uid), newUser)
 
     this.setUser({...newUser})

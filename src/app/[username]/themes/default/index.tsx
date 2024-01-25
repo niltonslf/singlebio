@@ -14,7 +14,7 @@ export const DefaultTheme = ({links, socialPages, user}: ThemeProps) => {
       <Wrapper theme={user.theme}>
         <Header01 user={user} />
         <SocialPages01 theme={user.theme} socialPages={socialPages} />
-        <PageLinks01 links={links} user={user} />
+        <PageLinks01 links={links} theme={user.theme} />
         <GithubChart01 user={user} />
         <Footer01 />
       </Wrapper>

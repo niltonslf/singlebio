@@ -8,14 +8,15 @@ type Header02Props = {
 }
 
 export const Header02 = ({user}: Header02Props) => {
+  const defaultBorderColor = !user.theme?.backgroundImage && 'border-[#f9f9f9]'
+
   return (
     <header className='relative z-20 mb-5 w-full'>
       <div className='mb-4 flex w-full justify-center'>
         <div
-          className={clsx(['rounded-full border-[10px]'])}
+          className={clsx(['rounded-full border-[10px]', defaultBorderColor])}
           style={{
-            borderColor:
-              `rgb(from ${user.theme?.backgroundColor} r g b / 1)` ?? '#f9f9f9',
+            borderColor: `rgb(from ${user.theme?.backgroundColor} r g b / 1)`,
           }}>
           <div className='rounded-full shadow-md shadow-black/50'>
             <Avatar
