@@ -37,6 +37,11 @@ class AdminStore {
     this.setPageLinks(data)
   }
 
+  public async reloadSocialPages() {
+    const data = await this.fetchSocialPages()
+    this.setSocialPages(data)
+  }
+
   public async fetchPageLinks(): Promise<Link[]> {
     if (!this?.user) throw ERROR_MESSAGES['user-not-found']
 

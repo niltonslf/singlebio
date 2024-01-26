@@ -4,6 +4,7 @@ import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
 import {SectionCard} from '@/app/admin/components'
+import {adminStore} from '@/app/admin/context/admin-store'
 import {useImageCompressor, useImageUploader} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
 import {Avatar, InputErrorMsg} from '@/app/components'
@@ -56,6 +57,8 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
   })
 
   const onSubmit = async (data: UserProfile) => {
+    if (!validUsername) return false
+
     setIsSubmitting(true)
 
     const userData = {...data}
@@ -85,7 +88,6 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
   }, 1000)
 
   const handleCheckUsername = async (username: string) => {
-    setValidUsername(true)
     const isValid = await validateUsername(username)
     setValidUsername(isValid)
   }
@@ -109,6 +111,13 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
             onChange={handleCheckUsername}
             isUsernameValid={validUsername}
             errors={errors}
+          />
+
+          <input
+            type='text'
+            disabled
+            className={merge(['input input-bordered  input-md'])}
+            value={adminStore.user?.email}
           />
 
           <input

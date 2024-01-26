@@ -5,6 +5,7 @@ import Link from 'next/link'
 import {useRouter} from 'next/navigation'
 import {useState} from 'react'
 
+import {useValidateAuth} from '@/app/admin/hooks'
 import {Button, GoogleIcon, GithubIcon, Appear} from '@/app/components'
 import {LoginWithPassword} from '@/domain/models'
 
@@ -14,10 +15,12 @@ import {authStore} from './context/auth-store'
 type MethodOptions = 'google' | 'github' | 'password'
 
 const SignIn = observer(() => {
+  const {isFetchingUser} = useValidateAuth()
+
   const {push} = useRouter()
 
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(isFetchingUser)
 
   const handleAllLoginMethods = async (
     method: MethodOptions,

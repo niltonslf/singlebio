@@ -103,7 +103,7 @@ const navbarItems: NavbarLinks = {
       {
         href: '/privacy-policy',
         title: 'go to privacy policy page',
-        name: 'Privacy policie',
+        name: 'Privacy policy',
         Icon: <Info width={18} />,
       },
     ],

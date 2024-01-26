@@ -28,26 +28,14 @@ export const SocialCard = observer(({user}: SocialCardProps) => {
     const userRef = doc(db, 'users', user.uid)
     const docRef = await addDoc(collection(userRef, 'social-pages'), data)
     await updateDoc(docRef, {id: docRef.id})
-    // await adminStore.fetchSocialPages()
+    await adminStore.reloadSocialPages()
   }
 
   const handleDelete = async (socialId: string) => {
-    if (!adminStore.user) return
-
-    const ref = doc(db, 'users', adminStore.user?.uid, 'social-pages', socialId)
+    const ref = doc(db, 'users', user.uid, 'social-pages', socialId)
     await deleteDoc(ref)
-    // await adminStore.fetchSocialPages()
+    await adminStore.reloadSocialPages()
   }
-
-  // const fetchSocialPages = useCallback(async () => {
-
-  //   setSocialPages(data)
-  //   adminStore.setSocialPages(data)
-  // }, [user.uid])
-
-  // useEffect(() => {
-  //   fetchSocialPages()
-  // }, [fetchSocialPages])
 
   return (
     <SectionCard title='Social pages'>
