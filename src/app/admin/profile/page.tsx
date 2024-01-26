@@ -21,11 +21,14 @@ const Profile = observer(() => {
       </AdminBaseLayout.Content>
 
       <AdminBaseLayout.PagePreview>
-        <SmartphonePreview
-          pageLinks={pageLinks}
-          socialPages={socialPages}
-          user={user}
-        />
+        {user && (
+          <SmartphonePreview
+            pageLinks={pageLinks}
+            socialPages={socialPages}
+            user={user}
+            theme={user.theme}
+          />
+        )}
       </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
   )

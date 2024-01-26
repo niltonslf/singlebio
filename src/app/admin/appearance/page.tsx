@@ -22,8 +22,6 @@ const AppearancePage = observer(() => {
   const {user, socialPages, pageLinks} = adminStore
   const {theme, aux} = appearanceStore
 
-  const userTheme = {...user, theme}
-
   const {compress} = useImageCompressor()
   const {upload} = useImageUploader()
 
@@ -130,7 +128,8 @@ const AppearancePage = observer(() => {
         <SmartphonePreview
           pageLinks={pageLinks}
           socialPages={socialPages}
-          user={userTheme}
+          user={user}
+          theme={theme}
         />
       </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>

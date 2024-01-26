@@ -50,6 +50,7 @@ const LinksPage = observer(() => {
             pageLinks={pageLinks}
             socialPages={socialPages}
             user={user}
+            theme={user.theme}
           />
         </AdminBaseLayout.PagePreview>
       </AdminBaseLayout>

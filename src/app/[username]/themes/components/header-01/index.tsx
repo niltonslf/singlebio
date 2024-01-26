@@ -1,13 +1,14 @@
 import clsx from 'clsx'
 
 import {Avatar} from '@/app/components'
-import {User} from '@/domain/models'
+import {User, UserTheme} from '@/domain/models'
 
 type Header01Props = {
   user: User
+  theme: UserTheme
 }
 
-export const Header01 = ({user}: Header01Props) => {
+export const Header01 = ({user, theme}: Header01Props) => {
   return (
     <header className='mb-5 w-full'>
       <div className='mb-4 flex w-full justify-center'>
@@ -16,7 +17,7 @@ export const Header01 = ({user}: Header01Props) => {
           pictureUrl={user?.pictureUrl ?? ''}
           size={100}
           className={clsx([
-            user.theme?.name === 'arch'
+            theme?.name === 'arch'
               ? 'border-[10px] border-[#f9f9f9] bg-[#f9f9f9]'
               : '',
           ])}
@@ -26,7 +27,7 @@ export const Header01 = ({user}: Header01Props) => {
       {user?.name && (
         <h2
           className='mb-2 flex items-center justify-center text-2xl font-semibold text-neutral-900'
-          style={{color: user.theme?.usernameColor}}>
+          style={{color: theme?.usernameColor}}>
           {user?.name}
         </h2>
       )}
@@ -34,7 +35,7 @@ export const Header01 = ({user}: Header01Props) => {
       {user?.bio && (
         <p
           className='w-full break-before-auto text-center text-sm text-neutral-900'
-          style={{color: user.theme?.usernameColor}}>
+          style={{color: theme?.usernameColor}}>
           {user?.bio}
         </p>
       )}

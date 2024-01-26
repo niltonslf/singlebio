@@ -2,16 +2,15 @@
 
 import {makeAutoObservable} from 'mobx'
 
+import {adminStore} from '@/app/admin/context/admin-store'
 import {ThemeButtonStyles, UserTheme} from '@/domain/models'
-import {deepEqual, parseUserPageUrl} from '@/utils'
-
-import {parseThemeToQuery} from '../utils'
+import {deepEqual} from '@/utils'
 
 type Aux = {
   backgroundFile?: File
 }
 
-class AppearanceStore {
+export class AppearanceStore {
   private initialData: UserTheme = {
     backgroundImage: '',
     backgroundColor: '',
@@ -24,7 +23,6 @@ class AppearanceStore {
     name: '',
   }
   private themeConfig: UserTheme = {...this.initialData}
-  private themeConfigInitial: UserTheme = {...this.initialData}
 
   public aux: Aux = {
     backgroundFile: undefined,
@@ -39,19 +37,13 @@ class AppearanceStore {
   }
 
   get hasChanges() {
-    return !deepEqual(this.themeConfig, this.themeConfigInitial)
-  }
-
-  getPreviewUrl(username: string) {
-    return `${parseUserPageUrl(username)}/?preview=true&${parseThemeToQuery(
-      this.themeConfig,
-    )}`
+    return !deepEqual(this.themeConfig, adminStore.user?.theme)
   }
 
   setTheme(theme: UserTheme) {
     this.themeConfig = {...theme}
-    this.themeConfigInitial = {...theme}
   }
+
   setBackgroundFile(file?: File) {
     this.aux.backgroundFile = file
   }
@@ -78,9 +70,9 @@ class AppearanceStore {
   }
 
   reset() {
-    this.themeConfig = {...this.initialData}
-    this.themeConfigInitial = {...this.initialData}
+    if (!adminStore.user?.theme) return
 
+    this.themeConfig = adminStore.user?.theme
     this.aux.backgroundFile = undefined
   }
 }

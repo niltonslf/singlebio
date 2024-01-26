@@ -8,13 +8,13 @@ import {
 import {Wrapper} from '@/app/[username]/themes/default/components'
 import {ThemeProps} from '@/app/[username]/themes/types'
 
-export const DefaultTheme = ({links, socialPages, user}: ThemeProps) => {
+export const DefaultTheme = ({links, socialPages, user, theme}: ThemeProps) => {
   return (
     <>
-      <Wrapper theme={user.theme}>
-        <Header01 user={user} />
-        <SocialPages01 theme={user.theme} socialPages={socialPages} />
-        <PageLinks01 links={links} theme={user.theme} />
+      <Wrapper theme={theme}>
+        <Header01 user={user} theme={theme} />
+        <SocialPages01 theme={theme} socialPages={socialPages} />
+        <PageLinks01 links={links} theme={theme} />
         <GithubChart01 user={user} />
         <Footer01 />
       </Wrapper>

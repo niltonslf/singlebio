@@ -1,6 +1,10 @@
 import {redirect} from 'next/navigation'
 
-import { fetchUserLinks, fetchUserProfile, fetchUserSocialPages } from '@/api/usecases'
+import {
+  fetchUserLinks,
+  fetchUserProfile,
+  fetchUserSocialPages,
+} from '@/api/usecases'
 import {CookieConsentBanner} from '@/app/components'
 import {themeOptions} from '@/constants/theme-options'
 import {UserTheme} from '@/domain/models'
@@ -32,7 +36,12 @@ const UserPage = async ({params}: UserPageProps) => {
 
   return (
     <>
-      <Theme links={links} socialPages={socialPages} user={user} />
+      <Theme
+        links={links}
+        socialPages={socialPages}
+        user={user}
+        theme={user.theme}
+      />
       <CookieConsentBanner />
     </>
   )

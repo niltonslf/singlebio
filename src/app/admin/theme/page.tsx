@@ -32,7 +32,7 @@ const ThemePage = observer(() => {
         <h1 className='mb-8 text-2xl font-semibold'>Theme</h1>
 
         <SectionCard>
-          <div className='carousel-end carousel w-full gap-3 '>
+          <div className='carousel carousel-end w-full gap-3 '>
             {themes.map(theme => (
               <div
                 key={theme.name}
@@ -62,11 +62,14 @@ const ThemePage = observer(() => {
       </AdminBaseLayout.Content>
 
       <AdminBaseLayout.PagePreview>
-        <SmartphonePreview
-          pageLinks={pageLinks}
-          socialPages={socialPages}
-          user={user}
-        />
+        {user && (
+          <SmartphonePreview
+            pageLinks={pageLinks}
+            socialPages={socialPages}
+            user={user}
+            theme={user.theme}
+          />
+        )}
       </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
   )
