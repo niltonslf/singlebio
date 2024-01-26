@@ -11,6 +11,7 @@ import {ThemeOption, themeOptions} from '@/constants/theme-options'
 import {UserTheme} from '@/domain/models'
 
 import {AdminBaseLayout, SectionCard, SmartphonePreview} from '../components'
+import {Info} from 'lucide-react'
 
 const ThemePage = observer(() => {
   const {user} = adminStore
@@ -31,7 +32,7 @@ const ThemePage = observer(() => {
         <h1 className='mb-8 text-2xl font-semibold'>Theme</h1>
 
         <SectionCard>
-          <div className='carousel carousel-end w-full gap-3 '>
+          <div className='carousel-end carousel w-full gap-3 '>
             {themes.map(theme => (
               <div
                 key={theme.name}
@@ -50,6 +51,12 @@ const ThemePage = observer(() => {
                 />
               </div>
             ))}
+          </div>
+          <div className='alert alert-info mt-5'>
+            <Info size={18} />
+            <span>
+              Some of your customizations can be lost by selecting a new theme.
+            </span>
           </div>
         </SectionCard>
       </AdminBaseLayout.Content>
