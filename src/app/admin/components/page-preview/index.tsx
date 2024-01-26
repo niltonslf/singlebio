@@ -9,12 +9,7 @@ type Props = {
   theme: UserTheme
 }
 
-export const SmartphonePreview = ({
-  user,
-  socialPages,
-  pageLinks,
-  theme,
-}: Props) => {
+export const PagePreview = ({user, socialPages, pageLinks, theme}: Props) => {
   const Theme = themeOptions[theme?.name || 'default'].component
 
   return (
@@ -31,4 +26,4 @@ export const SmartphonePreview = ({
   )
 }
 
-SmartphonePreview.displayName = 'SmartphonePreview'
+PagePreview.displayName = 'PagePreview'

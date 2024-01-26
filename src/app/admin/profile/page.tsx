@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite'
 
 import {adminStore} from '@/app/admin/context/admin-store'
 
-import {AdminBaseLayout, SmartphonePreview} from '../components'
+import {AdminBaseLayout, PagePreview} from '../components'
 import {GithubSection, ProfileForm, SocialCard} from './components'
 
 const Profile = observer(() => {
@@ -22,7 +22,7 @@ const Profile = observer(() => {
 
       <AdminBaseLayout.PagePreview>
         {user && (
-          <SmartphonePreview
+          <PagePreview
             pageLinks={pageLinks}
             socialPages={socialPages}
             user={user}

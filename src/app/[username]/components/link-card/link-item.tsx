@@ -3,24 +3,25 @@ import Link from 'next/link'
 import {CSSProperties, ReactNode} from 'react'
 
 import {themeButtonStyle} from '@/constants/theme-options'
-import {ThemeButtonStyles} from '@/domain/models'
+import {Link as LinkPage, ThemeButtonStyles} from '@/domain/models'
 import {parseExternalUrl} from '@/utils'
 
 type LinkItemProps = {
-  path: string
+  link: LinkPage
   children: ReactNode
   variant?: ThemeButtonStyles
   styles?: CSSProperties
 }
 
-export const LinkItem = ({path, children, variant, styles}: LinkItemProps) => {
+export const LinkItem = ({link, children, variant, styles}: LinkItemProps) => {
   const Button = themeButtonStyle[variant || 'default'].component
 
   return (
     <Link
-      href={parseExternalUrl(path)}
+      href={parseExternalUrl(link.url)}
       target='_blank'
-      className='user-link-item'>
+      id='page-link-item'
+      data-id={link.id}>
       <Button
         className={clsx([
           'btn btn-md flex h-auto w-full flex-wrap items-center justify-center bg-white p-3 text-center font-medium text-base-200 shadow-md transition-all hover:scale-95 hover:text-base-content md:py-5',

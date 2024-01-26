@@ -4,8 +4,8 @@ import {LinkCard} from '@/app/[username]/components/link-card'
 import {Link, UserTheme} from '@/domain/models'
 
 type PageLinks01Props = {
-  links?: Link[]
-  theme?: UserTheme
+  links: Link[]
+  theme: UserTheme
 }
 
 export const PageLinks01 = ({links, theme}: PageLinks01Props) => {
@@ -26,8 +26,8 @@ export const PageLinks01 = ({links, theme}: PageLinks01Props) => {
         links.map(link => {
           return (
             <LinkCard.Item
-              key={link.url}
-              path={link.url || '#'}
+              key={link.id}
+              link={link}
               variant={theme?.buttonStyle}
               styles={styles}>
               {link.label}

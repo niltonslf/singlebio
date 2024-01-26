@@ -5,7 +5,7 @@ import {useEffect, useState} from 'react'
 
 import {
   AdminBaseLayout,
-  SmartphonePreview,
+  PagePreview,
   BetaVersionWarningModal,
   PageLoader,
 } from '@/app/admin/components'
@@ -46,7 +46,7 @@ const LinksPage = observer(() => {
         </AdminBaseLayout.Content>
 
         <AdminBaseLayout.PagePreview>
-          <SmartphonePreview
+          <PagePreview
             pageLinks={pageLinks}
             socialPages={socialPages}
             user={user}

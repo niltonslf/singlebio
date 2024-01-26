@@ -4,7 +4,7 @@ import {AlertTriangle, CheckCircle} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
-import {SmartphonePreview} from '@/app/admin/components'
+import {PagePreview} from '@/app/admin/components'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {useImageUploader, useImageCompressor} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
@@ -125,7 +125,7 @@ const AppearancePage = observer(() => {
       </AdminBaseLayout.Content>
 
       <AdminBaseLayout.PagePreview>
-        <SmartphonePreview
+        <PagePreview
           pageLinks={pageLinks}
           socialPages={socialPages}
           user={user}

@@ -11,7 +11,7 @@ import {authStore} from '@/app/auth/context/auth-store'
 import {ThemeOption, themeOptions} from '@/constants/theme-options'
 import {UserTheme} from '@/domain/models'
 
-import {AdminBaseLayout, SectionCard, SmartphonePreview} from '../components'
+import {AdminBaseLayout, SectionCard, PagePreview} from '../components'
 
 const ThemePage = observer(() => {
   const {user, socialPages, pageLinks} = adminStore
@@ -63,7 +63,7 @@ const ThemePage = observer(() => {
 
       <AdminBaseLayout.PagePreview>
         {user && (
-          <SmartphonePreview
+          <PagePreview
             pageLinks={pageLinks}
             socialPages={socialPages}
             user={user}
