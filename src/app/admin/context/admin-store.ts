@@ -32,7 +32,18 @@ class AdminStore {
     this.pageLinks = []
   }
 
-  public async fetchLinks(): Promise<Link[]> {}
+  public async fetchLinks(): Promise<Link[]> {
+    if (!this?.user) throw ERROR_MESSAGES['user-not-found']
+
+    const userRef = doc(db, 'users', this.user.uid)
+    // TODO: invert links order to asc
+    const q = query(collection(userRef, 'links'), orderBy('order', 'desc')) 
+    const res = await getDocs(q)
+
+    if (res.empty) return []
+
+    return res.docs.map(link => link.data()) as Link[]
+  }
 
   public async fetchSocialPages(): Promise<SocialPage[]> {
     if (!this?.user) throw ERROR_MESSAGES['user-not-found']
@@ -42,11 +53,11 @@ class AdminStore {
       collection(userRef, 'social-pages'),
       orderBy('order', 'asc'),
     )
-    const socialReq = await getDocs(q)
+    const res = await getDocs(q)
 
-    if (socialReq.empty) return []
+    if (res.empty) return []
 
-    return socialReq.docs.map(social => social.data()) as SocialPage[]
+    return res.docs.map(social => social.data()) as SocialPage[]
   }
 
   public async fetchData(): Promise<void> {
