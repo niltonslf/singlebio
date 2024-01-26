@@ -19,7 +19,7 @@ export const useValidateAuth = () => {
         authStore.clearUser()
         push('/auth')
       } else {
-        await authStore.authUser(firebaseUser)
+        await authStore.authOrCreateUser(firebaseUser)
 
         const isEmailAccount =
           firebaseUser.providerData[0].providerId === Providers.PASSWORD

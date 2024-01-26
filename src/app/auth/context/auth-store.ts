@@ -43,7 +43,7 @@ class AuthStore {
       signInWithGithub: action,
       signInWithEmailAndPassword: action,
       createWithEmailAndPassword: action,
-      authUser: action,
+      authOrCreateUser: action,
       updateUser: action,
       logout: action,
       deleteUser: action,
@@ -61,7 +61,7 @@ class AuthStore {
   public async signInWithGoogle(): Promise<void> {
     try {
       const {user} = await signInWithPopup(auth, googleProvider)
-      return this.authUser(user)
+      return this.authOrCreateUser(user)
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
       if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
@@ -73,7 +73,7 @@ class AuthStore {
     try {
       const {user} = await signInWithPopup(auth, githubProvider)
 
-      return this.authUser(user)
+      return this.authOrCreateUser(user)
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
       if (ERROR_MESSAGES[code]) throw ERROR_MESSAGES[code]
@@ -91,7 +91,7 @@ class AuthStore {
       const {user} = await createUserWithEmailAndPassword(auth, email, password)
       await updateProfile(user, {displayName})
       await sendEmailVerification(user, {url: continueUrl})
-      await this.authUser({...user, displayName})
+      await this.authOrCreateUser({...user, displayName})
       await this.logout()
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
@@ -107,7 +107,7 @@ class AuthStore {
   ): Promise<void> {
     try {
       const {user} = await signInWithEmailAndPasswordFB(auth, email, password)
-      return this.authUser(user)
+      return this.authOrCreateUser(user)
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
 
@@ -116,7 +116,7 @@ class AuthStore {
     }
   }
 
-  public async authUser(firebaseUser: FbUser): Promise<void> {
+  public async authOrCreateUser(firebaseUser: FbUser): Promise<void> {
     this.setFirebaseUser(firebaseUser)
 
     const res = await this.fetchFirebaseUser(firebaseUser)

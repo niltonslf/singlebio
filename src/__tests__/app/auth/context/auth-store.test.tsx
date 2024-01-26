@@ -261,7 +261,7 @@ describe('AuthStore', () => {
       const userRes = makeGetDocsResponse({data: userMock, exists: true})
       jest.spyOn(firestore, 'getDoc').mockResolvedValue(userRes)
 
-      await authStore.authUser(firebaseUser)
+      await authStore.authOrCreateUser(firebaseUser)
 
       expect({...authStore.firebaseUser}).toEqual(firebaseUser)
       expect({...adminStore.user}).toEqual(userMock)
@@ -283,7 +283,7 @@ describe('AuthStore', () => {
         .mockImplementation(() => Promise.resolve())
 
       // SUT
-      await authStore.authUser(firebaseUser)
+      await authStore.authOrCreateUser(firebaseUser)
 
       expect({...authStore.firebaseUser}).toEqual(firebaseUser)
       expect({...adminStore.user}).toEqual(userMock)
