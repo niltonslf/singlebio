@@ -32,12 +32,17 @@ class AdminStore {
     this.pageLinks = []
   }
 
-  public async fetchLinks(): Promise<Link[]> {
+  public async reloadPageLinks() {
+    const data = await this.fetchPageLinks()
+    this.setPageLinks(data)
+  }
+
+  public async fetchPageLinks(): Promise<Link[]> {
     if (!this?.user) throw ERROR_MESSAGES['user-not-found']
 
     const userRef = doc(db, 'users', this.user.uid)
     // TODO: invert links order to asc
-    const q = query(collection(userRef, 'links'), orderBy('order', 'desc')) 
+    const q = query(collection(userRef, 'links'), orderBy('order', 'desc'))
     const res = await getDocs(q)
 
     if (res.empty) return []
@@ -62,7 +67,7 @@ class AdminStore {
 
   public async fetchData(): Promise<void> {
     const [links, socialPages] = await Promise.all([
-      this.fetchLinks(),
+      this.fetchPageLinks(),
       this.fetchSocialPages(),
     ])
 

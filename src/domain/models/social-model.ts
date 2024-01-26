@@ -3,7 +3,6 @@ export type SocialPage = {
   url: string
   name: string
   order: number
-  clicks: number
 }
 
 export type SocialPageCreation = Omit<SocialPage, 'id'>

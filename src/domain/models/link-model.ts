@@ -3,7 +3,6 @@ export type Link = {
   url: string
   label: string
   order: number
-  clicks: number
 }
 
 export type LinkCreation = Omit<Link, 'id'>

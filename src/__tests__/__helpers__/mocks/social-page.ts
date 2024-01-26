@@ -12,6 +12,5 @@ export const makeSocialPage = (
     name: name ?? faker.person.firstName(),
     url: url ?? faker.internet.url(),
     order: order ?? faker.number.int(),
-    clicks: 0,
   }
 }

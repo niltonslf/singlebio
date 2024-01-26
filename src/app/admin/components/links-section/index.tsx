@@ -1,6 +1,13 @@
 'use client'
 
-import {collection, deleteDoc, doc, addDoc, setDoc} from 'firebase/firestore'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  addDoc,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore'
 import {Info, Plus} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 
@@ -48,35 +55,23 @@ export const LinksSection = observer(({user}: CardListProps) => {
 
   const handleAddNewLink = async () => {
     const res = await doc(db, 'users', user.uid)
-    const emptyLink: LinkCreation = {
-      label: '',
-      url: '',
-      clicks: 0,
-      order: getLastOrder(),
-    }
-    addDoc(collection(res, 'links'), emptyLink)
+    const emptyLink: LinkCreation = {label: '', url: '', order: getLastOrder()}
+    const docRef = await addDoc(collection(res, 'links'), emptyLink)
+    await updateDoc(docRef, {id: docRef.id})
+    adminStore.reloadPageLinks()
   }
 
   const handleSaveLink = async (data: Link) => {
-    if (data.id)
-      return setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
-  }
-
-  const handleSubmitForm = async (data: Link) => {
-    await handleSaveLink(data)
+    await setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
+    adminStore.reloadPageLinks()
   }
 
   const deleteLink = async (link: Link) => {
-    if (link.id) {
-      await deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
-    }
+    await deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
+    adminStore.reloadPageLinks()
   }
 
-  const updateSort = (
-    links: Required<Link>[],
-    oldIndex: number,
-    newIndex: number,
-  ): void => {
+  const updateSort = (links: Link[], oldIndex: number, newIndex: number) => {
     // MOVING DOWN
     if (oldIndex < newIndex) {
       const [start, end] = [oldIndex, newIndex - 1]
@@ -91,7 +86,6 @@ export const LinksSection = observer(({user}: CardListProps) => {
 
     // MOVING UP
     const [start, end] = [newIndex + 1, oldIndex]
-
     handleSaveLink({...links[newIndex], order: links[start].order})
 
     for (let index = start; index <= end; index++) {
@@ -136,7 +130,7 @@ export const LinksSection = observer(({user}: CardListProps) => {
               strategy={verticalListSortingStrategy}>
               {pageLinks.map(link => (
                 <CardLink key={link.id} onDelete={deleteLink} link={link}>
-                  <AddLinkForm saveLink={handleSubmitForm} link={link} />
+                  <AddLinkForm saveLink={handleSaveLink} link={link} />
                 </CardLink>
               ))}
             </SortableContext>

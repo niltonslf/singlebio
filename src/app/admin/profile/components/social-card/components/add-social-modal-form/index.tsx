@@ -21,7 +21,6 @@ export const AddSocialModalForm = ({
   const [formData, setFormData] = useState<SocialPageCreation>({
     url: '',
     name: '',
-    clicks: 0,
     order: 0,
   })
   const [filter, setFilter] = useState('')
@@ -49,7 +48,7 @@ export const AddSocialModalForm = ({
   }
 
   const resetForm = () => {
-    setFormData({name: '', url: '', clicks: 0, order: 0})
+    setFormData({name: '', url: '', order: 0})
   }
 
   const handleClose = () => {

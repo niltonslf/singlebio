@@ -12,6 +12,5 @@ export const makeLink = (
     label: label ?? faker.word.words(2),
     url: url ?? faker.internet.url(),
     order: order ?? faker.number.int(),
-    clicks: 0,
   }
 }
