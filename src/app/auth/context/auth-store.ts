@@ -124,12 +124,17 @@ class AuthStore {
       return adminStore.setUser(res.data() as User)
     }
 
-    // create new user
+    // create new user into the firestore
+    const newUser = await this.persistUser(firebaseUser)
+    adminStore.setUser({...newUser})
+  }
+
+  private async persistUser(firebaseUser: FbUser) {
     const defaultTheme = themeOptions['default'].defaultTheme
     const newUser = parseToUser(firebaseUser, undefined, defaultTheme)
     await setDoc(doc(db, 'users', newUser.uid), newUser)
 
-    adminStore.setUser({...newUser})
+    return newUser
   }
 
   private async fetchFirebaseUser(
