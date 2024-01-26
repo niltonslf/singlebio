@@ -19,8 +19,10 @@ import {
 import {appearanceStore} from './context'
 
 const AppearancePage = observer(() => {
-  const {user} = adminStore
+  const {user, socialPages, pageLinks} = adminStore
   const {theme, aux} = appearanceStore
+
+  const userTheme = {...user, theme}
 
   const {compress} = useImageCompressor()
   const {upload} = useImageUploader()
@@ -125,7 +127,11 @@ const AppearancePage = observer(() => {
       </AdminBaseLayout.Content>
 
       <AdminBaseLayout.PagePreview>
-        <SmartphonePreview />
+        <SmartphonePreview
+          pageLinks={pageLinks}
+          socialPages={socialPages}
+          user={userTheme}
+        />
       </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
   )

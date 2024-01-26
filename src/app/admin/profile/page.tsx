@@ -8,7 +8,7 @@ import {AdminBaseLayout, SmartphonePreview} from '../components'
 import {GithubSection, ProfileForm, SocialCard} from './components'
 
 const Profile = observer(() => {
-  const {user} = adminStore
+  const {user, socialPages, pageLinks} = adminStore
 
   return (
     <AdminBaseLayout>
@@ -21,7 +21,11 @@ const Profile = observer(() => {
       </AdminBaseLayout.Content>
 
       <AdminBaseLayout.PagePreview>
-        <SmartphonePreview />
+        <SmartphonePreview
+          pageLinks={pageLinks}
+          socialPages={socialPages}
+          user={user}
+        />
       </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
   )

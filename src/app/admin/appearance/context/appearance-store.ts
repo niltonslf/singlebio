@@ -3,7 +3,7 @@
 import {makeAutoObservable} from 'mobx'
 
 import {ThemeButtonStyles, UserTheme} from '@/domain/models'
-import {parseUserPageUrl} from '@/utils'
+import {deepEqual, parseUserPageUrl} from '@/utils'
 
 import {parseThemeToQuery} from '../utils'
 
@@ -39,20 +39,7 @@ class AppearanceStore {
   }
 
   get hasChanges() {
-    return (
-      this.themeConfig.backgroundImage !=
-        this.themeConfigInitial.backgroundImage ||
-      this.themeConfig.backgroundColor !=
-        this.themeConfigInitial.backgroundColor ||
-      this.themeConfig.buttonBackground !=
-        this.themeConfigInitial.buttonBackground ||
-      this.themeConfig.buttonTextColor !=
-        this.themeConfigInitial.buttonTextColor ||
-      this.themeConfig.usernameColor != this.themeConfigInitial.usernameColor ||
-      this.themeConfig.socialIconColor !=
-        this.themeConfigInitial.socialIconColor ||
-      this.themeConfig.buttonStyle != this.themeConfigInitial.buttonStyle
-    )
+    return !deepEqual(this.themeConfig, this.themeConfigInitial)
   }
 
   getPreviewUrl(username: string) {

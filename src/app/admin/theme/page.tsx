@@ -1,6 +1,7 @@
 'use client'
 
 import clsx from 'clsx'
+import {Info} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import Image from 'next/image'
 
@@ -11,10 +12,9 @@ import {ThemeOption, themeOptions} from '@/constants/theme-options'
 import {UserTheme} from '@/domain/models'
 
 import {AdminBaseLayout, SectionCard, SmartphonePreview} from '../components'
-import {Info} from 'lucide-react'
 
 const ThemePage = observer(() => {
-  const {user} = adminStore
+  const {user, socialPages, pageLinks} = adminStore
   const themes = Object.keys(themeOptions).map(key => themeOptions[key])
 
   const handleSelectTheme = async (theme: ThemeOption<ThemeProps>) => {
@@ -62,7 +62,11 @@ const ThemePage = observer(() => {
       </AdminBaseLayout.Content>
 
       <AdminBaseLayout.PagePreview>
-        <SmartphonePreview />
+        <SmartphonePreview
+          pageLinks={pageLinks}
+          socialPages={socialPages}
+          user={user}
+        />
       </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
   )

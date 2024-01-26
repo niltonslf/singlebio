@@ -1,20 +1,27 @@
 import {observer} from 'mobx-react-lite'
 
 import {SmartphoneCanvas} from '@/app/admin/components'
-import {adminStore} from '@/app/admin/context/admin-store'
 import {themeOptions} from '@/constants/theme-options'
+import {Link, SocialPage, User} from '@/domain/models'
 
-export const SmartphonePreview = observer(() => {
-  const {user, socialPages, pageLinks} = adminStore
-  const Theme = themeOptions[user?.theme?.name || 'default'].component
+type Props = {
+  user?: User
+  socialPages: SocialPage[]
+  pageLinks: Link[]
+}
 
-  return (
-    <SmartphoneCanvas>
-      {user && (
-        <Theme links={pageLinks} socialPages={socialPages} user={user} />
-      )}
-    </SmartphoneCanvas>
-  )
-})
+export const SmartphonePreview = observer(
+  ({user, socialPages, pageLinks}: Props) => {
+    const Theme = themeOptions[user?.theme?.name || 'default'].component
+
+    return (
+      <SmartphoneCanvas>
+        {user && (
+          <Theme links={pageLinks} socialPages={socialPages} user={user} />
+        )}
+      </SmartphoneCanvas>
+    )
+  },
+)
 
 SmartphonePreview.displayName = 'SmartphonePreview'

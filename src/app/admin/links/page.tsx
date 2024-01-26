@@ -15,7 +15,7 @@ import {authStore} from '@/app/auth/context/auth-store'
 import {SetUsernameModal} from '@/app/components'
 
 const LinksPage = observer(() => {
-  const user = adminStore.user
+  const {user, socialPages, pageLinks} = adminStore
 
   const [showUsernameModal, setShowUsernameModal] = useState(false)
   const [showBetaWarningModal, setShowBetaWarningModal] = useState(false)
@@ -46,7 +46,11 @@ const LinksPage = observer(() => {
         </AdminBaseLayout.Content>
 
         <AdminBaseLayout.PagePreview>
-          <SmartphonePreview />
+          <SmartphonePreview
+            pageLinks={pageLinks}
+            socialPages={socialPages}
+            user={user}
+          />
         </AdminBaseLayout.PagePreview>
       </AdminBaseLayout>
 
