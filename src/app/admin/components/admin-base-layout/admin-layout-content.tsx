@@ -14,7 +14,7 @@ export const AdminLayoutContent = ({
   return (
     <section
       className={merge([
-        'flex h-full w-full flex-col py-10 md:w-[60%]',
+        'flex h-full w-full flex-col py-10 md:w-[50%]',
         className,
       ])}>
       {children}
