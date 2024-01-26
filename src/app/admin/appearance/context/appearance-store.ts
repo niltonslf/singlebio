@@ -11,14 +11,18 @@ type Aux = {
 }
 
 export class AppearanceStore {
+  constructor() {
+    makeAutoObservable(this)
+  }
+
   private initialData: UserTheme = {
     backgroundImage: '',
     backgroundColor: '',
-    buttonBackground: '#FFF',
-    buttonTextColor: '#000',
+    buttonBackground: '',
+    buttonTextColor: '',
     buttonStyle: 'default',
-    usernameColor: '#000',
-    socialIconColor: '#000',
+    usernameColor: '',
+    socialIconColor: '',
     socialDefaultColor: false,
     name: '',
   }
@@ -26,10 +30,6 @@ export class AppearanceStore {
 
   public aux: Aux = {
     backgroundFile: undefined,
-  }
-
-  constructor() {
-    makeAutoObservable(this)
   }
 
   get theme() {
