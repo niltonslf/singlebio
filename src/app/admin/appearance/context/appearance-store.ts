@@ -1,6 +1,6 @@
 'use client'
 
-import {makeAutoObservable, toJS} from 'mobx'
+import {makeAutoObservable} from 'mobx'
 
 import {adminStore} from '@/app/admin/context/admin-store'
 import {ThemeButtonStyles, UserTheme} from '@/domain/models'
@@ -41,7 +41,7 @@ export class AppearanceStore {
   }
 
   setTheme(theme: UserTheme) {
-    this.themeConfig = toJS(theme)
+    this.themeConfig = {...theme}
   }
 
   setBackgroundFile(file?: File) {
@@ -72,7 +72,7 @@ export class AppearanceStore {
   reset() {
     if (!adminStore.user?.theme) return
 
-    this.themeConfig = toJS(adminStore.user?.theme)
+    this.themeConfig = {...adminStore.user?.theme}
     this.aux.backgroundFile = undefined
   }
 }

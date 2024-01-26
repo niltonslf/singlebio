@@ -25,7 +25,7 @@ export const Wrapper = ({theme, children}: WrapperProps) => {
         className={clsx([
           'flex h-[100dvh] w-screen flex-col items-center justify-start  overflow-y-auto',
           'px-5 pb-8 pt-20',
-          !theme?.backgroundImage ? defaultBg : '',
+          !theme?.backgroundImage && !theme?.backgroundColor ? defaultBg : '',
         ])}
         style={{
           backgroundColor: theme?.backgroundColor,

@@ -8,13 +8,13 @@ import {
 } from '@/app/[username]/themes/components'
 import {ThemeProps} from '@/app/[username]/themes/types'
 
-export const ArchTheme = ({links, socialPages, user}: ThemeProps) => {
+export const ArchTheme = ({links, socialPages, user, theme}: ThemeProps) => {
   return (
     <>
-      <Wrapper theme={user.theme}>
-        <Header02 user={user} />
-        <SocialPages01 socialPages={socialPages} theme={user.theme} />
-        <PageLinks01 links={links} theme={user.theme} />
+      <Wrapper theme={theme}>
+        <Header02 user={user} theme={theme} />
+        <SocialPages01 socialPages={socialPages} theme={theme} />
+        <PageLinks01 links={links} theme={theme} />
         <GithubChart01 user={user} />
         <Footer01 />
       </Wrapper>
