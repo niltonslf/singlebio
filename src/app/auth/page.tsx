@@ -3,7 +3,7 @@
 import {observer} from 'mobx-react-lite'
 import Link from 'next/link'
 import {useRouter} from 'next/navigation'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 
 import {useValidateAuth} from '@/app/admin/hooks'
 import {Button, GoogleIcon, GithubIcon, Appear} from '@/app/components'
@@ -20,7 +20,7 @@ const SignIn = observer(() => {
   const {push} = useRouter()
 
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(isFetchingUser)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleAllLoginMethods = async (
     method: MethodOptions,
@@ -50,6 +50,10 @@ const SignIn = observer(() => {
 
   const handleLoginPassword = (data: LoginWithPassword) =>
     handleAllLoginMethods('password', data)
+
+  useEffect(() => {
+    setIsLoading(isFetchingUser)
+  }, [isFetchingUser])
 
   return (
     <div className='flex flex-col'>

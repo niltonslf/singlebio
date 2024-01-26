@@ -1,4 +1,4 @@
-import { UserTheme } from "@/domain/models/user-theme-model"
+import {UserTheme} from '@/domain/models/user-theme-model'
 
 export type UserFeatures = {
   github: {
@@ -13,7 +13,7 @@ export type User = {
   email: string
   bio?: string
   username?: string
-  theme?: UserTheme
+  theme: UserTheme
   pageViews: number
   features?: UserFeatures
 }
