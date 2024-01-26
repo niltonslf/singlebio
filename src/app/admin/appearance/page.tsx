@@ -109,13 +109,13 @@ const AppearancePage = observer(() => {
 
             <div className='flex flex-row flex-nowrap items-center gap-5'>
               <button
-                className='btn btn-primary btn-md flex-1 md:btn-wide'
+                className='btn btn-primary btn-md flex-[2] md:btn-wide'
                 onClick={() => handleSaveAppearance()}>
                 {isLoading && <span className='loading loading-spinner'></span>}
                 Save
               </button>
               <button
-                className='btn btn-warning btn-md flex-1 md:btn-wide'
+                className='btn btn-md flex-1 bg-base-300 md:btn-wide'
                 onClick={() => handleResetAppearance()}>
                 Reset
               </button>
