@@ -1,7 +1,3 @@
-
-
-
-
 const Admin = () => {
   return null
 }

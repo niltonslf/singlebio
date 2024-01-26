@@ -7,7 +7,7 @@ import {
   setup,
 } from '@/__tests__/__helpers__'
 import {adminStore} from '@/app/admin/context/admin-store'
-import AdminLayout from '@/app/admin/layout'
+import AdminLayoutWrapper from '@/app/admin/layout'
 import AdminPage from '@/app/admin/test'
 import {authStore} from '@/app/auth/context/auth-store'
 import {parseUserPageUrl} from '@/utils'
@@ -38,9 +38,9 @@ jest.mock('@/app/admin/context/smartphone-context', () => {
 
 const makeSUT = async () => {
   return setup(
-    <AdminLayout>
+    <AdminLayoutWrapper>
       <AdminPage />
-    </AdminLayout>,
+    </AdminLayoutWrapper>,
   )
 }
 

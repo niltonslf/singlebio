@@ -1,7 +1,7 @@
 import routerMock from 'next-router-mock'
 
 import {fail, handlePageAuthentication, setup} from '@/__tests__/__helpers__'
-import AdminLayout from '@/app/admin/layout'
+import AdminLayoutWrapper from '@/app/admin/layout'
 import {cleanup, waitFor} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
@@ -23,9 +23,9 @@ jest.mock('firebase/firestore', () => ({
 const makeSUT = async () => {
   return await waitFor(() =>
     setup(
-      <AdminLayout>
+      <AdminLayoutWrapper>
         <p>children</p>
-      </AdminLayout>,
+      </AdminLayoutWrapper>,
     ),
   )
 }

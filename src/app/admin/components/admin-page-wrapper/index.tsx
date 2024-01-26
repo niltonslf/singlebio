@@ -2,17 +2,27 @@
 
 import {AlignJustify} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
-import {ReactNode, useState} from 'react'
+import {ReactNode, useEffect, useState} from 'react'
 
-import {Header, Sidebar} from '@/app/admin/components'
+import {Header, PageLoader, Sidebar} from '@/app/admin/components'
+import {adminStore} from '@/app/admin/context/admin-store'
+import {useValidateAuth} from '@/app/admin/hooks'
 import {merge} from '@/utils'
 
 type Props = {
   children: ReactNode
 }
 
-const AdminPageWrapper = observer(({children}: Props) => {
+const AdminLayoutWrapper = observer(({children}: Props) => {
+  const {isFetchingUser} = useValidateAuth()
+
   const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (!isFetchingUser) {
+      adminStore.fetchData()
+    }
+  }, [isFetchingUser])
 
   const navbarHandler = (
     <button
@@ -21,6 +31,13 @@ const AdminPageWrapper = observer(({children}: Props) => {
       <AlignJustify size={18} />
     </button>
   )
+
+  if (isFetchingUser)
+    return (
+      <div className='flex h-screen w-screen items-center justify-center'>
+        <PageLoader />
+      </div>
+    )
 
   return (
     <main
@@ -47,4 +64,4 @@ const AdminPageWrapper = observer(({children}: Props) => {
   )
 })
 
-export default AdminPageWrapper
+export default AdminLayoutWrapper

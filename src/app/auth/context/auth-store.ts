@@ -25,7 +25,6 @@ import {
 } from 'firebase/firestore'
 import {action, makeObservable, observable} from 'mobx'
 
-import {sessionLogin} from '@/api/usecases/auth/session-handler'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {APP_URL} from '@/config/envs'
 import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
@@ -117,10 +116,6 @@ class AuthStore {
   }
 
   public async authOrCreateUser(firebaseUser: FbUser): Promise<void> {
-    // set API session
-    const idToken = await firebaseUser.getIdToken()
-    await sessionLogin(idToken)
-
     this.setFirebaseUser(firebaseUser)
 
     const res = await this.fetchFirebaseUser(firebaseUser)

@@ -1,35 +1,33 @@
-'use client'
+import {Metadata} from 'next'
+import {ReactNode} from 'react'
 
-import {observer} from 'mobx-react-lite'
-import {ReactNode, useEffect} from 'react'
-
-import AdminPageWrapper from '@/app/admin/components/admin-page-wrapper'
-import {PageLoader} from '@/app/admin/components/page-loader'
-import {adminStore} from '@/app/admin/context/admin-store'
-
-import {useValidateAuth} from './hooks'
+import AdminLayoutWrapper from '@/app/admin/components/admin-page-wrapper'
+import {APP_NAME} from '@/config/envs'
 
 type AdminLayoutProps = {
   children: ReactNode
 }
 
-const AdminLayout = observer(({children}: AdminLayoutProps) => {
-  const {isFetchingUser} = useValidateAuth()
+export const metadata: Metadata = {
+  title: {
+    template: `%s - ${APP_NAME}`,
+    default: 'Dashboard',
+  },
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      'index': false,
+      'follow': false,
+      'noimageindex': false,
+      'max-image-preview': 'large',
+    },
+  },
+}
 
-  useEffect(() => {
-    if (!isFetchingUser) {
-      adminStore.fetchData()
-    }
-  }, [isFetchingUser])
-
-  if (isFetchingUser)
-    return (
-      <div className='flex h-screen w-screen items-center justify-center'>
-        <PageLoader />
-      </div>
-    )
-
-  return <AdminPageWrapper>{children}</AdminPageWrapper>
-})
+const AdminLayout = ({children}: AdminLayoutProps) => {
+  return <AdminLayoutWrapper>{children}</AdminLayoutWrapper>
+}
 
 export default AdminLayout

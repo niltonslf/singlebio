@@ -9,7 +9,7 @@ import {
 } from '@/__tests__/__helpers__'
 import {appearanceStore} from '@/app/admin/appearance/context'
 import AppearancePage from '@/app/admin/appearance/page'
-import AdminLayout from '@/app/admin/layout'
+import AdminLayoutWrapper from '@/app/admin/layout'
 import {authStore} from '@/app/auth/context/auth-store'
 import {act, cleanup, screen, waitFor} from '@testing-library/react'
 
@@ -49,9 +49,9 @@ const makeSUT = () => {
   handlePageAuthentication(makeFbUser())
 
   return setup(
-    <AdminLayout>
+    <AdminLayoutWrapper>
       <AppearancePage />
-    </AdminLayout>,
+    </AdminLayoutWrapper>,
   )
 }
 

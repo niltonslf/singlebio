@@ -11,8 +11,12 @@ const inter = Inter({subsets: ['latin']})
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL
 
 export const metadata: Metadata = {
-  title: `${APP_NAME}: Share anything in your bio in seconds`,
-  description: `${APP_NAME} makes your life simple by marking room for you to share your digital world with just a single link. Put everything about you together in your exclusive personal page and be discovered easily sharing your links in a social media, blog page, anywhere.`,
+  title: {
+    template: `%s - ${APP_NAME}`,
+    default: `Share anything in your bio in seconds`,
+    absolute: `${APP_NAME} - Share anything in your bio in seconds`,
+  },
+  description: `${APP_NAME} makes your life simple by marking room for you to share your digital world with just a single link. Put everything about you together in your exclusive personal page and be discovered easily sharing your links on your instagram, tiktok, facebook, discord, telegram, blog page, anywhere.`,
   keywords: [
     'link sharing',
     'share link on Instagram',
