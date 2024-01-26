@@ -1,23 +1,14 @@
 'use client'
 
-import {
-  collection,
-  onSnapshot,
-  query,
-  deleteDoc,
-  doc,
-  addDoc,
-  setDoc,
-} from 'firebase/firestore'
+import {collection, deleteDoc, doc, addDoc, setDoc} from 'firebase/firestore'
 import {Info, Plus} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
-import {useCallback, useEffect, useState} from 'react'
 
 import {adminStore} from '@/app/admin/context/admin-store'
 import {Link, LinkCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
 
-import {AddLinkForm, PageLoader} from '..'
+import {AddLinkForm} from '..'
 
 import {
   DndContext,
@@ -42,6 +33,8 @@ type CardListProps = {
 }
 
 export const LinksSection = observer(({user}: CardListProps) => {
+  const {pageLinks} = adminStore
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -49,11 +42,8 @@ export const LinksSection = observer(({user}: CardListProps) => {
     }),
   )
 
-  const [links, setLinks] = useState<Required<Link>[]>([])
-  const [isFetchingData, setIsFetchingData] = useState(false)
-
   const getLastOrder = () => {
-    return links.reduce((prev, cur) => Math.max(prev, cur.order + 1), 0)
+    return pageLinks.reduce((prev, cur) => Math.max(prev, cur.order + 1), 0)
   }
 
   const handleAddNewLink = async () => {
@@ -81,31 +71,6 @@ export const LinksSection = observer(({user}: CardListProps) => {
       await deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
     }
   }
-
-  const fetchData = useCallback(() => {
-    setIsFetchingData(true)
-
-    const customQuery = query(collection(db, 'users', user.uid, 'links'))
-    const unsubscribe = onSnapshot(customQuery, querySnapshot => {
-      setLinks([])
-
-      let newLinks: Required<Link>[] = []
-
-      if (!querySnapshot.size) return setIsFetchingData(false)
-
-      querySnapshot.docs.forEach((doc: any) =>
-        newLinks.push({...doc.data(), id: doc.id}),
-      )
-
-      newLinks = newLinks.sort((prev, next) => next.order - prev.order)
-
-      setLinks(newLinks)
-      adminStore.setPageLinks(newLinks)
-      setIsFetchingData(false)
-    })
-
-    return unsubscribe
-  }, [user.uid])
 
   const updateSort = (
     links: Required<Link>[],
@@ -139,21 +104,14 @@ export const LinksSection = observer(({user}: CardListProps) => {
     const {active, over} = event
 
     if (active.id != over?.id) {
-      setLinks(items => {
-        const oldIndex = items.findIndex(item => item.id == active.id)
-        const newIndex = items.findIndex(item => item.id == over?.id)
-        const newArr = arrayMove(items, oldIndex, newIndex)
+      const oldIndex = pageLinks.findIndex(item => item.id == active.id)
+      const newIndex = pageLinks.findIndex(item => item.id == over?.id)
+      const newArr = arrayMove(pageLinks, oldIndex, newIndex)
 
-        updateSort(newArr, oldIndex, newIndex)
-        return newArr
-      })
+      updateSort(newArr, oldIndex, newIndex)
+      adminStore.setPageLinks(newArr)
     }
   }
-
-  useEffect(() => {
-    const unsubscribe = fetchData()
-    return () => unsubscribe()
-  }, [fetchData])
 
   return (
     <section className='flex w-full flex-col gap-5 px-0 py-3'>
@@ -167,31 +125,25 @@ export const LinksSection = observer(({user}: CardListProps) => {
           </button>
         </div>
 
-        {isFetchingData ? (
-          <div className='pt-5'>
-            <PageLoader />
-          </div>
-        ) : (
-          <ul className='flex flex-1 flex-col gap-3'>
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}>
-              <SortableContext
-                items={links}
-                key='links-list'
-                strategy={verticalListSortingStrategy}>
-                {links.map(link => (
-                  <CardLink key={link.id} onDelete={deleteLink} link={link}>
-                    <AddLinkForm saveLink={handleSubmitForm} link={link} />
-                  </CardLink>
-                ))}
-              </SortableContext>
-            </DndContext>
-          </ul>
-        )}
+        <ul className='flex flex-1 flex-col gap-3'>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}>
+            <SortableContext
+              items={pageLinks}
+              key='links-list'
+              strategy={verticalListSortingStrategy}>
+              {pageLinks.map(link => (
+                <CardLink key={link.id} onDelete={deleteLink} link={link}>
+                  <AddLinkForm saveLink={handleSubmitForm} link={link} />
+                </CardLink>
+              ))}
+            </SortableContext>
+          </DndContext>
+        </ul>
 
-        {!isFetchingData && !links.length && (
+        {!pageLinks.length && (
           <div className='alert alert-info'>
             <Info />
             <p className='content'>It's time to create your first link!</p>
