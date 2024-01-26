@@ -7,7 +7,7 @@ import {useForm} from 'react-hook-form'
 import {z} from 'zod'
 
 import {Appear, Button} from '@/app/components'
-import {SignUpWithEmailAndPassword} from '@/domain/models'
+import {SignUpWithPassword} from '@/domain/models'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 import {authStore} from '../context/auth-store'
@@ -27,7 +27,7 @@ const RegisterPage = () => {
     register,
     handleSubmit,
     formState: {errors},
-  } = useForm<SignUpWithEmailAndPassword>({
+  } = useForm<SignUpWithPassword>({
     resolver: zodResolver(schema),
   })
 
@@ -36,7 +36,7 @@ const RegisterPage = () => {
   const [accountCreated, setAccountCreated] = useState(false)
 
   const handleRegisterWithEmailAndPassword = async (
-    data: SignUpWithEmailAndPassword,
+    data: SignUpWithPassword,
   ) => {
     try {
       setIsLoading(true)

@@ -1,9 +1,9 @@
-export type LoginWithEmailAndPassword = {
+export type LoginWithPassword = {
   email: string
   password: string
 }
 
-export type SignUpWithEmailAndPassword = {
+export type SignUpWithPassword = {
   email: string
   password: string
   displayName: string

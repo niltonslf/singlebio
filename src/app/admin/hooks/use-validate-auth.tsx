@@ -3,36 +3,36 @@ import {useRouter, usePathname} from 'next/navigation'
 import {useCallback, useEffect, useState} from 'react'
 
 import {authStore} from '@/app/auth/context/auth-store'
-import {Providers} from '@/domain/enums'
+import {AuthProviders} from '@/domain/enums'
 import {auth} from '@/services/firebase'
 
 export const useValidateAuth = () => {
-  const {push} = useRouter()
+  const router = useRouter()
   const pathName = usePathname()
 
-  const [isFetchingUser, setIsFetchingUser] = useState(false)
+  const [isFetchingUser, setIsFetchingUser] = useState(true)
 
   const listenAuthState = useCallback(() => {
     return onAuthStateChanged(auth, async firebaseUser => {
-      setIsFetchingUser(true)
       if (!firebaseUser) {
         authStore.clearUser()
-        push('/auth')
+        setIsFetchingUser(false)
+        return router.push('/auth')
+      }
+
+      await authStore.authOrCreateUser(firebaseUser)
+      const providerId = firebaseUser.providerData[0].providerId
+      const isEmailAccount = providerId === AuthProviders.PASSWORD
+
+      if (!firebaseUser.emailVerified && isEmailAccount) {
+        router.push('/auth/verify-email')
       } else {
-        await authStore.authOrCreateUser(firebaseUser)
-
-        const isEmailAccount =
-          firebaseUser.providerData[0].providerId === Providers.PASSWORD
-
-        if (!firebaseUser.emailVerified && isEmailAccount) {
-          return push('/auth/verify-email')
-        }
-
-        if (!pathName.startsWith('/admin')) push('/admin')
+        if (pathName === '/auth' || pathName === '/admin')
+          router.push('/admin/links')
       }
       setIsFetchingUser(false)
     })
-  }, [pathName, push])
+  }, [pathName, router])
 
   useEffect(() => {
     const unsubscribe = listenAuthState()

@@ -1,12 +1,8 @@
 import {redirect} from 'next/navigation'
 
+import { fetchUserLinks, fetchUserProfile, fetchUserSocialPages } from '@/api/usecases'
 import {CookieConsentBanner} from '@/app/components'
 import {themeOptions} from '@/constants/theme-options'
-import {
-  fetchUserLinks,
-  fetchUserProfile,
-  fetchUserSocialPages,
-} from '@/data/usecases'
 import {UserTheme} from '@/domain/models'
 
 type UserPageProps = {

@@ -8,7 +8,7 @@ import {Dropdown} from '..'
 import Link from 'next/link'
 import {ReactNode} from 'react'
 
-import {authStore} from '@/app/auth/context/auth-store'
+import {adminStore} from '@/app/admin/context/admin-store'
 import {Avatar} from '@/app/components'
 import {displayUrlShort, merge, parseUserPageUrl} from '@/utils'
 
@@ -17,7 +17,7 @@ type HeaderProps = {
 }
 
 export const Header = observer(({navbarHandler}: HeaderProps) => {
-  const {user} = authStore
+  const {user} = adminStore
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(parseUserPageUrl(user?.username ?? ''))

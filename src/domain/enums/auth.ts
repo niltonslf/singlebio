@@ -1,7 +1,8 @@
-export const Providers = {
+export const AuthProviders = {
   GITHUB: 'github.com',
   GOOGLE: 'google.com',
   PASSWORD: 'password',
 } as const
 
-export type ProvidersValues = (typeof Providers)[keyof typeof Providers]
+export type AuthProvidersOptions =
+  (typeof AuthProviders)[keyof typeof AuthProviders]

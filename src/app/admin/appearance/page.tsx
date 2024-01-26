@@ -5,6 +5,7 @@ import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
 import {SmartphonePreview} from '@/app/admin/components'
+import {adminStore} from '@/app/admin/context/admin-store'
 import {useImageUploader, useImageCompressor} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
 
@@ -18,7 +19,7 @@ import {
 import {appearanceStore} from './context'
 
 const AppearancePage = observer(() => {
-  const {user} = authStore
+  const {user} = adminStore
   const {theme, aux} = appearanceStore
 
   const {compress} = useImageCompressor()

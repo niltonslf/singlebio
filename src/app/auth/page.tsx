@@ -5,52 +5,33 @@ import Link from 'next/link'
 import {useRouter} from 'next/navigation'
 import {useState} from 'react'
 
-import {useValidateAuth} from '@/app/admin/hooks'
 import {Button, GoogleIcon, GithubIcon, Appear} from '@/app/components'
-import {LoginWithEmailAndPassword} from '@/domain/models'
+import {LoginWithPassword} from '@/domain/models'
 
 import {LoginEmailPasswordForm} from './components'
 import {authStore} from './context/auth-store'
 
-const SignIn = observer(() => {
-  const {isFetchingUser} = useValidateAuth()
+type MethodOptions = 'google' | 'github' | 'password'
 
+const SignIn = observer(() => {
   const {push} = useRouter()
 
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(isFetchingUser)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleLoginWithGoogle = async () => {
-    try {
-      setIsLoading(true)
-      await authStore.signInWithGoogle()
-      push('/admin')
-      setIsLoading(false)
-    } catch (error: any) {
-      setIsLoading(false)
-      setError(error)
-    }
-  }
-
-  const handleLoginWithGithub = async () => {
-    try {
-      setIsLoading(true)
-      await authStore.signInWithGithub()
-      push('/admin')
-      setIsLoading(false)
-    } catch (error: any) {
-      setIsLoading(false)
-      setError(error)
-    }
-  }
-
-  const handleLoginWithEmailAndPassword = async (
-    data: LoginWithEmailAndPassword,
+  const handleAllLoginMethods = async (
+    method: MethodOptions,
+    data?: LoginWithPassword,
   ) => {
-    const {email, password} = data
     try {
       setIsLoading(true)
-      await authStore.signInWithEmailAndPassword(email, password)
+
+      if (method === 'github') await authStore.signInWithGithub()
+      else if (method == 'google') await authStore.signInWithGoogle()
+      else {
+        if (data)
+          await authStore.signInWithEmailAndPassword(data.email, data.password)
+      }
 
       push('/admin')
       setIsLoading(false)
@@ -59,10 +40,18 @@ const SignIn = observer(() => {
       setError(error)
     }
   }
+
+  const handleLoginWithGoogle = () => handleAllLoginMethods('google')
+
+  const handleLoginWithGithub = () => handleAllLoginMethods('github')
+
+  const handleLoginPassword = (data: LoginWithPassword) =>
+    handleAllLoginMethods('password', data)
+
   return (
     <div className='flex flex-col'>
       <LoginEmailPasswordForm
-        onSubmit={handleLoginWithEmailAndPassword}
+        onSubmit={handleLoginPassword}
         isLoading={isLoading}
       />
 

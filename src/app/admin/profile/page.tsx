@@ -8,7 +8,7 @@ import {AdminBaseLayout, SmartphonePreview} from '../components'
 import {GithubSection, ProfileForm, SocialCard} from './components'
 
 const Profile = observer(() => {
-  const user = adminStore.getUser
+  const {user} = adminStore
 
   return (
     <AdminBaseLayout>

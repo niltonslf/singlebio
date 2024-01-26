@@ -3,10 +3,10 @@
 import {useForm} from 'react-hook-form'
 
 import {Button} from '@/app/components'
-import {LoginWithEmailAndPassword} from '@/domain/models'
+import {LoginWithPassword} from '@/domain/models'
 
 type LoginEmailPasswordFormProps = {
-  onSubmit: (data: LoginWithEmailAndPassword) => void
+  onSubmit: (data: LoginWithPassword) => void
   isLoading?: boolean
 }
 
@@ -14,7 +14,7 @@ export const LoginEmailPasswordForm = ({
   onSubmit,
   isLoading,
 }: LoginEmailPasswordFormProps) => {
-  const {register, handleSubmit} = useForm<LoginWithEmailAndPassword>()
+  const {register, handleSubmit} = useForm<LoginWithPassword>()
 
   return (
     <form

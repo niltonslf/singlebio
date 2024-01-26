@@ -25,12 +25,13 @@ import {
 } from 'firebase/firestore'
 import {action, makeObservable, observable} from 'mobx'
 
+import {sessionLogin} from '@/api/usecases/auth/session-handler'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {APP_URL} from '@/config/envs'
 import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
 import {themeOptions} from '@/constants/theme-options'
-import {Providers, ProvidersValues} from '@/domain/enums'
-import {SignUpWithEmailAndPassword, User} from '@/domain/models'
+import {AuthProviders, AuthProvidersOptions} from '@/domain/enums'
+import {SignUpWithPassword, User} from '@/domain/models'
 import {auth, db, githubProvider, googleProvider} from '@/services/firebase'
 import {createPopup, parseToUser} from '@/utils'
 
@@ -72,7 +73,6 @@ class AuthStore {
   public async signInWithGithub(): Promise<void> {
     try {
       const {user} = await signInWithPopup(auth, githubProvider)
-
       return this.authOrCreateUser(user)
     } catch (error: any) {
       const code = error?.code as ErrorMessagesKeys
@@ -85,7 +85,7 @@ class AuthStore {
     email,
     password,
     displayName,
-  }: SignUpWithEmailAndPassword): Promise<void> {
+  }: SignUpWithPassword): Promise<void> {
     try {
       const continueUrl = `${APP_URL}/auth`
       const {user} = await createUserWithEmailAndPassword(auth, email, password)
@@ -117,6 +117,10 @@ class AuthStore {
   }
 
   public async authOrCreateUser(firebaseUser: FbUser): Promise<void> {
+    // set API session
+    const idToken = await firebaseUser.getIdToken()
+    await sessionLogin(idToken)
+
     this.setFirebaseUser(firebaseUser)
 
     const res = await this.fetchFirebaseUser(firebaseUser)
@@ -170,7 +174,7 @@ class AuthStore {
     const userProvider = this.firebaseUser?.providerData[0].providerId
 
     await this.reauthenticateByProvider(
-      userProvider as ProvidersValues,
+      userProvider as AuthProvidersOptions,
       this.firebaseUser,
     )
 
@@ -182,16 +186,16 @@ class AuthStore {
   }
 
   public async reauthenticateByProvider(
-    providerId: ProvidersValues,
+    providerId: AuthProvidersOptions,
     firebaseUser: FbUser,
   ) {
-    if (providerId === Providers.PASSWORD) {
+    if (providerId === AuthProviders.PASSWORD) {
       return await createPopup('/auth/reauthenticate')
     }
 
     const provider = {
-      [Providers.GOOGLE]: googleProvider,
-      [Providers.GITHUB]: githubProvider,
+      [AuthProviders.GOOGLE]: googleProvider,
+      [AuthProviders.GITHUB]: githubProvider,
     }
 
     await reauthenticateWithPopup(firebaseUser, provider[providerId])

@@ -104,8 +104,8 @@ describe('Auth Page', () => {
         passwordMock,
       )
       expect(mockRouter).toMatchObject({
-        asPath: '/admin',
-        pathname: '/admin',
+        asPath: '/admin/links',
+        pathname: '/admin/links',
         query: {},
       })
     })
@@ -168,8 +168,8 @@ describe('Auth Page', () => {
       await user.click(googleButton)
 
       expect(mockRouter).toMatchObject({
-        asPath: '/admin',
-        pathname: '/admin',
+        asPath: '/admin/links',
+        pathname: '/admin/links',
         query: {},
       })
     })
@@ -186,7 +186,10 @@ describe('Auth Page', () => {
 
       await user.click(githubBtn)
 
-      expect(mockRouter).toMatchObject({asPath: '/admin', pathname: '/admin'})
+      expect(mockRouter).toMatchObject({
+        asPath: '/admin/links',
+        pathname: '/admin/links',
+      })
     })
     it('should return an error when tried to sign in with github', async () => {
       jest.spyOn(authStore, 'signInWithGithub').mockRejectedValue('error')

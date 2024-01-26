@@ -1,16 +1,14 @@
 import {Plus} from 'lucide-react'
-import {useCallback, useEffect, useState} from 'react'
+import {observer} from 'mobx-react-lite'
+import {useState} from 'react'
 
 import {SectionCard} from '@/app/admin/components'
 import {adminStore} from '@/app/admin/context/admin-store'
-import {SocialPage, SocialPageCreation, User} from '@/domain/models'
+import {SocialPageCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
 import {
   doc,
   collection,
-  getDocs,
-  orderBy,
-  query,
   addDoc,
   updateDoc,
   deleteDoc,
@@ -22,15 +20,15 @@ type SocialCardProps = {
   user: User
 }
 
-export const SocialCard = ({user}: SocialCardProps) => {
+export const SocialCard = observer(({user}: SocialCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [socialPages, setSocialPages] = useState<SocialPage[]>([])
+  const {socialPages} = adminStore
 
   const handleCreate = async (data: SocialPageCreation) => {
     const userRef = doc(db, 'users', user.uid)
     const docRef = await addDoc(collection(userRef, 'social-pages'), data)
     await updateDoc(docRef, {id: docRef.id})
-    await fetchSocialPages()
+    // await adminStore.fetchSocialPages()
   }
 
   const handleDelete = async (socialId: string) => {
@@ -38,27 +36,18 @@ export const SocialCard = ({user}: SocialCardProps) => {
 
     const ref = doc(db, 'users', adminStore.user?.uid, 'social-pages', socialId)
     await deleteDoc(ref)
-    await fetchSocialPages()
+    // await adminStore.fetchSocialPages()
   }
 
-  const fetchSocialPages = useCallback(async () => {
-    const userRef = doc(db, 'users', user.uid)
-    const q = query(
-      collection(userRef, 'social-pages'),
-      orderBy('order', 'asc'),
-    )
-    const socialReq = await getDocs(q)
+  // const fetchSocialPages = useCallback(async () => {
 
-    if (socialReq.empty) return
+  //   setSocialPages(data)
+  //   adminStore.setSocialPages(data)
+  // }, [user.uid])
 
-    const data = socialReq.docs.map(social => social.data()) as SocialPage[]
-    setSocialPages(data)
-    adminStore.setSocialPages(data)
-  }, [user.uid])
-
-  useEffect(() => {
-    fetchSocialPages()
-  }, [fetchSocialPages])
+  // useEffect(() => {
+  //   fetchSocialPages()
+  // }, [fetchSocialPages])
 
   return (
     <SectionCard title='Social pages'>
@@ -84,4 +73,4 @@ export const SocialCard = ({user}: SocialCardProps) => {
       />
     </SectionCard>
   )
-}
+})

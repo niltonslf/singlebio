@@ -31,7 +31,7 @@ export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
       </button>
 
       <Link
-        href='/admin'
+        href='/admin/links'
         title='Home page'
         className='indicator mx-auto mb-8 flex cursor-pointer justify-center'>
         <span className='indicator-end badge indicator-item badge-primary badge-sm'>

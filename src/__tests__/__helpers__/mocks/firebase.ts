@@ -1,6 +1,6 @@
 import {User as FbUser} from 'firebase/auth'
 
-import {Providers} from '@/domain/enums'
+import {AuthProviders} from '@/domain/enums'
 import {faker} from '@faker-js/faker'
 
 type MakeGetDocsResponse = Partial<{
@@ -25,7 +25,7 @@ export const makeFbUser = ({
     photoURL: photoURL ?? faker.image.urlLoremFlickr(),
     providerData: [
       {
-        providerId: providerId ?? Providers.GOOGLE,
+        providerId: providerId ?? AuthProviders.GOOGLE,
       },
     ],
   } as FbUser

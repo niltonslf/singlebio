@@ -5,11 +5,11 @@ import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 
 import {Appear, Button, Disappear} from '@/app/components'
-import {LoginWithEmailAndPassword} from '@/domain/models'
+import {LoginWithPassword} from '@/domain/models'
 
 import {authStore} from '../context/auth-store'
 
-type FormData = Pick<LoginWithEmailAndPassword, 'email'>
+type FormData = Pick<LoginWithPassword, 'email'>
 
 const ResetPasswordPage = () => {
   const {register, handleSubmit, reset} = useForm<FormData>()

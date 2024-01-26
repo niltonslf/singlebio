@@ -41,7 +41,7 @@ const navbarItems: NavbarLinks = {
     label: 'App',
     links: [
       {
-        href: '/admin',
+        href: '/admin/links',
         title: 'go to home page',
         name: 'Links',
         Icon: <Link2 width={18} />,

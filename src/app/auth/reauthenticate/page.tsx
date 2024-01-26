@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite'
 import {useState} from 'react'
 
 import {Appear} from '@/app/components'
-import {LoginWithEmailAndPassword} from '@/domain/models'
+import {LoginWithPassword} from '@/domain/models'
 import {auth} from '@/services/firebase'
 
 import {LoginEmailPasswordForm} from '../components'
@@ -13,7 +13,7 @@ import {authStore} from '../context/auth-store'
 const ReauthenticatePage = observer(() => {
   const [error, setError] = useState('')
 
-  const handleSubmit = async (data: LoginWithEmailAndPassword) => {
+  const handleSubmit = async (data: LoginWithPassword) => {
     try {
       await authStore.reauthenticateWithEmailAndPassword(
         data.email,

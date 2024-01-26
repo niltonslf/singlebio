@@ -11,7 +11,7 @@ import {adminStore} from '@/app/admin/context/admin-store'
 import {authStore} from '@/app/auth/context/auth-store'
 import {APP_URL} from '@/config/envs'
 import {ERROR_MESSAGES} from '@/constants/error-msgs'
-import {Providers} from '@/domain/enums'
+import {AuthProviders} from '@/domain/enums'
 import {auth} from '@/services/firebase'
 import {parseToUser} from '@/utils'
 import * as windowUtils from '@/utils/window'
@@ -355,7 +355,7 @@ describe('AuthStore', () => {
     })
 
     it('should delete user with google provider', async () => {
-      const fbUserMock = makeFbUser({providerId: Providers.GOOGLE})
+      const fbUserMock = makeFbUser({providerId: AuthProviders.GOOGLE})
       const userMock = parseToUser(fbUserMock)
 
       // simulate an user logged in
@@ -389,7 +389,7 @@ describe('AuthStore', () => {
     })
 
     it('should delete user with github provider', async () => {
-      const fbUserMock = makeFbUser({providerId: Providers.GITHUB})
+      const fbUserMock = makeFbUser({providerId: AuthProviders.GITHUB})
       const userMock = parseToUser(fbUserMock)
 
       // simulate an user logged in
@@ -423,7 +423,7 @@ describe('AuthStore', () => {
     })
 
     it('should delete user with password provider', async () => {
-      const fbUserMock = makeFbUser({providerId: Providers.PASSWORD})
+      const fbUserMock = makeFbUser({providerId: AuthProviders.PASSWORD})
       const userMock = parseToUser(fbUserMock)
 
       // simulate an user logged in

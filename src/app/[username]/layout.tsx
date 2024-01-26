@@ -1,8 +1,8 @@
 import {Metadata} from 'next'
 import {ReactNode} from 'react'
 
+import {fetchUserProfile} from '@/api/usecases'
 import {APP_NAME} from '@/config/envs'
-import {fetchUserProfile} from '@/data/usecases'
 
 type LayoutProps = {
   children: ReactNode
