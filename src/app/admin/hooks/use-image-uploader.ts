@@ -1,10 +1,10 @@
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 
-import {authStore} from '@/app/auth/context/auth-store'
+import {adminStore} from '@/app/admin/context/admin-store'
 import {storage} from '@/services/firebase'
 
 export const useImageUploader = () => {
-  const user = authStore.user
+  const user = adminStore.user
 
   const returnImageThumbnail = (file: File) => URL.createObjectURL(file)
 

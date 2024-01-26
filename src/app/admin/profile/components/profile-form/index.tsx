@@ -4,7 +4,6 @@ import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
 import {SectionCard} from '@/app/admin/components'
-import {useSmartphone} from '@/app/admin/context'
 import {useImageCompressor, useImageUploader} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
 import {Avatar, InputErrorMsg} from '@/app/components'
@@ -34,7 +33,6 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
   const {validateUsername} = useProfile()
   const {returnImageThumbnail, upload} = useImageUploader()
   const {compress} = useImageCompressor()
-  const {reloadSmartphoneList} = useSmartphone()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUploadingImg, setIsUploadingImg] = useState(false)
@@ -80,7 +78,6 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
     await authStore.updateUser(userData)
     setIsUploadingImg(false)
     setIsSubmitting(false)
-    reloadSmartphoneList()
   }
 
   const triggerFormSubmit = useDebounce(() => {

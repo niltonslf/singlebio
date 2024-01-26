@@ -23,28 +23,21 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore'
-import {action, computed, makeObservable, observable} from 'mobx'
+import {action, makeObservable, observable} from 'mobx'
 
+import {adminStore} from '@/app/admin/context/admin-store'
 import {APP_URL} from '@/config/envs'
 import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
 import {themeOptions} from '@/constants/theme-options'
 import {Providers, ProvidersValues} from '@/domain/enums'
-import {
-  Link,
-  SignUpWithEmailAndPassword,
-  SocialPage,
-  User,
-} from '@/domain/models'
+import {SignUpWithEmailAndPassword, User} from '@/domain/models'
 import {auth, db, githubProvider, googleProvider} from '@/services/firebase'
 import {createPopup, parseToUser} from '@/utils'
 
 class AuthStore {
   constructor() {
     makeObservable(this, {
-      userModel: observable,
       firebaseUser: observable,
-      socialPages: observable,
-      pageLinks: observable,
       //action
       signInWithGoogle: action,
       signInWithGithub: action,
@@ -54,30 +47,16 @@ class AuthStore {
       updateUser: action,
       logout: action,
       deleteUser: action,
-      setUser: action,
       setFirebaseUser: action,
-      setSocialPages: action,
-      setPageLinks: action,
       clearUser: action,
       resetPassword: action,
       reauthenticateWithEmailAndPassword: action,
       reauthenticateByProvider: action,
       deleteUserLinks: action,
-
-      //computed
-      user: computed,
     })
   }
 
-  public userModel: User | undefined = undefined
   public firebaseUser: FbUser | undefined = undefined
-
-  public socialPages: SocialPage[] | undefined = undefined
-  public pageLinks: Link[] | undefined = undefined
-
-  get user() {
-    return this.userModel
-  }
 
   public async signInWithGoogle(): Promise<void> {
     try {
@@ -143,7 +122,7 @@ class AuthStore {
     const res = await this.fetchFirebaseUser(firebaseUser)
 
     if (res.exists() && res.data()) {
-      return this.setUser(res.data() as User)
+      return adminStore.setUser(res.data() as User)
     }
 
     // create new user
@@ -151,7 +130,7 @@ class AuthStore {
     const newUser = parseToUser(firebaseUser, undefined, defaultTheme)
     await setDoc(doc(db, 'users', newUser.uid), newUser)
 
-    this.setUser({...newUser})
+    adminStore.setUser({...newUser})
   }
 
   private async fetchFirebaseUser(
@@ -161,37 +140,23 @@ class AuthStore {
   }
 
   public async updateUser(user: Partial<User>): Promise<User> {
-    if (!this?.user?.uid) throw ERROR_MESSAGES['user-not-found']
+    if (!adminStore?.user?.uid) throw ERROR_MESSAGES['user-not-found']
 
-    const newUser = {...this.user, ...user} as User
+    const newUser = {...adminStore?.user, ...user} as User
 
-    this.setUser(newUser)
+    adminStore.setUser(newUser)
 
-    await updateDoc(doc(db, 'users', this.user.uid), user)
+    await updateDoc(doc(db, 'users', adminStore?.user.uid), user)
     return newUser
-  }
-
-  public setUser(user?: User): void {
-    this.userModel = user
   }
 
   public setFirebaseUser(firebaseUser?: FbUser): void {
     this.firebaseUser = firebaseUser
   }
 
-  public setSocialPages(socialPages?: SocialPage[]): void {
-    this.socialPages = socialPages
-  }
-
-  public setPageLinks(pageLinks?: Link[]): void {
-    this.pageLinks = pageLinks
-  }
-
   public clearUser(): void {
-    this.userModel = undefined
     this.firebaseUser = undefined
-    this.socialPages = undefined
-    this.pageLinks = undefined
+    adminStore.reset()
   }
 
   public async logout(): Promise<void> {
@@ -199,7 +164,8 @@ class AuthStore {
   }
 
   public async deleteUser(): Promise<void> {
-    if (!this.user || !this.firebaseUser) throw ERROR_MESSAGES['user-not-found']
+    if (!adminStore?.user || !this.firebaseUser)
+      throw ERROR_MESSAGES['user-not-found']
 
     const userProvider = this.firebaseUser?.providerData[0].providerId
 
@@ -208,9 +174,9 @@ class AuthStore {
       this.firebaseUser,
     )
 
-    await this.deleteUserLinks(this.user)
+    await this.deleteUserLinks(adminStore?.user)
 
-    await deleteDoc(doc(db, 'users', this.user.uid))
+    await deleteDoc(doc(db, 'users', adminStore?.user.uid))
     await deleteUser(this.firebaseUser)
     this.clearUser()
   }

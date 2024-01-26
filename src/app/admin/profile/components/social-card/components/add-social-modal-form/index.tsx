@@ -1,7 +1,6 @@
 import {useState} from 'react'
 import {SocialIcon} from 'react-social-icons'
 
-import {useSmartphone} from '@/app/admin/context'
 import {socialOptions} from '@/constants/social-options'
 import {SocialPage, SocialPageCreation} from '@/domain/models'
 import {merge} from '@/utils'
@@ -19,8 +18,6 @@ export const AddSocialModalForm = ({
   isOpen,
   onClose,
 }: AddSocialModalFormProps) => {
-  const {reloadSmartphoneList} = useSmartphone()
-
   const [formData, setFormData] = useState<SocialPageCreation>({
     url: '',
     name: '',
@@ -48,7 +45,6 @@ export const AddSocialModalForm = ({
   const handleSubmit = async () => {
     await onSubmit(formData)
 
-    reloadSmartphoneList()
     handleClose()
   }
 

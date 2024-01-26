@@ -1,11 +1,11 @@
 import {observer} from 'mobx-react-lite'
 
 import {SmartphoneCanvas} from '@/app/admin/components'
-import {authStore} from '@/app/auth/context/auth-store'
+import {adminStore} from '@/app/admin/context/admin-store'
 import {themeOptions} from '@/constants/theme-options'
 
 export const SmartphonePreview = observer(() => {
-  const {user, socialPages, pageLinks} = authStore
+  const {user, socialPages, pageLinks} = adminStore
   const Theme = themeOptions[user?.theme?.name || 'default'].component
 
   return (

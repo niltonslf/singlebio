@@ -3,6 +3,7 @@
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
+import {adminStore} from '@/app/admin/context/admin-store'
 import {SetUsernameModal} from '@/app/components'
 
 import {authStore} from '../auth/context/auth-store'
@@ -13,18 +14,15 @@ import {
   SmartphonePreview,
 } from './components'
 import {LinksSection} from './components/links-section'
-import {useSmartphone} from './context/smartphone-context'
 
 const Admin = observer(() => {
-  const user = authStore.user
+  const user = adminStore.user
 
-  const {reloadSmartphoneList} = useSmartphone()
   const [showUsernameModal, setShowUsernameModal] = useState(false)
   const [showBetaWarningModal, setShowBetaWarningModal] = useState(false)
 
   const onSubmitUsername = async (username: string) => {
     await authStore.updateUser({username})
-    reloadSmartphoneList()
     setShowUsernameModal(false)
     setShowBetaWarningModal(true)
   }

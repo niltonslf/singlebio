@@ -13,13 +13,12 @@ import {Info, Plus} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useCallback, useEffect, useState} from 'react'
 
-import {authStore} from '@/app/auth/context/auth-store'
+import {adminStore} from '@/app/admin/context/admin-store'
 import {Link, LinkCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
 
 import {AddLinkForm, PageLoader} from '..'
 
-import {useDebounce} from '@/utils'
 import {
   DndContext,
   closestCenter,
@@ -36,7 +35,6 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
-import {useSmartphone} from '../../context'
 import {CardLink} from './components/card-link'
 
 type CardListProps = {
@@ -44,12 +42,6 @@ type CardListProps = {
 }
 
 export const LinksSection = observer(({user}: CardListProps) => {
-  const {reloadSmartphoneList} = useSmartphone()
-
-  const reloadSmartphoneListDebounced = useDebounce(() => {
-    reloadSmartphoneList()
-  })
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -82,13 +74,11 @@ export const LinksSection = observer(({user}: CardListProps) => {
 
   const handleSubmitForm = async (data: Link) => {
     await handleSaveLink(data)
-    reloadSmartphoneListDebounced()
   }
 
   const deleteLink = async (link: Link) => {
     if (link.id) {
       await deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
-      reloadSmartphoneList()
     }
   }
 
@@ -110,7 +100,7 @@ export const LinksSection = observer(({user}: CardListProps) => {
       newLinks = newLinks.sort((prev, next) => next.order - prev.order)
 
       setLinks(newLinks)
-      authStore.setPageLinks(newLinks)
+      adminStore.setPageLinks(newLinks)
       setIsFetchingData(false)
     })
 
@@ -132,8 +122,6 @@ export const LinksSection = observer(({user}: CardListProps) => {
         const link: Link = {...links[index], order: links[index].order + 1}
         handleSaveLink(link)
       }
-
-      return reloadSmartphoneListDebounced()
     }
 
     // MOVING UP
@@ -145,7 +133,6 @@ export const LinksSection = observer(({user}: CardListProps) => {
       const link: Link = {...links[index], order: links[index].order - 1}
       handleSaveLink(link)
     }
-    return reloadSmartphoneListDebounced()
   }
 
   const handleDragEnd = (event: DragEndEvent) => {

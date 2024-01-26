@@ -20,7 +20,7 @@ jest.mock('firebase/auth', () => ({
 
 const makeSUT = (user?: User) => {
   const userMock = user ?? makeUser()
-  authStore.setUser(userMock)
+  adminStore.setUser(userMock)
 
   const sut = setup(<Header navbarHandler={<></>} />)
 
@@ -72,7 +72,7 @@ describe('Header component', () => {
     const userMock = makeUser()
 
     // fake login
-    authStore.setUser(userMock)
+    adminStore.setUser(userMock)
 
     const {user} = makeSUT(userMock)
     const logoutBtn = screen.getByText(/logout/i).parentElement

@@ -128,7 +128,7 @@ describe('Appearance Page', () => {
     await waitFor(() => makeSUT())
 
     await act(() => {
-      authStore.setUser({...user, theme})
+      adminStore.setUser({...user, theme})
     })
 
     await waitFor(() => {

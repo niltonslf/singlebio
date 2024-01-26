@@ -3,12 +3,12 @@
 import {observer} from 'mobx-react-lite'
 import {useCallback, useEffect} from 'react'
 
-import {authStore} from '@/app/auth/context/auth-store'
+import {adminStore} from '@/app/admin/context/admin-store'
 
 import {adminAnalyticsStore} from '../context/admin-analytics-store'
 
 export const PageViewsChart = observer(() => {
-  const user = authStore.user
+  const user = adminStore.user
 
   const fetchData = useCallback(async () => {
     await adminAnalyticsStore.fetchPageViews()

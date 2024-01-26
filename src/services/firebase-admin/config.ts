@@ -1,4 +1,5 @@
 import {getApps, initializeApp, cert} from 'firebase-admin/app'
+import {getAuth} from 'firebase-admin/auth'
 import {initializeFirestore} from 'firebase-admin/firestore'
 
 const firestoreCredential = JSON.parse(
@@ -14,3 +15,4 @@ const initApp = () => {
 
 export const firebaseAdmin = initApp()
 export const firestoreAdmin = initializeFirestore(firebaseAdmin)
+export const firebaseAuthAdmin = getAuth(firebaseAdmin)

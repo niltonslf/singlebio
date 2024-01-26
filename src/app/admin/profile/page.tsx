@@ -2,13 +2,13 @@
 
 import {observer} from 'mobx-react-lite'
 
-import {authStore} from '@/app/auth/context/auth-store'
+import {adminStore} from '@/app/admin/context/admin-store'
 
 import {AdminBaseLayout, SmartphonePreview} from '../components'
 import {GithubSection, ProfileForm, SocialCard} from './components'
 
 const Profile = observer(() => {
-  const user = authStore.user
+  const user = adminStore.getUser
 
   return (
     <AdminBaseLayout>

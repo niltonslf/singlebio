@@ -7,6 +7,7 @@ import {
   makeUser,
   makeUserTheme,
 } from '@/__tests__/__helpers__'
+import {adminStore} from '@/app/admin/context/admin-store'
 import {authStore} from '@/app/auth/context/auth-store'
 import {APP_URL} from '@/config/envs'
 import {ERROR_MESSAGES} from '@/constants/error-msgs'
@@ -41,9 +42,9 @@ describe('AuthStore', () => {
   describe('computed', () => {
     it('should get user() be equals to userModel', () => {
       const userMock = makeUser()
-      authStore.setUser(userMock)
+      adminStore.setUser(userMock)
 
-      expect(authStore.userModel).toStrictEqual(userMock)
+      expect(adminStore.user).toStrictEqual(userMock)
     })
   })
 
@@ -263,7 +264,7 @@ describe('AuthStore', () => {
       await authStore.authUser(firebaseUser)
 
       expect({...authStore.firebaseUser}).toEqual(firebaseUser)
-      expect({...authStore.user}).toEqual(userMock)
+      expect({...adminStore.user}).toEqual(userMock)
     })
 
     it('should authenticate the user creating a new account', async () => {
@@ -285,7 +286,7 @@ describe('AuthStore', () => {
       await authStore.authUser(firebaseUser)
 
       expect({...authStore.firebaseUser}).toEqual(firebaseUser)
-      expect({...authStore.user}).toEqual(userMock)
+      expect({...adminStore.user}).toEqual(userMock)
     })
   })
 
@@ -301,7 +302,7 @@ describe('AuthStore', () => {
     it('should update user data in the store and in the database', async () => {
       const initialUserData = makeUser()
       // simulate an user already logged in
-      authStore.setUser(initialUserData)
+      adminStore.setUser(initialUserData)
 
       jest.spyOn(firestore, 'updateDoc').mockResolvedValue()
 
@@ -312,7 +313,7 @@ describe('AuthStore', () => {
 
       const mergedUserData = {...initialUserData, ...userNewData}
 
-      expect(authStore.userModel).toEqual(mergedUserData)
+      expect(adminStore.user).toEqual(mergedUserData)
       expect(updateRes).toEqual(mergedUserData)
     })
   })
@@ -321,9 +322,9 @@ describe('AuthStore', () => {
     it('should replace user data', () => {
       const userMock = makeUser()
 
-      authStore.setUser(userMock)
+      adminStore.setUser(userMock)
 
-      expect(authStore.userModel).toEqual(userMock)
+      expect(adminStore.user).toEqual(userMock)
     })
   })
 
@@ -331,7 +332,7 @@ describe('AuthStore', () => {
     it('should clear userModel and firebaseUser properties', () => {
       authStore.clearUser()
 
-      expect(authStore.user).toBe(undefined)
+      expect(adminStore.user).toBe(undefined)
       expect(authStore.firebaseUser).toBe(undefined)
     })
   })
@@ -358,7 +359,7 @@ describe('AuthStore', () => {
       const userMock = parseToUser(fbUserMock)
 
       // simulate an user logged in
-      authStore.setUser(userMock)
+      adminStore.setUser(userMock)
       authStore.setFirebaseUser(fbUserMock)
 
       jest
@@ -384,7 +385,7 @@ describe('AuthStore', () => {
       expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
       expect(authStore.clearUser).toHaveBeenCalledTimes(1)
       expect(authStore.firebaseUser).toBe(undefined)
-      expect(authStore.user).toBe(undefined)
+      expect(adminStore.user).toBe(undefined)
     })
 
     it('should delete user with github provider', async () => {
@@ -392,7 +393,7 @@ describe('AuthStore', () => {
       const userMock = parseToUser(fbUserMock)
 
       // simulate an user logged in
-      authStore.setUser(userMock)
+      adminStore.setUser(userMock)
       authStore.setFirebaseUser(fbUserMock)
 
       jest
@@ -418,7 +419,7 @@ describe('AuthStore', () => {
       expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
       expect(authStore.clearUser).toHaveBeenCalledTimes(1)
       expect(authStore.firebaseUser).toBe(undefined)
-      expect(authStore.user).toBe(undefined)
+      expect(adminStore.user).toBe(undefined)
     })
 
     it('should delete user with password provider', async () => {
@@ -426,7 +427,7 @@ describe('AuthStore', () => {
       const userMock = parseToUser(fbUserMock)
 
       // simulate an user logged in
-      authStore.setUser(userMock)
+      adminStore.setUser(userMock)
       authStore.setFirebaseUser(fbUserMock)
 
       jest
@@ -452,7 +453,7 @@ describe('AuthStore', () => {
       expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
       expect(authStore.clearUser).toHaveBeenCalledTimes(1)
       expect(authStore.firebaseUser).toBe(undefined)
-      expect(authStore.user).toBe(undefined)
+      expect(adminStore.user).toBe(undefined)
     })
   })
 

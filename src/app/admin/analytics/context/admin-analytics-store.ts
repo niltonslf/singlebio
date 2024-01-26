@@ -12,16 +12,16 @@ class AdminAnalyticsStore {
   user?: User
 
   public setUser(user?: User) {
-    this.user = user
+    adminStore?.user = user
   }
 
   public async fetchPageViews() {
-    if (!this.user) return null
+    if (!adminStore?.user) return null
 
     const viewsCollectionRef = collection(
       db,
       'analytics',
-      this.user?.uid,
+      adminStore?.user?.uid,
       'page-views',
     )
 

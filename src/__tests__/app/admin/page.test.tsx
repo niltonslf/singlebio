@@ -6,6 +6,7 @@ import {
   makeGetDocsResponse,
   setup,
 } from '@/__tests__/__helpers__'
+import {adminStore} from '@/app/admin/context/admin-store'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import {authStore} from '@/app/auth/context/auth-store'
@@ -64,7 +65,7 @@ describe('Admin page', () => {
       expect(smartphone).toBeInTheDocument()
       expect(smartphone).toHaveAttribute(
         'src',
-        parseUserPageUrl(authStore.user?.username),
+        parseUserPageUrl(adminStore.user?.username),
       )
     })
   })

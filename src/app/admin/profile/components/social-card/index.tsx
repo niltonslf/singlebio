@@ -2,8 +2,7 @@ import {Plus} from 'lucide-react'
 import {useCallback, useEffect, useState} from 'react'
 
 import {SectionCard} from '@/app/admin/components'
-import {useSmartphone} from '@/app/admin/context'
-import {authStore} from '@/app/auth/context/auth-store'
+import {adminStore} from '@/app/admin/context/admin-store'
 import {SocialPage, SocialPageCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
 import {
@@ -24,8 +23,6 @@ type SocialCardProps = {
 }
 
 export const SocialCard = ({user}: SocialCardProps) => {
-  const {reloadSmartphoneList} = useSmartphone()
-
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [socialPages, setSocialPages] = useState<SocialPage[]>([])
 
@@ -37,12 +34,11 @@ export const SocialCard = ({user}: SocialCardProps) => {
   }
 
   const handleDelete = async (socialId: string) => {
-    if (!authStore.user) return
+    if (!adminStore.user) return
 
-    const ref = doc(db, 'users', authStore.user?.uid, 'social-pages', socialId)
+    const ref = doc(db, 'users', adminStore.user?.uid, 'social-pages', socialId)
     await deleteDoc(ref)
     await fetchSocialPages()
-    reloadSmartphoneList()
   }
 
   const fetchSocialPages = useCallback(async () => {
@@ -57,7 +53,7 @@ export const SocialCard = ({user}: SocialCardProps) => {
 
     const data = socialReq.docs.map(social => social.data()) as SocialPage[]
     setSocialPages(data)
-    authStore.setSocialPages(data)
+    adminStore.setSocialPages(data)
   }, [user.uid])
 
   useEffect(() => {

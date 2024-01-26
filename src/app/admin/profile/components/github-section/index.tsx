@@ -1,7 +1,6 @@
 import {useState} from 'react'
 
 import {SectionCard} from '@/app/admin/components'
-import {useSmartphone} from '@/app/admin/context'
 import {authStore} from '@/app/auth/context/auth-store'
 import {User} from '@/domain/models'
 import {useDebounce} from '@/utils'
@@ -11,8 +10,6 @@ type GithubSectionProps = {
 }
 
 export const GithubSection = ({user}: GithubSectionProps) => {
-  const {reloadSmartphoneList} = useSmartphone()
-
   const [githubUsername, setGithubUsername] = useState(
     user.features?.github.username ?? '',
   )
@@ -32,7 +29,6 @@ export const GithubSection = ({user}: GithubSectionProps) => {
 
     await authStore.updateUser(data)
     setIsSubmitting(false)
-    reloadSmartphoneList()
   }
 
   const handleSubmitDebounced = useDebounce(value => handleSubmit(value), 1000)
