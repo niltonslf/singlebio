@@ -16,7 +16,7 @@ import {
 } from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import Link from 'next/link'
-import {MouseEvent, ReactNode} from 'react'
+import {ReactNode} from 'react'
 
 import {NavLink} from '@/app/admin/components/nav-links/components'
 import {adminStore} from '@/app/admin/context/admin-store'
@@ -126,20 +126,6 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
     },
   ]
 
-  const handleOnClick = (
-    event: MouseEvent<HTMLAnchorElement>,
-    page: NavLink,
-  ) => {
-    if (page.disabled) {
-      event.preventDefault()
-      event.stopPropagation()
-      return
-    }
-
-    page.onClick?.()
-    onClick?.()
-  }
-
   return (
     <div className='flex h-full w-full flex-col gap-3 md:w-[210px]'>
       {Object.keys(navbarItems).map(section => {
@@ -162,10 +148,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
                     </p>
                   </NavLink>
 
-                  <NavLink
-                    page={page}
-                    className='md:hidden'
-                    onClick={handleOnClick}>
+                  <NavLink page={page} className='md:hidden' onClick={onClick}>
                     {page.Icon}
                     <p>{page.name}</p>
                   </NavLink>
@@ -205,7 +188,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
               <p className={merge([!isOpen && 'md:opacity-0'])}>{page.name}</p>
             </NavLink>
 
-            <NavLink page={page} className='md:hidden' onClick={handleOnClick}>
+            <NavLink page={page} className='md:hidden' onClick={onClick}>
               {page.Icon}
               <p>{page.name}</p>
             </NavLink>
