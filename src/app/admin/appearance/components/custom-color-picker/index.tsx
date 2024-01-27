@@ -32,7 +32,7 @@ export const CustomColorPicker = ({
   return (
     <div
       ref={containerRef}
-      className='relative w-full rounded-lg border border-neutral bg-base-100 p-2'
+      className='relative w-full rounded-lg border border-base-200 bg-base-100 p-2'
       data-testid='color-picker'>
       <div
         onClick={() => setShowBtnPicker(prev => !prev)}

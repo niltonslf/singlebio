@@ -1,10 +1,9 @@
 'use client'
 
-import {AlignJustify} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
-import {ReactNode, useEffect, useState} from 'react'
+import {ReactNode, useEffect} from 'react'
 
-import {Header, PageLoader, Sidebar} from '@/app/admin/components'
+import {PageLoader, Sidebar} from '@/app/admin/components'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {useValidateAuth} from '@/app/admin/hooks'
 import {merge} from '@/utils'
@@ -16,21 +15,11 @@ type Props = {
 const AdminLayoutWrapper = observer(({children}: Props) => {
   const {isFetchingUser} = useValidateAuth()
 
-  const [isOpen, setIsOpen] = useState(false)
-
   useEffect(() => {
     if (!isFetchingUser) {
       adminStore.fetchData()
     }
   }, [isFetchingUser])
-
-  const navbarHandler = (
-    <button
-      className='btn btn-square btn-outline btn-sm'
-      onClick={() => setIsOpen(prev => !prev)}>
-      <AlignJustify size={18} />
-    </button>
-  )
 
   if (isFetchingUser)
     return (
@@ -42,23 +31,15 @@ const AdminLayoutWrapper = observer(({children}: Props) => {
   return (
     <main
       className={merge([
-        'flex h-screen  w-screen flex-col items-center',
-        'bg-base-100',
+        'flex h-screen w-screen flex-row flex-nowrap items-center',
+        'relative bg-base-100',
       ])}>
-      <div
-        className={merge([
-          'relative grid h-screen w-screen grid-cols-[1fr] grid-rows-[1fr]',
-          'overflow-hidden md:grid-cols-[250px_1fr]',
-        ])}>
-        <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <div className={merge(['flex h-screen'])}>
+        <Sidebar />
+      </div>
 
-        <div className='grid h-screen grid-rows-[60px_1fr]'>
-          <Header navbarHandler={navbarHandler} />
-
-          <div className='h-[calc(100vh-60px)] min-w-full gap-5 overflow-y-auto px-5 pb-16 pt-0 md:px-10 md:py-0'>
-            {children}
-          </div>
-        </div>
+      <div className='h-full w-full gap-5 overflow-y-auto  px-5 pb-16 pt-0 md:px-10 md:py-0'>
+        {children}
       </div>
     </main>
   )

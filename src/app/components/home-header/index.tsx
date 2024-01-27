@@ -16,7 +16,7 @@ export const HomeHeader = () => {
         />
       </Link>
 
-      <Link href='/auth' className='btn btn-outline btn-neutral px-10'>
+      <Link href='/auth' className='btn-base-200 btn btn-outline px-10'>
         Login
       </Link>
     </header>

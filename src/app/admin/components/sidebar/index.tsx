@@ -1,65 +1,77 @@
-import {X} from 'lucide-react'
+import clsx from 'clsx'
+import {ChevronsLeft, ChevronsRight, Menu} from 'lucide-react'
 import Image from 'next/image'
 
-import {NavLinks, ThemeSwitcher} from '..'
+import {NavLinks} from '..'
 
 import Link from 'next/link'
+import {useState} from 'react'
 
 import {merge} from '@/utils'
 
-type SidebarProps = {
-  isOpen: boolean
-  onClose: () => void
-}
+export const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(true)
 
-export const Sidebar = ({isOpen, onClose}: SidebarProps) => {
   return (
-    <nav
-      data-testid='admin-sidebar'
-      className={merge([
-        'absolute left-[-100%]  top-0 z-40 flex h-full border-base-200 bg-base-100',
-        'w-full max-w-full flex-col gap-5 border-r p-5 ',
-        'bg-opacity-90 backdrop-blur-md transition-all ',
-        'md:relative md:left-0 md:z-auto md:w-full md:bg-base-200 dark:md:bg-transparent',
-        'overflow-y-auto',
-        isOpen && 'left-0',
-      ])}>
-      <button
-        className='btn btn-square btn-outline btn-xs absolute left-5 top-5 md:hidden '
-        onClick={onClose}>
-        <X size={17} />
-      </button>
-
-      <Link
-        href='/admin/links'
-        title='Home page'
-        className='indicator mx-auto mb-8 flex cursor-pointer justify-center'>
-        <span className='indicator-end badge indicator-item badge-primary badge-sm'>
-          Beta
+    <>
+      <nav
+        data-testid='admin-sidebar'
+        className={merge([
+          'fixed left-0 top-0 z-40 flex h-full flex-col border-base-200 bg-base-100',
+          'w-full max-w-full flex-col gap-5 border-r px-3 py-5',
+          'bg-opacity-90 backdrop-blur-md transition-all',
+          'md:relative md:z-auto md:w-[250px] md:bg-base-200 dark:md:bg-base-300',
+          'overflow-y-auto overflow-x-hidden md:left-0',
+          !isOpen &&
+            'left-[-100%] rounded-br-lg rounded-tr-lg bg-opacity-100 md:w-[65px]',
+        ])}>
+        <span
+          className={clsx([
+            'btn btn-square btn-ghost btn-sm absolute right-6 top-5 rounded-md transition-all',
+            !isOpen && 'btn-active right-[15px]',
+          ])}
+          onClick={() => setIsOpen(prev => !prev)}>
+          {isOpen ? <ChevronsLeft size={18} /> : <ChevronsRight size={18} />}
         </span>
-        <Image
-          src='/logo-white.png'
-          width={114.72}
-          height={30}
-          alt='Logo'
-          className='hidden dark:flex'
-        />
 
-        <Image
-          src='/logo-black.png'
-          width={114.72}
-          height={30}
-          alt='Logo'
-          className='flex dark:hidden'
-        />
-      </Link>
+        <Link
+          href='/admin/links'
+          title='Home page'
+          className={clsx([
+            'indicator mb-5 flex cursor-pointer justify-end opacity-100 transition-all',
+            !isOpen && 'opacity-0 md:translate-x-full',
+          ])}>
+          <span className='indicator-end badge indicator-item badge-primary badge-xs'>
+            Beta
+          </span>
+          <Image
+            src='/logo-white.png'
+            width={114.72}
+            height={30}
+            alt='Logo'
+            className='hidden dark:flex'
+          />
 
-      <NavLinks onClick={onClose} />
+          <Image
+            src='/logo-black.png'
+            width={114.72}
+            height={30}
+            alt='Logo'
+            className='flex dark:hidden'
+          />
+        </Link>
 
-      <div className='mt-auto flex w-full flex-row items-center justify-between'>
-        <p className=' text-left text-xs'>v0.0.1 (beta)</p>
-        <ThemeSwitcher />
-      </div>
-    </nav>
+        <NavLinks onClick={() => setIsOpen(false)} isOpen={isOpen} />
+      </nav>
+
+      <span
+        onClick={() => setIsOpen(true)}
+        className={clsx([
+          'btn btn-neutral btn-md fixed bottom-5 left-[-100%] z-20 transition-all duration-300 md:hidden',
+          !isOpen && 'left-[20px]',
+        ])}>
+        <Menu size={18} />
+      </span>
+    </>
   )
 }

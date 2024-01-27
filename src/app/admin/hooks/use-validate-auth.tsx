@@ -28,8 +28,7 @@ export const useValidateAuth = () => {
       if (!firebaseUser.emailVerified && isEmailAccount) {
         router.push('/auth/verify-email')
       } else {
-        if (pathName === '/auth' || pathName === '/admin')
-          router.push('/admin/links')
+        if (pathName === '/auth') router.push('/admin')
       }
       setIsFetchingUser(false)
     })

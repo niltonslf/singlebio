@@ -95,7 +95,7 @@ const SignIn = observer(() => {
         <Button
           onClick={handleLoginWithGithub}
           isLoading={isLoading}
-          className='flex w-full max-w-md items-center justify-center gap-2 rounded-lg border-neutral bg-gray-600 px-4 py-2 text-center text-sm  text-neutral-50 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'>
+          className='flex w-full max-w-md items-center justify-center gap-2 rounded-lg border-base-200 bg-gray-600 px-4 py-2 text-center text-sm  text-neutral-50 shadow-md transition duration-200 ease-in hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-200'>
           <GithubIcon />
           Sign in with GitHub
         </Button>

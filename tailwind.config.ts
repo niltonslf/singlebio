@@ -28,9 +28,9 @@ const config: Config = {
           'accent-focus': '#203f0a' /* Accent color - focused */,
           'accent-content': '#faf7f5' /* Foreground content color  */,
 
-          'neutral': '#1e1e24' /* Neutral color */,
-          'neutral-focus': '#1a1a1f' /* Neutral color - focused */,
-          'neutral-content': '#ebecf0' /* Foreground content color */,
+          'neutral': '#ebecf0' /* Neutral color */,
+          'neutral-focus': '#b9b9bd' /* Neutral color - focused */,
+          'neutral-content': '#17171d' /* Foreground content color */,
 
           'base-100': '#23232a' /* Base color of page, used for blank bg */,
           'base-200': '#1a1a1f' /* Base color, a little darker */,

@@ -15,7 +15,7 @@ export const CookieConsentBanner = () => {
       enableDeclineButton
       buttonText='ACCEPT COOKIES'
       buttonWrapperClasses='flex gap-5 flex-col md:flex-row w-full md:w-auto'
-      buttonClasses='btn bg-neutral-content text-neutral text-xs  w-full md:w-auto hover:bg-neutral hover:text-neutral-content'
+      buttonClasses='btn bg-neutral-content text-base-200 text-xs  w-full md:w-auto hover:bg-base-200 hover:text-neutral-content'
       declineButtonText='DECLINE COOKIES'
       declineButtonClasses='btn btn-outline text-xs w-full md:w-auto'
       contentClasses='flex-1 '>
