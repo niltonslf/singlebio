@@ -48,7 +48,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
       label: 'App',
       links: [
         {
-          href: '/admin/links',
+          href: '/admin',
           title: 'go to home page',
           name: 'Links',
           Icon: <Link2 width={18} />,

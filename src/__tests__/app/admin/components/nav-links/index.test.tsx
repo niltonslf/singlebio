@@ -4,7 +4,7 @@ import {screen} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
-  usePathname: jest.fn(() => '/admin/links'),
+  usePathname: jest.fn(() => '/admin'),
 }))
 
 const makeSUT = () => {
@@ -18,6 +18,6 @@ describe('NavLinks component', () => {
     const sections = screen.getAllByRole('link')
     const homeLink = sections[0]
 
-    expect(homeLink).toHaveAttribute('href', '/admin/links')
+    expect(homeLink).toHaveAttribute('href', '/admin')
   })
 })

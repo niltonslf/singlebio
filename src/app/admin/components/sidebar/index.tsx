@@ -35,7 +35,7 @@ export const Sidebar = () => {
         </span>
 
         <Link
-          href='/admin/links'
+          href='/admin'
           title='Home page'
           className={clsx([
             'indicator mb-5 flex cursor-pointer justify-end opacity-100 transition-all',

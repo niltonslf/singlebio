@@ -104,8 +104,8 @@ describe('Auth Page', () => {
         passwordMock,
       )
       expect(mockRouter).toMatchObject({
-        asPath: '/admin/links',
-        pathname: '/admin/links',
+        asPath: '/admin',
+        pathname: '/admin',
         query: {},
       })
     })
@@ -168,8 +168,8 @@ describe('Auth Page', () => {
       await user.click(googleButton)
 
       expect(mockRouter).toMatchObject({
-        asPath: '/admin/links',
-        pathname: '/admin/links',
+        asPath: '/admin',
+        pathname: '/admin',
         query: {},
       })
     })
@@ -187,8 +187,8 @@ describe('Auth Page', () => {
       await user.click(githubBtn)
 
       expect(mockRouter).toMatchObject({
-        asPath: '/admin/links',
-        pathname: '/admin/links',
+        asPath: '/admin',
+        pathname: '/admin',
       })
     })
     it('should return an error when tried to sign in with github', async () => {

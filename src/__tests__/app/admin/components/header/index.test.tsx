@@ -10,7 +10,7 @@ import {cleanup, screen} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
-  usePathname: jest.fn(() => '/admin/links'),
+  usePathname: jest.fn(() => '/admin'),
 }))
 
 jest.mock('firebase/auth', () => ({
@@ -63,7 +63,7 @@ describe('Header component', () => {
   })
 
   it('should logout user', async () => {
-    routerMock.push('/admin/links')
+    routerMock.push('/admin')
 
     jest.spyOn(firebaseAuth, 'getAuth').mockImplementation()
     jest.spyOn(firebaseAuth, 'signOut').mockImplementation()
