@@ -2,7 +2,7 @@ import * as firestore from 'firebase/firestore'
 
 import {fail, makeLink, makeUser, setup} from '@/__tests__/__helpers__'
 import {LinksSection} from '@/app/admin/components/links-section'
-import {SmartphoneProvider} from '@/app/admin/context/smartphone-context'
+import {adminStore} from '@/app/admin/context/admin-store'
 import {Link, User} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 import {act, cleanup, screen, waitFor} from '@testing-library/react'
@@ -13,19 +13,9 @@ jest.mock('firebase/firestore', () => ({
   addDoc: jest.fn(),
 }))
 
-jest.mock('@/app/admin/context/smartphone-context', () => {
-  return {
-    ...jest.requireActual('@/app/admin/context/smartphone-context'),
-  }
-})
-
 const makeSUT = (user?: User) => {
   const userMock = user ?? makeUser()
-  const sut = setup(
-    <SmartphoneProvider>
-      <LinksSection user={userMock} />
-    </SmartphoneProvider>,
-  )
+  const sut = setup(<LinksSection user={userMock} />)
   return {userMock, ...sut}
 }
 

@@ -15,7 +15,7 @@ export const makeUser = (
     pictureUrl: pictureUrl ?? faker.image.urlLoremFlickr(),
     uid: uid ?? faker.string.uuid(),
     username: username ?? faker.internet.userName(),
-    theme: theme,
+    theme: theme ?? makeUserTheme(),
     pageViews: 0,
   }
 }

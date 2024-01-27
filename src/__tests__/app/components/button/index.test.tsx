@@ -6,7 +6,7 @@ import {screen} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
-  usePathname: jest.fn(() => '/admin),
+  usePathname: jest.fn(() => '/admin'),
 }))
 
 const makeSUT = (
