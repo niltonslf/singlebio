@@ -24,7 +24,7 @@ export interface ThemeOption<T> extends Option<T> {
 
 export const themeOptions: Record<string, ThemeOption<ThemeProps>> = {
   default: {
-    image: '/theme/theme-arch.png',
+    image: '/theme/theme-default.png',
     name: 'default',
     component: DefaultTheme,
     defaultTheme: {
