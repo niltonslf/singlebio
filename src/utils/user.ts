@@ -4,8 +4,8 @@ import {User, UserTheme} from '@/domain/models'
 
 export const parseToUser = (
   firebaseUser: FbUser,
+  theme: UserTheme,
   username?: string,
-  theme?: UserTheme,
 ): User => {
   if (!firebaseUser.email || !firebaseUser.uid)
     throw new Error('email and uid are required.')
@@ -17,10 +17,9 @@ export const parseToUser = (
     name: firebaseUser.displayName || fallbackName,
     pictureUrl: firebaseUser.photoURL || '',
     uid: firebaseUser.uid,
-    pageViews: 0,
+    theme: theme,
   }
 
-  if (theme) response.theme = theme
   if (username) response.username = username
 
   return response

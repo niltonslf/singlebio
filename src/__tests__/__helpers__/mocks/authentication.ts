@@ -4,7 +4,7 @@ import * as firestore from 'firebase/firestore'
 
 import {parseToUser} from '@/utils'
 
-import {makeGetDocsResponse} from '.'
+import {makeGetDocsResponse, makeUserTheme} from '.'
 
 jest.mock('firebase/auth', () => ({
   __esModule: true,
@@ -20,7 +20,9 @@ export const handlePageAuthentication = (
   fbUserMock: User | undefined,
   username?: string,
 ) => {
-  const data = fbUserMock ? parseToUser(fbUserMock, username) : undefined
+  const data = fbUserMock
+    ? parseToUser(fbUserMock, makeUserTheme(), username)
+    : undefined
   jest
     .spyOn(firebaseAuth, 'onAuthStateChanged')
     .mockImplementation((auth: any, userCallback: any) => {

@@ -142,7 +142,7 @@ describe('AuthStore', () => {
   describe('createWithEmailAndPassword', () => {
     it('should create an account using email and password', async () => {
       const firebaseUserMock = makeFbUser()
-      const userMock = parseToUser(firebaseUserMock)
+      const userMock = parseToUser(firebaseUserMock, makeUserTheme())
       const passwordMock = faker.internet.password({length: 8})
       const displayNameMock = faker.internet.userName()
 
@@ -183,7 +183,7 @@ describe('AuthStore', () => {
 
     it('should return an error to create an account', async () => {
       const firebaseUserMock = makeFbUser()
-      const userMock = parseToUser(firebaseUserMock)
+      const userMock = parseToUser(firebaseUserMock, makeUserTheme())
       const passwordMock = faker.internet.password({length: 8})
       const displayNameMock = faker.internet.userName()
 
@@ -203,7 +203,7 @@ describe('AuthStore', () => {
 
     it('should return a custom error to create an account', async () => {
       const firebaseUserMock = makeFbUser()
-      const userMock = parseToUser(firebaseUserMock)
+      const userMock = parseToUser(firebaseUserMock, makeUserTheme())
       const passwordMock = faker.internet.password({length: 8})
       const displayNameMock = faker.internet.userName()
 
@@ -269,7 +269,7 @@ describe('AuthStore', () => {
 
     it('should authenticate the user creating a new account', async () => {
       const firebaseUser = makeFbUser()
-      const userMock = parseToUser(firebaseUser)
+      const userMock = parseToUser(firebaseUser, makeUserTheme())
 
       // simulate no user found
       const userRes = makeGetDocsResponse({exists: false})
@@ -356,7 +356,7 @@ describe('AuthStore', () => {
 
     it('should delete user with google provider', async () => {
       const fbUserMock = makeFbUser({providerId: AuthProviders.GOOGLE})
-      const userMock = parseToUser(fbUserMock)
+      const userMock = parseToUser(fbUserMock, makeUserTheme())
 
       // simulate an user logged in
       adminStore.setUser(userMock)
@@ -390,7 +390,7 @@ describe('AuthStore', () => {
 
     it('should delete user with github provider', async () => {
       const fbUserMock = makeFbUser({providerId: AuthProviders.GITHUB})
-      const userMock = parseToUser(fbUserMock)
+      const userMock = parseToUser(fbUserMock, makeUserTheme())
 
       // simulate an user logged in
       adminStore.setUser(userMock)
@@ -424,7 +424,7 @@ describe('AuthStore', () => {
 
     it('should delete user with password provider', async () => {
       const fbUserMock = makeFbUser({providerId: AuthProviders.PASSWORD})
-      const userMock = parseToUser(fbUserMock)
+      const userMock = parseToUser(fbUserMock, makeUserTheme())
 
       // simulate an user logged in
       adminStore.setUser(userMock)

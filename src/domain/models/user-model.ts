@@ -14,6 +14,5 @@ export type User = {
   bio?: string
   username?: string
   theme: UserTheme
-  pageViews: number
   features?: UserFeatures
 }

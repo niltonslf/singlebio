@@ -1,6 +1,11 @@
 import mockRouter from 'next-router-mock'
 
-import {makeFbUser, makeUser, setup} from '@/__tests__/__helpers__'
+import {
+  makeFbUser,
+  makeUser,
+  makeUserTheme,
+  setup,
+} from '@/__tests__/__helpers__'
 import {authStore} from '@/app/auth/context/auth-store'
 import AuthLayout from '@/app/auth/layout'
 import AuthPage from '@/app/auth/page'
@@ -158,7 +163,7 @@ describe('Auth Page', () => {
 
     it('Should sign in with Google successfully  ', async () => {
       const firebaseUserMock = makeFbUser()
-      const userMock = parseToUser(firebaseUserMock) as User
+      const userMock = parseToUser(firebaseUserMock, makeUserTheme()) as User
 
       jest.spyOn(authStore, 'signInWithGoogle').mockResolvedValue(userMock)
 

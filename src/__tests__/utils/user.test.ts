@@ -9,7 +9,7 @@ describe('parseToUser', () => {
   it('returns a user object', () => {
     const firebaseUser = makeFbUser()
 
-    const user = parseToUser(firebaseUser)
+    const user = parseToUser(firebaseUser, makeUserTheme())
 
     expect(user).toEqual({
       email: firebaseUser.email,
@@ -23,7 +23,7 @@ describe('parseToUser', () => {
     const firebaseUser = makeFbUser()
     const theme = makeUserTheme()
 
-    const user = parseToUser(firebaseUser, undefined, theme)
+    const user = parseToUser(firebaseUser, theme)
 
     expect(user).toEqual({
       email: firebaseUser.email,
@@ -42,7 +42,7 @@ describe('parseToUser', () => {
       uid: faker.string.uuid(),
     } as User
 
-    expect(() => parseToUser(firebaseUser)).toThrowError()
+    expect(() => parseToUser(firebaseUser, makeUserTheme())).toThrowError()
   })
 
   it('return a user object without picture and name', () => {
@@ -51,7 +51,7 @@ describe('parseToUser', () => {
       uid: faker.string.uuid(),
     } as User
 
-    const user = parseToUser(firebaseUser)
+    const user = parseToUser(firebaseUser, makeUserTheme())
 
     expect(user).toEqual({
       email: firebaseUser.email,
