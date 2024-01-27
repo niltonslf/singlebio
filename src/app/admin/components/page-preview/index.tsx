@@ -1,3 +1,5 @@
+'use client'
+
 import {SmartphoneCanvas} from '@/app/admin/components'
 import {themeOptions} from '@/constants/theme-options'
 import {Link, SocialPage, User, UserTheme} from '@/domain/models'
@@ -16,7 +18,7 @@ export const PagePreview = ({user, socialPages, pageLinks, theme}: Props) => {
   return (
     <div
       className={merge(['flex h-full min-w-full', 'bg-cover bg-center'])}
-      style={{backgroundImage: `url(${theme.backgroundImage})`}}>
+      style={{backgroundImage: `url(${theme?.backgroundImage})`}}>
       <div className='flex h-full w-full items-center justify-center backdrop-blur-md'>
         <SmartphoneCanvas>
           {user && (
