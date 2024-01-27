@@ -10,7 +10,7 @@ import {useState} from 'react'
 import {merge} from '@/utils'
 
 export const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
@@ -27,7 +27,7 @@ export const Sidebar = () => {
         ])}>
         <span
           className={clsx([
-            'btn btn-square btn-ghost btn-sm absolute right-6 top-5 rounded-md transition-all',
+            'btn btn-square btn-ghost btn-sm absolute right-6 top-4 rounded-md transition-all',
             !isOpen && 'btn-active right-[15px]',
           ])}
           onClick={() => setIsOpen(prev => !prev)}>

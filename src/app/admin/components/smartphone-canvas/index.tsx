@@ -11,9 +11,9 @@ export const SmartphoneCanvas = ({children}: SmartphoneCanvasProps) => {
     <div
       className={merge([
         'shadow-[0px_0px_30px_0px_rgba(154, 154, 154, 0.1)] rounded-[60px]',
-        'max-h-[calc(100vh-90px)] max-w-[calc(100vw-100px)] md:max-h-[100%] md:max-w-[350px] ',
-        '-mb-12 h-full w-full md:mb-0 md:h-auto',
-        'scale-75 transform',
+        'max-h-[calc(100vh-30px)] max-w-[calc(100vw-110px)] md:max-h-[100%] md:max-w-[350px] ',
+        'mb-5 h-full w-full md:mb-0 md:h-auto',
+        'pt-5 md:scale-75 md:transform md:pt-0',
       ])}>
       <div
         className='after:content-[" "] before:content-[" "]
@@ -22,14 +22,14 @@ export const SmartphoneCanvas = ({children}: SmartphoneCanvasProps) => {
         flex 
         aspect-[9/19] 
         h-full 
-        max-h-[calc(100vh-90px)]
+        max-h-[calc(100vh-30px)]
         w-full
-        max-w-[calc(100vw-70px)]
+        max-w-[calc(100vw-110px)]
         items-center 
         justify-center 
         overflow-hidden
-        rounded-bl-[0px]
-        rounded-br-[0px]
+        rounded-bl-[40px]
+        rounded-br-[40px]
         rounded-tl-[40px]
         rounded-tr-[40px]
         bg-black

@@ -13,7 +13,7 @@ export const AdminBaseLayout = ({children}: LayoutProps) => {
   return (
     <div
       className={merge([
-        'flex h-auto w-full flex-col flex-wrap gap-10',
+        'flex h-auto w-full flex-col flex-wrap gap-5',
         'md:flex-row',
       ])}>
       {children}
