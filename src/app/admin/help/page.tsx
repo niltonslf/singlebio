@@ -12,7 +12,7 @@ const Help = observer(() => {
 
   return (
     <AdminBaseLayout>
-      <AdminBaseLayout.Content>
+      <AdminBaseLayout.Content className='mr-5'>
         <h1 className='mb-8 text-2xl font-semibold'>Help</h1>
 
         <SectionCard title='Get in touch'>
@@ -21,8 +21,8 @@ const Help = observer(() => {
               <Image
                 src='/me.png'
                 alt='The developer'
-                width={250}
-                height={250}
+                width={350}
+                height={350}
                 className='h-full w-full object-cover'
               />
             </figure>
