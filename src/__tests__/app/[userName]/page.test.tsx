@@ -7,12 +7,12 @@ import {
   makeUserTheme,
   setup,
 } from '@/__tests__/__helpers__'
+import * as fetchUser from '@/api/usecases/user'
 import UserPage from '@/app/[username]/page'
-import * as fetchUser from '@/data/usecases/user'
 import {Link, SocialPage, User} from '@/domain/models'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
-jest.mock('@/data/usecases/user')
+jest.mock('@/api/usecases/user')
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),

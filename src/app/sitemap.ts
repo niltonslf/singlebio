@@ -1,6 +1,6 @@
 import {MetadataRoute} from 'next'
 
-import {fetchAllUsernames} from '@/data/usecases'
+import {fetchAllUsernames} from '@/api/usecases'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? ''
