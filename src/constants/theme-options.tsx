@@ -1,6 +1,7 @@
 import {ComponentType} from 'react'
 
 import {DefaultTheme, ArchTheme} from '@/app/[username]/themes'
+import {BlueTheme} from '@/app/[username]/themes/blue'
 import {
   ButtonCircle,
   ButtonCircleOutline,
@@ -9,6 +10,7 @@ import {
   ButtonSquare,
   ButtonSquareOutline,
 } from '@/app/[username]/themes/components'
+import {GrayTheme} from '@/app/[username]/themes/gray'
 import {ThemeButtonProps, ThemeProps} from '@/app/[username]/themes/types'
 import {ThemeButtonStyles, UserTheme} from '@/domain/models'
 
@@ -53,6 +55,38 @@ export const themeOptions: Record<string, ThemeOption<ThemeProps>> = {
       socialDefaultColor: false,
       socialIconColor: '#000000',
       usernameColor: '#000000',
+    },
+  },
+  gray: {
+    image: '/theme/theme-gray.png',
+    name: 'gray',
+    component: GrayTheme,
+    defaultTheme: {
+      name: 'gray',
+      backgroundColor: '#f2f2f2',
+      backgroundImage: '',
+      buttonBackground: '#FFF',
+      buttonStyle: 'default',
+      buttonTextColor: '#000000',
+      socialDefaultColor: false,
+      socialIconColor: '#000000',
+      usernameColor: '#000000',
+    },
+  },
+  blue: {
+    image: '/theme/theme-blue.png',
+    name: 'blue',
+    component: BlueTheme,
+    defaultTheme: {
+      name: 'blue',
+      backgroundColor: '#2d93f1',
+      backgroundImage: '',
+      buttonBackground: '#00427e',
+      buttonStyle: 'default',
+      buttonTextColor: '#f2f2f2',
+      socialDefaultColor: false,
+      socialIconColor: '#f2f2f2',
+      usernameColor: '#f2f2f2',
     },
   },
 }
