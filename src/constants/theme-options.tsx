@@ -1,7 +1,12 @@
 import {ComponentType} from 'react'
 
-import {DefaultTheme, ArchTheme} from '@/app/[username]/themes'
-import {BlueTheme} from '@/app/[username]/themes/blue'
+import {
+  DefaultTheme,
+  ArchTheme,
+  GreenTheme,
+  GrayTheme,
+  BlueTheme,
+} from '@/app/[username]/themes'
 import {
   ButtonCircle,
   ButtonCircleOutline,
@@ -10,7 +15,6 @@ import {
   ButtonSquare,
   ButtonSquareOutline,
 } from '@/app/[username]/themes/components'
-import {GrayTheme} from '@/app/[username]/themes/gray'
 import {ThemeButtonProps, ThemeProps} from '@/app/[username]/themes/types'
 import {ThemeButtonStyles, UserTheme} from '@/domain/models'
 
@@ -87,6 +91,22 @@ export const themeOptions: Record<string, ThemeOption<ThemeProps>> = {
       socialDefaultColor: false,
       socialIconColor: '#f2f2f2',
       usernameColor: '#f2f2f2',
+    },
+  },
+  green: {
+    image: '/theme/theme-green.png',
+    name: 'green',
+    component: GreenTheme,
+    defaultTheme: {
+      name: 'green',
+      backgroundColor: '#f5fdf4',
+      backgroundImage: '',
+      buttonBackground: '#a6eb99',
+      buttonStyle: 'circle',
+      buttonTextColor: '#000000',
+      socialDefaultColor: false,
+      socialIconColor: '#000000',
+      usernameColor: '#000000',
     },
   },
 }
