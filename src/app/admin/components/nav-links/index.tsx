@@ -3,6 +3,7 @@
 import clsx from 'clsx'
 import {
   BarChartHorizontalBig,
+  Copy,
   Info,
   LayoutDashboard,
   Link2,
@@ -126,6 +127,12 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
     },
   ]
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(
+      parseUserPageUrl(adminStore.user?.username ?? ''),
+    )
+  }
+
   return (
     <div className='flex h-full w-full flex-col gap-3 md:w-[210px]'>
       {Object.keys(navbarItems).map(section => {
@@ -159,8 +166,17 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
         )
       })}
 
-      <div className='mt-auto '>
-        {adminStore?.user?.username && (
+      {adminStore?.user?.username && (
+        <>
+          <span
+            onClick={() => handleCopyLink()}
+            className={merge([
+              'font-base btn btn-outline mt-auto w-full px-3 font-light',
+              !isOpen && 'w-9 p-0',
+            ])}>
+            <span className={merge([!isOpen && 'hidden'])}>Copy url</span>
+            <Copy size={18} />
+          </span>
           <Link
             href={parseUserPageUrl(adminStore.user.username)}
             target='_blank'
@@ -173,8 +189,8 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
             </span>
             <LinkIcon size={18} />
           </Link>
-        )}
-      </div>
+        </>
+      )}
 
       <div
         className={merge([
