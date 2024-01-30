@@ -28,35 +28,36 @@ const ThemePage = observer(() => {
 
   return (
     <AdminBaseLayout>
-      <AdminBaseLayout.Content className='gap-5'>
+      <AdminBaseLayout.Content>
         <h1 className='mb-8 text-2xl font-semibold'>Theme</h1>
 
         <SectionCard>
-          <div className='carousel carousel-end w-full gap-3 '>
-            {themes.map(theme => (
-              <div
-                key={theme.name}
-                className={clsx([
-                  'carousel-item w-40 cursor-pointer overflow-hidden rounded-md',
-                  user?.theme?.name === theme.name &&
-                    ' box-border border border-base-content p-2',
-                ])}
-                onClick={() => handleSelectTheme(theme)}>
-                <Image
-                  width={160}
-                  height={285}
-                  src={theme.image}
-                  alt={theme.name}
-                  className='w-full rounded-md'
-                />
-              </div>
-            ))}
-          </div>
-          <div className='alert alert-info mt-5'>
+          <div className='alert alert-info mb-5'>
             <Info size={18} />
             <span>
               Some of your customizations can be lost by selecting a new theme.
             </span>
+          </div>
+
+          <div className=' flex w-full flex-wrap gap-5 '>
+            {themes.map(theme => (
+              <div
+                key={theme.name}
+                className={clsx([
+                  'w-[23%] cursor-pointer overflow-hidden rounded-md',
+                  user?.theme?.name === theme.name &&
+                    'box-border border border-base-content p-2',
+                ])}
+                onClick={() => handleSelectTheme(theme)}>
+                <Image
+                  width={180}
+                  height={305}
+                  src={theme.image}
+                  alt={theme.name}
+                  className='h-full w-full rounded-md object-cover'
+                />
+              </div>
+            ))}
           </div>
         </SectionCard>
       </AdminBaseLayout.Content>
