@@ -1,10 +1,10 @@
 'use client'
 
-import {AlertTriangle, CheckCircle} from 'lucide-react'
+import {AlertTriangle} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
-import {PagePreview} from '@/app/admin/components'
+import {PagePreview, toastAlertStore} from '@/app/admin/components'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {useImageUploader, useImageCompressor} from '@/app/admin/hooks'
 import {authStore} from '@/app/auth/context/auth-store'
@@ -25,16 +25,10 @@ const AppearancePage = observer(() => {
   const {compress} = useImageCompressor()
   const {upload} = useImageUploader()
 
-  const [updated, setUpdated] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
-  const scheduleCloseSuccessMsg = () => {
-    setTimeout(() => setUpdated(false), 5000)
-  }
 
   const handleSaveAppearance = async () => {
     const data = {theme}
-    setIsLoading(true)
 
     if (aux.backgroundFile && theme.backgroundImage) {
       const newImage = await compress(aux.backgroundFile)
@@ -45,9 +39,13 @@ const AppearancePage = observer(() => {
     }
 
     await authStore.updateUser(data)
-    setUpdated(true)
-    scheduleCloseSuccessMsg()
     setIsLoading(false)
+
+    toastAlertStore.show({
+      title: 'Theme published with success!',
+      message: 'You can check on your page link.',
+      type: 'success',
+    })
   }
 
   const handleResetAppearance = () => appearanceStore.reset()
@@ -98,30 +96,21 @@ const AppearancePage = observer(() => {
           </Collapse.Item>
         </Collapse>
 
-        {updated ? (
-          <div role='alert' className='alert alert-success mb-5'>
-            <CheckCircle />
-            Theme published with success! You can check on your profile link.
-          </div>
-        ) : (
-          <>
-            <div className='divider'></div>
+        <div className='divider'></div>
 
-            <div className='flex flex-row flex-nowrap items-center gap-5'>
-              <button
-                className='btn btn-primary btn-md flex-[2] md:btn-wide'
-                onClick={() => handleSaveAppearance()}>
-                {isLoading && <span className='loading loading-spinner'></span>}
-                Save
-              </button>
-              <button
-                className='btn btn-md flex-1 bg-base-300 md:btn-wide'
-                onClick={() => handleResetAppearance()}>
-                Reset
-              </button>
-            </div>
-          </>
-        )}
+        <div className='flex flex-row flex-nowrap items-center gap-5'>
+          <button
+            className='btn btn-primary btn-md flex-[2] md:btn-wide'
+            onClick={() => handleSaveAppearance()}>
+            {isLoading && <span className='loading loading-spinner'></span>}
+            Save
+          </button>
+          <button
+            className='btn btn-md flex-1 bg-base-300 md:btn-wide'
+            onClick={() => handleResetAppearance()}>
+            Reset
+          </button>
+        </div>
       </AdminBaseLayout.Content>
 
       <AdminBaseLayout.PagePreview>
