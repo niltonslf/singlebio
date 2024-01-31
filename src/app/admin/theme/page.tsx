@@ -44,7 +44,7 @@ const ThemePage = observer(() => {
               <div
                 key={theme.name}
                 className={clsx([
-                  'w-[23%] cursor-pointer overflow-hidden rounded-md',
+                  'w-[calc(25%-1.25rem)] cursor-pointer overflow-hidden rounded-md',
                   user?.theme?.name === theme.name &&
                     'box-border border border-base-content p-2',
                 ])}
