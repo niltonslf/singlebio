@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import Link from 'next/link'
-import {ReactNode} from 'react'
+import {Fragment, ReactNode} from 'react'
 
 import {toastAlertStore} from '@/app/admin/components'
 import {NavLink} from '@/app/admin/components/nav-links/components'
@@ -154,7 +154,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
             </p>
             <div className='flex flex-col gap-1'>
               {navbarItems[section].links.map(page => (
-                <>
+                <Fragment key={page.href}>
                   <NavLink page={page} className='hidden md:flex'>
                     {page.Icon}
                     <p className={merge([!isOpen && 'md:opacity-0'])}>
@@ -166,7 +166,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
                     {page.Icon}
                     <p>{page.name}</p>
                   </NavLink>
-                </>
+                </Fragment>
               ))}
             </div>
           </div>
@@ -205,7 +205,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
           !isOpen && 'border-t-0',
         ])}>
         {settings.map(page => (
-          <>
+          <Fragment key={page.href}>
             <NavLink page={page} className='hidden md:flex'>
               {page.Icon}
               <p className={merge([!isOpen && 'md:opacity-0'])}>{page.name}</p>
@@ -215,7 +215,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
               {page.Icon}
               <p>{page.name}</p>
             </NavLink>
-          </>
+          </Fragment>
         ))}
       </div>
     </div>

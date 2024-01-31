@@ -1,5 +1,5 @@
-import {setup} from '@/__tests__/__helpers__'
-import {LinkCard} from '@/app/components'
+import {makeLink, setup} from '@/__tests__/__helpers__'
+import {LinkCard} from '@/app/[username]/components/link-card'
 
 describe('Link component', () => {
   it('should render LinkCard with a children', () => {
@@ -14,8 +14,10 @@ describe('Link component', () => {
   })
 
   it('should render LinkCard.Item with a children', () => {
+    const linkMock = makeLink()
+
     const {baseElement} = setup(
-      <LinkCard.Item path='/'>
+      <LinkCard.Item link={linkMock}>
         <span>I'm a child</span>
       </LinkCard.Item>,
     )
@@ -25,12 +27,16 @@ describe('Link component', () => {
   })
 
   it('LinkCard.Item should  have a link tag', () => {
+    const linkMock = makeLink()
+
     const {baseElement} = setup(
-      <LinkCard.Item path='/'>
+      <LinkCard.Item link={linkMock}>
         <span>I'm a child</span>
       </LinkCard.Item>,
     )
 
-    expect(baseElement?.querySelector('a')?.getAttribute('href')).toBe('//')
+    const link = baseElement?.querySelector('a')
+
+    expect(link?.getAttribute('href')).toBe(linkMock.url)
   })
 })
