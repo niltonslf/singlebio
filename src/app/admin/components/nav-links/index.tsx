@@ -120,7 +120,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
     },
     {
       href: '',
-      onClick: authStore.logout,
+      onClick: () => authStore.logout(),
       title: 'logout',
       name: 'Logout',
       Icon: <LogOut width={18} />,
@@ -139,7 +139,9 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
   }
 
   return (
-    <div className='flex h-full w-full flex-col gap-3 md:w-[210px]'>
+    <div
+      className='flex h-full w-full flex-col gap-3 md:w-[210px]'
+      data-testid='nav-links'>
       {Object.keys(navbarItems).map(section => {
         return (
           <div key={section} className={clsx(['w-full'])}>

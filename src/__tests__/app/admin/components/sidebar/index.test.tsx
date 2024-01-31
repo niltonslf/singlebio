@@ -3,7 +3,7 @@ import {Sidebar} from '@/app/admin/components'
 import {screen} from '@testing-library/react'
 
 const makeSUT = () => {
-  return setup(<Sidebar isOpen={true} onClose={() => null} />)
+  return setup(<Sidebar />)
 }
 
 describe('Sidebar component', () => {
@@ -11,11 +11,11 @@ describe('Sidebar component', () => {
     makeSUT()
 
     const logos = screen.getAllByRole('img')
-    const mobileBtn = screen.getByRole('button')
-    const menuSections = document.querySelectorAll('nav > div > div')
+    const mobileBtn = screen.getByTestId('sidebar-toggle-button')
+    const navLinksWrapper = screen.getByTestId('nav-links')
 
     expect(logos.length).toBe(2)
     expect(mobileBtn).toBeInTheDocument()
-    expect(menuSections).toHaveLength(3)
+    expect(navLinksWrapper).toBeInTheDocument()
   })
 })

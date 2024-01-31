@@ -27,6 +27,7 @@ export const Sidebar = observer(() => {
             'left-[-100%] rounded-br-lg rounded-tr-lg bg-opacity-100 md:w-[65px]',
         ])}>
         <span
+          data-testid='sidebar-toggle-button'
           className={clsx([
             'btn btn-square btn-ghost btn-sm absolute right-6 top-4 rounded-md transition-all',
             !isOpen && 'btn-active right-[15px]',

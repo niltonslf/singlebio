@@ -62,25 +62,27 @@ describe('Auth Page', () => {
   it('should render Auth page with all sign in methods', async () => {
     await makeSUT()
 
-    const formLogo = screen.getByRole('img')
-    const emailInput = screen.getByRole('textbox')
-    const passwordInput = screen.getByPlaceholderText(/password/i)
-    const signInButton = screen.getByText(/Sign in with email/i)
-    const forgotPasswordLink = screen.getByRole('link', {
-      name: /forgot your password\?/i,
-    })
-    const createAccountLink = screen.getByRole('link', {
-      name: /create an account/i,
-    })
+    await waitFor(async () => {
+      const formLogo = screen.getByRole('img')
+      const emailInput = screen.getByRole('textbox')
+      const passwordInput = screen.getByPlaceholderText(/password/i)
+      const signInButton = screen.getByText(/Sign in with email/i)
+      const forgotPasswordLink = screen.getByRole('link', {
+        name: /forgot your password\?/i,
+      })
+      const createAccountLink = screen.getByRole('link', {
+        name: /create an account/i,
+      })
 
-    expect(formLogo).toHaveAttribute('alt', 'logo')
-    expect(emailInput).toBeVisible()
-    expect(passwordInput).toBeVisible()
-    expect(signInButton).toBeVisible()
-    expect(forgotPasswordLink).toBeVisible()
-    expect(createAccountLink).toBeVisible()
-    validateGoogleBtn()
-    validateGithubBtn()
+      expect(formLogo).toHaveAttribute('alt', 'logo')
+      expect(emailInput).toBeVisible()
+      expect(passwordInput).toBeVisible()
+      expect(signInButton).toBeVisible()
+      expect(forgotPasswordLink).toBeVisible()
+      expect(createAccountLink).toBeVisible()
+      validateGoogleBtn()
+      validateGithubBtn()
+    })
   })
 
   describe('sign in with email', () => {
@@ -88,26 +90,27 @@ describe('Auth Page', () => {
       jest.spyOn(authStore, 'signInWithEmailAndPassword').mockResolvedValue()
 
       const {user} = await makeSUT()
+      await waitFor(async () => {
+        const emailInput = screen.getByRole('textbox')
+        const passwordInput = screen.getByPlaceholderText(/password/i)
+        const signInButton = screen.getByText(/Sign in with email/i)
 
-      const emailInput = screen.getByRole('textbox')
-      const passwordInput = screen.getByPlaceholderText(/password/i)
-      const signInButton = screen.getByText(/Sign in with email/i)
+        const emailMock = faker.internet.email()
+        const passwordMock = faker.internet.password({length: 8})
 
-      const emailMock = faker.internet.email()
-      const passwordMock = faker.internet.password({length: 8})
+        await user.type(emailInput, emailMock)
+        await user.type(passwordInput, passwordMock)
+        await user.click(signInButton)
 
-      await user.type(emailInput, emailMock)
-      await user.type(passwordInput, passwordMock)
-      await user.click(signInButton)
-
-      expect(authStore.signInWithEmailAndPassword).toHaveBeenCalledWith(
-        emailMock,
-        passwordMock,
-      )
-      expect(mockRouter).toMatchObject({
-        asPath: '/admin',
-        pathname: '/admin',
-        query: {},
+        expect(authStore.signInWithEmailAndPassword).toHaveBeenCalledWith(
+          emailMock,
+          passwordMock,
+        )
+        expect(mockRouter).toMatchObject({
+          asPath: '/admin',
+          pathname: '/admin',
+          query: {},
+        })
       })
     })
 
@@ -183,13 +186,15 @@ describe('Auth Page', () => {
       jest.spyOn(authStore, 'signInWithGithub').mockResolvedValue()
 
       const {user} = await makeSUT()
-      const githubBtn = validateGithubBtn()
+      await waitFor(async () => {
+        const githubBtn = validateGithubBtn()
 
-      await user.click(githubBtn)
+        await user.click(githubBtn)
 
-      expect(mockRouter).toMatchObject({
-        asPath: '/admin',
-        pathname: '/admin',
+        expect(mockRouter).toMatchObject({
+          asPath: '/admin',
+          pathname: '/admin',
+        })
       })
     })
 
