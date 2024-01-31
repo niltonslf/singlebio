@@ -19,6 +19,7 @@ import {observer} from 'mobx-react-lite'
 import Link from 'next/link'
 import {ReactNode} from 'react'
 
+import {toastAlertStore} from '@/app/admin/components'
 import {NavLink} from '@/app/admin/components/nav-links/components'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {authStore} from '@/app/auth/context/auth-store'
@@ -131,6 +132,10 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
     navigator.clipboard.writeText(
       parseUserPageUrl(adminStore.user?.username ?? ''),
     )
+    toastAlertStore.show({
+      title: 'Link copied 🎉',
+      type: 'default',
+    })
   }
 
   return (

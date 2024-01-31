@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import {ChevronsLeft, ChevronsRight, Menu} from 'lucide-react'
+import {observer} from 'mobx-react-lite'
 import Image from 'next/image'
 
 import {NavLinks} from '..'
@@ -9,7 +10,7 @@ import {useState} from 'react'
 
 import {merge} from '@/utils'
 
-export const Sidebar = () => {
+export const Sidebar = observer(() => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -17,7 +18,7 @@ export const Sidebar = () => {
       <nav
         data-testid='admin-sidebar'
         className={merge([
-          'fixed left-0 top-0 z-40 flex h-full flex-col border-base-200 bg-base-100',
+          'fixed left-0 top-0 z-50 flex h-full flex-col border-base-200 bg-base-100',
           'w-full max-w-full flex-col gap-5 border-r px-3 py-5',
           'bg-opacity-90 backdrop-blur-md transition-all',
           'md:relative md:z-auto md:w-[250px] md:bg-base-200 dark:md:bg-base-300',
@@ -74,4 +75,4 @@ export const Sidebar = () => {
       </span>
     </>
   )
-}
+})
