@@ -8,14 +8,16 @@ import {makeFbUser, makeUserTheme} from '../__helpers__'
 describe('parseToUser', () => {
   it('returns a user object', () => {
     const firebaseUser = makeFbUser()
+    const userTheme = makeUserTheme()
 
-    const user = parseToUser(firebaseUser, makeUserTheme())
+    const user = parseToUser(firebaseUser, userTheme)
 
     expect(user).toEqual({
       email: firebaseUser.email,
       name: firebaseUser.displayName,
       pictureUrl: firebaseUser.photoURL,
       uid: firebaseUser.uid,
+      theme: userTheme,
     })
   })
   it('returns a user object with theme', () => {
@@ -48,14 +50,16 @@ describe('parseToUser', () => {
       email: faker.internet.email(),
       uid: faker.string.uuid(),
     } as User
+    const userTheme = makeUserTheme()
 
-    const user = parseToUser(firebaseUser, makeUserTheme())
+    const user = parseToUser(firebaseUser, userTheme)
 
     expect(user).toEqual({
       email: firebaseUser.email,
       name: firebaseUser?.email?.split('@')[0],
       pictureUrl: '',
       uid: firebaseUser.uid,
+      theme: userTheme,
     })
   })
 })

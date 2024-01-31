@@ -39,7 +39,7 @@ const validateGoogleBtn = () => {
 }
 
 const validateGithubBtn = () => {
-  const githubButton = screen.getByText('Sign in with GitHub')
+  const githubButton = screen.getByText(/Sign in with GitHub/i)
   expect(githubButton).toBeVisible()
   return githubButton
 }
