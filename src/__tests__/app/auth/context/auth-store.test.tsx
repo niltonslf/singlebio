@@ -56,7 +56,7 @@ describe('AuthStore', () => {
         .spyOn(firebaseAuth, 'signInWithPopup')
         .mockResolvedValue({user: firebaseUserMock} as any)
 
-      jest.spyOn(authStore, 'authUser').mockResolvedValue()
+      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
 
       await expect(authStore.signInWithGoogle()).resolves.toBeUndefined()
     })
@@ -90,7 +90,7 @@ describe('AuthStore', () => {
         .spyOn(firebaseAuth, 'signInWithEmailAndPassword')
         .mockResolvedValue({user: firebaseUserMock} as any)
 
-      jest.spyOn(authStore, 'authUser').mockResolvedValue()
+      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
 
       const signIn = authStore.signInWithEmailAndPassword(
         emailMock,
@@ -155,7 +155,7 @@ describe('AuthStore', () => {
         })
       jest.spyOn(firebaseAuth, 'updateProfile').mockResolvedValue()
       jest.spyOn(firebaseAuth, 'sendEmailVerification').mockResolvedValue()
-      jest.spyOn(authStore, 'authUser').mockResolvedValue()
+      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
       jest.spyOn(authStore, 'logout')
 
       // SUT
@@ -230,7 +230,7 @@ describe('AuthStore', () => {
         .spyOn(firebaseAuth, 'signInWithPopup')
         .mockResolvedValue({user: firebaseUserMock} as any)
 
-      jest.spyOn(authStore, 'authUser').mockResolvedValue()
+      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
 
       await expect(authStore.signInWithGithub()).resolves.toBeUndefined()
     })
@@ -253,7 +253,7 @@ describe('AuthStore', () => {
     })
   })
 
-  describe('authUser', () => {
+  describe('authOrCreateUser', () => {
     it('should authenticate the user with an existent account', async () => {
       const [firebaseUser, userMock] = [makeFbUser(), makeUser()]
 
@@ -279,8 +279,8 @@ describe('AuthStore', () => {
 
       // simulate save user
       jest
-        .spyOn(firestore, 'setDoc')
-        .mockImplementation(() => Promise.resolve())
+        .spyOn(authStore, 'persistUser')
+        .mockImplementation(() => Promise.resolve(userMock))
 
       // SUT
       await authStore.authOrCreateUser(firebaseUser)

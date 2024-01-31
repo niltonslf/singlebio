@@ -129,7 +129,7 @@ class AuthStore {
     adminStore.setUser({...newUser})
   }
 
-  private async persistUser(firebaseUser: FbUser) {
+  public async persistUser(firebaseUser: FbUser) {
     const defaultTheme = themeOptions['default'].defaultTheme
     const newUser = parseToUser(firebaseUser, defaultTheme)
     await setDoc(doc(db, 'users', newUser.uid), newUser)
