@@ -16,7 +16,6 @@ export const makeUser = (
     uid: uid ?? faker.string.uuid(),
     username: username ?? faker.internet.userName(),
     theme: theme ?? makeUserTheme(),
-    pageViews: 0,
   }
 }
 

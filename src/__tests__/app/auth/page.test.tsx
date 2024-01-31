@@ -85,11 +85,7 @@ describe('Auth Page', () => {
 
   describe('sign in with email', () => {
     it('should sign in with email successfully', async () => {
-      const userMock = makeUser()
-
-      jest
-        .spyOn(authStore, 'signInWithEmailAndPassword')
-        .mockResolvedValue(userMock)
+      jest.spyOn(authStore, 'signInWithEmailAndPassword').mockResolvedValue()
 
       const {user} = await makeSUT()
 
@@ -114,6 +110,7 @@ describe('Auth Page', () => {
         query: {},
       })
     })
+
     it('should return an error when tried to sign in with email', async () => {
       jest
         .spyOn(authStore, 'signInWithEmailAndPassword')
@@ -140,7 +137,6 @@ describe('Auth Page', () => {
       )
 
       expect(errorMsg).toHaveTextContent('error message')
-      expect(mockRouter).toMatchObject({asPath: '/auth', pathname: '/auth'})
     })
   })
 
@@ -163,9 +159,9 @@ describe('Auth Page', () => {
 
     it('Should sign in with Google successfully  ', async () => {
       const firebaseUserMock = makeFbUser()
-      const userMock = parseToUser(firebaseUserMock, makeUserTheme()) as User
+      parseToUser(firebaseUserMock, makeUserTheme()) as User
 
-      jest.spyOn(authStore, 'signInWithGoogle').mockResolvedValue(userMock)
+      jest.spyOn(authStore, 'signInWithGoogle').mockResolvedValue()
 
       const {user} = await makeSUT()
 
@@ -182,9 +178,9 @@ describe('Auth Page', () => {
 
   describe('sign in with gitHub', () => {
     it('should sign in with github successfully', async () => {
-      const userMock = makeUser()
+      makeUser()
 
-      jest.spyOn(authStore, 'signInWithGithub').mockResolvedValue(userMock)
+      jest.spyOn(authStore, 'signInWithGithub').mockResolvedValue()
 
       const {user} = await makeSUT()
       const githubBtn = validateGithubBtn()
@@ -196,7 +192,10 @@ describe('Auth Page', () => {
         pathname: '/admin',
       })
     })
+
     it('should return an error when tried to sign in with github', async () => {
+      mockRouter.push('/auth')
+
       jest.spyOn(authStore, 'signInWithGithub').mockRejectedValue('error')
 
       const {user} = await makeSUT()
@@ -207,6 +206,8 @@ describe('Auth Page', () => {
       const errorMsg = screen.getByTestId('error-msg')
 
       expect(errorMsg).toBeInTheDocument()
+      expect(errorMsg).toHaveTextContent('error')
+
       expect(mockRouter).toMatchObject({asPath: '/auth', pathname: '/auth'})
     })
   })

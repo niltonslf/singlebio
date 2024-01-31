@@ -16,7 +16,6 @@ describe('parseToUser', () => {
       name: firebaseUser.displayName,
       pictureUrl: firebaseUser.photoURL,
       uid: firebaseUser.uid,
-      pageViews: 0,
     })
   })
   it('returns a user object with theme', () => {
@@ -31,7 +30,6 @@ describe('parseToUser', () => {
       pictureUrl: firebaseUser.photoURL,
       uid: firebaseUser.uid,
       theme,
-      pageViews: 0,
     })
   })
 
@@ -58,7 +56,6 @@ describe('parseToUser', () => {
       name: firebaseUser?.email?.split('@')[0],
       pictureUrl: '',
       uid: firebaseUser.uid,
-      pageViews: 0,
     })
   })
 })
