@@ -11,10 +11,11 @@ import {
   PageLoader,
   Collapse,
   FeatureList,
+  SocialPagesSection,
+  GithubSection,
 } from '@/app/admin/components'
 import {CollapseBody} from '@/app/admin/components/collapse/collapse-body'
 import {LinksSection} from '@/app/admin/components/links-section'
-import {SocialPagesSection} from '@/app/admin/components/social-pages-section'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {authStore} from '@/app/auth/context/auth-store'
 import {SetUsernameModal} from '@/app/components'
@@ -47,14 +48,14 @@ const AdminPage = observer(() => {
       Component: SocialPagesSection,
     },
     {
+      title: 'Github',
+      Icon: Github,
+      Component: GithubSection,
+    },
+    {
       title: 'Spotify',
       Icon: AudioLines,
       iconClass: 'bg-green-600',
-      Component: LinksSection,
-    },
-    {
-      title: 'Github',
-      Icon: Github,
       Component: LinksSection,
     },
   ])
