@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import {
   BarChartHorizontalBig,
   Copy,
+  Home,
   Info,
   Layers,
   LayoutDashboard,
@@ -54,25 +55,31 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
       links: [
         {
           href: '/admin',
-          title: 'go to home page',
+          title: 'Home',
+          name: 'Home',
+          Icon: <Home width={18} />,
+        },
+        {
+          href: '/admin/page-links',
+          title: 'Page links',
           name: 'Links',
           Icon: <Link2 width={18} />,
         },
         {
           href: '/admin/profile',
-          title: 'go to register page',
+          title: 'Profile',
           name: 'Profile',
           Icon: <User2 width={18} />,
         },
         {
           href: '/admin/appearance',
-          title: 'go to appearance page',
+          title: 'Appearance',
           name: 'Appearance',
           Icon: <Palette width={18} />,
         },
         {
           href: '/admin/theme',
-          title: 'go to theme page',
+          title: 'Theme',
           name: 'Theme',
           Icon: <Layers width={18} />,
         },
@@ -83,14 +90,14 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
       links: [
         {
           href: '/admin/analytics',
-          title: 'go to analytics page',
+          title: 'Analytics',
           name: 'Analytics',
           Icon: <BarChartHorizontalBig width={18} />,
           disabled: true,
         },
         {
           href: '/admin/my-plan',
-          title: 'go to plan page',
+          title: 'Subscription',
           name: 'My subscription',
           Icon: <LayoutDashboard width={18} />,
           disabled: true,
@@ -102,19 +109,19 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
   const settings: NavLink[] = [
     {
       href: '/admin/help',
-      title: 'go to help page',
+      title: 'Help',
       name: 'Help',
       Icon: <MessagesSquare width={18} />,
     },
     {
       href: '/privacy-policy',
-      title: 'go to privacy policy page',
+      title: 'Privacy policy',
       name: 'Privacy policy',
       Icon: <Info width={18} />,
     },
     {
       href: '/admin/settings',
-      title: 'go to settings page',
+      title: 'Settings',
       name: 'Settings',
       Icon: <Settings2 width={18} />,
     },
