@@ -18,7 +18,6 @@ export const FeatureListItem = ({
 }: FeatureListItemProps) => {
   return (
     <label
-      onClick={onClick}
       className={merge([
         'color flex w-full justify-between bg-base-300 px-5 py-4 ',
         'items-center gap-3 rounded-xl',
@@ -31,7 +30,7 @@ export const FeatureListItem = ({
         {children}
       </div>
 
-      <button className='btn btn-square btn-ghost btn-sm'>
+      <button className='btn btn-square btn-ghost btn-sm' onClick={onClick}>
         <Plus className='icon-up text-base-content' />
       </button>
     </label>
