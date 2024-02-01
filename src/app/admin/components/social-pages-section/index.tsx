@@ -2,7 +2,6 @@ import {Plus} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useState} from 'react'
 
-import {SectionCard} from '@/app/admin/components'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {SocialPageCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
@@ -16,11 +15,11 @@ import {
 
 import {AddSocialModalForm, SocialItem} from './components'
 
-type SocialCardProps = {
+type SocialPagesProps = {
   user: User
 }
 
-export const SocialCard = observer(({user}: SocialCardProps) => {
+export const SocialPagesSection = observer(({user}: SocialPagesProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const {socialPages} = adminStore
 
@@ -38,7 +37,7 @@ export const SocialCard = observer(({user}: SocialCardProps) => {
   }
 
   return (
-    <SectionCard title='Social pages'>
+    <>
       <div className='flex flex-col gap-3'>
         {socialPages?.map(item => {
           return (
@@ -59,6 +58,6 @@ export const SocialCard = observer(({user}: SocialCardProps) => {
         onSubmit={handleCreate}
         onClose={() => setIsModalOpen(false)}
       />
-    </SectionCard>
+    </>
   )
 })
