@@ -3,7 +3,7 @@ import {getAuth} from 'firebase-admin/auth'
 import {initializeFirestore} from 'firebase-admin/firestore'
 
 const firestoreCredential = JSON.parse(
-  atob(process.env.FIRESTORE_CREDENTIALS || ''),
+  atob(process.env.FIRESTORE_BASE64_CREDENTIALS || ''),
 )
 
 const initApp = () => {
