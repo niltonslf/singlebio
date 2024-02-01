@@ -4,11 +4,9 @@ import clsx from 'clsx'
 import {
   BarChartHorizontalBig,
   Copy,
-  Home,
   Info,
   Layers,
-  LayoutDashboard,
-  Link2,
+  LayoutPanelTopIcon,
   LinkIcon,
   LogOut,
   MessagesSquare,
@@ -54,22 +52,16 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
       label: 'App',
       links: [
         {
-          href: '/admin',
-          title: 'Home',
-          name: 'Home',
-          Icon: <Home width={18} />,
-        },
-        {
-          href: '/admin/page-links',
-          title: 'Page links',
-          name: 'Links',
-          Icon: <Link2 width={18} />,
-        },
-        {
           href: '/admin/profile',
           title: 'Profile',
           name: 'Profile',
           Icon: <User2 width={18} />,
+        },
+        {
+          href: '/admin',
+          title: 'Sections',
+          name: 'Sections',
+          Icon: <LayoutPanelTopIcon width={18} />,
         },
         {
           href: '/admin/appearance',
@@ -83,23 +75,11 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
           name: 'Theme',
           Icon: <Layers width={18} />,
         },
-      ],
-    },
-    soon: {
-      label: 'Soon',
-      links: [
         {
           href: '/admin/analytics',
           title: 'Analytics',
           name: 'Analytics',
           Icon: <BarChartHorizontalBig width={18} />,
-          disabled: true,
-        },
-        {
-          href: '/admin/my-plan',
-          title: 'Subscription',
-          name: 'My subscription',
-          Icon: <LayoutDashboard width={18} />,
           disabled: true,
         },
       ],
@@ -185,17 +165,18 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
           <span
             onClick={() => handleCopyLink()}
             className={merge([
-              'font-base btn btn-outline mt-auto w-full px-3 font-light',
+              'font-base btn btn-outline btn-sm mt-auto w-full px-3 font-light',
               !isOpen && 'w-9 p-0',
             ])}>
             <span className={merge([!isOpen && 'hidden'])}>Copy url</span>
             <Copy size={18} />
           </span>
+
           <Link
             href={parseUserPageUrl(adminStore.user.username)}
             target='_blank'
             className={merge([
-              'font-base btn btn-outline mb-3 w-full bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-rose-500 to-indigo-700 px-3 font-light',
+              'font-base btn btn-outline btn-sm mb-3 w-full bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-rose-500 to-indigo-700 px-3 font-light',
               !isOpen && 'w-9 p-0',
             ])}>
             <span className={merge([!isOpen && 'hidden'])}>

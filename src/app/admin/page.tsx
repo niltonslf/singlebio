@@ -175,7 +175,7 @@ const AdminPage = observer(() => {
               </div>
             </div>
           ) : (
-            <Collapse defaultOpen={1}>
+            <Collapse>
               {activeFeatures.map((feature, key) => (
                 <Collapse.Item index={key + 1} key={feature.title}>
                   <Collapse.Header>
