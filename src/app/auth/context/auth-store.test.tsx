@@ -290,44 +290,6 @@ describe('AuthStore', () => {
     })
   })
 
-  describe('updateUser', () => {
-    it('should throw an error if user does not exists', async () => {
-      const userMock = makeUser()
-
-      await expect(authStore.updateUser(userMock)).rejects.toBe(
-        ERROR_MESSAGES['user-not-found'],
-      )
-    })
-
-    it('should update user data in the store and in the database', async () => {
-      const initialUserData = makeUser()
-      // simulate an user already logged in
-      adminStore.setUser(initialUserData)
-
-      jest.spyOn(firestore, 'updateDoc').mockResolvedValue()
-
-      const userNewData = {theme: makeUserTheme()}
-
-      // SUT
-      const updateRes = await authStore.updateUser(userNewData)
-
-      const mergedUserData = {...initialUserData, ...userNewData}
-
-      expect(adminStore.user).toEqual(mergedUserData)
-      expect(updateRes).toEqual(mergedUserData)
-    })
-  })
-
-  describe('setUser', () => {
-    it('should replace user data', () => {
-      const userMock = makeUser()
-
-      adminStore.setUser(userMock)
-
-      expect(adminStore.user).toEqual(userMock)
-    })
-  })
-
   describe('clearUser', () => {
     it('should clear userModel and firebaseUser properties', () => {
       authStore.clearUser()

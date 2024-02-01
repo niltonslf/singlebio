@@ -7,7 +7,6 @@ import {useEffect, useState} from 'react'
 import {PagePreview, toastAlertStore} from '@/app/admin/components'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {useImageUploader, useImageCompressor} from '@/app/admin/hooks'
-import {authStore} from '@/app/auth/context/auth-store'
 
 import {Collapse, AdminBaseLayout} from '../components'
 import {
@@ -38,7 +37,7 @@ const AppearancePage = observer(() => {
       appearanceStore.setBackgroundFile(undefined)
     }
 
-    await authStore.updateUser(data)
+    await adminStore.updateUser(data)
     setIsLoading(false)
 
     toastAlertStore.show({

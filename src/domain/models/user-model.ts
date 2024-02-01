@@ -1,11 +1,21 @@
 import {UserTheme} from '@/domain/models/user-theme-model'
 
+export type UserFeaturesList = keyof UserFeatures
+
 export type UserFeatures = {
+  pageLinks?: {
+    order: number
+  }
+  socialPages?: {
+    order: number
+  }
   github?: {
-    username: string
+    username?: string
+    order: number
   }
   spotify?: {
-    url: string
+    url?: string
+    order: number
   }
 }
 

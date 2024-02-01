@@ -6,7 +6,6 @@ import * as z from 'zod'
 import {SectionCard} from '@/app/admin/components'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {useImageCompressor, useImageUploader} from '@/app/admin/hooks'
-import {authStore} from '@/app/auth/context/auth-store'
 import {Avatar, InputErrorMsg} from '@/app/components'
 import {User} from '@/domain/models'
 import {merge, useDebounce} from '@/utils'
@@ -78,7 +77,7 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
       setPicture(remoteUrl)
     }
 
-    await authStore.updateUser(userData)
+    await adminStore.updateUser(userData)
     setIsUploadingImg(false)
     setIsSubmitting(false)
   }

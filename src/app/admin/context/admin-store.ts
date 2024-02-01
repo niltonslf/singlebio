@@ -1,4 +1,11 @@
-import {doc, query, collection, orderBy, getDocs} from 'firebase/firestore'
+import {
+  doc,
+  query,
+  collection,
+  orderBy,
+  getDocs,
+  updateDoc,
+} from 'firebase/firestore'
 import {makeAutoObservable} from 'mobx'
 
 import {ERROR_MESSAGES} from '@/constants/error-msgs'
@@ -78,6 +85,16 @@ class AdminStore {
 
     this.setPageLinks(links)
     this.setSocialPages(socialPages)
+  }
+
+  public async updateUser(user: Partial<User>): Promise<User> {
+    if (!this?.user?.uid) throw ERROR_MESSAGES['user-not-found']
+
+    const newUser = {...this?.user, ...user} as User
+    await updateDoc(doc(db, 'users', this?.user?.uid), user)
+
+    this.setUser(newUser)
+    return newUser
   }
 }
 

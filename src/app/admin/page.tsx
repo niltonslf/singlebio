@@ -27,12 +27,12 @@ import {
 import {CollapseBody} from '@/app/admin/components/collapse/collapse-body'
 import {LinksSection} from '@/app/admin/components/links-section'
 import {adminStore} from '@/app/admin/context/admin-store'
-import {authStore} from '@/app/auth/context/auth-store'
 import {SetUsernameModal} from '@/app/components'
-import {User} from '@/domain/models'
+import {User, UserFeatures, UserFeaturesList} from '@/domain/models'
 import {merge} from '@/utils'
 
 type Feature = {
+  id: UserFeaturesList
   title: string
   Icon: LucideIcon
   iconClass?: HTMLAttributes<HTMLElement>['className']
@@ -47,23 +47,27 @@ const AdminPage = observer(() => {
 
   const [availableFeatures, setAvailableFeatures] = useState<Feature[]>([
     {
+      id: 'pageLinks',
       title: 'Links',
       Icon: Link2,
       iconClass: 'bg-blue-600',
       Component: LinksSection,
     },
     {
+      id: 'socialPages',
       title: 'Social',
       Icon: Share2,
       iconClass: 'bg-pink-600',
       Component: SocialPagesSection,
     },
     {
+      id: 'github',
       title: 'Github',
       Icon: Github,
       Component: GithubSection,
     },
     {
+      id: 'spotify',
       title: 'Spotify',
       Icon: AudioLines,
       iconClass: 'bg-green-600',
@@ -71,17 +75,53 @@ const AdminPage = observer(() => {
     },
   ])
 
-  const [Feature, setFeature] = useState<Feature[]>([])
+  const [activeFeatures, setActiveFeatures] = useState<Feature[]>([])
 
-  const handleEnableFeature = (feature: Feature) => {
-    setFeature(prev => [...prev, feature])
+  const handleEnableFeature = async (feature: Feature) => {
+    setActiveFeatures(prev => [...prev, feature])
+
     setAvailableFeatures(prev =>
       prev.filter(item => item.title != feature.title),
     )
+
+    // persist in the database
+
+    const data = {
+      features: {
+        ...user?.features,
+        [feature.id]: {
+          ...user?.features?.[feature.id],
+          order: 0, //TODO: make the last one
+        },
+      },
+    }
+    await adminStore.updateUser(data)
+  }
+
+  const handleDisableFeature = async (feature: Feature) => {
+    setActiveFeatures(prev => prev.filter(item => item.title != feature.title))
+    setAvailableFeatures(prev => [...prev, feature])
+
+    // persist in the database
+    if (!user?.features) return
+
+    const newFeatures: UserFeatures = {}
+
+    for (const key in user.features) {
+      if (key != feature.id) {
+        const feat = key as UserFeaturesList
+        newFeatures[feat] = user.features?.[feat]
+      }
+    }
+
+    const data = {
+      features: newFeatures,
+    }
+    await adminStore.updateUser(data)
   }
 
   const onSubmitUsername = async (username: string) => {
-    await authStore.updateUser({username})
+    await adminStore.updateUser({username})
     setShowUsernameModal(false)
     setShowBetaWarningModal(true)
   }
@@ -102,7 +142,7 @@ const AdminPage = observer(() => {
         <AdminBaseLayout.Content>
           <h1 className='mb-8 text-2xl font-semibold'>Sections</h1>
 
-          {Feature.length === 0 ? (
+          {activeFeatures.length === 0 ? (
             <div className='alert alert-info '>
               <Info size={15} />
               <div>
@@ -114,9 +154,9 @@ const AdminPage = observer(() => {
               </div>
             </div>
           ) : (
-            <Collapse defaultOpen={0}>
-              {Feature.map((feature, key) => (
-                <Collapse.Item index={key} key={feature.title}>
+            <Collapse defaultOpen={1}>
+              {activeFeatures.map((feature, key) => (
+                <Collapse.Item index={key + 1} key={feature.title}>
                   <Collapse.Header>
                     <div className='flex w-full items-center gap-3'>
                       <div
@@ -134,6 +174,7 @@ const AdminPage = observer(() => {
 
                       {feature.title}
                       <div
+                        onClick={() => handleDisableFeature(feature)}
                         className={merge([
                           'ml-auto rounded-md p-2 hover:bg-base-200',
                         ])}>

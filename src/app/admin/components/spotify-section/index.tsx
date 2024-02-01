@@ -1,6 +1,6 @@
 import {useState} from 'react'
 
-import {authStore} from '@/app/auth/context/auth-store'
+import {adminStore} from '@/app/admin/context/admin-store'
 import {User} from '@/domain/models'
 import {useDebounce} from '@/utils'
 
@@ -26,7 +26,7 @@ export const SpotifySection = ({user}: SpotifySectionProps) => {
       },
     }
 
-    await authStore.updateUser(data)
+    await adminStore.updateUser(data)
     setIsSubmitting(false)
   }
 

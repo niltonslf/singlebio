@@ -11,7 +11,6 @@ import {
 } from '@/app/admin/components'
 import {LinksSection} from '@/app/admin/components/links-section'
 import {adminStore} from '@/app/admin/context/admin-store'
-import {authStore} from '@/app/auth/context/auth-store'
 import {SetUsernameModal} from '@/app/components'
 
 const PageLinksPage = observer(() => {
@@ -21,7 +20,7 @@ const PageLinksPage = observer(() => {
   const [showBetaWarningModal, setShowBetaWarningModal] = useState(false)
 
   const onSubmitUsername = async (username: string) => {
-    await authStore.updateUser({username})
+    await adminStore.updateUser({username})
     setShowUsernameModal(false)
     setShowBetaWarningModal(true)
   }
