@@ -20,7 +20,7 @@ const config = {
   restoreMocks: true,
   setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
   workerThreads: true,
-  maxWorkers: 6,
+  maxWorkers: 3,
   cache: false,
 }
 
