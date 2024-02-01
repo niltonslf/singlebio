@@ -7,8 +7,7 @@ import AuthPage from '@/app/auth/page'
 import {User} from '@/domain/models'
 import {parseToUser} from '@/utils/user'
 import {faker} from '@faker-js/faker'
-import {screen, render, cleanup, waitFor} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import {screen, cleanup, waitFor} from '@testing-library/react'
 
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next-router-mock'),
@@ -144,16 +143,17 @@ describe('Auth Page', () => {
       const errorMsg = 'error message'
       jest.spyOn(authStore, 'signInWithGoogle').mockRejectedValue(errorMsg)
 
-      const user = userEvent.setup()
+      const {user} = await makeSUT()
 
-      await waitFor(() => render(<AuthPage />))
-      const googleButton = validateGoogleBtn()
+      await waitFor(async () => {
+        const googleButton = validateGoogleBtn()
 
-      await user.click(googleButton)
+        await user.click(googleButton)
 
-      const errorBox = await screen.findByTestId('error-msg')
+        const errorBox = await screen.findByTestId('error-msg')
 
-      expect(errorBox).toHaveTextContent(errorMsg)
+        expect(errorBox).toHaveTextContent(errorMsg)
+      })
     })
 
     it('Should sign in with Google successfully  ', async () => {
@@ -164,13 +164,15 @@ describe('Auth Page', () => {
 
       const {user} = await makeSUT()
 
-      const googleButton = validateGoogleBtn()
-      await user.click(googleButton)
+      await waitFor(async () => {
+        const googleButton = validateGoogleBtn()
+        await user.click(googleButton)
 
-      expect(mockRouter).toMatchObject({
-        asPath: '/admin',
-        pathname: '/admin',
-        query: {},
+        expect(mockRouter).toMatchObject({
+          asPath: '/admin',
+          pathname: '/admin',
+          query: {},
+        })
       })
     })
   })
