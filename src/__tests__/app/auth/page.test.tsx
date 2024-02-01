@@ -120,26 +120,27 @@ describe('Auth Page', () => {
         .mockRejectedValue('error message')
 
       const {user} = await makeSUT()
+      await waitFor(async () => {
+        const emailInput = screen.getByRole('textbox')
+        const passwordInput = screen.getByPlaceholderText(/password/i)
+        const signInButton = screen.getByText(/Sign in with email/i)
 
-      const emailInput = screen.getByRole('textbox')
-      const passwordInput = screen.getByPlaceholderText(/password/i)
-      const signInButton = screen.getByText(/Sign in with email/i)
+        const emailMock = faker.internet.email()
+        const passwordMock = faker.internet.password({length: 8})
 
-      const emailMock = faker.internet.email()
-      const passwordMock = faker.internet.password({length: 8})
+        await user.type(emailInput, emailMock)
+        await user.type(passwordInput, passwordMock)
+        await user.click(signInButton)
 
-      await user.type(emailInput, emailMock)
-      await user.type(passwordInput, passwordMock)
-      await user.click(signInButton)
+        const errorMsg = screen.getByTestId('error-msg')
 
-      const errorMsg = screen.getByTestId('error-msg')
+        expect(authStore.signInWithEmailAndPassword).toHaveBeenCalledWith(
+          emailMock,
+          passwordMock,
+        )
 
-      expect(authStore.signInWithEmailAndPassword).toHaveBeenCalledWith(
-        emailMock,
-        passwordMock,
-      )
-
-      expect(errorMsg).toHaveTextContent('error message')
+        expect(errorMsg).toHaveTextContent('error message')
+      })
     })
   })
 
@@ -204,16 +205,19 @@ describe('Auth Page', () => {
       jest.spyOn(authStore, 'signInWithGithub').mockRejectedValue('error')
 
       const {user} = await makeSUT()
-      const githubBtn = validateGithubBtn()
 
-      await user.click(githubBtn)
+      await waitFor(async () => {
+        const githubBtn = validateGithubBtn()
 
-      const errorMsg = screen.getByTestId('error-msg')
+        await user.click(githubBtn)
 
-      expect(errorMsg).toBeInTheDocument()
-      expect(errorMsg).toHaveTextContent('error')
+        const errorMsg = screen.getByTestId('error-msg')
 
-      expect(mockRouter).toMatchObject({asPath: '/auth', pathname: '/auth'})
+        expect(errorMsg).toBeInTheDocument()
+        expect(errorMsg).toHaveTextContent('error')
+
+        expect(mockRouter).toMatchObject({asPath: '/auth', pathname: '/auth'})
+      })
     })
   })
 })

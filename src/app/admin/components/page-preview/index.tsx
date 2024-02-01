@@ -17,6 +17,7 @@ export const PagePreview = ({user, socialPages, pageLinks, theme}: Props) => {
 
   return (
     <div
+      data-testid='admin-page-preview'
       className={merge(['flex h-full min-w-full', 'bg-cover bg-center'])}
       style={{backgroundImage: `url(${theme?.backgroundImage})`}}>
       <div className='flex h-full w-full items-center justify-center backdrop-blur-md'>
