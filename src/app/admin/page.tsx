@@ -42,10 +42,7 @@ type Feature = {
 const AdminPage = observer(() => {
   const {user, socialPages, pageLinks} = adminStore
 
-  const [showUsernameModal, setShowUsernameModal] = useState(false)
-  const [showBetaWarningModal, setShowBetaWarningModal] = useState(false)
-
-  const [availableFeatures, setAvailableFeatures] = useState<Feature[]>([
+  const featureList: Feature[] = [
     {
       id: 'pageLinks',
       title: 'Links',
@@ -73,7 +70,13 @@ const AdminPage = observer(() => {
       iconClass: 'bg-green-600',
       Component: SpotifySection,
     },
-  ])
+  ]
+
+  const [showUsernameModal, setShowUsernameModal] = useState(false)
+  const [showBetaWarningModal, setShowBetaWarningModal] = useState(false)
+
+  const [availableFeatures, setAvailableFeatures] =
+    useState<Feature[]>(featureList)
 
   const [activeFeatures, setActiveFeatures] = useState<Feature[]>([])
 
@@ -85,7 +88,6 @@ const AdminPage = observer(() => {
     )
 
     // persist in the database
-
     const data = {
       features: {
         ...user?.features,
@@ -106,7 +108,6 @@ const AdminPage = observer(() => {
     if (!user?.features) return
 
     const newFeatures: UserFeatures = {}
-
     for (const key in user.features) {
       if (key != feature.id) {
         const feat = key as UserFeaturesList
@@ -114,9 +115,7 @@ const AdminPage = observer(() => {
       }
     }
 
-    const data = {
-      features: newFeatures,
-    }
+    const data = {features: newFeatures}
     await adminStore.updateUser(data)
   }
 
@@ -125,6 +124,28 @@ const AdminPage = observer(() => {
     setShowUsernameModal(false)
     setShowBetaWarningModal(true)
   }
+
+  const getInitialActiveFeatures = (features: UserFeatures) => {
+    const active: Feature[] = []
+    Object.keys(features).forEach(feature => {
+      const item = featureList.find(feat => feat.id === feature)
+      if (item) return active.push(item)
+    })
+
+    setActiveFeatures(active)
+
+    const available = featureList.filter(feature => {
+      if (active.findIndex(item => item.id === feature.id) < 0) return feature
+    })
+
+    setAvailableFeatures(available)
+  }
+
+  useEffect(() => {
+    if (user?.features) {
+      getInitialActiveFeatures(user.features)
+    }
+  }, [user])
 
   useEffect(() => {
     if (user != undefined && !user?.username) {
