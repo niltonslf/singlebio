@@ -4,13 +4,13 @@ import {authStore} from '@/app/auth/context/auth-store'
 import {User} from '@/domain/models'
 import {useDebounce} from '@/utils'
 
-type GithubSectionProps = {
+type SpotifySectionProps = {
   user: User
 }
 
-export const GithubSection = ({user}: GithubSectionProps) => {
-  const [githubUsername, setGithubUsername] = useState(
-    user?.features?.github?.username ?? '',
+export const SpotifySection = ({user}: SpotifySectionProps) => {
+  const [spotifyUrl, setSpotifyUrl] = useState(
+    user?.features?.spotify?.url ?? '',
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -19,9 +19,9 @@ export const GithubSection = ({user}: GithubSectionProps) => {
     const data = {
       features: {
         ...user.features,
-        github: {
-          ...user.features?.github,
-          username: value,
+        spotify: {
+          ...user.features?.spotify,
+          url: value,
         },
       },
     }
@@ -43,14 +43,14 @@ export const GithubSection = ({user}: GithubSectionProps) => {
       )}
       <label className='form-control w-full'>
         <div className='label'>
-          <span className='label-text-alt'>GitHub username</span>
+          <span className='label-text-alt'>Spotify url</span>
         </div>
         <input
           type='text'
           className='input input-bordered input-md w-full'
-          placeholder='username'
-          value={githubUsername}
-          onChange={event => setGithubUsername(event.target.value)}
+          placeholder='Url'
+          value={spotifyUrl}
+          onChange={event => setSpotifyUrl(event.target.value)}
         />
       </label>
     </form>

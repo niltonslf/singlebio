@@ -13,6 +13,7 @@ import {
   FeatureList,
   SocialPagesSection,
   GithubSection,
+  SpotifySection,
 } from '@/app/admin/components'
 import {CollapseBody} from '@/app/admin/components/collapse/collapse-body'
 import {LinksSection} from '@/app/admin/components/links-section'
@@ -56,7 +57,7 @@ const AdminPage = observer(() => {
       title: 'Spotify',
       Icon: AudioLines,
       iconClass: 'bg-green-600',
-      Component: LinksSection,
+      Component: SpotifySection,
     },
   ])
 
