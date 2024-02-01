@@ -25,10 +25,10 @@ import {
 } from 'firebase/firestore'
 import {action, makeObservable, observable} from 'mobx'
 
+import {themeOptions} from '@/app/[username]/constants/theme-options'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {APP_URL} from '@/config/envs'
 import {ErrorMessagesKeys, ERROR_MESSAGES} from '@/constants/error-msgs'
-import {themeOptions} from '@/constants/theme-options'
 import {AuthProviders, AuthProvidersOptions} from '@/domain/enums'
 import {SignUpWithPassword, User} from '@/domain/models'
 import {auth, db, githubProvider, googleProvider} from '@/services/firebase'

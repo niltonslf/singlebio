@@ -1,5 +1,5 @@
 import {makeLink, setup} from '@/__tests__'
-import {LinkCard} from '@/app/[username]/components/link-card'
+import {LinkCard, LinkCardItem} from '@/app/[username]/components'
 
 describe('Link component', () => {
   it('should render LinkCard with a children', () => {
@@ -17,9 +17,9 @@ describe('Link component', () => {
     const linkMock = makeLink()
 
     const {baseElement} = setup(
-      <LinkCard.Item link={linkMock}>
+      <LinkCardItem link={linkMock}>
         <span>I'm a child</span>
-      </LinkCard.Item>,
+      </LinkCardItem>,
     )
 
     expect(baseElement.childElementCount).toBe(1)
@@ -30,9 +30,9 @@ describe('Link component', () => {
     const linkMock = makeLink()
 
     const {baseElement} = setup(
-      <LinkCard.Item link={linkMock}>
+      <LinkCardItem link={linkMock}>
         <span>I'm a child</span>
-      </LinkCard.Item>,
+      </LinkCardItem>,
     )
 
     const link = baseElement?.querySelector('a')

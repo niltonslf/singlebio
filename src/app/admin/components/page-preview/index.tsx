@@ -1,7 +1,7 @@
 'use client'
 
+import {themeOptions} from '@/app/[username]/constants/theme-options'
 import {SmartphoneCanvas} from '@/app/admin/components'
-import {themeOptions} from '@/constants/theme-options'
 import {Link, SocialPage, User, UserTheme} from '@/domain/models'
 import {merge} from '@/utils'
 

@@ -1,4 +1,4 @@
-import {User, UserTheme} from '@/domain/models'
+import {ThemeButtonStyles, User, UserTheme} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 
 type MakeUserProps = {
@@ -19,6 +19,7 @@ type MakeUserThemeProps = {
   usernameColor?: string
   socialDefaultColor?: boolean
   socialIconColor?: string
+  buttonStyle?: ThemeButtonStyles
   name?: string
 }
 
@@ -47,6 +48,7 @@ export const makeUserTheme = ({
   usernameColor,
   socialDefaultColor,
   socialIconColor,
+  buttonStyle,
   name,
 }: MakeUserThemeProps = {}): UserTheme => {
   return {
@@ -57,7 +59,7 @@ export const makeUserTheme = ({
     usernameColor: usernameColor ?? faker.color.rgb({format: 'css'}),
     socialDefaultColor: socialDefaultColor ?? false,
     socialIconColor: socialIconColor ?? faker.color.rgb({format: 'css'}),
-    buttonStyle: 'circle',
+    buttonStyle: buttonStyle ?? 'circle',
     name: name ?? 'default',
   }
 }

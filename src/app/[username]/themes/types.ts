@@ -10,7 +10,7 @@ export type ThemeProps = {
 }
 
 export type ThemeButtonProps = {
-  children: ReactNode
+  children?: ReactNode
   className: HTMLAttributes<HTMLElement>['className']
   styles?: CSSProperties
 }

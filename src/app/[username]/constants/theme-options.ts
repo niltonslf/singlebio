@@ -7,16 +7,8 @@ import {
   GrayTheme,
   BlueTheme,
 } from '@/app/[username]/themes'
-import {
-  ButtonCircle,
-  ButtonCircleOutline,
-  ButtonDefault,
-  ButtonOutline,
-  ButtonSquare,
-  ButtonSquareOutline,
-} from '@/app/[username]/themes/components'
-import {ThemeButtonProps, ThemeProps} from '@/app/[username]/themes/types'
-import {ThemeButtonStyles, UserTheme} from '@/domain/models'
+import {ThemeProps} from '@/app/[username]/themes/types'
+import {UserTheme} from '@/domain/models'
 
 export type Option<T> = {
   name: string
@@ -108,35 +100,5 @@ export const themeOptions: Record<string, ThemeOption<ThemeProps>> = {
       socialIconColor: '#000000',
       usernameColor: '#000000',
     },
-  },
-}
-
-export const themeButtonStyle: Record<
-  ThemeButtonStyles,
-  Option<ThemeButtonProps>
-> = {
-  'default': {
-    name: 'Default',
-    component: ButtonDefault,
-  },
-  'square': {
-    name: 'Square',
-    component: ButtonSquare,
-  },
-  'circle': {
-    name: 'Circle',
-    component: ButtonCircle,
-  },
-  'outline': {
-    name: 'Outline',
-    component: ButtonOutline,
-  },
-  'circle-outline': {
-    name: 'Circle outline',
-    component: ButtonCircleOutline,
-  },
-  'square-outline': {
-    name: 'Square outline',
-    component: ButtonSquareOutline,
   },
 }

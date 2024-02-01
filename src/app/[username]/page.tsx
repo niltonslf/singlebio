@@ -6,8 +6,8 @@ import {
   fetchUserSocialPages,
 } from '@/api/usecases'
 import {PageAnalyticsLoader} from '@/app/[username]/components'
+import {themeOptions} from '@/app/[username]/constants/theme-options'
 import {CookieConsentBanner} from '@/app/components'
-import {themeOptions} from '@/constants/theme-options'
 import {UserTheme} from '@/domain/models'
 
 type UserPageProps = {

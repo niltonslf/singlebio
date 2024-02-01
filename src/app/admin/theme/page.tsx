@@ -5,10 +5,13 @@ import {Info} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import Image from 'next/image'
 
+import {
+  themeOptions,
+  ThemeOption,
+} from '@/app/[username]/constants/theme-options'
 import {ThemeProps} from '@/app/[username]/themes/types'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {authStore} from '@/app/auth/context/auth-store'
-import {ThemeOption, themeOptions} from '@/constants/theme-options'
 import {UserTheme} from '@/domain/models'
 
 import {AdminBaseLayout, SectionCard, PagePreview} from '../components'

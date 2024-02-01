@@ -1,6 +1,6 @@
 import {CSSProperties} from 'react'
 
-import {LinkCard} from '@/app/[username]/components/link-card'
+import {LinkCard, LinkCardItem} from '@/app/[username]/components'
 import {Link, UserTheme} from '@/domain/models'
 
 type PageLinks01Props = {
@@ -21,17 +21,16 @@ export const PageLinks01 = ({links, theme}: PageLinks01Props) => {
 
   return (
     <LinkCard>
-      {links &&
-        links?.length > 0 &&
+      {links?.length > 0 &&
         links.map(link => {
           return (
-            <LinkCard.Item
+            <LinkCardItem
               key={link.id}
               link={link}
               variant={theme?.buttonStyle}
               styles={styles}>
               {link.label}
-            </LinkCard.Item>
+            </LinkCardItem>
           )
         })}
     </LinkCard>
