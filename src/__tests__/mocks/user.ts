@@ -8,7 +8,8 @@ export const makeUser = (
   uid?: string,
   username?: string,
   theme?: UserTheme,
-): User => {
+  bio?: string,
+): Required<User> => {
   return {
     email: email ?? faker.internet.email(),
     name: name ?? faker.person.fullName(),
@@ -16,6 +17,12 @@ export const makeUser = (
     uid: uid ?? faker.string.uuid(),
     username: username ?? faker.internet.userName(),
     theme: theme ?? makeUserTheme(),
+    bio: bio ?? faker.lorem.word(20),
+    features: {
+      github: {
+        username: faker.internet.userName(),
+      },
+    },
   }
 }
 

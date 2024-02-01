@@ -11,7 +11,9 @@ export const SocialPages01 = ({socialPages, theme}: SocialPages01Props) => {
   return (
     <>
       {socialPages && socialPages?.length > 0 && (
-        <div className='mb-5 flex w-full flex-row flex-wrap justify-center '>
+        <div
+          data-testid='user-page-social-pages'
+          className='mb-5 flex w-full flex-row flex-wrap justify-center'>
           {socialPages?.map(item => (
             <SocialIcon
               key={item.id}

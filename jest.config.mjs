@@ -11,7 +11,7 @@ const config = {
     '<rootDir>/src/__tests__/',
     '<rootDir>/node_modules/',
   ],
-  testPathIgnorePatterns: ['/icons/', '<rootDir>/node_modules/'],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '/icons/'],
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '/icons/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',

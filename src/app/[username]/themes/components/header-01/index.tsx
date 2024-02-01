@@ -10,7 +10,7 @@ type Header01Props = {
 
 export const Header01 = ({user, theme}: Header01Props) => {
   return (
-    <header className='mb-5 w-full'>
+    <header className='mb-5 w-full' data-testid='user-page-header'>
       <div className='mb-4 flex w-full justify-center'>
         <Avatar
           name={user?.name ?? ''}

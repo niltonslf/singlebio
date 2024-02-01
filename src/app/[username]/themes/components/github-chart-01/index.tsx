@@ -12,7 +12,9 @@ export const GithubChart01 = ({user}: GithubChart01Props) => {
   return (
     <>
       {github && (
-        <div className='mt-5 bg-white p-2 md:p-5'>
+        <div
+          data-testid='user-page-github-chart'
+          className='mt-5 bg-white p-2 md:p-5'>
           <Link
             href={`https://github.com/${github}`}
             target='_blank'

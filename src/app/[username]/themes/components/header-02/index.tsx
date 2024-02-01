@@ -12,7 +12,9 @@ export const Header02 = ({user, theme}: Header02Props) => {
   const defaultBorderColor = !theme?.backgroundImage && 'border-[#f9f9f9]'
 
   return (
-    <header className='relative z-20 mb-5 w-full'>
+    <header
+      data-testid='user-page-header'
+      className='relative z-20 mb-5 w-full'>
       <div className='mb-4 flex w-full justify-center'>
         <div
           className={clsx(['rounded-full border-[10px]', defaultBorderColor])}
