@@ -4,7 +4,7 @@ import {
   Header01,
   PageLinks01,
   SocialPages01,
-} from '@/app/[username]/themes/components'
+} from '@/app/[username]/components'
 import {Wrapper} from '@/app/[username]/themes/default/components'
 import {ThemeProps} from '@/app/[username]/themes/types'
 

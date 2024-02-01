@@ -1,5 +1,3 @@
-'use server'
-
 import {Link, SocialPage, User} from '@/domain/models'
 import {firestoreAdmin} from '@/services/firebase-admin'
 

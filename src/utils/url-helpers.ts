@@ -8,6 +8,7 @@ export const parseExternalUrl = (url: string): string => {
   if (hasProtocol) return url
   return `//${url}`
 }
+
 export const parseUserPageUrl = (username?: string): string => {
   if (!username) return ''
 

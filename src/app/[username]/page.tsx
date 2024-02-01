@@ -6,8 +6,8 @@ import {
   fetchUserSocialPages,
 } from '@/api/usecases'
 import {PageAnalyticsLoader} from '@/app/[username]/components'
+import {themeOptions} from '@/app/[username]/constants/theme-options'
 import {CookieConsentBanner} from '@/app/components'
-import {themeOptions} from '@/constants/theme-options'
 import {UserTheme} from '@/domain/models'
 
 type UserPageProps = {
@@ -20,12 +20,10 @@ const fetchUserData = async (username: string) => {
 
   if (!user) redirect('/not-found')
 
-  const [linksRes, socialPages] = await Promise.all([
+  const [links, socialPages] = await Promise.all([
     fetchUserLinks(user.uid),
     fetchUserSocialPages(user.uid),
   ])
-
-  const links = linksRes.sort((cur, next) => next?.order - cur?.order)
 
   return {user, links, socialPages}
 }

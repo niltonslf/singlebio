@@ -5,19 +5,19 @@ import {
   BarChartHorizontalBig,
   Copy,
   Info,
+  Layers,
   LayoutDashboard,
   Link2,
   LinkIcon,
   LogOut,
   MessagesSquare,
-  Paintbrush,
   Palette,
   Settings2,
   User2,
 } from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import Link from 'next/link'
-import {ReactNode} from 'react'
+import {Fragment, ReactNode} from 'react'
 
 import {toastAlertStore} from '@/app/admin/components'
 import {NavLink} from '@/app/admin/components/nav-links/components'
@@ -74,7 +74,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
           href: '/admin/theme',
           title: 'go to theme page',
           name: 'Theme',
-          Icon: <Paintbrush width={18} />,
+          Icon: <Layers width={18} />,
         },
       ],
     },
@@ -120,7 +120,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
     },
     {
       href: '',
-      onClick: authStore.logout,
+      onClick: () => authStore.logout(),
       title: 'logout',
       name: 'Logout',
       Icon: <LogOut width={18} />,
@@ -139,7 +139,9 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
   }
 
   return (
-    <div className='flex h-full w-full flex-col gap-3 md:w-[210px]'>
+    <div
+      className='flex h-full w-full flex-col gap-3 md:w-[210px]'
+      data-testid='nav-links'>
       {Object.keys(navbarItems).map(section => {
         return (
           <div key={section} className={clsx(['w-full'])}>
@@ -152,7 +154,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
             </p>
             <div className='flex flex-col gap-1'>
               {navbarItems[section].links.map(page => (
-                <>
+                <Fragment key={page.href}>
                   <NavLink page={page} className='hidden md:flex'>
                     {page.Icon}
                     <p className={merge([!isOpen && 'md:opacity-0'])}>
@@ -164,7 +166,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
                     {page.Icon}
                     <p>{page.name}</p>
                   </NavLink>
-                </>
+                </Fragment>
               ))}
             </div>
           </div>
@@ -203,7 +205,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
           !isOpen && 'border-t-0',
         ])}>
         {settings.map(page => (
-          <>
+          <Fragment key={page.href}>
             <NavLink page={page} className='hidden md:flex'>
               {page.Icon}
               <p className={merge([!isOpen && 'md:opacity-0'])}>{page.name}</p>
@@ -213,7 +215,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
               {page.Icon}
               <p>{page.name}</p>
             </NavLink>
-          </>
+          </Fragment>
         ))}
       </div>
     </div>

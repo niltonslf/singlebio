@@ -1,8 +1,11 @@
 import {UserTheme} from '@/domain/models/user-theme-model'
 
 export type UserFeatures = {
-  github: {
+  github?: {
     username: string
+  }
+  spotify?: {
+    url: string
   }
 }
 

@@ -8,10 +8,10 @@ const createJestConfig = nextJest({
 const config = {
   testEnvironment: 'jest-environment-jsdom',
   modulePathIgnorePatterns: [
-    '<rootDir>/src/__tests__/__helpers__/',
+    '<rootDir>/src/__tests__/',
     '<rootDir>/node_modules/',
   ],
-  testPathIgnorePatterns: ['/icons/', '<rootDir>/node_modules/'],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '/icons/'],
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '/icons/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
@@ -20,7 +20,7 @@ const config = {
   restoreMocks: true,
   setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
   workerThreads: true,
-  maxWorkers: 6,
+  maxWorkers: 3,
   cache: false,
 }
 
