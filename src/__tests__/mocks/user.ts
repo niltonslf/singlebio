@@ -1,23 +1,36 @@
 import {User, UserTheme} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 
-export const makeUser = (
-  email?: string,
-  name?: string,
-  pictureUrl?: string,
-  uid?: string,
-  username?: string,
-  theme?: UserTheme,
-  bio?: string,
-): Required<User> => {
+type MakeUserProps = {
+  email?: string
+  name?: string
+  pictureUrl?: string
+  uid?: string
+  username?: string
+  theme?: UserTheme
+  bio?: string
+}
+
+type MakeUserThemeProps = {
+  backgroundColor?: string
+  backgroundImage?: string
+  buttonBackground?: string
+  buttonTextColor?: string
+  usernameColor?: string
+  socialDefaultColor?: boolean
+  socialIconColor?: string
+  name?: string
+}
+
+export const makeUser = (user: MakeUserProps = {}): Required<User> => {
   return {
-    email: email ?? faker.internet.email(),
-    name: name ?? faker.person.fullName(),
-    pictureUrl: pictureUrl ?? faker.image.urlLoremFlickr(),
-    uid: uid ?? faker.string.uuid(),
-    username: username ?? faker.internet.userName(),
-    theme: theme ?? makeUserTheme(),
-    bio: bio ?? faker.lorem.word(20),
+    email: user?.email ?? faker.internet.email(),
+    name: user?.name ?? faker.person.fullName(),
+    pictureUrl: user?.pictureUrl ?? faker.image.urlLoremFlickr(),
+    uid: user?.uid ?? faker.string.uuid(),
+    username: user?.username ?? faker.internet.userName(),
+    theme: user?.theme ?? makeUserTheme(),
+    bio: user?.bio ?? faker.lorem.word(20),
     features: {
       github: {
         username: faker.internet.userName(),
@@ -26,15 +39,16 @@ export const makeUser = (
   }
 }
 
-export const makeUserTheme = (
-  backgroundColor?: string,
-  backgroundImage?: string,
-  buttonBackground?: string,
-  buttonTextColor?: string,
-  usernameColor?: string,
-  socialDefaultColor?: boolean,
-  socialIconColor?: string,
-): UserTheme => {
+export const makeUserTheme = ({
+  backgroundColor,
+  backgroundImage,
+  buttonBackground,
+  buttonTextColor,
+  usernameColor,
+  socialDefaultColor,
+  socialIconColor,
+  name,
+}: MakeUserThemeProps = {}): UserTheme => {
   return {
     backgroundColor: backgroundColor ?? faker.color.rgb({format: 'css'}),
     backgroundImage: backgroundImage ?? faker.image.urlLoremFlickr(),
@@ -44,6 +58,6 @@ export const makeUserTheme = (
     socialDefaultColor: socialDefaultColor ?? false,
     socialIconColor: socialIconColor ?? faker.color.rgb({format: 'css'}),
     buttonStyle: 'circle',
-    name: 'default',
+    name: name ?? 'default',
   }
 }

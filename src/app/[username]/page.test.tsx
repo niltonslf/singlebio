@@ -1,4 +1,10 @@
-import {makeLink, makeSocialPage, makeUser, setup} from '@/__tests__'
+import {
+  makeLink,
+  makeSocialPage,
+  makeUser,
+  makeUserTheme,
+  setup,
+} from '@/__tests__'
 import * as fetchUser from '@/api/usecases/user'
 import UserPage from '@/app/[username]/page'
 import {Link, SocialPage, User} from '@/domain/models'
@@ -58,6 +64,7 @@ describe('User page', () => {
     const headerPicture = header?.querySelector('img')
     const headerName = header?.querySelector('h2')
     const headerBio = header?.querySelector('p')
+
     const socialPages = screen.queryByTestId('user-page-social-pages')
     const pageLinks = screen.queryByTestId('user-page-page-links')
 
@@ -69,5 +76,25 @@ describe('User page', () => {
     expect(pageLinks?.children).toHaveLength(2)
   })
 
-  it.todo('should load user custom theme')
+  it('should render arch theme with header, social pages and page links', async () => {
+    const user = makeUser({theme: makeUserTheme({name: 'arch'})})
+    const {userMock} = await handleFetchLinks(user)
+
+    await waitFor(() => makeSUT(userMock?.username))
+
+    const header = screen.queryByTestId('user-page-header')
+    const headerPicture = header?.querySelector('img')
+    const headerName = header?.querySelector('h2')
+    const headerBio = header?.querySelector('p')
+
+    const socialPages = screen.queryByTestId('user-page-social-pages')
+    const pageLinks = screen.queryByTestId('user-page-page-links')
+
+    expect(headerPicture?.src).toMatch(encodeURIComponent(userMock.pictureUrl))
+    expect(headerName).toHaveTextContent(userMock.name)
+    expect(headerBio).toHaveTextContent(userMock.bio)
+
+    expect(socialPages?.children).toHaveLength(2)
+    expect(pageLinks?.children).toHaveLength(2)
+  })
 })

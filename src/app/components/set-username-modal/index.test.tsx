@@ -42,13 +42,7 @@ describe('Modal Component', () => {
 
   it('should disable save button and show error when username exists', async () => {
     const username = 'some_username-11'
-    const userMock = makeUser(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      username,
-    )
+    const userMock = makeUser({username})
 
     jest
       .spyOn(firestore, 'getDocs')
@@ -73,13 +67,7 @@ describe('Modal Component', () => {
 
   it('should call onSave method', async () => {
     const username = 'some_username-11'
-    const userMock = makeUser(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      username,
-    )
+    const userMock = makeUser({username})
 
     if (!userMock?.username) return fail()
 
