@@ -1,4 +1,4 @@
-import {makeLink, setup} from '@/__tests__/__helpers__'
+import {makeLink, setup} from '@/__tests__'
 import {AddLinkForm} from '@/app/admin/components'
 import {Link} from '@/domain/models'
 import {faker} from '@faker-js/faker'

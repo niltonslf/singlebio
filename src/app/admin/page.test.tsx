@@ -3,7 +3,7 @@ import {
   makeFbUser,
   makeUser,
   setup,
-} from '@/__tests__/__helpers__'
+} from '@/__tests__'
 import AdminLayout from '@/app/admin/layout'
 import AdminPage from '@/app/admin/page'
 import {faker} from '@faker-js/faker'

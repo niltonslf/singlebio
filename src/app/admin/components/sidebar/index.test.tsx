@@ -1,4 +1,4 @@
-import {setup} from '@/__tests__/__helpers__'
+import {setup} from '@/__tests__'
 import {Sidebar} from '@/app/admin/components'
 import {screen} from '@testing-library/react'
 

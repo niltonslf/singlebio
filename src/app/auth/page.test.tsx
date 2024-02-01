@@ -1,11 +1,6 @@
 import mockRouter from 'next-router-mock'
 
-import {
-  makeFbUser,
-  makeUser,
-  makeUserTheme,
-  setup,
-} from '@/__tests__/__helpers__'
+import {makeFbUser, makeUser, makeUserTheme, setup} from '@/__tests__'
 import {authStore} from '@/app/auth/context/auth-store'
 import AuthLayout from '@/app/auth/layout'
 import AuthPage from '@/app/auth/page'

@@ -1,4 +1,4 @@
-import {fail, setup} from '@/__tests__/__helpers__'
+import {fail, setup} from '@/__tests__'
 import {Collapse} from '@/app/admin/components'
 import {CollapseBody} from '@/app/admin/components/collapse/collapse-body'
 import {cleanup, screen, waitFor} from '@testing-library/react'

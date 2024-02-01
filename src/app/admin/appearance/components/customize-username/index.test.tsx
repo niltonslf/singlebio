@@ -1,4 +1,4 @@
-import {fail, setup} from '@/__tests__/__helpers__'
+import {fail, setup} from '@/__tests__'
 import {CustomizeUsername} from '@/app/admin/appearance/components'
 import {appearanceStore} from '@/app/admin/appearance/context'
 import {cleanup, screen, waitFor} from '@testing-library/react'

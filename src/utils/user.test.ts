@@ -1,6 +1,6 @@
 import {User} from 'firebase/auth'
 
-import {makeFbUser, makeUserTheme} from '@/__tests__/__helpers__'
+import {makeFbUser, makeUserTheme} from '@/__tests__'
 import {parseToUser} from '@/utils'
 import {faker} from '@faker-js/faker'
 

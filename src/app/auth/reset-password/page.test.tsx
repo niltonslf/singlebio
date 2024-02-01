@@ -1,4 +1,4 @@
-import {setup} from '@/__tests__/__helpers__'
+import {setup} from '@/__tests__'
 import {authStore} from '@/app/auth/context/auth-store'
 import ResetPasswordPage from '@/app/auth/reset-password/page'
 import {faker} from '@faker-js/faker'

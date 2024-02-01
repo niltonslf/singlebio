@@ -1,6 +1,6 @@
 import * as firestore from 'firebase/firestore'
 
-import {fail, makeLink, makeUser, setup} from '@/__tests__/__helpers__'
+import {fail, makeLink, makeUser, setup} from '@/__tests__'
 import {LinksSection} from '@/app/admin/components/links-section'
 import {Link, User} from '@/domain/models'
 import {faker} from '@faker-js/faker'

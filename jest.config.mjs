@@ -8,7 +8,7 @@ const createJestConfig = nextJest({
 const config = {
   testEnvironment: 'jest-environment-jsdom',
   modulePathIgnorePatterns: [
-    '<rootDir>/src/__tests__/__helpers__/',
+    '<rootDir>/src/__tests__/',
     '<rootDir>/node_modules/',
   ],
   testPathIgnorePatterns: ['/icons/', '<rootDir>/node_modules/'],

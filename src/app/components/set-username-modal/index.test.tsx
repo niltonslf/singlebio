@@ -1,11 +1,6 @@
 import * as firestore from 'firebase/firestore'
 
-import {
-  fail,
-  makeGetDocsResponse,
-  makeUser,
-  setup,
-} from '@/__tests__/__helpers__'
+import {fail, makeGetDocsResponse, makeUser, setup} from '@/__tests__'
 import {SetUsernameModal} from '@/app/components'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 

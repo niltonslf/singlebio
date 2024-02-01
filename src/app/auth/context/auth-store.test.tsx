@@ -6,7 +6,7 @@ import {
   makeGetDocsResponse,
   makeUser,
   makeUserTheme,
-} from '@/__tests__/__helpers__'
+} from '@/__tests__'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {authStore} from '@/app/auth/context/auth-store'
 import {APP_URL} from '@/config/envs'
