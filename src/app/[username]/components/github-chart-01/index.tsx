@@ -8,7 +8,7 @@ type GithubChart01Props = {
 }
 
 export const GithubChart01 = ({user}: GithubChart01Props) => {
-  const github = user.features?.github.username
+  const github = user.features?.github?.username
   return (
     <>
       {github && (

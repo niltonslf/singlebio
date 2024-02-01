@@ -4,6 +4,7 @@ import {
   Header02,
   PageLinks01,
   SocialPages01,
+  SpotifyEmbed01,
 } from '@/app/[username]/components'
 import {Wrapper} from '@/app/[username]/themes/arch/components'
 import {ThemeProps} from '@/app/[username]/themes/types'
@@ -14,6 +15,7 @@ export const ArchTheme = ({links, socialPages, user, theme}: ThemeProps) => {
       <Header02 user={user} theme={theme} />
       <SocialPages01 socialPages={socialPages} theme={theme} />
       <PageLinks01 links={links} theme={theme} />
+      <SpotifyEmbed01 user={user} />
       <GithubChart01 user={user} />
       <Footer01 />
     </Wrapper>
