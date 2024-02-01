@@ -1,9 +1,8 @@
 import {User} from 'firebase/auth'
 
+import {makeFbUser, makeUserTheme} from '@/__tests__/__helpers__'
 import {parseToUser} from '@/utils'
 import {faker} from '@faker-js/faker'
-
-import {makeFbUser, makeUserTheme} from '../__helpers__'
 
 describe('parseToUser', () => {
   it('returns a user object', () => {
