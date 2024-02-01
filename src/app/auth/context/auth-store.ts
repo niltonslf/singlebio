@@ -115,18 +115,21 @@ class AuthStore {
     }
   }
 
-  public async authOrCreateUser(firebaseUser: FbUser): Promise<void> {
+  public async authOrCreateUser(firebaseUser: FbUser): Promise<User> {
     this.setFirebaseUser(firebaseUser)
 
     const res = await this.fetchFirebaseUser(firebaseUser)
 
     if (res.exists() && res.data()) {
-      return adminStore.setUser(res.data() as User)
+      const user = res.data() as User
+      adminStore.setUser(user)
+      return user
     }
 
     // create new user into the firestore
     const newUser = await this.persistUser(firebaseUser)
     adminStore.setUser({...newUser})
+    return newUser
   }
 
   public async persistUser(firebaseUser: FbUser) {

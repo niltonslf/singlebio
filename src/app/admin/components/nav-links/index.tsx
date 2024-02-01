@@ -22,7 +22,7 @@ import {toastAlertStore} from '@/app/admin/components'
 import {NavLink} from '@/app/admin/components/nav-links/components'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {authStore} from '@/app/auth/context/auth-store'
-import {displayUrlShort, merge, parseUserPageUrl} from '@/utils'
+import {merge, parseUserPageUrl} from '@/utils'
 
 export type NavLink = {
   href: string
@@ -180,7 +180,7 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
               !isOpen && 'w-9 p-0',
             ])}>
             <span className={merge([!isOpen && 'hidden'])}>
-              {displayUrlShort(adminStore?.user?.username)}
+              @{adminStore?.user?.username}
             </span>
             <LinkIcon size={18} />
           </Link>

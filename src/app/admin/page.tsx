@@ -1,17 +1,8 @@
 'use client'
 
-import {
-  AudioLines,
-  ChevronsUpDown,
-  Github,
-  Info,
-  Link2,
-  LucideIcon,
-  Minus,
-  Share2,
-} from 'lucide-react'
+import {AudioLines, Github, Info, Link2, Share2} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
-import {ComponentType, HTMLAttributes, useEffect, useState} from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
 
 import {
   AdminBaseLayout,
@@ -23,65 +14,62 @@ import {
   SocialPagesSection,
   GithubSection,
   SpotifySection,
+  FeaturesDragAndDrop,
+  FeatureActiveItem,
 } from '@/app/admin/components'
-import {CollapseBody} from '@/app/admin/components/collapse/collapse-body'
 import {LinksSection} from '@/app/admin/components/links-section'
 import {adminStore} from '@/app/admin/context/admin-store'
-import {SetUsernameModal} from '@/app/components'
-import {User, UserFeatures, UserFeaturesList} from '@/domain/models'
-import {merge} from '@/utils'
-
-type Feature = {
-  id: UserFeaturesList
-  title: string
-  Icon: LucideIcon
-  iconClass?: HTMLAttributes<HTMLElement>['className']
-  Component: ComponentType<{user: User}>
-}
+import {UserFeatures, UserFeaturesList} from '@/domain/models'
+import {ActiveFeature, Feature} from '@/domain/utility'
 
 const AdminPage = observer(() => {
   const {user, socialPages, pageLinks} = adminStore
 
-  const featureList: Feature[] = [
-    {
-      id: 'pageLinks',
-      title: 'Links',
-      Icon: Link2,
-      iconClass: 'bg-blue-600',
-      Component: LinksSection,
-    },
-    {
-      id: 'socialPages',
-      title: 'Social',
-      Icon: Share2,
-      iconClass: 'bg-pink-600',
-      Component: SocialPagesSection,
-    },
-    {
-      id: 'github',
-      title: 'Github',
-      Icon: Github,
-      Component: GithubSection,
-    },
-    {
-      id: 'spotify',
-      title: 'Spotify',
-      Icon: AudioLines,
-      iconClass: 'bg-green-600',
-      Component: SpotifySection,
-    },
-  ]
+  const featureList: Feature[] = useMemo(
+    () => [
+      {
+        id: 'pageLinks',
+        title: 'Links',
+        Icon: Link2,
+        iconClass: 'bg-blue-600',
+        Component: LinksSection,
+      },
+      {
+        id: 'socialPages',
+        title: 'Social',
+        Icon: Share2,
+        iconClass: 'bg-pink-600',
+        Component: SocialPagesSection,
+      },
+      {
+        id: 'github',
+        title: 'Github',
+        Icon: Github,
+        Component: GithubSection,
+      },
+      {
+        id: 'spotify',
+        title: 'Spotify',
+        Icon: AudioLines,
+        iconClass: 'bg-green-600',
+        Component: SpotifySection,
+      },
+    ],
+    [],
+  )
 
-  const [showUsernameModal, setShowUsernameModal] = useState(false)
   const [showBetaWarningModal, setShowBetaWarningModal] = useState(false)
 
   const [availableFeatures, setAvailableFeatures] =
     useState<Feature[]>(featureList)
 
-  const [activeFeatures, setActiveFeatures] = useState<Feature[]>([])
+  const [activeFeatures, setActiveFeatures] = useState<ActiveFeature[]>([])
 
-  const handleEnableFeature = async (feature: Feature) => {
-    setActiveFeatures(prev => [...prev, feature])
+  const handleActiveFeature = async (feature: Feature) => {
+    const lastItem = activeFeatures[activeFeatures.length - 1]
+    const lastPos = activeFeatures.length ? Number(lastItem.order) + 1 : 0
+
+    setActiveFeatures(prev => [...prev, {...feature, order: lastPos}])
 
     setAvailableFeatures(prev =>
       prev.filter(item => item.title != feature.title),
@@ -93,7 +81,7 @@ const AdminPage = observer(() => {
         ...user?.features,
         [feature.id]: {
           ...user?.features?.[feature.id],
-          order: 0, //TODO: make the last one
+          order: lastPos,
         },
       },
     }
@@ -119,41 +107,39 @@ const AdminPage = observer(() => {
     await adminStore.updateUser(data)
   }
 
-  const onSubmitUsername = async (username: string) => {
-    await adminStore.updateUser({username})
-    setShowUsernameModal(false)
-    setShowBetaWarningModal(true)
-  }
+  const getInitialActiveFeatures = useCallback(
+    (features: UserFeatures) => {
+      let active: ActiveFeature[] = []
 
-  const getInitialActiveFeatures = (features: UserFeatures) => {
-    const active: Feature[] = []
-    Object.keys(features).forEach(feature => {
-      const item = featureList.find(feat => feat.id === feature)
-      if (item) return active.push(item)
-    })
+      Object.keys(features).forEach(feature => {
+        const item = featureList.find(feat => feat.id === feature)
+        if (item) {
+          const id = feature as UserFeaturesList
+          return active.push({
+            ...item,
+            order: features?.[id]?.order ?? 1,
+          })
+        }
+      })
 
-    setActiveFeatures(active)
+      active = active.sort((cur, next) => cur.order - next.order)
 
-    const available = featureList.filter(feature => {
-      if (active.findIndex(item => item.id === feature.id) < 0) return feature
-    })
+      setActiveFeatures(active)
 
-    setAvailableFeatures(available)
-  }
+      const available = featureList.filter(feature => {
+        if (active.findIndex(item => item.id === feature.id) < 0) return feature
+      })
+
+      setAvailableFeatures(available)
+    },
+    [featureList],
+  )
 
   useEffect(() => {
     if (user?.features) {
       getInitialActiveFeatures(user.features)
     }
-  }, [user])
-
-  useEffect(() => {
-    if (user != undefined && !user?.username) {
-      setShowUsernameModal(true)
-    } else {
-      setShowUsernameModal(false)
-    }
-  }, [user, user?.username])
+  }, [getInitialActiveFeatures, user])
 
   if (!user) return <PageLoader />
 
@@ -176,38 +162,17 @@ const AdminPage = observer(() => {
             </div>
           ) : (
             <Collapse>
-              {activeFeatures.map((feature, key) => (
-                <Collapse.Item index={key + 1} key={feature.title}>
-                  <Collapse.Header>
-                    <div className='flex w-full items-center gap-3'>
-                      <div
-                        className={merge(['rounded-md p-2 hover:bg-base-200'])}>
-                        <ChevronsUpDown size={18} />
-                      </div>
-
-                      <div
-                        className={merge([
-                          'rounded-md bg-gray-600 p-2',
-                          feature.iconClass,
-                        ])}>
-                        <feature.Icon size={15} />
-                      </div>
-
-                      {feature.title}
-                      <div
-                        onClick={() => handleDisableFeature(feature)}
-                        className={merge([
-                          'ml-auto rounded-md p-2 hover:bg-base-200',
-                        ])}>
-                        <Minus size={18} />
-                      </div>
-                    </div>
-                  </Collapse.Header>
-                  <CollapseBody>
-                    <feature.Component user={user} />
-                  </CollapseBody>
-                </Collapse.Item>
-              ))}
+              <FeaturesDragAndDrop items={activeFeatures}>
+                {activeFeatures.map((feature, key) => (
+                  <FeatureActiveItem
+                    key={feature.id}
+                    index={key + 1}
+                    feature={feature}
+                    onDisable={handleDisableFeature}
+                    user={user}
+                  />
+                ))}
+              </FeaturesDragAndDrop>
             </Collapse>
           )}
 
@@ -228,7 +193,7 @@ const AdminPage = observer(() => {
                   key={feature.title}
                   Icon={feature.Icon}
                   iconClass={feature.iconClass}
-                  onClick={() => handleEnableFeature(feature)}>
+                  onClick={() => handleActiveFeature(feature)}>
                   {feature.title}
                 </FeatureList.Item>
               ))}
@@ -246,10 +211,6 @@ const AdminPage = observer(() => {
         </AdminBaseLayout.PagePreview>
       </AdminBaseLayout>
 
-      <SetUsernameModal
-        onSave={onSubmitUsername}
-        initialOpen={showUsernameModal}
-      />
       <BetaVersionWarningModal
         isOpen={showBetaWarningModal}
         onClose={() => setShowBetaWarningModal(false)}

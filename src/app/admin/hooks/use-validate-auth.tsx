@@ -21,13 +21,14 @@ export const useValidateAuth = () => {
         return
       }
 
-      await authStore.authOrCreateUser(firebaseUser)
+      const user = await authStore.authOrCreateUser(firebaseUser)
       const providerId = firebaseUser.providerData[0].providerId
       const isEmailAccount = providerId === AuthProviders.PASSWORD
 
       if (!firebaseUser.emailVerified && isEmailAccount) {
         router.push('/auth/verify-email')
       } else {
+        if (!user?.username) router.push('/admin/set-username')
         if (pathName === '/auth') router.push('/admin')
       }
       setIsFetchingUser(false)

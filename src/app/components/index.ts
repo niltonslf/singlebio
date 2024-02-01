@@ -1,5 +1,4 @@
 export * from './icons'
-export * from './set-username-modal'
 export * from './avatar'
 export * from './button'
 export * from './input-error-msg'
