@@ -109,7 +109,7 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
         placeholder='Type the url'
         {...register('url', {required: true})}
         className={clsx(
-          'input input-ghost input-sm mt-1',
+          'input input-ghost input-sm mt-1 font-light',
           errors.url && 'input-error',
         )}
       />

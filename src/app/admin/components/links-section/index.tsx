@@ -108,9 +108,9 @@ export const LinksSection = observer(({user}: CardListProps) => {
   }
 
   return (
-    <section className='flex w-full flex-col gap-5 px-0 py-3'>
-      <div className='flex flex-1 flex-col gap-5'>
-        <div className='mb-10 flex w-full flex-1 flex-row flex-wrap gap-10'>
+    <section className='flex w-full flex-col px-0 py-3'>
+      <div className='flex flex-1 flex-col gap-3'>
+        <div className='mb-5 flex w-full flex-1 flex-row flex-wrap gap-10'>
           <button
             onClick={handleAddNewLink}
             className='btn btn-primary flex-1 text-sm uppercase text-neutral-100'>

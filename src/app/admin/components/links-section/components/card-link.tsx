@@ -30,7 +30,7 @@ export const CardLink = ({link, onDelete, children}: CardLinkProps) => {
         {...attributes}
         {...listeners}>
         <span>
-          <Grip width={20} height={20} className='text-neutral-400' />
+          <Grip width={18} height={18} className='text-neutral-400' />
         </span>
       </button>
 
@@ -41,8 +41,8 @@ export const CardLink = ({link, onDelete, children}: CardLinkProps) => {
         className='cursor-pointer'
         data-testid='delete-link-btn'>
         <Trash
-          width={20}
-          height={20}
+          width={18}
+          height={18}
           className='text-neutral-400 hover:text-base-content/70'
         />
       </div>

@@ -5,7 +5,7 @@ import {
   setup,
 } from '@/__tests__'
 import AdminLayout from '@/app/admin/layout'
-import AdminPage from '@/app/admin/page'
+import PageLinksPage from '@/app/admin/page-links/page'
 import {faker} from '@faker-js/faker'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
@@ -37,7 +37,7 @@ jest.mock('@/app/admin/context/admin-store', () => ({
 const makeSUT = async () => {
   return setup(
     <AdminLayout>
-      <AdminPage />
+      <PageLinksPage />
     </AdminLayout>,
   )
 }
