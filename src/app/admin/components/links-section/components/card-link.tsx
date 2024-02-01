@@ -1,4 +1,4 @@
-import {Grip, Trash} from 'lucide-react'
+import {ChevronsUpDown, Trash} from 'lucide-react'
 import {ReactNode} from 'react'
 
 import {Link} from '@/domain/models'
@@ -30,7 +30,7 @@ export const CardLink = ({link, onDelete, children}: CardLinkProps) => {
         {...attributes}
         {...listeners}>
         <span>
-          <Grip width={18} height={18} className='text-neutral-400' />
+          <ChevronsUpDown width={18} height={18} className='text-neutral-400' />
         </span>
       </button>
 

@@ -1,6 +1,15 @@
 'use client'
 
-import {AudioLines, Github, Info, Link2, LucideIcon, Share2} from 'lucide-react'
+import {
+  AudioLines,
+  ChevronsUpDown,
+  Github,
+  Info,
+  Link2,
+  LucideIcon,
+  Minus,
+  Share2,
+} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {ComponentType, HTMLAttributes, useEffect, useState} from 'react'
 
@@ -21,6 +30,7 @@ import {adminStore} from '@/app/admin/context/admin-store'
 import {authStore} from '@/app/auth/context/auth-store'
 import {SetUsernameModal} from '@/app/components'
 import {User} from '@/domain/models'
+import {merge} from '@/utils'
 
 type Feature = {
   title: string
@@ -107,10 +117,29 @@ const AdminPage = observer(() => {
             <Collapse defaultOpen={0}>
               {Feature.map((feature, key) => (
                 <Collapse.Item index={key} key={feature.title}>
-                  <Collapse.Header
-                    Icon={feature.Icon}
-                    iconClass={feature.iconClass}>
-                    {feature.title}
+                  <Collapse.Header>
+                    <div className='flex w-full items-center gap-3'>
+                      <div
+                        className={merge(['rounded-md p-2 hover:bg-base-200'])}>
+                        <ChevronsUpDown size={18} />
+                      </div>
+
+                      <div
+                        className={merge([
+                          'rounded-md bg-gray-600 p-2',
+                          feature.iconClass,
+                        ])}>
+                        <feature.Icon size={15} />
+                      </div>
+
+                      {feature.title}
+                      <div
+                        className={merge([
+                          'ml-auto rounded-md p-2 hover:bg-base-200',
+                        ])}>
+                        <Minus size={18} />
+                      </div>
+                    </div>
                   </Collapse.Header>
                   <CollapseBody>
                     <feature.Component user={user} />
