@@ -56,9 +56,11 @@ describe('AuthStore', () => {
         .spyOn(firebaseAuth, 'signInWithPopup')
         .mockResolvedValue({user: firebaseUserMock} as any)
 
-      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
+      jest
+        .spyOn(authStore, 'authOrCreateUser')
+        .mockResolvedValue(parseToUser(firebaseUserMock, makeUserTheme()))
 
-      await expect(authStore.signInWithGoogle()).resolves.toBeUndefined()
+      await expect(authStore.signInWithGoogle()).resolves.toBeDefined()
     })
 
     it('should call google, signin and throw an error', async () => {
@@ -90,14 +92,16 @@ describe('AuthStore', () => {
         .spyOn(firebaseAuth, 'signInWithEmailAndPassword')
         .mockResolvedValue({user: firebaseUserMock} as any)
 
-      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
+      jest
+        .spyOn(authStore, 'authOrCreateUser')
+        .mockResolvedValue(parseToUser(firebaseUserMock, makeUserTheme()))
 
       const signIn = authStore.signInWithEmailAndPassword(
         emailMock,
         passwordMock,
       )
 
-      await expect(signIn).resolves.toBeUndefined()
+      await expect(signIn).resolves.toBeDefined()
       expect(firebaseAuth.signInWithEmailAndPassword).toHaveBeenCalledWith(
         auth,
         emailMock,
@@ -155,7 +159,7 @@ describe('AuthStore', () => {
         })
       jest.spyOn(firebaseAuth, 'updateProfile').mockResolvedValue()
       jest.spyOn(firebaseAuth, 'sendEmailVerification').mockResolvedValue()
-      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
+      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue(userMock)
       jest.spyOn(authStore, 'logout')
 
       // SUT
@@ -230,9 +234,11 @@ describe('AuthStore', () => {
         .spyOn(firebaseAuth, 'signInWithPopup')
         .mockResolvedValue({user: firebaseUserMock} as any)
 
-      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
+      jest
+        .spyOn(authStore, 'authOrCreateUser')
+        .mockResolvedValue(parseToUser(firebaseUserMock, makeUserTheme()))
 
-      await expect(authStore.signInWithGithub()).resolves.toBeUndefined()
+      await expect(authStore.signInWithGithub()).resolves.toBeDefined()
     })
     it('should call github, signin and throw an error', async () => {
       jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue({code: ''})
