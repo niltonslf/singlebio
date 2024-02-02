@@ -1,6 +1,6 @@
 import {Footer01, Header01} from '@/app/[username]/components'
 import {loadThemeFeatures} from '@/app/[username]/config'
-import {Wrapper} from '@/app/[username]/themes/default/components'
+import {Wrapper} from '@/app/[username]/themes/green/components'
 import {ThemeProps} from '@/app/[username]/themes/types'
 
 export const GreenTheme = (props: ThemeProps) => {
