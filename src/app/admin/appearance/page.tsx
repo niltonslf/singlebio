@@ -1,6 +1,6 @@
 'use client'
 
-import {AlertTriangle} from 'lucide-react'
+import {AlertTriangle, Link2, PaintBucket, Share2, Text} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 import {useEffect, useState} from 'react'
 
@@ -55,28 +55,56 @@ const AppearancePage = observer(() => {
 
         <Collapse toggle defaultOpen={1}>
           <Collapse.Item index={1}>
-            <Collapse.Header>Page wallpaper</Collapse.Header>
+            <Collapse.Header>
+              <div className='flex w-full items-center gap-3'>
+                <div className='rounded-md bg-purple-600 p-2'>
+                  <PaintBucket size={15} />
+                </div>
+                <span className='mr-auto'>Background</span>
+              </div>
+            </Collapse.Header>
             <Collapse.Body>
               <CustomizeWallpaper />
             </Collapse.Body>
           </Collapse.Item>
 
           <Collapse.Item index={2}>
-            <Collapse.Header>Header </Collapse.Header>
+            <Collapse.Header>
+              <div className='flex w-full items-center gap-3'>
+                <div className='rounded-md bg-orange-600 p-2'>
+                  <Text size={15} />
+                </div>
+                <span className='mr-auto'>Profile</span>
+              </div>
+            </Collapse.Header>
             <Collapse.Body>
               <CustomizeUsername />
             </Collapse.Body>
           </Collapse.Item>
 
           <Collapse.Item index={3}>
-            <Collapse.Header>Social links</Collapse.Header>
+            <Collapse.Header>
+              <div className='flex w-full items-center gap-3'>
+                <div className='rounded-md bg-pink-600 p-2'>
+                  <Share2 size={15} />
+                </div>
+                <span className='mr-auto'>Social</span>
+              </div>
+            </Collapse.Header>
             <Collapse.Body>
               <CustomizeSocialLinks />
             </Collapse.Body>
           </Collapse.Item>
 
           <Collapse.Item index={4}>
-            <Collapse.Header>Page Links</Collapse.Header>
+            <Collapse.Header>
+              <div className='flex w-full items-center gap-3'>
+                <div className='rounded-md bg-blue-600 p-2'>
+                  <Link2 size={15} />
+                </div>
+                <span className='mr-auto'>Links</span>
+              </div>
+            </Collapse.Header>
             <Collapse.Body>
               <CustomizeButtons />
             </Collapse.Body>

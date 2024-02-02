@@ -79,7 +79,7 @@ const AdminPage = observer(() => {
               </div>
             </div>
           ) : (
-            <Collapse>
+            <Collapse toggle>
               <FeaturesDragAndDrop items={features}>
                 {features.map((feature, key) => (
                   <FeatureActiveItem
