@@ -2,7 +2,13 @@
 
 import {themeOptions} from '@/app/[username]/constants/theme-options'
 import {SmartphoneCanvas} from '@/app/admin/components'
-import {PageLink, SocialPage, User, UserTheme} from '@/domain/models'
+import {
+  PageLink,
+  SocialPage,
+  User,
+  UserFeature,
+  UserTheme,
+} from '@/domain/models'
 import {merge} from '@/utils'
 
 type Props = {
@@ -10,9 +16,16 @@ type Props = {
   socialPages: SocialPage[]
   pageLinks: PageLink[]
   theme: UserTheme
+  features: UserFeature[]
 }
 
-export const PagePreview = ({user, socialPages, pageLinks, theme}: Props) => {
+export const PagePreview = ({
+  user,
+  socialPages,
+  pageLinks,
+  theme,
+  features,
+}: Props) => {
   const Theme = themeOptions[theme?.name || 'default'].component
 
   return (
@@ -28,6 +41,7 @@ export const PagePreview = ({user, socialPages, pageLinks, theme}: Props) => {
               socialPages={socialPages}
               user={user}
               theme={theme}
+              features={features}
             />
           )}
         </SmartphoneCanvas>

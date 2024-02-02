@@ -1,4 +1,4 @@
-import {PageLink, SocialPage, User} from '@/domain/models'
+import {PageLink, SocialPage, User, UserFeature} from '@/domain/models'
 import {firestoreAdmin} from '@/services/firebase-admin'
 
 /**
@@ -46,6 +46,22 @@ export const fetchUserSocialPages = async (uid: string) => {
 
   if (req.empty) return []
   const pages = req.docs.map(pages => pages.data()) as SocialPage[]
+  return pages
+}
+
+/**
+ * fetch all features active in the user account
+ * @param uid
+ * @returns Array of Feature
+ */
+export const fetchUserFeatures = async (uid: string) => {
+  const req = await firestoreAdmin
+    .collection(`users/${uid}/features`)
+    .orderBy('order', 'asc')
+    .get()
+
+  if (req.empty) return []
+  const pages = req.docs.map(pages => pages.data()) as UserFeature[]
   return pages
 }
 

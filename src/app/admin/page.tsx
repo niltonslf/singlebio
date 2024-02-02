@@ -124,6 +124,7 @@ const AdminPage = observer(() => {
             socialPages={socialPages}
             user={user}
             theme={user.theme}
+            features={features}
           />
         </AdminBaseLayout.PagePreview>
       </AdminBaseLayout>

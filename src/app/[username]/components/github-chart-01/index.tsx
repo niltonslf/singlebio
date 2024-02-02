@@ -1,14 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import {User} from '@/domain/models'
+import {UserFeature} from '@/domain/models'
 
 type GithubChart01Props = {
-  user: User
+  features: UserFeature[]
 }
 
-export const GithubChart01 = ({user}: GithubChart01Props) => {
-  const github = user.features?.github?.username
+export const GithubChart01 = ({features}: GithubChart01Props) => {
+  const github = features?.find(feature => feature.id === 'github')?.value ?? ''
+
   return (
     <>
       {github && (
