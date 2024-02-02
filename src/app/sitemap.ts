@@ -30,8 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${appUrl}/auth`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.3,
+      changeFrequency: 'never',
+      priority: 1,
     },
     ...usersProfilePage,
   ]
