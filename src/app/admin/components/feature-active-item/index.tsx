@@ -1,3 +1,5 @@
+'use client'
+
 import {ChevronsUpDown, Minus} from 'lucide-react'
 
 import {Collapse} from '@/app/admin/components'

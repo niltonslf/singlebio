@@ -11,6 +11,7 @@ import {
 import {Info, Plus} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 
+import {CardLink} from '@/app/admin/components/links-section/components'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {PageLink, LinkCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
@@ -32,8 +33,6 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-
-import {CardLink} from './components/card-link'
 
 type CardListProps = {
   user: User
@@ -86,6 +85,7 @@ export const LinksSection = observer(({user}: CardListProps) => {
         const link: PageLink = {...links[index], order: links[index].order + 1}
         handleSaveLink(link)
       }
+      return
     }
 
     // MOVING UP

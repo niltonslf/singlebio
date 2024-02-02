@@ -1,5 +1,8 @@
+'use client'
+
 import {ReactNode} from 'react'
 
+import {adminStore} from '@/app/admin/context/admin-store'
 import {UserFeature} from '@/domain/models'
 import {
   DndContext,
@@ -26,65 +29,45 @@ export const FeaturesDragAndDrop = ({
 }: FeaturesDragAndDropProps) => {
   const sensors = useSensors(useSensor(PointerSensor))
 
-  // const handleUpdateFeature = async (feature: ActiveFeature) => {
-  //   const newFeature: UserFeatures = {
-  //     ...user?.features,
-  //     [feature.id]: {
-  //       ...user?.features?.[feature.id],
-  //       order: feature.order,
-  //     },
-  //   }
-
-  //   await adminStore.updateUser({features: newFeature})
-  // }
-
-  const updateSort = (
+  const updateSort = async (
     items: UserFeature[],
     oldIndex: number,
     newIndex: number,
   ) => {
     // MOVING DOWN
     if (oldIndex < newIndex) {
-      // console.log(oldIndex, newIndex)
+      const [start, end] = [oldIndex, newIndex - 1]
 
-      // const [start, end] = [oldIndex, newIndex - 1]
+      adminStore.insertFeature({...items[newIndex], order: items[end].order})
 
-      // handleUpdateFeature({...items[newIndex], order: items[end].order})
-
-      // for (let index = start; index <= end; index++) {
-      //   const feature: ActiveFeature = {
-      //     ...items[index],
-      //     order: items[index].order - 1,
-      //   }
-      //   handleUpdateFeature(feature)
-      // }
-
+      for (let index = start; index <= end; index++) {
+        const feature = {...items[index], order: items[index].order - 1}
+        await adminStore.insertFeature(feature)
+      }
       return
     }
 
-    // // MOVING UP
-    // const [start, end] = [newIndex + 1, oldIndex]
-    // handleUpdateFeature({...items[newIndex], order: items[start].order})
+    // MOVING UP
+    const [start, end] = [newIndex + 1, oldIndex]
+    adminStore.insertFeature({...items[newIndex], order: items[start].order})
 
-    // for (let index = start; index <= end; index++) {
-    //   const feature: ActiveFeature = {
-    //     ...items[index],
-    //     order: items[index].order +1,
-    //   }
-    //   handleUpdateFeature(feature)
-    // }
+    for (let index = start; index <= end; index++) {
+      const feature = {...items[index], order: items[index].order + 1}
+      await adminStore.insertFeature(feature)
+    }
   }
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const {active, over} = event
 
     if (active.id != over?.id) {
       const oldIndex = items.findIndex(item => item.id == active.id)
       const newIndex = items.findIndex(item => item.id == over?.id)
       const newArr = arrayMove(items, oldIndex, newIndex)
-      updateSort(newArr, oldIndex, newIndex)
 
-      // update store
+      adminStore.setFeatures(newArr)
+      await updateSort(newArr, oldIndex, newIndex)
+      await adminStore.reloadFeatures()
     }
   }
 

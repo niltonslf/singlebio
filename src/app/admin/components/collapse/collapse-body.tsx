@@ -1,6 +1,6 @@
 'use client'
 
-import {PropsWithChildren, memo} from 'react'
+import {PropsWithChildren} from 'react'
 
 import {merge} from '@/utils'
 
@@ -9,7 +9,7 @@ import {useCollapseItem} from './context/collapse-item-context'
 
 type CollapseBodyProps = PropsWithChildren
 
-export const CollapseBody = memo(({children}: CollapseBodyProps) => {
+export const CollapseBody = ({children}: CollapseBodyProps) => {
   const {isItemOpen} = useCollapse()
   const {itemIndex} = useCollapseItem()
 
@@ -26,4 +26,4 @@ export const CollapseBody = memo(({children}: CollapseBodyProps) => {
       </div>
     </div>
   )
-})
+}
