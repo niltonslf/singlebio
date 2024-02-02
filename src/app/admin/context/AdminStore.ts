@@ -5,7 +5,6 @@ import {
   orderBy,
   getDocs,
   updateDoc,
-  setDoc,
 } from 'firebase/firestore'
 import {makeAutoObservable} from 'mobx'
 
@@ -59,8 +58,7 @@ export class AdminStore {
     if (!this?.user) throw ERROR_MESSAGES['user-not-found']
 
     const userRef = doc(db, 'users', this.user.uid)
-    // TODO: invert links order to asc
-    const q = query(collection(userRef, 'links'), orderBy('order', 'desc'))
+    const q = query(collection(userRef, 'links'), orderBy('order', 'asc'))
     const res = await getDocs(q)
 
     if (res.empty) return []
@@ -119,7 +117,6 @@ export class AdminStore {
 
     const featRef = doc(db, 'users', this?.user?.uid, 'features', feature.id)
     await updateDoc(featRef, feature)
-    await setDoc(featRef)
     return feature
   }
 }

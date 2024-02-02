@@ -65,8 +65,7 @@ class AdminStore {
     if (!this?.user) throw ERROR_MESSAGES['user-not-found']
 
     const userRef = doc(db, 'users', this.user.uid)
-    // TODO: invert links order to asc
-    const q = query(collection(userRef, 'links'), orderBy('order', 'desc'))
+    const q = query(collection(userRef, 'links'), orderBy('order', 'asc'))
     const res = await getDocs(q)
 
     if (res.empty) return []

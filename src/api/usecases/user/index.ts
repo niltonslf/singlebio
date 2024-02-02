@@ -41,7 +41,7 @@ export const fetchUserLinks = async (uid: string) => {
 export const fetchUserSocialPages = async (uid: string) => {
   const req = await firestoreAdmin
     .collection(`users/${uid}/socialPages`)
-    .orderBy('order', 'desc')
+    .orderBy('order', 'asc')
     .get()
 
   if (req.empty) return []

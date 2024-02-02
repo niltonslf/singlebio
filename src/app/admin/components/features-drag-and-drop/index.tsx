@@ -38,7 +38,10 @@ export const FeaturesDragAndDrop = ({
     if (oldIndex < newIndex) {
       const [start, end] = [oldIndex, newIndex - 1]
 
-      adminStore.insertFeature({...items[newIndex], order: items[end].order})
+      await adminStore.insertFeature({
+        ...items[newIndex],
+        order: items[end].order,
+      })
 
       for (let index = start; index <= end; index++) {
         const feature = {...items[index], order: items[index].order - 1}
@@ -49,7 +52,10 @@ export const FeaturesDragAndDrop = ({
 
     // MOVING UP
     const [start, end] = [newIndex + 1, oldIndex]
-    adminStore.insertFeature({...items[newIndex], order: items[start].order})
+    await adminStore.insertFeature({
+      ...items[newIndex],
+      order: items[start].order,
+    })
 
     for (let index = start; index <= end; index++) {
       const feature = {...items[index], order: items[index].order + 1}
