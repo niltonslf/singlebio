@@ -6,7 +6,7 @@ import {
   fetchUserProfile,
   fetchUserSocialPages,
 } from '@/api/usecases'
-import {PageAnalyticsLoader} from '@/app/[username]/components'
+import {PageAnalyticsLoader, ScriptsLoader} from '@/app/[username]/components'
 import {themeOptions} from '@/app/[username]/constants/theme-options'
 import {CookieConsentBanner} from '@/app/components'
 import {UserTheme} from '@/domain/models'
@@ -48,6 +48,7 @@ const UserPage = async ({params}: UserPageProps) => {
       />
       <CookieConsentBanner />
       <PageAnalyticsLoader user={user} />
+      <ScriptsLoader gaCode={user?.googleAnalyticsCode} />
     </>
   )
 }

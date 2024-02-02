@@ -9,4 +9,5 @@ export type User = {
   bio: string
   username: string
   theme: UserTheme
+  googleAnalyticsCode?: string
 }
