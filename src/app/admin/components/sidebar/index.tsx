@@ -7,11 +7,12 @@ import {NavLinks} from '..'
 
 import Link from 'next/link'
 import {useState} from 'react'
+import {isMobile} from 'react-device-detect'
 
 import {merge} from '@/utils'
 
 export const Sidebar = observer(() => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(isMobile ? false : true)
 
   return (
     <>
