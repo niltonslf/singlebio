@@ -17,7 +17,7 @@ export const useValidateAuth = () => {
       if (!firebaseUser) {
         authStore.clearUser()
         setIsFetchingUser(false)
-        if (pathName !== '/auth') router.push('/auth')
+        if (pathName !== '/auth') return router.push('/auth')
         return
       }
 

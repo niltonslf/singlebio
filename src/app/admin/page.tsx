@@ -49,12 +49,10 @@ const AdminPage = observer(() => {
   }
 
   const handleCheckInitialFeatures = useCallback(() => {
-    const filtered = availableFeatures.filter(
-      feat => !features.find(({id}) => id === feat.id),
+    setAvailableFeatures(prev =>
+      prev.filter(feat => !features.find(({id}) => id === feat.id)),
     )
-
-    setAvailableFeatures(filtered)
-  }, [availableFeatures, features])
+  }, [features])
 
   useEffect(() => {
     handleCheckInitialFeatures()

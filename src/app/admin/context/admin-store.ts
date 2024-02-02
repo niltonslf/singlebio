@@ -44,6 +44,7 @@ class AdminStore {
     this.user = undefined
     this.socialPages = []
     this.pageLinks = []
+    this.features = []
   }
 
   public async reloadPageLinks() {
