@@ -176,7 +176,9 @@ export const NavLinks = observer(({onClick, isOpen}: NavLinksProps) => {
             href={parseUserPageUrl(adminStore.user.username)}
             target='_blank'
             className={merge([
-              'font-base btn btn-outline btn-sm mb-3 w-full bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-rose-500 to-indigo-700 px-3 font-light',
+              'font-base btn btn-outline btn-sm mb-3 w-full px-3 font-light',
+              'dark:bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] dark:from-rose-500 dark:to-indigo-700',
+              'bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500',
               !isOpen && 'w-9 p-0',
             ])}>
             <span className={merge([!isOpen && 'hidden'])}>

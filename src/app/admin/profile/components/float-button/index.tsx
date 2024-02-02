@@ -14,19 +14,19 @@ export const FloatButton = ({onClick, active = false}: FloatButtonProps) => {
       className={merge([
         'flex h-9 w-9 items-center justify-center rounded-full',
         'absolute right-0 top-0 cursor-pointer shadow-md shadow-black/50',
-        'group bg-neutral-950',
-        'hover:bg-neutral-200',
+        'group bg-base-300',
+        'hover:bg-base-content',
         'md:right-1 md:top-1',
       ])}>
       {active ? (
         <Trash2
           size={18}
-          className='text-base-content group-hover:text-neutral-950'
+          className='text-base-content group-hover:text-base-300'
         />
       ) : (
         <Camera
           size={18}
-          className='text-base-content group-hover:text-neutral-950'
+          className='text-base-content group-hover:text-base-300'
         />
       )}
     </div>

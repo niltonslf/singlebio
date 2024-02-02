@@ -14,8 +14,8 @@ export const Toast = observer(({toast, closeToast}: ToastProps) => {
     <div
       role='alert'
       className={merge([
-        'alert text-base-content shadow-md shadow-base-100',
-        toast.type === 'default' ? 'bg-base-300' : `alert-${toast.type}`,
+        'alert text-base-content shadow-md shadow-base-300',
+        toast.type === 'default' ? 'bg-base-200' : `alert-${toast.type}`,
       ])}>
       <div>
         <h3>{toast.title}</h3>
