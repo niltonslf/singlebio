@@ -14,7 +14,6 @@ const Profile = observer(() => {
     <AdminBaseLayout>
       <AdminBaseLayout.Content className='gap-5'>
         <h1 className='mb-8 text-2xl font-semibold'>Profile</h1>
-
         {user && <ProfileForm user={user} />}
       </AdminBaseLayout.Content>
 

@@ -1,4 +1,4 @@
-import {Camera, XCircle} from 'lucide-react'
+import Image from 'next/image'
 import {useRef, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
@@ -13,7 +13,12 @@ import {zodResolver} from '@hookform/resolvers/zod'
 
 import {useProfile} from '../../hooks/use-profile'
 
-import {UsernameInput, usernameInputRules} from '..'
+import {
+  FloatButton,
+  OverlayUploading,
+  UsernameInput,
+  usernameInputRules,
+} from '..'
 
 type ProfileFormProps = {
   user: User
@@ -91,8 +96,13 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
     setValidUsername(isValid)
   }
 
+  const toggleProfile = () => {
+    if (picture) return setPicture('')
+    document.querySelector<HTMLInputElement>('#profile-picture')?.click()
+  }
+
   return (
-    <SectionCard title='My data'>
+    <SectionCard>
       {isSubmitting && (
         <div className='absolute right-3 top-3'>
           <div className='loading loading-spinner loading-xs text-neutral-50'></div>
@@ -103,106 +113,106 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
         ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
         onChange={() => triggerFormSubmit()}
-        className='flex flex-col-reverse flex-wrap items-center gap-5 md:flex-row '>
-        <div className='flex w-full flex-1 flex-col gap-3'>
-          <UsernameInput
-            control={control}
-            onChange={handleCheckUsername}
-            isUsernameValid={validUsername}
-            errors={errors}
+        className='flex flex-row flex-wrap items-center gap-5 md:flex-row '>
+        <div className='flex w-full items-center gap-5'>
+          <div className='relative w-2/5 overflow-hidden rounded-md md:w-1/3'>
+            <Avatar
+              name={user.name}
+              pictureUrl={picture}
+              size={260}
+              className='aspect-auto h-44 w-full rounded-none'
+            />
+            <input
+              id='profile-picture'
+              type='file'
+              accept='image/x-png,image/jpeg'
+              multiple={false}
+              onChange={event => setPictureFile(event.target.files)}
+              className='hidden'
+            />
+
+            {isUploadingImg && <OverlayUploading />}
+
+            {!isUploadingImg && (
+              <FloatButton active={!!picture} onClick={() => toggleProfile()} />
+            )}
+          </div>
+
+          <Image
+            src='https://firebasestorage.googleapis.com/v0/b/lnktree.appspot.com/o/uploads%2FwGUlEbyej1fQ2uMq5Nw6k2Vftas2%2Fwallpaper.jpg?alt=media&token=2ae95b3a-ebca-49ba-8c5a-e335671ca942'
+            width={300}
+            height={150}
+            className='ml-auto h-44 w-2/3 rounded-md object-cover'
+            alt='Image'
           />
-
-          <input
-            type='text'
-            disabled
-            className={merge(['input input-bordered  input-md'])}
-            value={adminStore.user?.email}
-          />
-
-          <input
-            type='text'
-            className={merge([
-              'input input-bordered  input-md',
-              errors?.name?.message && 'input-error',
-            ])}
-            placeholder='Name'
-            {...register('name', {required: true})}
-          />
-
-          {errors?.name?.message && (
-            <InputErrorMsg>{errors?.name?.message}</InputErrorMsg>
-          )}
-
-          <textarea
-            placeholder='Bio'
-            className={merge([
-              'textarea textarea-bordered',
-              errors?.bio?.message && 'textarea-error',
-            ])}
-            maxLength={100}
-            wrap='soft'
-            rows={2}
-            {...register('bio', {required: true})}
-          />
-
-          {errors?.bio?.message && (
-            <InputErrorMsg>{errors?.bio?.message}</InputErrorMsg>
-          )}
         </div>
 
-        <div className='relative w-28 md:w-auto'>
-          <Avatar name={user.name} pictureUrl={picture} size={150} />
-          <input
-            id='profile-picture'
-            type='file'
-            accept='image/x-png,image/jpeg'
-            multiple={false}
-            onChange={event => setPictureFile(event.target.files)}
-            className='hidden'
-          />
-
-          {isUploadingImg && (
-            <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-full bg-neutral-950 bg-opacity-80'>
-              <div className='loading loading-spinner loading-xs text-neutral-50' />
-              <span className='mt-2 text-sm font-semibold text-base-content/70'>
-                Uploading...
-              </span>
-            </div>
-          )}
-
-          {picture && !isUploadingImg && (
-            <div
-              onClick={() => setPicture('')}
-              className={merge([
-                'flex h-7 w-7 items-center justify-center rounded-full',
-                'absolute right-0 top-0 cursor-pointer',
-                'group bg-neutral-950',
-                'hover:bg-neutral-200',
-                'md:right-1 md:top-1',
-              ])}>
-              <XCircle
-                size={25}
-                className='text-base-content/70 group-hover:text-neutral-950'
+        <div className='flex w-full flex-col gap-5'>
+          <div className='flex items-center gap-5'>
+            <div className='form-control w-full'>
+              <div className='label'>
+                <span className='label-text text-xs'>Username</span>
+              </div>
+              <UsernameInput
+                control={control}
+                onChange={handleCheckUsername}
+                isUsernameValid={validUsername}
+                errors={errors}
               />
             </div>
-          )}
 
-          {!picture && !isUploadingImg && (
-            <label
-              htmlFor='profile-picture'
-              className={merge([
-                'flex h-7 w-7 items-center justify-center rounded-full',
-                'absolute right-0 top-0 cursor-pointer',
-                'group hover:bg-neutral-200',
-                'bg-neutral-950',
-                'md:right-1 md:top-1',
-              ])}>
-              <Camera
-                size={18}
-                className='text-base-content/70 group-hover:text-neutral-900'
+            <div className='form-control w-full'>
+              <div className='label'>
+                <span className='label-text text-xs'>Email</span>
+              </div>
+              <input
+                type='email'
+                disabled
+                className={merge(['input input-bordered input-md w-full'])}
+                value={adminStore.user?.email}
               />
-            </label>
-          )}
+            </div>
+          </div>
+
+          <div className='form-control w-full'>
+            <div className='label'>
+              <span className='label-text text-xs'>Name</span>
+            </div>
+            <input
+              type='text'
+              className={merge([
+                'input input-bordered  input-md',
+                errors?.name?.message && 'input-error',
+              ])}
+              placeholder='Name'
+              {...register('name', {required: true})}
+            />
+
+            {errors?.name?.message && (
+              <InputErrorMsg>{errors?.name?.message}</InputErrorMsg>
+            )}
+          </div>
+
+          <div className='form-control w-full'>
+            <div className='label'>
+              <span className='label-text text-xs'>Bio</span>
+            </div>
+            <textarea
+              placeholder='Bio'
+              className={merge([
+                'textarea textarea-bordered',
+                errors?.bio?.message && 'textarea-error',
+              ])}
+              maxLength={100}
+              wrap='soft'
+              rows={2}
+              {...register('bio', {required: true})}
+            />
+
+            {errors?.bio?.message && (
+              <InputErrorMsg>{errors?.bio?.message}</InputErrorMsg>
+            )}
+          </div>
         </div>
       </form>
     </SectionCard>
