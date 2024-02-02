@@ -1,7 +1,7 @@
 import {makeLink, makeSocialPage, makeUser, setup} from '@/__tests__'
 import * as fetchUser from '@/api/usecases/user'
 import UserPage from '@/app/[username]/page'
-import {Link, SocialPage, User} from '@/domain/models'
+import {PageLink, SocialPage, User} from '@/domain/models'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('firebase-admin/auth', () => ({
@@ -18,7 +18,7 @@ jest.mock('next/navigation', () => ({
 
 const handleFetchLinks = (
   user?: Required<User>,
-  links?: Link[],
+  links?: PageLink[],
   socials?: SocialPage[],
 ) => {
   const userMock = user ?? makeUser()

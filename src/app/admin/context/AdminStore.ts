@@ -6,7 +6,6 @@ import {
   getDocs,
   updateDoc,
   setDoc,
-  deleteDoc,
 } from 'firebase/firestore'
 import {makeAutoObservable} from 'mobx'
 
@@ -14,7 +13,7 @@ import {ERROR_MESSAGES} from '@/constants/error-msgs'
 import {PageLink, SocialPage, User, UserFeature} from '@/domain/models'
 import {db} from '@/services/firebase'
 
-class AdminStore {
+export class AdminStore {
   constructor() {
     makeAutoObservable(this)
   }
@@ -54,11 +53,6 @@ class AdminStore {
   public async reloadSocialPages() {
     const data = await this.fetchSocialPages()
     this.setSocialPages(data)
-  }
-
-  public async reloadFeatures() {
-    const data = await this.fetchFeatures()
-    this.setFeatures(data)
   }
 
   public async fetchPageLinks(): Promise<PageLink[]> {
@@ -123,20 +117,12 @@ class AdminStore {
     return newUser
   }
 
-  public async insertFeature(feature: UserFeature): Promise<UserFeature> {
+  public async updateFeature(feature: UserFeature): Promise<UserFeature> {
     if (!this?.user?.uid) throw ERROR_MESSAGES['user-not-found']
 
     const featRef = doc(db, 'users', this?.user?.uid, 'features', feature.id)
-    await setDoc(featRef, feature)
+    await updateDoc(featRef, feature)
+    await setDoc(featRef)
     return feature
   }
-
-  public async deleteFeature(featId: string): Promise<void> {
-    if (!this?.user?.uid) throw ERROR_MESSAGES['user-not-found']
-
-    const featRef = doc(db, 'users', this?.user?.uid, 'features', featId)
-    await deleteDoc(featRef)
-  }
 }
-
-export const adminStore = new AdminStore()

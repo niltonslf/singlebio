@@ -1,8 +1,8 @@
 'use client'
 
-import {AudioLines, Github, Info, Link2, Share2} from 'lucide-react'
+import {Info} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
-import {useCallback, useEffect, useMemo, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 
 import {
   AdminBaseLayout,
@@ -10,136 +10,55 @@ import {
   BetaVersionWarningModal,
   PageLoader,
   Collapse,
-  FeatureList,
-  SocialPagesSection,
-  GithubSection,
-  SpotifySection,
   FeaturesDragAndDrop,
   FeatureActiveItem,
+  FeatureList,
 } from '@/app/admin/components'
-import {LinksSection} from '@/app/admin/components/links-section'
+import {featureOptions, featureOptionsObject} from '@/app/admin/constants'
 import {adminStore} from '@/app/admin/context/admin-store'
-import {UserFeatures, UserFeaturesList} from '@/domain/models'
-import {ActiveFeature, Feature} from '@/domain/utility'
 
 const AdminPage = observer(() => {
-  const {user, socialPages, pageLinks} = adminStore
-
-  const featureList: Feature[] = useMemo(
-    () => [
-      {
-        id: 'pageLinks',
-        title: 'Links',
-        Icon: Link2,
-        iconClass: 'bg-blue-600',
-        Component: LinksSection,
-      },
-      {
-        id: 'socialPages',
-        title: 'Social',
-        Icon: Share2,
-        iconClass: 'bg-pink-600',
-        Component: SocialPagesSection,
-      },
-      {
-        id: 'github',
-        title: 'Github',
-        Icon: Github,
-        Component: GithubSection,
-      },
-      {
-        id: 'spotify',
-        title: 'Spotify',
-        Icon: AudioLines,
-        iconClass: 'bg-green-600',
-        Component: SpotifySection,
-      },
-    ],
-    [],
-  )
+  const {user, socialPages, pageLinks, features} = adminStore
 
   const [showBetaWarningModal, setShowBetaWarningModal] = useState(false)
 
-  const [availableFeatures, setAvailableFeatures] =
-    useState<Feature[]>(featureList)
+  const [availableFeatures, setAvailableFeatures] = useState(featureOptions)
 
-  const [activeFeatures, setActiveFeatures] = useState<ActiveFeature[]>([])
+  const handleActiveFeature = async (featId: string) => {
+    setAvailableFeatures(prev => prev.filter(({id}) => id !== featId))
 
-  const handleActiveFeature = async (feature: Feature) => {
-    const lastItem = activeFeatures[activeFeatures.length - 1]
-    const lastPos = activeFeatures.length ? Number(lastItem.order) + 1 : 0
+    const lastItem = features[features.length - 1]
+    const lastPos = features.length ? Number(lastItem.order) + 1 : 0
 
-    setActiveFeatures(prev => [...prev, {...feature, order: lastPos}])
+    const currentFeat = featureOptionsObject[featId]
 
-    setAvailableFeatures(prev =>
-      prev.filter(item => item.title != feature.title),
+    await adminStore.insertFeature({
+      order: lastPos,
+      id: currentFeat.id,
+      value: '',
+    })
+    await adminStore.reloadFeatures()
+  }
+
+  const handleDisableFeature = async (featId: string) => {
+    await adminStore.deleteFeature(featId)
+    await adminStore.reloadFeatures()
+
+    const feature = featureOptionsObject[featId]
+    setAvailableFeatures(prev => [...prev, feature])
+  }
+
+  const handleCheckInitialFeatures = useCallback(() => {
+    const filtered = availableFeatures.filter(
+      feat => !features.find(({id}) => id === feat.id),
     )
 
-    // persist in the database
-    const data = {
-      features: {
-        ...user?.features,
-        [feature.id]: {
-          ...user?.features?.[feature.id],
-          order: lastPos,
-        },
-      },
-    }
-    await adminStore.updateUser(data)
-  }
-
-  const handleDisableFeature = async (feature: Feature) => {
-    setActiveFeatures(prev => prev.filter(item => item.title != feature.title))
-    setAvailableFeatures(prev => [...prev, feature])
-
-    // persist in the database
-    if (!user?.features) return
-
-    const newFeatures: UserFeatures = {}
-    for (const key in user.features) {
-      if (key != feature.id) {
-        const feat = key as UserFeaturesList
-        newFeatures[feat] = user.features?.[feat]
-      }
-    }
-
-    const data = {features: newFeatures}
-    await adminStore.updateUser(data)
-  }
-
-  const getInitialActiveFeatures = useCallback(
-    (features: UserFeatures) => {
-      let active: ActiveFeature[] = []
-
-      Object.keys(features).forEach(feature => {
-        const item = featureList.find(feat => feat.id === feature)
-        if (item) {
-          const id = feature as UserFeaturesList
-          return active.push({
-            ...item,
-            order: features?.[id]?.order ?? 1,
-          })
-        }
-      })
-
-      active = active.sort((cur, next) => cur.order - next.order)
-
-      setActiveFeatures(active)
-
-      const available = featureList.filter(feature => {
-        if (active.findIndex(item => item.id === feature.id) < 0) return feature
-      })
-
-      setAvailableFeatures(available)
-    },
-    [featureList],
-  )
+    setAvailableFeatures(filtered)
+  }, [availableFeatures, features])
 
   useEffect(() => {
-    if (user?.features) {
-      getInitialActiveFeatures(user.features)
-    }
-  }, [getInitialActiveFeatures, user])
+    handleCheckInitialFeatures()
+  }, [handleCheckInitialFeatures])
 
   if (!user) return <PageLoader />
 
@@ -149,7 +68,7 @@ const AdminPage = observer(() => {
         <AdminBaseLayout.Content>
           <h1 className='mb-8 text-2xl font-semibold'>Sections</h1>
 
-          {activeFeatures.length === 0 ? (
+          {features.length === 0 ? (
             <div className='alert alert-info '>
               <Info size={15} />
               <div>
@@ -162,8 +81,8 @@ const AdminPage = observer(() => {
             </div>
           ) : (
             <Collapse>
-              <FeaturesDragAndDrop items={activeFeatures}>
-                {activeFeatures.map((feature, key) => (
+              <FeaturesDragAndDrop items={features}>
+                {features.map((feature, key) => (
                   <FeatureActiveItem
                     key={feature.id}
                     index={key + 1}
@@ -190,10 +109,10 @@ const AdminPage = observer(() => {
             <FeatureList>
               {availableFeatures.map(feature => (
                 <FeatureList.Item
-                  key={feature.title}
+                  key={feature.id}
                   Icon={feature.Icon}
                   iconClass={feature.iconClass}
-                  onClick={() => handleActiveFeature(feature)}>
+                  onClick={() => handleActiveFeature(feature.id)}>
                   {feature.title}
                 </FeatureList.Item>
               ))}

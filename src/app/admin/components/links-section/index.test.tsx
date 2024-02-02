@@ -1,8 +1,8 @@
 import * as firestore from 'firebase/firestore'
 
 import {fail, makeLink, makeUser, setup} from '@/__tests__'
-import {LinksSection} from '@/app/admin/components/links-section'
-import {Link, User} from '@/domain/models'
+import {LinksSection} from '@/app/admin/components'
+import {PageLink, User} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
@@ -18,7 +18,7 @@ const makeSUT = (user?: User) => {
   return {userMock, ...sut}
 }
 
-const renderWithItems = (linksMock: Link[]) => {
+const renderWithItems = (linksMock: PageLink[]) => {
   const responseMock = {
     docs: linksMock.map(link => ({
       data: () => link,

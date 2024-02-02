@@ -18,9 +18,9 @@ export const parseToUser = (
     pictureUrl: firebaseUser.photoURL || '',
     uid: firebaseUser.uid,
     theme: theme,
+    username: username ?? '',
+    bio: '',
   }
-
-  if (username) response.username = username
 
   return response
 }

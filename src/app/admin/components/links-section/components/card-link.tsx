@@ -1,13 +1,13 @@
 import {ChevronsUpDown, Trash} from 'lucide-react'
 import {ReactNode} from 'react'
 
-import {Link} from '@/domain/models'
+import {PageLink} from '@/domain/models'
 import {useSortable} from '@dnd-kit/sortable'
 import {CSS} from '@dnd-kit/utilities'
 
 type CardLinkProps = {
-  link: Required<Link>
-  onDelete: (link: Link) => void
+  link: Required<PageLink>
+  onDelete: (link: PageLink) => void
   children: ReactNode
 }
 

@@ -1,4 +1,4 @@
-import {Link, SocialPage, User} from '@/domain/models'
+import {PageLink, SocialPage, User} from '@/domain/models'
 import {firestoreAdmin} from '@/services/firebase-admin'
 
 /**
@@ -29,7 +29,7 @@ export const fetchUserLinks = async (uid: string) => {
     .get()
 
   if (linksReq.empty) return []
-  const links = linksReq.docs.map(link => link.data()) as Link[]
+  const links = linksReq.docs.map(link => link.data()) as PageLink[]
   return links
 }
 

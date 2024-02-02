@@ -2,13 +2,13 @@
 
 import {themeOptions} from '@/app/[username]/constants/theme-options'
 import {SmartphoneCanvas} from '@/app/admin/components'
-import {Link, SocialPage, User, UserTheme} from '@/domain/models'
+import {PageLink, SocialPage, User, UserTheme} from '@/domain/models'
 import {merge} from '@/utils'
 
 type Props = {
   user?: User
   socialPages: SocialPage[]
-  pageLinks: Link[]
+  pageLinks: PageLink[]
   theme: UserTheme
 }
 

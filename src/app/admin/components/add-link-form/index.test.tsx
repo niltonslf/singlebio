@@ -1,10 +1,10 @@
 import {makeLink, setup} from '@/__tests__'
 import {AddLinkForm} from '@/app/admin/components'
-import {Link} from '@/domain/models'
+import {PageLink} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
-const makeSUT = (link?: Link) => {
+const makeSUT = (link?: PageLink) => {
   const linkMock = link ?? makeLink()
 
   const onAddLinkMock = jest.fn((data: any) => Promise.resolve(data))
@@ -29,7 +29,12 @@ describe('Add Link Form Component', () => {
   })
 
   it('should show errors when fields are filled wrong', async () => {
-    const link: Link = {label: '', url: '', id: faker.string.uuid(), order: 0}
+    const link: PageLink = {
+      label: '',
+      url: '',
+      id: faker.string.uuid(),
+      order: 0,
+    }
     const {user} = await waitFor(() => makeSUT(link))
 
     const inputLabel = screen.getByPlaceholderText(/type the label/i)

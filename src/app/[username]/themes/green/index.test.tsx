@@ -6,11 +6,11 @@ import {
   setup,
 } from '@/__tests__'
 import {GreenTheme} from '@/app/[username]/themes'
-import {Link, SocialPage, User, UserTheme} from '@/domain/models'
+import {PageLink, SocialPage, User, UserTheme} from '@/domain/models'
 import {screen} from '@testing-library/react'
 
 type SUTProps = {
-  links?: Link[]
+  links?: PageLink[]
   theme?: UserTheme
   user?: User
   socialPages?: SocialPage[]

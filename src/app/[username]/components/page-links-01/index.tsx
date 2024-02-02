@@ -1,10 +1,10 @@
 import {CSSProperties} from 'react'
 
 import {LinkCard, LinkCardItem} from '@/app/[username]/components'
-import {Link, UserTheme} from '@/domain/models'
+import {PageLink, UserTheme} from '@/domain/models'
 
 type PageLinks01Props = {
-  links: Link[]
+  links: PageLink[]
   theme: UserTheme
 }
 

@@ -5,13 +5,13 @@ import {useEffect, useRef, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
 
-import {Link} from '@/domain/models'
+import {PageLink} from '@/domain/models'
 import {merge, useDebounce, validateUrlRegex} from '@/utils'
 import {zodResolver} from '@hookform/resolvers/zod'
 
 type AddLinkFormProps = {
-  saveLink: (link: Link) => void
-  link: Link
+  saveLink: (link: PageLink) => void
+  link: PageLink
 }
 
 const schema = z.object({
@@ -39,7 +39,7 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
     handleSubmit,
     watch,
     formState: {errors},
-  } = useForm<Link>({
+  } = useForm<PageLink>({
     resolver: zodResolver(schema),
     defaultValues: link,
   })
@@ -51,7 +51,7 @@ export const AddLinkForm = ({saveLink, link}: AddLinkFormProps) => {
     formRef.current?.requestSubmit()
   })
 
-  const handleSaveLink = async (link: Link) => {
+  const handleSaveLink = async (link: PageLink) => {
     setIsSubmitting(true)
     await saveLink(link)
     setIsSubmitting(false)

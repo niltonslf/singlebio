@@ -12,7 +12,7 @@ import {Info, Plus} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 
 import {adminStore} from '@/app/admin/context/admin-store'
-import {Link, LinkCreation, User} from '@/domain/models'
+import {PageLink, LinkCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
 
 import {AddLinkForm} from '..'
@@ -61,17 +61,21 @@ export const LinksSection = observer(({user}: CardListProps) => {
     adminStore.reloadPageLinks()
   }
 
-  const handleSaveLink = async (data: Link) => {
+  const handleSaveLink = async (data: PageLink) => {
     await setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
     adminStore.reloadPageLinks()
   }
 
-  const deleteLink = async (link: Link) => {
+  const deleteLink = async (link: PageLink) => {
     await deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
     adminStore.reloadPageLinks()
   }
 
-  const updateSort = (links: Link[], oldIndex: number, newIndex: number) => {
+  const updateSort = (
+    links: PageLink[],
+    oldIndex: number,
+    newIndex: number,
+  ) => {
     // MOVING DOWN
     if (oldIndex < newIndex) {
       const [start, end] = [oldIndex, newIndex - 1]
@@ -79,7 +83,7 @@ export const LinksSection = observer(({user}: CardListProps) => {
       handleSaveLink({...links[newIndex], order: links[end].order})
 
       for (let index = start; index <= end; index++) {
-        const link: Link = {...links[index], order: links[index].order + 1}
+        const link: PageLink = {...links[index], order: links[index].order + 1}
         handleSaveLink(link)
       }
     }
@@ -89,7 +93,7 @@ export const LinksSection = observer(({user}: CardListProps) => {
     handleSaveLink({...links[newIndex], order: links[start].order})
 
     for (let index = start; index <= end; index++) {
-      const link: Link = {...links[index], order: links[index].order - 1}
+      const link: PageLink = {...links[index], order: links[index].order - 1}
       handleSaveLink(link)
     }
   }

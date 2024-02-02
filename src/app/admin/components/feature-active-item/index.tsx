@@ -1,17 +1,17 @@
 import {ChevronsUpDown, Minus} from 'lucide-react'
 
 import {Collapse} from '@/app/admin/components'
-import {User} from '@/domain/models'
-import {ActiveFeature} from '@/domain/utility'
+import {featureOptionsObject} from '@/app/admin/constants'
+import {User, UserFeature} from '@/domain/models'
 import {merge} from '@/utils'
 import {useSortable} from '@dnd-kit/sortable'
 import {CSS} from '@dnd-kit/utilities'
 
 type FeatureActiveItemProps = {
-  feature: ActiveFeature
+  feature: UserFeature
   user: User
   index: number
-  onDisable: (feature: ActiveFeature) => void
+  onDisable: (featId: string) => void
 }
 
 export const FeatureActiveItem = ({
@@ -28,6 +28,8 @@ export const FeatureActiveItem = ({
     transition,
   }
 
+  const {Component, Icon, iconClass, title} = featureOptionsObject[feature.id]
+
   return (
     <div ref={setNodeRef} style={style}>
       <Collapse.Item index={index}>
@@ -39,23 +41,22 @@ export const FeatureActiveItem = ({
               className={merge(['rounded-md p-2 hover:bg-base-200'])}>
               <ChevronsUpDown size={18} />
             </div>
-            <div
-              className={merge([
-                'rounded-md bg-gray-600 p-2',
-                feature.iconClass,
-              ])}>
-              <feature.Icon size={15} />
+            <div className={merge(['rounded-md bg-gray-600 p-2', iconClass])}>
+              <Icon size={15} />
             </div>
-            {feature.title} [{feature.order}]
+            {title} [{feature.order}]
             <div
-              onClick={() => onDisable(feature)}
+              onClick={e => {
+                e.stopPropagation()
+                onDisable(feature.id)
+              }}
               className={merge(['ml-auto rounded-md p-2 hover:bg-base-200'])}>
               <Minus size={18} />
             </div>
           </div>
         </Collapse.Header>
         <Collapse.Body>
-          <feature.Component user={user} />
+          <Component user={user} />
         </Collapse.Body>
       </Collapse.Item>
     </div>

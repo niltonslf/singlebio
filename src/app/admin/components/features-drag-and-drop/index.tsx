@@ -1,8 +1,6 @@
 import {ReactNode} from 'react'
 
-import {adminStore} from '@/app/admin/context/admin-store'
-import {UserFeatures, UserFeaturesList} from '@/domain/models'
-import {ActiveFeature} from '@/domain/utility'
+import {UserFeature} from '@/domain/models'
 import {
   DndContext,
   DragEndEvent,
@@ -19,14 +17,13 @@ import {
 
 type FeaturesDragAndDropProps = {
   children?: ReactNode
-  items: ActiveFeature[]
+  items: UserFeature[]
 }
 
 export const FeaturesDragAndDrop = ({
   children,
   items,
 }: FeaturesDragAndDropProps) => {
-  const {user} = adminStore
   const sensors = useSensors(useSensor(PointerSensor))
 
   // const handleUpdateFeature = async (feature: ActiveFeature) => {
@@ -42,7 +39,7 @@ export const FeaturesDragAndDrop = ({
   // }
 
   const updateSort = (
-    items: ActiveFeature[],
+    items: UserFeature[],
     oldIndex: number,
     newIndex: number,
   ) => {
@@ -87,19 +84,7 @@ export const FeaturesDragAndDrop = ({
       const newArr = arrayMove(items, oldIndex, newIndex)
       updateSort(newArr, oldIndex, newIndex)
 
-      const featureObj: UserFeatures = {}
-
-      newArr.forEach((item, index) => {
-        const id = item.id as UserFeaturesList
-
-        featureObj[id] = {
-          ...user?.features?.[id],
-          order: index,
-        }
-      })
-
-      if (!user) return
-      adminStore.setUser({...user, features: featureObj})
+      // update store
     }
   }
 
