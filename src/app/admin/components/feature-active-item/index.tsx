@@ -46,7 +46,7 @@ export const FeatureActiveItem = ({
             <div className={merge(['rounded-md bg-gray-600 p-2', iconClass])}>
               <Icon size={15} />
             </div>
-            {title} [{feature.order}]
+            {title}
             <div
               onClick={e => {
                 e.stopPropagation()
