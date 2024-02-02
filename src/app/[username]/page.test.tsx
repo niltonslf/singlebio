@@ -1,7 +1,13 @@
-import {makeLink, makeSocialPage, makeUser, setup} from '@/__tests__'
+import {
+  makeFeature,
+  makeLink,
+  makeSocialPage,
+  makeUser,
+  setup,
+} from '@/__tests__'
 import * as fetchUser from '@/api/usecases/user'
 import UserPage from '@/app/[username]/page'
-import {PageLink, SocialPage, User} from '@/domain/models'
+import {PageLink, SocialPage, User, UserFeature} from '@/domain/models'
 import {cleanup, screen, waitFor} from '@testing-library/react'
 
 jest.mock('firebase-admin/auth', () => ({
@@ -20,10 +26,12 @@ const handleFetchLinks = (
   user?: Required<User>,
   links?: PageLink[],
   socials?: SocialPage[],
+  features?: UserFeature[],
 ) => {
   const userMock = user ?? makeUser()
   const linksMock = links ?? [makeLink(), makeLink()]
   const socialsMock = socials ?? [makeSocialPage(), makeSocialPage()]
+  const featuresMock = features ?? [makeFeature(), makeFeature('socialPages')]
 
   jest
     .spyOn(fetchUser, 'fetchUserProfile')
@@ -34,6 +42,9 @@ const handleFetchLinks = (
   jest
     .spyOn(fetchUser, 'fetchUserSocialPages')
     .mockImplementation(() => Promise.resolve(socialsMock))
+  jest
+    .spyOn(fetchUser, 'fetchUserFeatures')
+    .mockImplementation(() => Promise.resolve(featuresMock))
 
   return {userMock, linksMock, socialsMock}
 }
