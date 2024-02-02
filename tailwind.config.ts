@@ -30,7 +30,7 @@ const config: Config = {
 
           'neutral': '#ebecf0' /* Neutral color */,
           'neutral-focus': '#b9b9bd' /* Neutral color - focused */,
-          'neutral-content': '#17171d' /* Foreground content color */,
+          'neutral-content': '#121217' /* Foreground content color */,
 
           'base-100': '#23232a' /* Base color of page, used for blank bg */,
           'base-200': '#1B1B22' /* Base color, a little darker */,
@@ -48,26 +48,26 @@ const config: Config = {
       },
       {
         light: {
-          'primary': '#6d0b74' /* Primary color */,
-          'primary-focus': '#410745' /* Primary color - focused */,
-          'primary-content': '#faf7f5' /* Foreground content color */,
+          'primary': '#ff0065' /* Primary color */,
+          'primary-focus': '#db0057' /* Primary color - focused */,
+          'primary-content': '#e7e2df' /* Foreground content color */,
 
           'secondary': '#007ebd' /* Secondary color */,
           'secondary-focus': '#005c8a' /* Secondary color - focused */,
-          'secondary-content': '#faf7f5' /* Foreground content color */,
+          'secondary-content': '#e7e2df' /* Foreground content color */,
 
           'accent': '#f88913' /* Accent color */,
           'accent-focus': '#cb6c06' /* Accent color - focused */,
-          'accent-content': '#faf7f5' /* Foreground content color  */,
+          'accent-content': '#e7e2df' /* Foreground content color  */,
 
-          'neutral': '#1e2734' /* Neutral color */,
-          'neutral-focus': '#111827' /* Neutral color - focused */,
-          'neutral-content': '#faf7f5' /* Foreground content color */,
+          'neutral': '#23232a' /* Neutral color */,
+          'neutral-focus': '#1B1B22' /* Neutral color - focused */,
+          'neutral-content': '#e7e2df' /* Foreground content color */,
 
           'base-100': '#faf7f5' /* Base color of page, used for blank bg */,
           'base-200': '#efeae6' /* Base color, a little darker */,
           'base-300': '#e7e2df' /* Base color, even more darker */,
-          'base-content': '#1e2734' /* Foreground content color  */,
+          'base-content': '#23232a' /* Foreground content color  */,
 
           'info': '#1c92f2' /* Info */,
           'success': '#15a99a' /* Success */,

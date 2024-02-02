@@ -19,13 +19,12 @@ export const Sidebar = observer(() => {
       <nav
         data-testid='admin-sidebar'
         className={merge([
-          'fixed left-0 top-0 z-50 flex h-full flex-col border-base-200 bg-base-100',
+          'fixed left-0 top-0 z-50 flex h-full flex-col border-base-200 bg-base-300',
           'w-full max-w-full flex-col gap-5 border-r px-3 py-5',
           'bg-opacity-90 backdrop-blur-md transition-all',
-          'md:relative md:z-auto md:w-[250px] md:bg-base-200 dark:md:bg-base-300',
+          'md:relative md:z-auto md:w-[250px] md:bg-opacity-100',
           'overflow-y-auto overflow-x-hidden md:left-0',
-          !isOpen &&
-            'left-[-100%] rounded-br-lg rounded-tr-lg bg-opacity-100 md:w-[65px]',
+          !isOpen && 'left-[-100%] rounded-br-lg rounded-tr-lg md:w-[65px]',
         ])}>
         <span
           data-testid='sidebar-toggle-button'
