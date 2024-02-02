@@ -1,29 +1,7 @@
-import {ThemeButtonStyles, User, UserTheme} from '@/domain/models'
+import {User, UserTheme} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 
-type MakeUserProps = {
-  email?: string
-  name?: string
-  pictureUrl?: string
-  uid?: string
-  username?: string
-  theme?: UserTheme
-  bio?: string
-}
-
-type MakeUserThemeProps = {
-  backgroundColor?: string
-  backgroundImage?: string
-  buttonBackground?: string
-  buttonTextColor?: string
-  usernameColor?: string
-  socialDefaultColor?: boolean
-  socialIconColor?: string
-  buttonStyle?: ThemeButtonStyles
-  name?: string
-}
-
-export const makeUser = (user: MakeUserProps = {}): Required<User> => {
+export const makeUser = (user: Partial<User> = {}): Required<User> => {
   return {
     email: user?.email ?? faker.internet.email(),
     name: user?.name ?? faker.person.fullName(),
@@ -32,17 +10,12 @@ export const makeUser = (user: MakeUserProps = {}): Required<User> => {
     username: user?.username ?? faker.internet.userName(),
     theme: user?.theme ?? makeUserTheme(),
     bio: user?.bio ?? faker.lorem.word(20),
-    features: {
-      github: {
-        username: faker.internet.userName(),
-      },
-    },
+    coverUrl: user?.coverUrl ?? faker.image.urlLoremFlickr(),
   }
 }
 
 export const makeUserTheme = ({
   backgroundColor,
-  backgroundImage,
   buttonBackground,
   buttonTextColor,
   usernameColor,
@@ -50,10 +23,9 @@ export const makeUserTheme = ({
   socialIconColor,
   buttonStyle,
   name,
-}: MakeUserThemeProps = {}): UserTheme => {
+}: Partial<UserTheme> = {}): UserTheme => {
   return {
     backgroundColor: backgroundColor ?? faker.color.rgb({format: 'css'}),
-    backgroundImage: backgroundImage ?? faker.image.urlLoremFlickr(),
     buttonBackground: buttonBackground ?? faker.color.rgb({format: 'css'}),
     buttonTextColor: buttonTextColor ?? faker.color.rgb({format: 'css'}),
     usernameColor: usernameColor ?? faker.color.rgb({format: 'css'}),

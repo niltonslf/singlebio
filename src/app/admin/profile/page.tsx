@@ -5,19 +5,16 @@ import {observer} from 'mobx-react-lite'
 import {adminStore} from '@/app/admin/context/admin-store'
 
 import {AdminBaseLayout, PagePreview} from '../components'
-import {GithubSection, ProfileForm, SocialCard} from './components'
+import {ProfileForm} from './components'
 
 const Profile = observer(() => {
-  const {user, socialPages, pageLinks} = adminStore
+  const {user, socialPages, pageLinks, features} = adminStore
 
   return (
     <AdminBaseLayout>
       <AdminBaseLayout.Content className='gap-5'>
         <h1 className='mb-8 text-2xl font-semibold'>Profile</h1>
-
         {user && <ProfileForm user={user} />}
-        {user && <SocialCard user={user} />}
-        {user && <GithubSection user={user} />}
       </AdminBaseLayout.Content>
 
       <AdminBaseLayout.PagePreview>
@@ -27,6 +24,7 @@ const Profile = observer(() => {
             socialPages={socialPages}
             user={user}
             theme={user.theme}
+            features={features}
           />
         )}
       </AdminBaseLayout.PagePreview>

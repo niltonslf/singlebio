@@ -1,14 +1,15 @@
 import clsx from 'clsx'
 import {ReactNode} from 'react'
 
-import {UserTheme} from '@/domain/models'
+import {User, UserTheme} from '@/domain/models'
 
 type WrapperProps = {
   children: ReactNode
   theme?: UserTheme
+  user?: User
 }
 
-export const Wrapper = ({theme, children}: WrapperProps) => {
+export const Wrapper = ({theme, user, children}: WrapperProps) => {
   return (
     <main
       data-theme='dark'
@@ -23,16 +24,16 @@ export const Wrapper = ({theme, children}: WrapperProps) => {
         <div
           className={clsx([
             'relative z-10 h-44 w-full bg-cover bg-center md:h-52 ',
-            !theme?.backgroundImage ? 'bg-gray-300' : '',
+            !user?.coverUrl ? 'bg-gray-300' : '',
           ])}
           style={{
-            backgroundImage: `url(${theme?.backgroundImage})`,
+            backgroundImage: `url(${user?.coverUrl})`,
           }}>
           <div className='h-full w-full backdrop-blur-md'>
             <div
               className='mx-auto h-full w-full max-w-5xl bg-base-300 bg-cover bg-center'
               style={{
-                backgroundImage: `url(${theme?.backgroundImage})`,
+                backgroundImage: `url(${user?.coverUrl})`,
               }}></div>
           </div>
         </div>

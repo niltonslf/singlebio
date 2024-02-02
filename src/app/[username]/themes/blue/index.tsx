@@ -1,21 +1,24 @@
 import {
   Footer01,
-  GithubChart01,
   Header01,
   PageLinks01,
   SocialPages01,
 } from '@/app/[username]/components'
+import {loadThemeFeatures} from '@/app/[username]/config'
 import {Wrapper} from '@/app/[username]/themes/default/components'
 import {ThemeProps} from '@/app/[username]/themes/types'
 
-export const BlueTheme = ({links, socialPages, user, theme}: ThemeProps) => {
+export const BlueTheme = (props: ThemeProps) => {
+  const themeFeatures = loadThemeFeatures(props, {
+    socialPages: SocialPages01,
+    pageLinks: PageLinks01,
+  })
+
   return (
     <>
-      <Wrapper theme={theme}>
-        <Header01 user={user} theme={theme} />
-        <SocialPages01 theme={theme} socialPages={socialPages} />
-        <PageLinks01 links={links} theme={theme} />
-        <GithubChart01 user={user} />
+      <Wrapper theme={props.theme} user={props.user}>
+        <Header01 user={props.user} theme={props.theme} />
+        {themeFeatures}
         <Footer01 />
       </Wrapper>
     </>

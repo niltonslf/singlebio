@@ -1,14 +1,15 @@
 import clsx from 'clsx'
 import {ReactNode} from 'react'
 
-import {UserTheme} from '@/domain/models'
+import {User, UserTheme} from '@/domain/models'
 
 type WrapperProps = {
   children: ReactNode
   theme?: UserTheme
+  user?: User
 }
 
-export const Wrapper = ({theme, children}: WrapperProps) => {
+export const Wrapper = ({theme, children, user}: WrapperProps) => {
   const defaultBg = 'bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100'
 
   return (
@@ -19,13 +20,13 @@ export const Wrapper = ({theme, children}: WrapperProps) => {
         'bg-fixed',
       ])}
       style={{
-        backgroundImage: `url(${theme?.backgroundImage})`,
+        backgroundImage: `url(${user?.coverUrl})`,
       }}>
       <section
         className={clsx([
           'flex h-[100dvh] w-screen flex-col items-center justify-start  overflow-y-auto',
           'px-5 pb-8 pt-20',
-          !theme?.backgroundImage && !theme?.backgroundColor ? defaultBg : '',
+          !user?.coverUrl && !theme?.backgroundColor ? defaultBg : '',
         ])}
         style={{
           backgroundColor: theme?.backgroundColor,

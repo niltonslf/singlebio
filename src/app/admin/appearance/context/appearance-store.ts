@@ -6,17 +6,12 @@ import {adminStore} from '@/app/admin/context/admin-store'
 import {ThemeButtonStyles, UserTheme} from '@/domain/models'
 import {deepEqual} from '@/utils'
 
-type Aux = {
-  backgroundFile?: File
-}
-
 export class AppearanceStore {
   constructor() {
     makeAutoObservable(this)
   }
 
   private initialData: UserTheme = {
-    backgroundImage: '',
     backgroundColor: '',
     buttonBackground: '',
     buttonTextColor: '',
@@ -28,10 +23,6 @@ export class AppearanceStore {
   }
   private themeConfig: UserTheme = {...this.initialData}
 
-  public aux: Aux = {
-    backgroundFile: undefined,
-  }
-
   get theme() {
     return {...this.themeConfig}
   }
@@ -42,13 +33,6 @@ export class AppearanceStore {
 
   setTheme(theme: UserTheme) {
     this.themeConfig = {...theme}
-  }
-
-  setBackgroundFile(file?: File) {
-    this.aux.backgroundFile = file
-  }
-  setBackgroundImage(value: string) {
-    this.themeConfig.backgroundImage = value
   }
   setBackgroundColor(value: string) {
     this.themeConfig.backgroundColor = value
@@ -73,7 +57,6 @@ export class AppearanceStore {
     if (!adminStore.user?.theme) return
 
     this.themeConfig = {...adminStore.user?.theme}
-    this.aux.backgroundFile = undefined
   }
 }
 

@@ -39,7 +39,7 @@ const AdminLayoutWrapper = observer(({children}: Props) => {
           <Sidebar />
         </div>
 
-        <div className='h-full w-full gap-5 overflow-y-auto pb-16 pl-5 pr-5 pt-0 md:py-0 md:pl-5 md:pr-0'>
+        <div className='h-full w-full overflow-y-auto pb-16 pl-5 pr-5 pt-0 md:py-0 md:pl-10 md:pr-0'>
           {children}
         </div>
       </main>

@@ -6,8 +6,6 @@ import {useEffect, useState} from 'react'
 
 import {PagePreview, toastAlertStore} from '@/app/admin/components'
 import {adminStore} from '@/app/admin/context/admin-store'
-import {useImageUploader, useImageCompressor} from '@/app/admin/hooks'
-import {authStore} from '@/app/auth/context/auth-store'
 
 import {Collapse, AdminBaseLayout} from '../components'
 import {
@@ -19,26 +17,15 @@ import {
 import {appearanceStore} from './context'
 
 const AppearancePage = observer(() => {
-  const {user, socialPages, pageLinks} = adminStore
-  const {theme, aux} = appearanceStore
-
-  const {compress} = useImageCompressor()
-  const {upload} = useImageUploader()
+  const {user, socialPages, pageLinks, features} = adminStore
+  const {theme} = appearanceStore
 
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSaveAppearance = async () => {
     const data = {theme}
 
-    if (aux.backgroundFile && theme.backgroundImage) {
-      const newImage = await compress(aux.backgroundFile)
-      const url = await upload(newImage, 'wallpaper')
-
-      data.theme.backgroundImage = url
-      appearanceStore.setBackgroundFile(undefined)
-    }
-
-    await authStore.updateUser(data)
+    await adminStore.updateUser(data)
     setIsLoading(false)
 
     toastAlertStore.show({
@@ -119,6 +106,7 @@ const AppearancePage = observer(() => {
           socialPages={socialPages}
           user={user}
           theme={theme}
+          features={features}
         />
       </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>

@@ -1,13 +1,13 @@
-import {Grip, Trash} from 'lucide-react'
+import {ChevronsUpDown, Trash} from 'lucide-react'
 import {ReactNode} from 'react'
 
-import {Link} from '@/domain/models'
+import {PageLink} from '@/domain/models'
 import {useSortable} from '@dnd-kit/sortable'
 import {CSS} from '@dnd-kit/utilities'
 
 type CardLinkProps = {
-  link: Required<Link>
-  onDelete: (link: Link) => void
+  link: Required<PageLink>
+  onDelete: (link: PageLink) => void
   children: ReactNode
 }
 
@@ -30,7 +30,7 @@ export const CardLink = ({link, onDelete, children}: CardLinkProps) => {
         {...attributes}
         {...listeners}>
         <span>
-          <Grip width={20} height={20} className='text-neutral-400' />
+          <ChevronsUpDown width={18} height={18} className='text-neutral-400' />
         </span>
       </button>
 
@@ -41,8 +41,8 @@ export const CardLink = ({link, onDelete, children}: CardLinkProps) => {
         className='cursor-pointer'
         data-testid='delete-link-btn'>
         <Trash
-          width={20}
-          height={20}
+          width={18}
+          height={18}
           className='text-neutral-400 hover:text-base-content/70'
         />
       </div>

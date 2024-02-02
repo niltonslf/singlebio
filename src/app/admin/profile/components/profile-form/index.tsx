@@ -1,4 +1,4 @@
-import {Camera, XCircle} from 'lucide-react'
+import Image from 'next/image'
 import {useRef, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import * as z from 'zod'
@@ -6,7 +6,6 @@ import * as z from 'zod'
 import {SectionCard} from '@/app/admin/components'
 import {adminStore} from '@/app/admin/context/admin-store'
 import {useImageCompressor, useImageUploader} from '@/app/admin/hooks'
-import {authStore} from '@/app/auth/context/auth-store'
 import {Avatar, InputErrorMsg} from '@/app/components'
 import {User} from '@/domain/models'
 import {merge, useDebounce} from '@/utils'
@@ -14,13 +13,19 @@ import {zodResolver} from '@hookform/resolvers/zod'
 
 import {useProfile} from '../../hooks/use-profile'
 
-import {UsernameInput, usernameInputRules} from '..'
+import {
+  FloatButton,
+  OverlayUploading,
+  UsernameInput,
+  usernameInputRules,
+} from '..'
 
 type ProfileFormProps = {
   user: User
 }
 type UserProfile = Required<Pick<User, 'username' | 'name' | 'bio'>> & {
   pictureUrl?: string
+  coverUrl?: string
 }
 
 export const ProfileForm = ({user}: ProfileFormProps) => {
@@ -36,11 +41,16 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
   const {compress} = useImageCompressor()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isUploadingImg, setIsUploadingImg] = useState(false)
+  const [isUploadingImg, setIsUploadingImg] = useState<
+    'profile' | 'cover' | undefined
+  >()
   const [validUsername, setValidUsername] = useState(true)
 
-  const [picture, setPicture] = useState(user.pictureUrl ?? '')
+  const [pictureUrl, setPictureUrl] = useState(user.pictureUrl)
   const [pictureFile, setPictureFile] = useState<FileList | null>(null)
+
+  const [coverUrl, setCoverUrl] = useState(user.coverUrl)
+  const [coverFile, setCoverFile] = useState<FileList | null>(null)
 
   const {
     register,
@@ -62,24 +72,35 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
     setIsSubmitting(true)
 
     const userData = {...data}
-    const file = pictureFile?.[0]
+    const picture = pictureFile?.[0]
+    const cover = coverFile?.[0]
 
-    if (file) {
-      setIsUploadingImg(true)
+    if (picture) {
+      setIsUploadingImg('profile')
+      setPictureUrl(returnImageThumbnail(picture))
 
-      const localUrl = returnImageThumbnail(file)
-      setPicture(localUrl)
-
-      const newImage = await compress(file)
+      const newImage = await compress(picture)
       const remoteUrl = await upload(newImage, 'profile')
 
       userData['pictureUrl'] = remoteUrl
       setPictureFile(null)
-      setPicture(remoteUrl)
+      setPictureUrl(remoteUrl)
     }
 
-    await authStore.updateUser(userData)
-    setIsUploadingImg(false)
+    if (cover) {
+      setIsUploadingImg('cover')
+      setCoverUrl(returnImageThumbnail(cover))
+
+      const newImage = await compress(cover)
+      const remoteUrl = await upload(newImage, 'cover')
+
+      userData['coverUrl'] = remoteUrl
+      setCoverFile(null)
+      setCoverUrl(remoteUrl)
+    }
+
+    await adminStore.updateUser(userData)
+    setIsUploadingImg(undefined)
     setIsSubmitting(false)
   }
 
@@ -92,120 +113,155 @@ export const ProfileForm = ({user}: ProfileFormProps) => {
     setValidUsername(isValid)
   }
 
+  const toggleProfile = () => {
+    if (pictureUrl) return setPictureUrl('')
+    document.querySelector<HTMLInputElement>(`#profile-picture`)?.click()
+  }
+
+  const toggleCover = () => {
+    if (coverUrl) return setCoverUrl('')
+    document.querySelector<HTMLInputElement>(`#cover-picture`)?.click()
+  }
+
   return (
-    <SectionCard title='My data'>
-      {isSubmitting && (
-        <div className='absolute right-3 top-3'>
-          <div className='loading loading-spinner loading-xs text-neutral-50'></div>
-        </div>
-      )}
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit(onSubmit)}
+      onChange={() => triggerFormSubmit()}
+      className='flex w-full flex-col gap-5'>
+      <SectionCard>
+        {isSubmitting && (
+          <div className='absolute right-3 top-3'>
+            <div className='loading loading-spinner loading-xs text-neutral-50'></div>
+          </div>
+        )}
 
-      <form
-        ref={formRef}
-        onSubmit={handleSubmit(onSubmit)}
-        onChange={() => triggerFormSubmit()}
-        className='flex flex-col-reverse flex-wrap items-center gap-5 md:flex-row '>
-        <div className='flex w-full flex-1 flex-col gap-3'>
-          <UsernameInput
-            control={control}
-            onChange={handleCheckUsername}
-            isUsernameValid={validUsername}
-            errors={errors}
-          />
-
-          <input
-            type='text'
-            disabled
-            className={merge(['input input-bordered  input-md'])}
-            value={adminStore.user?.email}
-          />
-
-          <input
-            type='text'
-            className={merge([
-              'input input-bordered  input-md',
-              errors?.name?.message && 'input-error',
-            ])}
-            placeholder='Name'
-            {...register('name', {required: true})}
-          />
-
-          {errors?.name?.message && (
-            <InputErrorMsg>{errors?.name?.message}</InputErrorMsg>
-          )}
-
-          <textarea
-            placeholder='Bio'
-            className={merge([
-              'textarea textarea-bordered',
-              errors?.bio?.message && 'textarea-error',
-            ])}
-            maxLength={100}
-            wrap='soft'
-            rows={2}
-            {...register('bio', {required: true})}
-          />
-
-          {errors?.bio?.message && (
-            <InputErrorMsg>{errors?.bio?.message}</InputErrorMsg>
-          )}
-        </div>
-
-        <div className='relative w-28 md:w-auto'>
-          <Avatar name={user.name} pictureUrl={picture} size={150} />
-          <input
-            id='profile-picture'
-            type='file'
-            accept='image/x-png,image/jpeg'
-            multiple={false}
-            onChange={event => setPictureFile(event.target.files)}
-            className='hidden'
-          />
-
-          {isUploadingImg && (
-            <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-full bg-neutral-950 bg-opacity-80'>
-              <div className='loading loading-spinner loading-xs text-neutral-50' />
-              <span className='mt-2 text-sm font-semibold text-base-content/70'>
-                Uploading...
-              </span>
-            </div>
-          )}
-
-          {picture && !isUploadingImg && (
-            <div
-              onClick={() => setPicture('')}
-              className={merge([
-                'flex h-7 w-7 items-center justify-center rounded-full',
-                'absolute right-0 top-0 cursor-pointer',
-                'group bg-neutral-950',
-                'hover:bg-neutral-200',
-                'md:right-1 md:top-1',
-              ])}>
-              <XCircle
-                size={25}
-                className='text-base-content/70 group-hover:text-neutral-950'
+        <div className='flex flex-row flex-wrap items-center gap-5 md:flex-row '>
+          <div className='flex w-full items-center gap-5'>
+            <div className='relative w-2/5 overflow-hidden rounded-md md:w-1/3'>
+              <Avatar
+                name={user.name}
+                pictureUrl={pictureUrl}
+                size={260}
+                className='aspect-auto h-44 w-full rounded-none'
               />
-            </div>
-          )}
-
-          {!picture && !isUploadingImg && (
-            <label
-              htmlFor='profile-picture'
-              className={merge([
-                'flex h-7 w-7 items-center justify-center rounded-full',
-                'absolute right-0 top-0 cursor-pointer',
-                'group hover:bg-neutral-200',
-                'bg-neutral-950',
-                'md:right-1 md:top-1',
-              ])}>
-              <Camera
-                size={18}
-                className='text-base-content/70 group-hover:text-neutral-900'
+              <input
+                id='profile-picture'
+                type='file'
+                accept='image/x-png,image/jpeg'
+                multiple={false}
+                onChange={event => setPictureFile(event.target.files)}
+                className='hidden'
               />
-            </label>
-          )}
+
+              {isUploadingImg === 'profile' && <OverlayUploading />}
+              {isUploadingImg === undefined && (
+                <FloatButton active={!!pictureUrl} onClick={toggleProfile} />
+              )}
+            </div>
+
+            <div className='relative w-2/3 overflow-hidden rounded-md md:w-2/3'>
+              {coverUrl ? (
+                <Image
+                  src={coverUrl}
+                  width={300}
+                  height={150}
+                  className='ml-auto h-44 w-full object-cover'
+                  alt='cover image'
+                />
+              ) : (
+                <div className='ml-auto h-44 w-full bg-base-100' />
+              )}
+              <input
+                id='cover-picture'
+                type='file'
+                accept='image/x-png,image/jpeg'
+                multiple={false}
+                onChange={event => setCoverFile(event.target.files)}
+                className='hidden'
+              />
+
+              {isUploadingImg === 'cover' && <OverlayUploading />}
+
+              {isUploadingImg === undefined && (
+                <FloatButton active={!!coverUrl} onClick={toggleCover} />
+              )}
+            </div>
+          </div>
         </div>
-      </form>
-    </SectionCard>
+      </SectionCard>
+
+      <SectionCard>
+        <div className='flex flex-row flex-wrap items-center gap-5 md:flex-row '>
+          <div className='flex w-full flex-col gap-5'>
+            <div className='flex items-center gap-5'>
+              <div className='form-control w-full'>
+                <div className='label'>
+                  <span className='label-text text-xs'>Username</span>
+                </div>
+                <UsernameInput
+                  control={control}
+                  onChange={handleCheckUsername}
+                  isUsernameValid={validUsername}
+                  errors={errors}
+                />
+              </div>
+
+              <div className='form-control w-full'>
+                <div className='label'>
+                  <span className='label-text text-xs'>Email</span>
+                </div>
+                <input
+                  type='email'
+                  disabled
+                  className={merge(['input input-bordered input-md w-full'])}
+                  value={adminStore.user?.email}
+                />
+              </div>
+            </div>
+
+            <div className='form-control w-full'>
+              <div className='label'>
+                <span className='label-text text-xs'>Name</span>
+              </div>
+              <input
+                type='text'
+                className={merge([
+                  'input input-bordered  input-md',
+                  errors?.name?.message && 'input-error',
+                ])}
+                placeholder='Name'
+                {...register('name', {required: true})}
+              />
+
+              {errors?.name?.message && (
+                <InputErrorMsg>{errors?.name?.message}</InputErrorMsg>
+              )}
+            </div>
+
+            <div className='form-control w-full'>
+              <div className='label'>
+                <span className='label-text text-xs'>Bio</span>
+              </div>
+              <textarea
+                placeholder='Bio'
+                className={merge([
+                  'textarea textarea-bordered',
+                  errors?.bio?.message && 'textarea-error',
+                ])}
+                maxLength={100}
+                wrap='soft'
+                rows={2}
+                {...register('bio', {required: true})}
+              />
+
+              {errors?.bio?.message && (
+                <InputErrorMsg>{errors?.bio?.message}</InputErrorMsg>
+              )}
+            </div>
+          </div>
+        </div>
+      </SectionCard>
+    </form>
   )
 }

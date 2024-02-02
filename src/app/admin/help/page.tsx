@@ -12,7 +12,7 @@ const Help = observer(() => {
 
   return (
     <AdminBaseLayout>
-      <AdminBaseLayout.Content className='mr-5'>
+      <AdminBaseLayout.Content className='mr-10'>
         <h1 className='mb-8 text-2xl font-semibold'>Help</h1>
 
         <SectionCard title='Get in touch'>

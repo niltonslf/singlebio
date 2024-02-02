@@ -3,7 +3,7 @@ import Link from 'next/link'
 import {CSSProperties, ReactNode} from 'react'
 
 import {themeButtonStyle} from '@/app/[username]/constants/theme-button-options'
-import {Link as LinkPage, ThemeButtonStyles} from '@/domain/models'
+import {PageLink as LinkPage, ThemeButtonStyles} from '@/domain/models'
 import {parseExternalUrl} from '@/utils'
 
 type LinkCardItemProps = {

@@ -11,22 +11,20 @@ import {
 } from '@/app/[username]/constants/theme-options'
 import {ThemeProps} from '@/app/[username]/themes/types'
 import {adminStore} from '@/app/admin/context/admin-store'
-import {authStore} from '@/app/auth/context/auth-store'
 import {UserTheme} from '@/domain/models'
 
 import {AdminBaseLayout, SectionCard, PagePreview} from '../components'
 
 const ThemePage = observer(() => {
-  const {user, socialPages, pageLinks} = adminStore
+  const {user, socialPages, pageLinks, features} = adminStore
   const themes = Object.keys(themeOptions).map(key => themeOptions[key])
 
   const handleSelectTheme = async (theme: ThemeOption<ThemeProps>) => {
     const newData = {
       ...theme.defaultTheme,
-      backgroundImage: user?.theme?.backgroundImage,
     } as UserTheme
 
-    await authStore.updateUser({theme: newData})
+    await adminStore.updateUser({theme: newData})
   }
 
   return (
@@ -72,6 +70,7 @@ const ThemePage = observer(() => {
             socialPages={socialPages}
             user={user}
             theme={user.theme}
+            features={features}
           />
         )}
       </AdminBaseLayout.PagePreview>

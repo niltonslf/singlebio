@@ -1,4 +1,5 @@
 import {
+  makeFeature,
   makeLink,
   makeSocialPage,
   makeUser,
@@ -6,14 +7,21 @@ import {
   setup,
 } from '@/__tests__'
 import {GreenTheme} from '@/app/[username]/themes'
-import {Link, SocialPage, User, UserTheme} from '@/domain/models'
+import {
+  PageLink,
+  SocialPage,
+  User,
+  UserFeature,
+  UserTheme,
+} from '@/domain/models'
 import {screen} from '@testing-library/react'
 
 type SUTProps = {
-  links?: Link[]
+  links?: PageLink[]
   theme?: UserTheme
   user?: User
   socialPages?: SocialPage[]
+  features?: UserFeature[]
 }
 
 const makeSUT = (props: SUTProps = {}) => {
@@ -21,6 +29,7 @@ const makeSUT = (props: SUTProps = {}) => {
   const userThemeMock = makeUserTheme({buttonStyle: 'square'})
   const userMock = makeUser()
   const socialPagesMock = [makeSocialPage(), makeSocialPage()]
+  const featuresMock = [makeFeature(), makeFeature('socialPages')]
 
   const render = setup(
     <GreenTheme
@@ -28,6 +37,7 @@ const makeSUT = (props: SUTProps = {}) => {
       theme={props?.theme ?? userThemeMock}
       user={props?.user ?? userMock}
       socialPages={props?.socialPages ?? socialPagesMock}
+      features={props?.features ?? featuresMock}
     />,
   )
 

@@ -7,7 +7,6 @@ export type ThemeButtonStyles =
   | 'outline'
 
 export type UserTheme = {
-  backgroundImage: string
   backgroundColor: string
 
   buttonBackground: string

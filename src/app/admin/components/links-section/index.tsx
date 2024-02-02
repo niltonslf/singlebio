@@ -11,8 +11,9 @@ import {
 import {Info, Plus} from 'lucide-react'
 import {observer} from 'mobx-react-lite'
 
+import {CardLink} from '@/app/admin/components/links-section/components'
 import {adminStore} from '@/app/admin/context/admin-store'
-import {Link, LinkCreation, User} from '@/domain/models'
+import {PageLink, LinkCreation, User} from '@/domain/models'
 import {db} from '@/services/firebase'
 
 import {AddLinkForm} from '..'
@@ -20,7 +21,6 @@ import {AddLinkForm} from '..'
 import {
   DndContext,
   closestCenter,
-  KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
@@ -29,11 +29,8 @@ import {
 import {
   SortableContext,
   arrayMove,
-  sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-
-import {CardLink} from './components/card-link'
 
 type CardListProps = {
   user: User
@@ -42,12 +39,7 @@ type CardListProps = {
 export const LinksSection = observer(({user}: CardListProps) => {
   const {pageLinks} = adminStore
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  )
+  const sensors = useSensors(useSensor(PointerSensor))
 
   const getLastOrder = () => {
     return pageLinks.reduce((prev, cur) => Math.max(prev, cur.order + 1), 0)
@@ -61,40 +53,44 @@ export const LinksSection = observer(({user}: CardListProps) => {
     adminStore.reloadPageLinks()
   }
 
-  const handleSaveLink = async (data: Link) => {
+  const handleSaveLink = async (data: PageLink) => {
     await setDoc(doc(db, 'users', user.uid, 'links', data.id), data)
-    adminStore.reloadPageLinks()
   }
 
-  const deleteLink = async (link: Link) => {
+  const deleteLink = async (link: PageLink) => {
     await deleteDoc(doc(db, 'users', user.uid, 'links', link.id))
     adminStore.reloadPageLinks()
   }
 
-  const updateSort = (links: Link[], oldIndex: number, newIndex: number) => {
+  const updateSort = async (
+    links: PageLink[],
+    oldIndex: number,
+    newIndex: number,
+  ) => {
     // MOVING DOWN
     if (oldIndex < newIndex) {
       const [start, end] = [oldIndex, newIndex - 1]
 
-      handleSaveLink({...links[newIndex], order: links[end].order})
+      await handleSaveLink({...links[newIndex], order: links[end].order})
 
       for (let index = start; index <= end; index++) {
-        const link: Link = {...links[index], order: links[index].order + 1}
-        handleSaveLink(link)
+        const link = {...links[index], order: links[index].order - 1}
+        await handleSaveLink(link)
       }
+      return
     }
 
     // MOVING UP
     const [start, end] = [newIndex + 1, oldIndex]
-    handleSaveLink({...links[newIndex], order: links[start].order})
+    await handleSaveLink({...links[newIndex], order: links[start].order})
 
     for (let index = start; index <= end; index++) {
-      const link: Link = {...links[index], order: links[index].order - 1}
-      handleSaveLink(link)
+      const link = {...links[index], order: links[index].order + 1}
+      await handleSaveLink(link)
     }
   }
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const {active, over} = event
 
     if (active.id != over?.id) {
@@ -102,15 +98,16 @@ export const LinksSection = observer(({user}: CardListProps) => {
       const newIndex = pageLinks.findIndex(item => item.id == over?.id)
       const newArr = arrayMove(pageLinks, oldIndex, newIndex)
 
-      updateSort(newArr, oldIndex, newIndex)
       adminStore.setPageLinks(newArr)
+      await updateSort(newArr, oldIndex, newIndex)
+      await adminStore.reloadPageLinks()
     }
   }
 
   return (
-    <section className='flex w-full flex-col gap-5 px-0 py-3'>
-      <div className='flex flex-1 flex-col gap-5'>
-        <div className='mb-10 flex w-full flex-1 flex-row flex-wrap gap-10'>
+    <section className='flex w-full flex-col px-0 py-3'>
+      <div className='flex flex-1 flex-col gap-3'>
+        <div className='mb-5 flex w-full flex-1 flex-row flex-wrap gap-10'>
           <button
             onClick={handleAddNewLink}
             className='btn btn-primary flex-1 text-sm uppercase text-neutral-100'>
@@ -130,7 +127,13 @@ export const LinksSection = observer(({user}: CardListProps) => {
               strategy={verticalListSortingStrategy}>
               {pageLinks.map(link => (
                 <CardLink key={link.id} onDelete={deleteLink} link={link}>
-                  <AddLinkForm saveLink={handleSaveLink} link={link} />
+                  <AddLinkForm
+                    saveLink={async data => {
+                      handleSaveLink(data)
+                      await adminStore.reloadPageLinks()
+                    }}
+                    link={link}
+                  />
                 </CardLink>
               ))}
             </SortableContext>

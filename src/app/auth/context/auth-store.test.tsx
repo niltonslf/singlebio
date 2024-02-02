@@ -56,9 +56,11 @@ describe('AuthStore', () => {
         .spyOn(firebaseAuth, 'signInWithPopup')
         .mockResolvedValue({user: firebaseUserMock} as any)
 
-      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
+      jest
+        .spyOn(authStore, 'authOrCreateUser')
+        .mockResolvedValue(parseToUser(firebaseUserMock, makeUserTheme()))
 
-      await expect(authStore.signInWithGoogle()).resolves.toBeUndefined()
+      await expect(authStore.signInWithGoogle()).resolves.toBeDefined()
     })
 
     it('should call google, signin and throw an error', async () => {
@@ -90,14 +92,16 @@ describe('AuthStore', () => {
         .spyOn(firebaseAuth, 'signInWithEmailAndPassword')
         .mockResolvedValue({user: firebaseUserMock} as any)
 
-      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
+      jest
+        .spyOn(authStore, 'authOrCreateUser')
+        .mockResolvedValue(parseToUser(firebaseUserMock, makeUserTheme()))
 
       const signIn = authStore.signInWithEmailAndPassword(
         emailMock,
         passwordMock,
       )
 
-      await expect(signIn).resolves.toBeUndefined()
+      await expect(signIn).resolves.toBeDefined()
       expect(firebaseAuth.signInWithEmailAndPassword).toHaveBeenCalledWith(
         auth,
         emailMock,
@@ -155,7 +159,7 @@ describe('AuthStore', () => {
         })
       jest.spyOn(firebaseAuth, 'updateProfile').mockResolvedValue()
       jest.spyOn(firebaseAuth, 'sendEmailVerification').mockResolvedValue()
-      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
+      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue(userMock)
       jest.spyOn(authStore, 'logout')
 
       // SUT
@@ -230,9 +234,11 @@ describe('AuthStore', () => {
         .spyOn(firebaseAuth, 'signInWithPopup')
         .mockResolvedValue({user: firebaseUserMock} as any)
 
-      jest.spyOn(authStore, 'authOrCreateUser').mockResolvedValue()
+      jest
+        .spyOn(authStore, 'authOrCreateUser')
+        .mockResolvedValue(parseToUser(firebaseUserMock, makeUserTheme()))
 
-      await expect(authStore.signInWithGithub()).resolves.toBeUndefined()
+      await expect(authStore.signInWithGithub()).resolves.toBeDefined()
     })
     it('should call github, signin and throw an error', async () => {
       jest.spyOn(firebaseAuth, 'signInWithPopup').mockRejectedValue({code: ''})
@@ -290,44 +296,6 @@ describe('AuthStore', () => {
     })
   })
 
-  describe('updateUser', () => {
-    it('should throw an error if user does not exists', async () => {
-      const userMock = makeUser()
-
-      await expect(authStore.updateUser(userMock)).rejects.toBe(
-        ERROR_MESSAGES['user-not-found'],
-      )
-    })
-
-    it('should update user data in the store and in the database', async () => {
-      const initialUserData = makeUser()
-      // simulate an user already logged in
-      adminStore.setUser(initialUserData)
-
-      jest.spyOn(firestore, 'updateDoc').mockResolvedValue()
-
-      const userNewData = {theme: makeUserTheme()}
-
-      // SUT
-      const updateRes = await authStore.updateUser(userNewData)
-
-      const mergedUserData = {...initialUserData, ...userNewData}
-
-      expect(adminStore.user).toEqual(mergedUserData)
-      expect(updateRes).toEqual(mergedUserData)
-    })
-  })
-
-  describe('setUser', () => {
-    it('should replace user data', () => {
-      const userMock = makeUser()
-
-      adminStore.setUser(userMock)
-
-      expect(adminStore.user).toEqual(userMock)
-    })
-  })
-
   describe('clearUser', () => {
     it('should clear userModel and firebaseUser properties', () => {
       authStore.clearUser()
@@ -380,7 +348,6 @@ describe('AuthStore', () => {
       await authStore.deleteUser()
 
       expect(firebaseAuth.reauthenticateWithPopup).toHaveBeenCalledTimes(1)
-      expect(firestore.getDocs).toHaveBeenCalledTimes(1)
       expect(firestore.deleteDoc).toHaveBeenCalled()
       expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
       expect(authStore.clearUser).toHaveBeenCalledTimes(1)
@@ -414,7 +381,6 @@ describe('AuthStore', () => {
       await authStore.deleteUser()
 
       expect(firebaseAuth.reauthenticateWithPopup).toHaveBeenCalledTimes(1)
-      expect(firestore.getDocs).toHaveBeenCalledTimes(1)
       expect(firestore.deleteDoc).toHaveBeenCalled()
       expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
       expect(authStore.clearUser).toHaveBeenCalledTimes(1)
@@ -448,7 +414,6 @@ describe('AuthStore', () => {
       await authStore.deleteUser()
 
       expect(windowUtils.createPopup).toHaveBeenCalledTimes(1)
-      expect(firestore.getDocs).toHaveBeenCalledTimes(1)
       expect(firestore.deleteDoc).toHaveBeenCalled()
       expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
       expect(authStore.clearUser).toHaveBeenCalledTimes(1)

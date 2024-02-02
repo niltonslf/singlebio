@@ -28,7 +28,7 @@ export const CollapseHeader = ({children, className}: CollapseHeaderProps) => {
     <header className='flex w-full select-none' onClick={() => handleClick()}>
       <label
         className={merge([
-          'color flex w-full cursor-pointer justify-between bg-base-300 px-5 py-4 ',
+          'color flex w-full cursor-pointer items-center justify-between gap-3 bg-base-300 px-5 py-4 ',
           className,
         ])}>
         <div className='text-md w-full font-semibold text-base-content'>

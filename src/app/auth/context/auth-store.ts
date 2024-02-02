@@ -58,7 +58,7 @@ class AuthStore {
 
   public firebaseUser: FbUser | undefined = undefined
 
-  public async signInWithGoogle(): Promise<void> {
+  public async signInWithGoogle(): Promise<User> {
     try {
       const {user} = await signInWithPopup(auth, googleProvider)
       return this.authOrCreateUser(user)
@@ -69,7 +69,7 @@ class AuthStore {
     }
   }
 
-  public async signInWithGithub(): Promise<void> {
+  public async signInWithGithub(): Promise<User> {
     try {
       const {user} = await signInWithPopup(auth, githubProvider)
       return this.authOrCreateUser(user)
@@ -103,7 +103,7 @@ class AuthStore {
   public async signInWithEmailAndPassword(
     email: string,
     password: string,
-  ): Promise<void> {
+  ): Promise<User> {
     try {
       const {user} = await signInWithEmailAndPasswordFB(auth, email, password)
       return this.authOrCreateUser(user)
@@ -115,18 +115,21 @@ class AuthStore {
     }
   }
 
-  public async authOrCreateUser(firebaseUser: FbUser): Promise<void> {
+  public async authOrCreateUser(firebaseUser: FbUser): Promise<User> {
     this.setFirebaseUser(firebaseUser)
 
     const res = await this.fetchFirebaseUser(firebaseUser)
 
     if (res.exists() && res.data()) {
-      return adminStore.setUser(res.data() as User)
+      const user = res.data() as User
+      adminStore.setUser(user)
+      return user
     }
 
     // create new user into the firestore
     const newUser = await this.persistUser(firebaseUser)
     adminStore.setUser({...newUser})
+    return newUser
   }
 
   public async persistUser(firebaseUser: FbUser) {
@@ -179,6 +182,8 @@ class AuthStore {
     )
 
     await this.deleteUserLinks(adminStore?.user)
+    await this.deleteUserSocialPages(adminStore?.user)
+    await this.deleteUserFeatures(adminStore?.user)
 
     await deleteDoc(doc(db, 'users', adminStore?.user.uid))
     await deleteUser(this.firebaseUser)
@@ -203,6 +208,27 @@ class AuthStore {
 
   public async deleteUserLinks(user: User) {
     const queryLinks = query(collection(db, 'users', user.uid, 'links'))
+    const {size, docs} = await getDocs(queryLinks)
+
+    if (size) {
+      for await (const linkDoc of docs) {
+        await deleteDoc(doc(db, linkDoc.ref.path))
+      }
+    }
+  }
+
+  public async deleteUserSocialPages(user: User) {
+    const queryLinks = query(collection(db, 'users', user.uid, 'socialPages'))
+    const {size, docs} = await getDocs(queryLinks)
+
+    if (size) {
+      for await (const linkDoc of docs) {
+        await deleteDoc(doc(db, linkDoc.ref.path))
+      }
+    }
+  }
+  public async deleteUserFeatures(user: User) {
+    const queryLinks = query(collection(db, 'users', user.uid, 'features'))
     const {size, docs} = await getDocs(queryLinks)
 
     if (size) {

@@ -1,11 +1,11 @@
-import {User} from '@/domain/models'
+import {UserFeature} from '@/domain/models'
 
 type SpotifyEmbed01Props = {
-  user: User
+  features: UserFeature[]
 }
 
-export const SpotifyEmbed01 = ({user}: SpotifyEmbed01Props) => {
-  const url = user?.features?.spotify?.url || ''
+export const SpotifyEmbed01 = ({features}: SpotifyEmbed01Props) => {
+  const url = features?.find(feature => feature.id === 'spotify')?.value ?? ''
 
   const regex = new RegExp(/.+\.com\/(\w+)\/(\w+)/)
   const [, type, id] = regex.exec(url) || [undefined, null, null]

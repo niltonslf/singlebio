@@ -1,6 +1,7 @@
 import {redirect} from 'next/navigation'
 
 import {
+  fetchUserFeatures,
   fetchUserLinks,
   fetchUserProfile,
   fetchUserSocialPages,
@@ -20,16 +21,19 @@ const fetchUserData = async (username: string) => {
 
   if (!user) redirect('/not-found')
 
-  const [links, socialPages] = await Promise.all([
+  const [links, socialPages, features] = await Promise.all([
     fetchUserLinks(user.uid),
     fetchUserSocialPages(user.uid),
+    fetchUserFeatures(user.uid),
   ])
 
-  return {user, links, socialPages}
+  return {user, links, socialPages, features}
 }
 
 const UserPage = async ({params}: UserPageProps) => {
-  const {user, links, socialPages} = await fetchUserData(params.username)
+  const {user, links, socialPages, features} = await fetchUserData(
+    params.username,
+  )
 
   const Theme = themeOptions[user?.theme?.name || 'default'].component
 
@@ -40,6 +44,7 @@ const UserPage = async ({params}: UserPageProps) => {
         socialPages={socialPages}
         user={user}
         theme={user.theme}
+        features={features}
       />
       <CookieConsentBanner />
       <PageAnalyticsLoader user={user} />

@@ -1,4 +1,4 @@
-import {Link} from '@/domain/models'
+import {PageLink} from '@/domain/models'
 import {faker} from '@faker-js/faker'
 
 export const makeLink = (
@@ -6,7 +6,7 @@ export const makeLink = (
   label?: string,
   url?: string,
   order?: number,
-): Link => {
+): PageLink => {
   return {
     id: id ?? faker.string.uuid(),
     label: label ?? faker.word.words(2),

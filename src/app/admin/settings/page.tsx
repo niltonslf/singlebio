@@ -15,7 +15,7 @@ const Settings = observer(() => {
   return (
     <AdminBaseLayout>
       <div className='w-full md:w-1/2'>
-        <AdminBaseLayout.Content className='md:mr-5'>
+        <AdminBaseLayout.Content className='md:mr-10'>
           <h1 className='mb-8 text-2xl font-semibold'>Settings</h1>
           <div className='flex flex-row flex-wrap gap-5'>
             <div className='flex-1'>
