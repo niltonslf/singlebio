@@ -40,7 +40,9 @@ export const FeatureActiveItem = ({
             <div
               {...attributes}
               {...listeners}
-              className={merge(['rounded-md p-2 hover:bg-base-200'])}>
+              className={merge([
+                'touch-none rounded-md p-2 hover:bg-base-200',
+              ])}>
               <ChevronsUpDown size={18} />
             </div>
             <div className={merge(['rounded-md bg-gray-600 p-2', iconClass])}>
