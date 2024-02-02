@@ -37,7 +37,9 @@ export const generateMetadata = async ({
       'personal page',
       'share link',
     ],
-
+    alternates: {
+      canonical: `${baseUrl}/${user.username}`,
+    },
     openGraph: {
       images: [
         {
