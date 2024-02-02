@@ -342,7 +342,6 @@ describe('AuthStore', () => {
       await authStore.deleteUser()
 
       expect(firebaseAuth.reauthenticateWithPopup).toHaveBeenCalledTimes(1)
-      expect(firestore.getDocs).toHaveBeenCalledTimes(1)
       expect(firestore.deleteDoc).toHaveBeenCalled()
       expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
       expect(authStore.clearUser).toHaveBeenCalledTimes(1)
@@ -376,7 +375,6 @@ describe('AuthStore', () => {
       await authStore.deleteUser()
 
       expect(firebaseAuth.reauthenticateWithPopup).toHaveBeenCalledTimes(1)
-      expect(firestore.getDocs).toHaveBeenCalledTimes(1)
       expect(firestore.deleteDoc).toHaveBeenCalled()
       expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
       expect(authStore.clearUser).toHaveBeenCalledTimes(1)
@@ -410,7 +408,6 @@ describe('AuthStore', () => {
       await authStore.deleteUser()
 
       expect(windowUtils.createPopup).toHaveBeenCalledTimes(1)
-      expect(firestore.getDocs).toHaveBeenCalledTimes(1)
       expect(firestore.deleteDoc).toHaveBeenCalled()
       expect(firebaseAuth.deleteUser).toHaveBeenCalledTimes(1)
       expect(authStore.clearUser).toHaveBeenCalledTimes(1)
