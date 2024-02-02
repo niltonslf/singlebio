@@ -218,7 +218,7 @@ class AuthStore {
   }
 
   public async deleteUserSocialPages(user: User) {
-    const queryLinks = query(collection(db, 'users', user.uid, 'social-pages'))
+    const queryLinks = query(collection(db, 'users', user.uid, 'socialPages'))
     const {size, docs} = await getDocs(queryLinks)
 
     if (size) {

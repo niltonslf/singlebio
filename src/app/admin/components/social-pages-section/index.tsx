@@ -25,13 +25,13 @@ export const SocialPagesSection = observer(({user}: SocialPagesProps) => {
 
   const handleCreate = async (data: SocialPageCreation) => {
     const userRef = doc(db, 'users', user.uid)
-    const docRef = await addDoc(collection(userRef, 'social-pages'), data)
+    const docRef = await addDoc(collection(userRef, 'socialPages'), data)
     await updateDoc(docRef, {id: docRef.id})
     await adminStore.reloadSocialPages()
   }
 
   const handleDelete = async (socialId: string) => {
-    const ref = doc(db, 'users', user.uid, 'social-pages', socialId)
+    const ref = doc(db, 'users', user.uid, 'socialPages', socialId)
     await deleteDoc(ref)
     await adminStore.reloadSocialPages()
   }

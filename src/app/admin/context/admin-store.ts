@@ -78,10 +78,7 @@ class AdminStore {
     if (!this?.user) throw ERROR_MESSAGES['user-not-found']
 
     const userRef = doc(db, 'users', this.user.uid)
-    const q = query(
-      collection(userRef, 'social-pages'),
-      orderBy('order', 'asc'),
-    )
+    const q = query(collection(userRef, 'socialPages'), orderBy('order', 'asc'))
     const res = await getDocs(q)
 
     if (res.empty) return []
