@@ -1,3 +1,4 @@
+import {observer} from 'mobx-react-lite'
 import {useState} from 'react'
 
 import {adminStore} from '@/app/admin/context/admin-store'
@@ -5,28 +6,23 @@ import {User} from '@/domain/models'
 import {useDebounce} from '@/utils'
 
 type SpotifySectionProps = {
-  user: User
+  user?: User
 }
 
-export const SpotifySection = ({user}: SpotifySectionProps) => {
-  const [spotifyUrl, setSpotifyUrl] = useState(
-    user?.features?.spotify?.url ?? '',
-  )
+export const SpotifySection = observer(({}: SpotifySectionProps) => {
+  const {features} = adminStore
+
+  const spotify = features.find(feature => feature.id === 'spotify')
+
+  const [spotifyUrl, setSpotifyUrl] = useState(spotify?.value)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (value: string) => {
-    setIsSubmitting(true)
-    const data = {
-      features: {
-        ...user.features,
-        spotify: {
-          ...user.features?.spotify,
-          url: value,
-        },
-      },
-    }
+    if (!spotify) return
 
-    await adminStore.updateUser(data)
+    setIsSubmitting(true)
+    await adminStore.insertFeature({...spotify, value: value})
+
     setIsSubmitting(false)
   }
 
@@ -55,4 +51,4 @@ export const SpotifySection = ({user}: SpotifySectionProps) => {
       </label>
     </form>
   )
-}
+})

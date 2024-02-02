@@ -1,3 +1,4 @@
+import {observer} from 'mobx-react-lite'
 import {useState} from 'react'
 
 import {adminStore} from '@/app/admin/context/admin-store'
@@ -5,28 +6,22 @@ import {User} from '@/domain/models'
 import {useDebounce} from '@/utils'
 
 type GithubSectionProps = {
-  user: User
+  user?: User
 }
 
-export const GithubSection = ({user}: GithubSectionProps) => {
-  const [githubUsername, setGithubUsername] = useState(
-    user?.features?.github?.username ?? '',
-  )
+export const GithubSection = observer(({}: GithubSectionProps) => {
+  const {features} = adminStore
+
+  const github = features.find(feature => feature.id === 'github')
+
+  const [githubUsername, setGithubUsername] = useState(github?.value)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (value: string) => {
-    setIsSubmitting(true)
-    const data = {
-      features: {
-        ...user.features,
-        github: {
-          ...user.features?.github,
-          username: value,
-        },
-      },
-    }
+    if (!github) return
 
-    await adminStore.updateUser(data)
+    setIsSubmitting(true)
+    await adminStore.insertFeature({...github, value: value})
     setIsSubmitting(false)
   }
 
@@ -55,4 +50,4 @@ export const GithubSection = ({user}: GithubSectionProps) => {
       </label>
     </form>
   )
-}
+})
