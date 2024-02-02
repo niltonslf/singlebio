@@ -8,7 +8,7 @@ export const GrayTheme = (props: ThemeProps) => {
 
   return (
     <>
-      <Wrapper theme={props.theme}>
+      <Wrapper theme={props.theme} user={props.user}>
         <Header01 user={props.user} theme={props.theme} />
         {themeFeatures}
         <Footer01 />

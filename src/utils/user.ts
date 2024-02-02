@@ -16,6 +16,7 @@ export const parseToUser = (
     email: firebaseUser.email,
     name: firebaseUser.displayName || fallbackName,
     pictureUrl: firebaseUser.photoURL || '',
+    coverUrl: '',
     uid: firebaseUser.uid,
     theme: theme,
     username: username ?? '',

@@ -9,7 +9,7 @@ type Header02Props = {
 }
 
 export const Header02 = ({user, theme}: Header02Props) => {
-  const defaultBorderColor = !theme?.backgroundImage && 'border-[#f9f9f9]'
+  const defaultBorderColor = !user.coverUrl && 'border-[#f9f9f9]'
 
   return (
     <header

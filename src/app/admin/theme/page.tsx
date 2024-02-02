@@ -22,7 +22,6 @@ const ThemePage = observer(() => {
   const handleSelectTheme = async (theme: ThemeOption<ThemeProps>) => {
     const newData = {
       ...theme.defaultTheme,
-      backgroundImage: user?.theme?.backgroundImage,
     } as UserTheme
 
     await adminStore.updateUser({theme: newData})

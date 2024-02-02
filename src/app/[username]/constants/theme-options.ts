@@ -28,7 +28,6 @@ export const themeOptions: Record<string, ThemeOption<ThemeProps>> = {
     defaultTheme: {
       name: 'default',
       backgroundColor: '',
-      backgroundImage: '',
       buttonBackground: '',
       buttonStyle: 'default',
       buttonTextColor: '#000000',
@@ -44,7 +43,6 @@ export const themeOptions: Record<string, ThemeOption<ThemeProps>> = {
     defaultTheme: {
       name: 'arch',
       backgroundColor: '#f9f9f9',
-      backgroundImage: '',
       buttonBackground: '#00000000',
       buttonStyle: 'square-outline',
       buttonTextColor: '#000000',
@@ -60,7 +58,6 @@ export const themeOptions: Record<string, ThemeOption<ThemeProps>> = {
     defaultTheme: {
       name: 'gray',
       backgroundColor: '#f2f2f2',
-      backgroundImage: '',
       buttonBackground: '#FFF',
       buttonStyle: 'default',
       buttonTextColor: '#000000',
@@ -76,7 +73,6 @@ export const themeOptions: Record<string, ThemeOption<ThemeProps>> = {
     defaultTheme: {
       name: 'blue',
       backgroundColor: '#2d93f1',
-      backgroundImage: '',
       buttonBackground: '#00427e',
       buttonStyle: 'default',
       buttonTextColor: '#f2f2f2',
@@ -92,7 +88,6 @@ export const themeOptions: Record<string, ThemeOption<ThemeProps>> = {
     defaultTheme: {
       name: 'green',
       backgroundColor: '#f5fdf4',
-      backgroundImage: '',
       buttonBackground: '#a6eb99',
       buttonStyle: 'circle',
       buttonTextColor: '#000000',

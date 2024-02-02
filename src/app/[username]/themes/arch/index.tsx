@@ -19,7 +19,7 @@ export const ArchTheme = (props: ThemeProps) => {
   })
 
   return (
-    <Wrapper theme={props.theme}>
+    <Wrapper theme={props.theme} user={props.user}>
       <Header02 user={props.user} theme={props.theme} />
 
       {themeFeatures}
