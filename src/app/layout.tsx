@@ -1,6 +1,7 @@
 import './globals.css'
 import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
+import Script from 'next/script'
 
 import {APP_NAME} from '@/config/envs'
 
@@ -75,6 +76,11 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang='en' suppressHydrationWarning>
+      <Script
+        async
+        src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8270516024728167'
+        crossOrigin='anonymous'></Script>
+
       <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>
