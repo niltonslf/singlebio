@@ -8,7 +8,7 @@ import {AdminBaseLayout, PagePreview} from '../components'
 import {ProfileForm} from './components'
 
 const Profile = observer(() => {
-  const {user, socialPages, pageLinks} = adminStore
+  const {user, socialPages, pageLinks, features} = adminStore
 
   return (
     <AdminBaseLayout>
@@ -25,6 +25,7 @@ const Profile = observer(() => {
             socialPages={socialPages}
             user={user}
             theme={user.theme}
+            features={features}
           />
         )}
       </AdminBaseLayout.PagePreview>

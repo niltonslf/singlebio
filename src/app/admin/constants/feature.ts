@@ -16,6 +16,7 @@ interface FeatureOption {
   iconClass: string
   Component: ComponentType<{user: User}>
 }
+type FeatureOptionsObject = Record<string, FeatureOption>
 
 export const featureOptions: FeatureOption[] = [
   {
@@ -47,8 +48,6 @@ export const featureOptions: FeatureOption[] = [
     Component: SpotifySection,
   },
 ]
-
-type FeatureOptionsObject = Record<string, FeatureOption>
 
 export const featureOptionsObject = featureOptions.reduce((acc, curr) => {
   acc[curr.id] = curr

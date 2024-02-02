@@ -18,7 +18,7 @@ import {
 import {appearanceStore} from './context'
 
 const AppearancePage = observer(() => {
-  const {user, socialPages, pageLinks} = adminStore
+  const {user, socialPages, pageLinks, features} = adminStore
   const {theme, aux} = appearanceStore
 
   const {compress} = useImageCompressor()
@@ -118,6 +118,7 @@ const AppearancePage = observer(() => {
           socialPages={socialPages}
           user={user}
           theme={theme}
+          features={features}
         />
       </AdminBaseLayout.PagePreview>
     </AdminBaseLayout>
