@@ -22,27 +22,27 @@ export const loadThemeFeatures = (
     switch (feature.id) {
       case 'pageLinks':
         return components.pageLinks ? (
-          <components.pageLinks {...props} />
+          <components.pageLinks {...props} key={feature.id} />
         ) : (
-          <PageLinks01 {...props} />
+          <PageLinks01 {...props} key={feature.id} />
         )
       case 'socialPages':
         return components.socialPages ? (
-          <components.socialPages {...props} />
+          <components.socialPages {...props} key={feature.id} />
         ) : (
-          <SocialPages01 {...props} />
+          <SocialPages01 {...props} key={feature.id} />
         )
       case 'github':
         return components.github ? (
-          <components.github {...props} />
+          <components.github {...props} key={feature.id} />
         ) : (
-          <GithubChart01 {...props} />
+          <GithubChart01 {...props} key={feature.id} />
         )
       case 'spotify':
         return components.spotify ? (
-          <components.spotify {...props} />
+          <components.spotify {...props} key={feature.id} />
         ) : (
-          <SpotifyEmbed01 {...props} />
+          <SpotifyEmbed01 {...props} key={feature.id} />
         )
     }
   })
