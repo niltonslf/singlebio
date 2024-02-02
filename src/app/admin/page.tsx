@@ -16,6 +16,7 @@ import {
 } from '@/app/admin/components'
 import {featureOptions, featureOptionsObject} from '@/app/admin/constants'
 import {adminStore} from '@/app/admin/context/admin-store'
+import {UserFeaturesAvailable} from '@/domain/models'
 
 const AdminPage = observer(() => {
   const {user, socialPages, pageLinks, features} = adminStore
@@ -34,7 +35,7 @@ const AdminPage = observer(() => {
 
     await adminStore.insertFeature({
       order: lastPos,
-      id: currentFeat.id,
+      id: currentFeat.id as UserFeaturesAvailable,
       value: '',
     })
     await adminStore.reloadFeatures()
