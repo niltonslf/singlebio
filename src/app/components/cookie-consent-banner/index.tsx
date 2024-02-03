@@ -15,9 +15,9 @@ export const CookieConsentBanner = () => {
       enableDeclineButton
       buttonText='ACCEPT COOKIES'
       buttonWrapperClasses='flex gap-5 flex-col md:flex-row w-full md:w-auto'
-      buttonClasses='btn bg-neutral-content text-base-200 text-xs  w-full md:w-auto hover:bg-base-200 hover:text-neutral-content'
+      buttonClasses='btn btn-outline border-info text-xs w-full md:w-auto hover:bg-base-200 hover:text-base-300'
       declineButtonText='DECLINE COOKIES'
-      declineButtonClasses='btn btn-outline text-xs w-full md:w-auto'
+      declineButtonClasses='btn btn-outline border-error text-xs w-full md:w-auto'
       contentClasses='flex-1 '>
       <p className='text-sm'>
         This website employs cookies for performance, analytics, and
