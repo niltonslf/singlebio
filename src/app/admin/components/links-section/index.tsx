@@ -106,8 +106,34 @@ export const LinksSection = observer(({user}: CardListProps) => {
 
   return (
     <section className='flex w-full flex-col px-0 py-3'>
-      <div className='flex flex-1 flex-col gap-3'>
-        <div className='mb-5 flex w-full flex-1 flex-row flex-wrap gap-10'>
+      <div className='flex flex-1 flex-col gap-5'>
+        {pageLinks.length > 0 && (
+          <ul className='flex flex-1 flex-col gap-3'>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}>
+              <SortableContext
+                items={pageLinks}
+                key='links-list'
+                strategy={verticalListSortingStrategy}>
+                {pageLinks.map(link => (
+                  <CardLink key={link.id} onDelete={deleteLink} link={link}>
+                    <AddLinkForm
+                      saveLink={async data => {
+                        handleSaveLink(data)
+                        await adminStore.reloadPageLinks()
+                      }}
+                      link={link}
+                    />
+                  </CardLink>
+                ))}
+              </SortableContext>
+            </DndContext>
+          </ul>
+        )}
+
+        <div className='flex w-full flex-1 flex-row flex-wrap gap-10'>
           <button
             onClick={handleAddNewLink}
             className='btn btn-primary flex-1 text-sm uppercase text-neutral-100'>
@@ -115,30 +141,6 @@ export const LinksSection = observer(({user}: CardListProps) => {
             Add link
           </button>
         </div>
-
-        <ul className='flex flex-1 flex-col gap-3'>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}>
-            <SortableContext
-              items={pageLinks}
-              key='links-list'
-              strategy={verticalListSortingStrategy}>
-              {pageLinks.map(link => (
-                <CardLink key={link.id} onDelete={deleteLink} link={link}>
-                  <AddLinkForm
-                    saveLink={async data => {
-                      handleSaveLink(data)
-                      await adminStore.reloadPageLinks()
-                    }}
-                    link={link}
-                  />
-                </CardLink>
-              ))}
-            </SortableContext>
-          </DndContext>
-        </ul>
 
         {!pageLinks.length && (
           <div className='alert alert-info'>
