@@ -143,7 +143,7 @@ export const LinksSection = observer(({user}: CardListProps) => {
         </div>
 
         {!pageLinks.length && (
-          <div className='alert alert-info'>
+          <div className='alert alert-info' data-testid='empty-list'>
             <Info />
             <p className='content'>It's time to create your first link!</p>
           </div>

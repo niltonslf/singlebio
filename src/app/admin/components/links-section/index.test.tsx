@@ -54,8 +54,8 @@ describe('Links List component', () => {
 
     await waitFor(() => makeSUT())
 
-    const list = screen.getByRole('list')
-    expect(list.querySelectorAll('li')).toHaveLength(0)
+    const list = screen.getByTestId('empty-list')
+    expect(list).toBeInTheDocument()
   })
 
   it.todo('render component with 2 items')
