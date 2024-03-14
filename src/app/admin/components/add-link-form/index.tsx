@@ -19,10 +19,9 @@ const schema = z.object({
     .string()
     .regex(
       validateUrlRegex,
-      'Value must be a valid url. e.g. https://google.com ',
+      'Value must be a valid url. e.g. https://google.com',
     )
-    .refine(s => !s.includes(' '), 'White spaces are not allowed')
-    .refine(s => !/[A-Z]/.test(s), 'Uppercase characters are not allowed'),
+    .refine(s => !s.includes(' '), 'White spaces are not allowed'),
   label: z.string().min(3, {message: 'Required field'}),
   id: z.string(),
   order: z.number(),
