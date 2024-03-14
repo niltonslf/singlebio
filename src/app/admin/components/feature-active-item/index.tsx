@@ -30,6 +30,8 @@ export const FeatureActiveItem = ({
     transition,
   }
 
+  if (!featureOptionsObject[feature.id]) return null
+
   const {Component, Icon, iconClass, title} = featureOptionsObject[feature.id]
 
   return (

@@ -1,6 +1,5 @@
 export * from './links-section'
 export * from './add-link-form'
-export * from './dropdown'
 export * from './admin-base-layout'
 export * from './collapse'
 export * from './nav-links'
